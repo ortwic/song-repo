@@ -1,18 +1,11 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
     import { nanoid } from 'nanoid';
     import { groupBy } from 'lodash';
-    import { Status } from '../types';
+    import { Status, type Item } from '../model/types';
     import Column from './Column.svelte';
-
-    type T = $$Generic<{ status: Status, progress?: number }>;
   
-    export let data: T[];
+    export let data: Item[];
     $: groups = groupBy(data, 'status');
-    
-    onMount(() => {
-      // ...        
-    });
 
     function add(status: Status): void {
         const id = nanoid();
@@ -23,8 +16,8 @@
         }];
     }
 
-    function change(item: T, direction: number): void {
-        groups[item.status] = groups[item.status].filter((i: T) => i !== item);
+    function change(item: Item, direction: number): void {
+        groups[item.status] = groups[item.status].filter((i: Item) => i !== item);
         if (item.status === Status.Done) {
             item.status = Status.Repeat;
         } else if (item.status === Status.Repeat) {

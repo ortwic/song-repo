@@ -2,7 +2,7 @@
     import Button, { Icon } from "@smui/button";
     import Card, { Content } from "@smui/card";
     import { createEventDispatcher } from "svelte";
-    import type { Status } from "../types";
+    import type { Status } from "../model/types";
     import Tile from "./Tile.svelte";
 
     type T = $$Generic<{

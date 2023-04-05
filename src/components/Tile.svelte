@@ -5,26 +5,26 @@
     import Card, { Content } from '@smui/card';
     import Chip, { Set, Text } from '@smui/chips';
     import Autocomplete from '@smui-extra/autocomplete';
-    import { Status } from '../types';
+    import { Status } from '../model/types';
     import InlineEdit from './InlineEdit.svelte';
     import genres from '../data/genres.json'
 
     const dispatch = createEventDispatcher();    
     const down = () => {
-        if (progress > .9) {
+        if (progress > 99) {
             dispatch('next', id);
         }
-        progress -= .1;
-        if (progress < .1) {
+        progress -= 10;
+        if (progress < 1) {
             dispatch('prev', id);
         }
     }
     const up = () => {
-        if (progress < .1) {
+        if (progress < 1) {
             dispatch('next', id);        
         }
-        progress += .1;
-        if (progress > .9) {
+        progress += 10;
+        if (progress > 99) {
             dispatch('next', id);
         }
     }
@@ -36,12 +36,12 @@
     export let artist = 'Unknown';
     export let genre = 'Unknown';
     export let progress = 0;
+    export let learnedOn = new Date();
     export let tags = new Array<string>();
 
     const genreArray = Object.keys(genres);
     let width: number;
-    $: progressStyle = `width: ${width * progress}px; background-color: ${genres[genre] ?? 'black'}`;
-    $: progressPercent = Math.round(progress * 100);
+    $: progressStyle = `width: ${width * progress * .01}px; background-color: ${genres[genre] ?? 'black'}`;
 </script>
 
 <section class="card">
@@ -50,11 +50,11 @@
             <Button color="secondary" size="button" on:click={remove}>
                 <Icon class="material-icons">close</Icon>
             </Button>
-            <Button disabled={progress > .99} color="primary" size="button" on:click={up}>
+            <Button disabled={progress > 99} color="primary" size="button" on:click={up}>
                 <Icon class="material-icons">north</Icon>
             </Button>
-            <span class="progress">{progressPercent} %</span>
-            <Button disabled={progress < .01} color="primary" size="button" on:click={down}>
+            <span class="progress">{progress} %</span>
+            <Button disabled={progress < 1} color="primary" size="button" on:click={down}>
                 <Icon class="material-icons">south</Icon>
             </Button>
         </div>

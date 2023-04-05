@@ -12,20 +12,22 @@ export enum Status {
     Todo, 
     Wip, 
     Done, 
-    Repeat
+    Repeat,
+    Removed = -1
 };
 
 export interface Song extends Item {
-    title: string;
     artist?: string;
     genre?: string;
     complete?: Complete;
     learnedOn?: Date;
+    fav?: boolean;
     tags: string[];
 };
 
 export interface Item {
     id: string;
+    title: string;
     status: Status;
     progress?: number;
 };
