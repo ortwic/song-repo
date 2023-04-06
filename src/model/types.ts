@@ -15,19 +15,3 @@ export enum Status {
     Repeat,
     Removed = -1
 };
-
-export interface Song extends Item {
-    artist?: string;
-    genre?: string;
-    complete?: Complete;
-    learnedOn?: Date;
-    fav?: boolean;
-    tags: string[];
-};
-
-export interface Item {
-    id: string;
-    title: string;
-    status: Status;
-    progress?: number;
-};

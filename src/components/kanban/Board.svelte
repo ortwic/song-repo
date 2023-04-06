@@ -1,16 +1,20 @@
 <script lang="ts">
     import { nanoid } from 'nanoid';
     import { groupBy } from 'lodash';
-    import { Status, type Item } from '../model/types';
     import Column from './Column.svelte';
+    import type { Item } from '../../model/song.model';
+    import { Status } from '../../model/types';
   
+    export let uid: string;
     export let data: Item[];
+    
     $: groups = groupBy(data, 'status');
-
+    
     function add(status: Status): void {
         const id = nanoid();
         groups[status] = [...groups[status], {
             id,
+            uid,
             status,
             title: `${Status[status]} ${groups[status].length}`
         }];

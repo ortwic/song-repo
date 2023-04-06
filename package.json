@@ -25,8 +25,11 @@
     "@types/tabulator-tables": "^5.4.6",
     "carbon-components-svelte": "^0.73.5",
     "color": "^4.2.3",
+    "firebase": "^9.18.0",
     "lodash": "^4.17.21",
     "nanoid": "^4.0.2",
+    "rxfire": "^6.0.3",
+    "rxjs": "^7.8.0",
     "svelte": "^3.55.1",
     "svelte-check": "^2.10.3",
     "tabulator-tables": "^5.4.4",
@@ -35,7 +38,6 @@
     "vite": "^4.2.0"
   },
   "dependencies": {
-    "firebase": "^9.18.0",
     "svelte-material-ui": "^7.0.0-beta.0"
   }
 }

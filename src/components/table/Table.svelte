@@ -3,11 +3,11 @@
     import Button, { Group } from '@smui/button';
     import { favFormatter, statusMutator, genreFormatter, progressFormatter } from './formatter.helper';
     import { TabulatorFull as Tabulator, type ColumnDefinition } from 'tabulator-tables';
-    import {onMount} from 'svelte';
-    import type { Item } from '../../model/types';
+    import { onMount } from 'svelte';
+    import type { Song } from '../../model/song.model';
     import samples from '../../data/samples.json';
-    
-    export let data: Item[];
+
+    export let data: Song[];
     let table: Tabulator;
     let tableComponent: HTMLElement;
 
@@ -23,24 +23,26 @@
     ];
 
     onMount(() => {
-        table = new Tabulator(tableComponent, {
-          data,
+      table = new Tabulator(tableComponent, {
           columns,
           reactiveData: true,
           pagination: true,
           paginationSize: 50
-        });
+      });
     });
 
-    function replaceData(data: unknown): void {
-        table.replaceData(data as Item[]);
+    $: {
+      if (table && data && data.length) {
+        console.debug('set data', data);
+        table.replaceData(data as Song[]);
+      }
     }
 </script>
 
 <div>
   <Group>
-    <Button variant="raised" color="secondary" on:click={() => replaceData(data)}>Small Sample</Button>
-    <Button variant="raised" color="secondary" on:click={() => replaceData(samples)}>Large Sample</Button>
+    <Button variant="raised" color="secondary" on:click={() => table.replaceData(data)}>Source</Button>
+    <Button variant="raised" color="secondary" on:click={() => table.replaceData(samples)}>Large Sample</Button>
   </Group>
   
   <div bind:this={tableComponent}></div>

@@ -2,11 +2,12 @@
     import Button, { Icon } from "@smui/button";
     import Card, { Content } from "@smui/card";
     import { createEventDispatcher } from "svelte";
-    import type { Status } from "../model/types";
+    import type { Status } from "../../model/types";
     import Tile from "./Tile.svelte";
 
     type T = $$Generic<{
         id: string,
+        uid: string,
         title: string,
         status: Status,
         progress?: number
@@ -28,13 +29,15 @@
     <div class="wrapper">
       <h2>{title}</h2>
       <Content>
-        {#each items as item (item.id)}
-          <Tile {...item} 
-            on:prev={() => changeStatus(item, -1)} 
-            on:next={() => changeStatus(item, 1)} 
-            on:remove={() => remove(item)} 
-          />
-        {/each}
+        {#if items}
+          {#each items as item (item.id)}
+            <Tile {...item} 
+              on:prev={() => changeStatus(item, -1)} 
+              on:next={() => changeStatus(item, 1)} 
+              on:remove={() => remove(item)} 
+            />
+          {/each}
+        {/if}
       </Content>
     </div>
     <Button color="secondary" on:click={add}>

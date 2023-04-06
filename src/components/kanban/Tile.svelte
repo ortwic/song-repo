@@ -5,9 +5,9 @@
     import Card, { Content } from '@smui/card';
     import Chip, { Set, Text } from '@smui/chips';
     import Autocomplete from '@smui-extra/autocomplete';
-    import { Status } from '../model/types';
+    import { Status } from '../../model/types';
     import InlineEdit from './InlineEdit.svelte';
-    import genres from '../data/genres.json'
+    import genres from '../../data/genres.json'
 
     const dispatch = createEventDispatcher();    
     const down = () => {
@@ -31,6 +31,8 @@
     const remove = () => dispatch('remove', id);
     
     export let id: string; // document ID
+    export let uid: string;
+    export let fav = false;
     export let title: string;
     export let status: Status;
     export let artist = 'Unknown';
