@@ -1,9 +1,7 @@
 <script lang="ts">
-    import Switch from '@smui/switch';
     import type { User } from 'firebase/auth';
-    import type { Observable } from 'rxjs';
+    import { of, type Observable } from 'rxjs';
     import Login from './components/login/Login.svelte';
-    import Board from './components/kanban/Board.svelte';
     import Table from './components/table/Table.svelte';
     import { Status } from './model/types';
     import type { Song } from './model/song.model';
@@ -15,13 +13,8 @@
       { id: "4", uid: "0", title: "Take 5", artist: "Dave Brubeck", genre: "Jazz", status: Status.Repeat, progress: 80, tags: ["improv", "lead sheet"] },
     ];
 
-    // Todo binding error
-    let kanbanData = samples.map((value) => ({...value}));
-
-    let showKanban = false;
     let user: Observable<User>;
-    let data: Observable<Song[]>;
-    // $: data = of(samples);
+    $: data = of(samples);
 </script>
 
 <svelte:head>
@@ -31,9 +24,6 @@
 <main>
   <div class="header">
     <div>
-      Table
-      <Switch icons={false} bind:checked={showKanban} />
-      Kanban
       {#if !$user}
         <span>Demo Data</span>
       {/if}
@@ -45,11 +35,7 @@
   
   <div>
     {#if $data}
-      {#if showKanban}
-        <Board uid={$user.uid} data={kanbanData} />
-      {:else}
-        <Table data={$data} />
-      {/if}
+      <Table data={$data} />
     {/if}
   </div>
 
