@@ -24,3 +24,12 @@
 body {
   margin: 0;
 }
+
+span.label {
+  margin: .4rem .2rem;
+  padding: .2rem .6rem;
+  border: 1px solid silver;
+  border-radius: 1rem;
+  background-color: whitesmoke;
+  font-size: smaller;
+}

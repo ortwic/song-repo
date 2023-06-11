@@ -7,10 +7,10 @@
     import type { Song } from './model/song.model';
   
     let samples: Song[] = [
-      { id: "1", uid: "0", title: "Fried Chicken", artist: "Jürgen Moser", status: Status.Todo, genre: 'Pop / Rock', tags: ["new"] },
-      { id: "2", uid: "0", title: "Manhatten Skyline", artist: "Jürgen Moser", status: Status.Wip, genre: 'Rock Ballad', progress: 60, tags: [], fav: true },
-      { id: "3", uid: "0", title: "Für Elise", artist: "Beethoven", status: Status.Done, genre: 'Classic', progress: 100, tags: [] },
-      { id: "4", uid: "0", title: "Take 5", artist: "Dave Brubeck", genre: "Jazz", status: Status.Repeat, progress: 80, tags: ["improv", "lead sheet"] },
+      { id: "1", uid: "0", title: "Fried Chicken", artist: "Jürgen Moser", status: Status.Todo, genre: 'Pop / Rock', tags: [], fav: false },
+      { id: "2", uid: "0", title: "Manhatten Skyline", artist: "Jürgen Moser", status: Status.Wip, genre: 'Rock Ballad', progress: 60, tags: ["new"], fav: true },
+      { id: "3", uid: "0", title: "Für Elise", artist: "Beethoven", status: Status.Done, genre: 'Classic', progress: 100, tags: [], fav: false },
+      { id: "4", uid: "0", title: "Take 5", artist: "Dave Brubeck", genre: "Jazz", status: Status.Repeat, progress: 80, tags: ["improv", "lead sheet"], fav: false },
     ];
 
     let user: Observable<User>;
