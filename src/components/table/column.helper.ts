@@ -1,8 +1,5 @@
 import Color from "color";
 import type { CellComponent, ColumnDefinition, ListEditorParams } from "tabulator-tables";
-import { Status } from '../../model/types';
-import genres from '../../data/genres.json';
-import colornames from '../../data/colornames.json';
 
 type Sorter = undefined
     | 'string'
@@ -74,41 +71,4 @@ export const progressColumn: Partial<ColumnDefinition> = {
         legendColor:"#000000",
         legendAlign:"center",
     }
-};
-
-export const genreFormatter: Partial<ColumnDefinition> = {
-    formatter(cell: CellComponent) {
-        const value = cell.getValue();
-        try {
-            const hexcolor = genres[value] && colornames[genres[value].toLowerCase()];
-            if (hexcolor) {
-                const color = Color(hexcolor).isDark() ? 'white' : 'black';
-                const element = cell.getElement();
-                element.style.color = color;
-                element.style.backgroundColor = hexcolor;
-            }
-        } catch {      
-        }
-        return value;
-    }
-};
-
-export const labelFormatter: Partial<ColumnDefinition> = {
-    formatter(cell: CellComponent) {
-        const value = cell.getValue().toString();
-        if (value) {
-            return value.split(',').map(v => `<span class='label'>${v}</span>`).join('');
-        }
-    }
-};
-
-export const statusMutator = (value: any) => {
-    return {
-        Unknown: "?",
-        Todo: " ",
-        Wip: ">",
-        Done: "✓",
-        Repeat: "<",
-        Removed: "✗",
-    }[isNaN(value) ? value : `${Status[value]}`];
 };

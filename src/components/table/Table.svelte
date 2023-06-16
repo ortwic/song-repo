@@ -1,20 +1,24 @@
 <script lang="ts">
     import 'tabulator-tables/dist/css/tabulator_bulma.min.css';
-    import Button, { Group } from '@smui/button';
-    import { column, autoFilter, favColumn, comboBoxEditor, statusMutator, genreFormatter, labelFormatter, progressColumn } from './column.helper';
+    import Menu from '@smui/menu';
+    import List, { Item, Text } from '@smui/list';
+    import Button from '@smui/button';
+    import { column, autoFilter, favColumn, comboBoxEditor, progressColumn } from './column.helper';
+    import { genreFormatter, labelFormatter, statusFormatter } from './formatter.helper';
     import { TabulatorFull as Tabulator, type ColumnDefinition } from 'tabulator-tables';
     import { onMount } from 'svelte';
+    import FileDrop from './FileDrop.svelte';
     import type { Song } from '../../model/song.model';
-    import samples from '../../data/samples.json';
 
     export let data: Song[];  
+    let exportMenu: Menu;
     let table: Tabulator;
     let tableComponent: HTMLElement;
 
     // https://tabulator.info/docs/5.4/edit#editor-list
     const columns: ColumnDefinition[] = [
       column("✩", "fav", "4%", undefined, favColumn),
-      column("?", "status", "4%", "string", autoFilter, { hozAlign: 'center', mutator: statusMutator }),
+      column("?", "status", "4%", "string", autoFilter, statusFormatter),
       column("Progress", "progress", "14%", "number", progressColumn, { editor: 'range' }),
       column("Title", "title", "25%", "string", autoFilter, { editor: 'input' }),
       column("Artist", "artist", "25%", "string", autoFilter, comboBoxEditor),
@@ -25,6 +29,7 @@
 
     onMount(() => {
       table = new Tabulator(tableComponent, {
+          data,
           columns,
           maxHeight: "100%",
           reactiveData: true,
@@ -32,6 +37,13 @@
           paginationSize: 50
       });
     });
+    
+    function importJSON(data: string) {
+      const json = JSON.parse(data) as Song[];
+      if (json) {
+        table.replaceData(json);
+      }
+    }
 
     $: {
       if (table && data && data.length) {
@@ -42,12 +54,30 @@
 </script>
 
 <div>
-  <Group>
-    <Button variant="raised" color="secondary" on:click={() => table.replaceData(data)}>Source</Button>
-    <Button variant="raised" color="secondary" on:click={() => table.replaceData(samples)}>Large Sample</Button>
-  </Group>
+  <div id="export-menu">
+    <Button variant="raised" color="secondary" on:click={() => exportMenu.setOpen(true)}>Export</Button>
+    <Menu bind:this={exportMenu}>
+      <List>
+        <Item on:SMUI:action={() => (table.download("csv", "songs.csv", { delimiter: ";" }))}>
+          <Text>CSV</Text>
+        </Item>
+        <Item on:SMUI:action={() => (table.download("json", "songs.json"))}>
+          <Text>JSON</Text>
+        </Item>
+        <Item on:SMUI:action={() => (table.download("xlsx", "songs.xlsx", { sheetName: "My song repertoire" }))}>
+          <Text>XLSX</Text>
+        </Item>
+        <Item on:SMUI:action={() => (table.download("pdf", "songs.pdf", { title: "My song repertoire" }))}>
+          <Text>PDF</Text>
+        </Item>
+      </List>
+    </Menu>
+  </div>
   
-  <div id="table" bind:this={tableComponent}></div>
+  <FileDrop on:addJson="{({ detail }) => importJSON(detail)}">
+    <div id="table" bind:this="{tableComponent}">
+    </div>
+  </FileDrop>
 </div>
 
 <style>
@@ -55,9 +85,47 @@
         margin: 4px;
     }
 
+    div#export-menu {
+      display: inline-block;
+      min-width: 100px;
+    }
+
     div#table {
       overflow: auto;
       max-height: 100%;
+    }
+
+    :global(div.tabulator-cell.status) {
+      font-weight: bold;
+    }
+
+    :global(div.tabulator-cell.status.unkown::before) {
+      content: '?';
+      color: silver;
+    }
+
+    :global(div.tabulator-cell.status.todo::before) {
+      content: ' ';
+    }
+
+    :global(div.tabulator-cell.status.wip::before) {
+      content: '>';
+      color: orange
+    }
+
+    :global(div.tabulator-cell.status.done::before) {
+      content: '✓';
+      color: green
+    }
+
+    :global(div.tabulator-cell.status.repeat::before) {
+      content: '<';
+      color: red;
+    }
+
+    :global(div.tabulator-cell.status.removed::before) {
+      content: '✗';
+      color: purple;
     }
 </style>
   

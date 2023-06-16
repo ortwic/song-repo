@@ -7,11 +7,4 @@ export enum Complete {
     Finishing = 0b0000000000000000000000000100000,
 };
 
-export enum Status {
-    Unknown,
-    Todo, 
-    Wip, 
-    Done, 
-    Repeat,
-    Removed = -1
-};
+export type Status = 'unknown' | 'todo' | 'wip' | 'done' | 'repeat' | 'removed';
