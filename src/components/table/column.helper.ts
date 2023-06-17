@@ -39,22 +39,6 @@ export const autoFilter: Partial<ColumnDefinition> = {
     headerFilterParams: comboBoxEditor.editorParams
 };
 
-export const favColumn: Partial<ColumnDefinition> = {
-    hozAlign: 'center',
-    headerFilter: "tickCross",
-    headerFilterParams: {
-        tristate: true
-    },
-    formatter(cell: CellComponent) {
-        const value = cell.getValue();
-        const element = cell.getElement();
-        element.addEventListener('click', () => cell.setValue(!value));
-        element.style.fontSize = 'large';
-        element.style.color = value ? 'gold' : 'lightgray';
-        return value ? '✮' : '✩';
-    }
-};
-
 export const progressColumn: Partial<ColumnDefinition> = {
     headerFilter: 'number',
     headerFilterParams: {

@@ -2,9 +2,9 @@
     import 'tabulator-tables/dist/css/tabulator_bulma.min.css';
     import Menu from '@smui/menu';
     import List, { Item, Text } from '@smui/list';
-    import Button from '@smui/button';
-    import { column, autoFilter, favColumn, comboBoxEditor, progressColumn } from './column.helper';
-    import { genreFormatter, labelFormatter, statusFormatter } from './formatter.helper';
+    import Button, { Group } from '@smui/button';
+    import { column, autoFilter, comboBoxEditor, progressColumn } from './column.helper';
+    import { favColumn, statusFormatter, genreFormatter, labelFormatter } from './formatter.helper';
     import { TabulatorFull as Tabulator, type ColumnDefinition } from 'tabulator-tables';
     import { onMount } from 'svelte';
     import FileDrop from './FileDrop.svelte';
@@ -37,6 +37,8 @@
           paginationSize: 50
       });
     });
+
+    const newSong = (): Song => ({ status: 'todo', progress: 0, tags: [] } as Song);
     
     function importJSON(data: string) {
       const json = JSON.parse(data) as Song[];
@@ -55,7 +57,11 @@
 
 <div>
   <div id="export-menu">
-    <Button variant="raised" color="secondary" on:click={() => exportMenu.setOpen(true)}>Export</Button>
+    <Group>
+      <Button title="add row before" variant="raised" color="secondary" on:click={() => data.unshift(newSong())}>+[]</Button>
+      <Button title="add row after" variant="raised" color="secondary" on:click={() => data.push(newSong())}>[]+</Button>
+    </Group>
+    <Button title="export table data" variant="raised" color="secondary" on:click={() => exportMenu.setOpen(true)}>Export</Button>
     <Menu bind:this={exportMenu}>
       <List>
         <Item on:SMUI:action={() => (table.download("csv", "songs.csv", { delimiter: ";" }))}>
@@ -93,6 +99,15 @@
     div#table {
       overflow: auto;
       max-height: 100%;
+    }
+
+    :global(div.tabulator-cell.fav) {
+      font-size: larger;
+      color: lightgray;
+    }
+
+    :global(div.tabulator-cell.fav.active) {
+      color: gold;
     }
 
     :global(div.tabulator-cell.status) {
