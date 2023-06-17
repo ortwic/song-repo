@@ -1,19 +1,18 @@
 <script lang="ts">
     import type { User } from 'firebase/auth';
-    import { of, type Observable } from 'rxjs';
+    import type { Observable } from 'rxjs';
     import Login from './components/login/Login.svelte';
-    import Table from './components/table/Table.svelte';
-    import type { Song } from './model/song.model';
+    import Table from './components/table/SongTable.svelte';
+    import { songs } from './store/song.store';
   
-    let samples: Song[] = [
+    songs.set([
       { id: "1", uid: "0", title: "Fried Chicken", artist: "Jürgen Moser", status: 'todo', genre: 'Rock', tags: [], fav: false },
       { id: "2", uid: "0", title: "Interstellar", artist: "Hans Zimmer / Pietschmann", status: 'wip', genre: 'Movie Score', progress: 60, tags: ["new"], fav: true },
       { id: "3", uid: "0", title: "Für Elise", artist: "Beethoven", status: 'done', genre: 'Classic', progress: 100, tags: [], fav: false },
       { id: "4", uid: "0", title: "Take 5", artist: "Dave Brubeck", status: 'repeat', genre: "Jazz", progress: 80, tags: ["improv", "lead sheet"], fav: false },
-    ];
+    ]);
 
     let user: Observable<User>;
-    $: data = of(samples);
 </script>
 
 <svelte:head>
@@ -28,14 +27,12 @@
       {/if}
     </div>
     <div class="login">
-      <Login bind:user={user} bind:data={data} />
+      <Login bind:user={user} />
     </div>
   </div>
   
   <div>
-    {#if $data}
-      <Table data={$data} />
-    {/if}
+    <Table />
   </div>
 
 </main>
