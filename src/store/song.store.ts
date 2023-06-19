@@ -29,6 +29,10 @@ class ArrayStore<T> {
         return popped;
     }
 
+    public update(items: T[]): void {
+        
+    }
+
     public set(items: T[]): void {
         this._store.set(items);
     }

@@ -6,10 +6,10 @@
     import { songs } from './store/song.store';
   
     songs.set([
-      { id: "1", uid: "0", title: "Fried Chicken", artist: "Jürgen Moser", status: 'todo', genre: 'Rock', tags: [], fav: false },
-      { id: "2", uid: "0", title: "Interstellar", artist: "Hans Zimmer / Pietschmann", status: 'wip', genre: 'Movie Score', progress: 60, tags: ["new"], fav: true },
-      { id: "3", uid: "0", title: "Für Elise", artist: "Beethoven", status: 'done', genre: 'Classic', progress: 100, tags: [], fav: false },
-      { id: "4", uid: "0", title: "Take 5", artist: "Dave Brubeck", status: 'repeat', genre: "Jazz", progress: 80, tags: ["improv", "lead sheet"], fav: false },
+      { uid: "0", title: "Fried Chicken", artist: "Jürgen Moser", status: 'todo', genre: 'Rock', tags: [], fav: false },
+      { uid: "0", title: "Interstellar", artist: "Hans Zimmer / Pietschmann", status: 'wip', genre: 'Movie Score', progress: 60, tags: ["new"], fav: true },
+      { uid: "0", title: "Für Elise", artist: "Beethoven", status: 'done', genre: 'Classic', progress: 100, tags: [], fav: false },
+      { uid: "0", title: "Take 5", artist: "Dave Brubeck", status: 'repeat', genre: "Jazz", progress: 80, tags: ["improv", "lead sheet"], fav: false },
     ]);
 
     let user: Observable<User>;

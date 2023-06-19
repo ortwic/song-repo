@@ -10,7 +10,6 @@ export interface Song extends Item {
 };
 
 export interface Item {
-    id: string;
     uid: string;
     title: string;
     status: Status;
