@@ -34,6 +34,9 @@ devDependencies:
   '@smui/menu':
     specifier: ^7.0.0-beta.8
     version: 7.0.0-beta.8(svelte@3.57.0)(typescript@4.9.5)
+  '@smui/snackbar':
+    specifier: 7.0.0-beta.8
+    version: 7.0.0-beta.8(svelte@3.57.0)(typescript@4.9.5)
   '@smui/switch':
     specifier: ^7.0.0-beta.1
     version: 7.0.0-beta.1(svelte@3.57.0)(typescript@4.9.5)
@@ -2540,7 +2543,6 @@ packages:
       '@material/theme': 14.0.0
       '@material/typography': 14.0.0
       tslib: 2.5.0
-    dev: false
 
   /@material/switch@14.0.0:
     resolution: {integrity: sha512-vHVKzbvHVKGSrkMB1lZAl8z3eJ8sPRnSR+DWn+IhqHcTsDdDyly2NNj4i2vTSrEA39CztGqkx0OnKM4vkpiZHw==}
@@ -2892,6 +2894,22 @@ packages:
       - svelte
       - typescript
 
+  /@smui/button@7.0.0-beta.8(svelte@3.57.0)(typescript@4.9.5):
+    resolution: {integrity: sha512-DE/dXV0a0L+LtXZRyhEH1rN6+5XJwG1s1xqa8v4778fCe/Zf8qpHTXsF1Y8xxjbr7NeOdqIYkgFEk3F8Gee1lg==}
+    dependencies:
+      '@material/button': 14.0.0
+      '@material/elevation': 14.0.0
+      '@material/feature-targeting': 14.0.0
+      '@material/ripple': 14.0.0
+      '@material/shape': 14.0.0
+      '@material/theme': 14.0.0
+      '@smui/common': 7.0.0-beta.8(svelte@3.57.0)(typescript@4.9.5)
+      '@smui/ripple': 7.0.0-beta.8(svelte@3.57.0)(typescript@4.9.5)
+      svelte2tsx: 0.6.11(svelte@3.57.0)(typescript@4.9.5)
+    transitivePeerDependencies:
+      - svelte
+      - typescript
+
   /@smui/card@7.0.0-beta.0(svelte@3.57.0)(typescript@4.9.5):
     resolution: {integrity: sha512-IxcmeDgfilsKsGbjHo1mGhHlw4jRksD7LudghWiSCvbKVOvg0ukAD2nOzNzXCa5LJEuODjHjoEC0GCRDTINLtg==}
     dependencies:
@@ -3044,6 +3062,18 @@ packages:
       '@smui/common': 7.0.0-beta.1(svelte@3.57.0)(typescript@4.9.5)
       '@smui/ripple': 7.0.0-beta.1(svelte@3.57.0)(typescript@4.9.5)
       svelte2tsx: 0.5.23(svelte@3.57.0)(typescript@4.9.5)
+    transitivePeerDependencies:
+      - svelte
+      - typescript
+
+  /@smui/icon-button@7.0.0-beta.8(svelte@3.57.0)(typescript@4.9.5):
+    resolution: {integrity: sha512-QMqBoDQFcKqGYniky+VhTTp7QHH2ID7Zvdht6kGRcWC8Yb5UhcE4+yLnvKUWqz8I608bVznbL5viQfmsJbSlvA==}
+    dependencies:
+      '@material/density': 14.0.0
+      '@material/icon-button': 14.0.0
+      '@smui/common': 7.0.0-beta.8(svelte@3.57.0)(typescript@4.9.5)
+      '@smui/ripple': 7.0.0-beta.8(svelte@3.57.0)(typescript@4.9.5)
+      svelte2tsx: 0.6.11(svelte@3.57.0)(typescript@4.9.5)
     transitivePeerDependencies:
       - svelte
       - typescript
@@ -3245,21 +3275,20 @@ packages:
       - typescript
     dev: false
 
-  /@smui/snackbar@7.0.0-beta.0(svelte@3.57.0)(typescript@4.9.5):
-    resolution: {integrity: sha512-01DFF3ggnU7O3ispu2WvcI8MLXmP82Oplzex5cOdNDat/xzU4fn++1fw3CcuNGZ4NSm3eb3HqDkSSkN39mQQ6w==}
+  /@smui/snackbar@7.0.0-beta.8(svelte@3.57.0)(typescript@4.9.5):
+    resolution: {integrity: sha512-NdlqsWYtgnHDjCXIi/iHVqMHk+93zjZsJLkGZvbVlSSPrQJsYVHKxogYjP301M/n/AjvcLOXFrJL7qXR2PP5MQ==}
     dependencies:
       '@material/dom': 14.0.0
       '@material/feature-targeting': 14.0.0
       '@material/snackbar': 14.0.0
-      '@smui/button': 7.0.0-beta.0(svelte@3.57.0)(typescript@4.9.5)
-      '@smui/common': 7.0.0-beta.1(svelte@3.57.0)(typescript@4.9.5)
-      '@smui/icon-button': 7.0.0-beta.0(svelte@3.57.0)(typescript@4.9.5)
-      '@smui/ripple': 7.0.0-beta.1(svelte@3.57.0)(typescript@4.9.5)
-      svelte2tsx: 0.5.23(svelte@3.57.0)(typescript@4.9.5)
+      '@smui/button': 7.0.0-beta.8(svelte@3.57.0)(typescript@4.9.5)
+      '@smui/common': 7.0.0-beta.8(svelte@3.57.0)(typescript@4.9.5)
+      '@smui/icon-button': 7.0.0-beta.8(svelte@3.57.0)(typescript@4.9.5)
+      '@smui/ripple': 7.0.0-beta.8(svelte@3.57.0)(typescript@4.9.5)
+      svelte2tsx: 0.6.11(svelte@3.57.0)(typescript@4.9.5)
     transitivePeerDependencies:
       - svelte
       - typescript
-    dev: false
 
   /@smui/switch@7.0.0-beta.1(svelte@3.57.0)(typescript@4.9.5):
     resolution: {integrity: sha512-ei4hXQ/wjf8HWpYnUrXgDIvFtgYMizeIMRpUtuwlxhYs8WIxyc/tuHlZpDF24HqI9mAQcKF9FYoZV+oLJD1wsw==}
@@ -5928,7 +5957,7 @@ packages:
       '@smui/segmented-button': 7.0.0-beta.0(svelte@3.57.0)(typescript@4.9.5)
       '@smui/select': 7.0.0-beta.0(svelte@3.57.0)(typescript@4.9.5)
       '@smui/slider': 7.0.0-beta.0(svelte@3.57.0)(typescript@4.9.5)
-      '@smui/snackbar': 7.0.0-beta.0(svelte@3.57.0)(typescript@4.9.5)
+      '@smui/snackbar': 7.0.0-beta.8(svelte@3.57.0)(typescript@4.9.5)
       '@smui/switch': 7.0.0-beta.1(svelte@3.57.0)(typescript@4.9.5)
       '@smui/tab': 7.0.0-beta.0(svelte@3.57.0)(typescript@4.9.5)
       '@smui/tab-bar': 7.0.0-beta.0(svelte@3.57.0)(typescript@4.9.5)

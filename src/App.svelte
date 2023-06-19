@@ -8,7 +8,7 @@
     songs.set([
       { uid: "0", title: "Fried Chicken", artist: "Jürgen Moser", status: 'todo', genre: 'Rock', tags: [], fav: false },
       { uid: "0", title: "Interstellar", artist: "Hans Zimmer / Pietschmann", status: 'wip', genre: 'Movie Score', progress: 60, tags: ["new"], fav: true },
-      { uid: "0", title: "Für Elise", artist: "Beethoven", status: 'done', genre: 'Classic', progress: 100, tags: [], fav: false },
+      { uid: "0", title: "Für Elise", artist: "L. Beethoven", status: 'done', genre: 'Classic', progress: 100, tags: [], fav: false },
       { uid: "0", title: "Take 5", artist: "Dave Brubeck", status: 'repeat', genre: "Jazz", progress: 80, tags: ["improv", "lead sheet"], fav: false },
     ]);
 

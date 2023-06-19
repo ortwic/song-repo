@@ -1,4 +1,5 @@
 import { writable } from "svelte/store";
+import { findIndex, setWith } from "lodash";
 import type { Song } from "../model/song.model";
 
 class ArrayStore<T> {
@@ -29,8 +30,18 @@ class ArrayStore<T> {
         return popped;
     }
 
-    public update(items: T[]): void {
-        
+    public replace(newItem: T, getKey: (item: T) => string): void {
+        this._store.update(items => {
+            const index = findIndex(items, (item: T) => getKey(item) === getKey(newItem));
+
+            if (index !== -1) {
+                items[index] = newItem;
+            } else {
+                items.push(newItem);
+            }
+    
+            return items;
+        });
     }
 
     public set(items: T[]): void {

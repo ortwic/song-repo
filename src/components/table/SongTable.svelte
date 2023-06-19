@@ -3,15 +3,17 @@
     import Menu from '@smui/menu';
     import List, { Item, Text } from '@smui/list';
     import Button, { Group } from '@smui/button';
+    import type { TabulatorFull as Tabulator, ColumnDefinition } from 'tabulator-tables';
     import { column, autoFilter, comboBoxEditor, progressColumn } from './column.helper';
     import { favColumn, statusFormatter, genreFormatter, labelFormatter } from './formatter.helper';
-    import type { TabulatorFull as Tabulator, ColumnDefinition } from 'tabulator-tables';
     import Table from './Table.svelte'
     import FileDrop from './FileDrop.svelte';
+    import Snackbar from '../Snackbar.svelte';
     import type { Song } from '../../model/song.model';
     import type { Observable } from 'rxjs';
     import { songs } from '../../store/song.store';
 
+    let snackbar: Snackbar;
     let exportMenu: Menu;
     let table: Observable<Tabulator>;
 
@@ -32,7 +34,10 @@
     function importJSON(data: string) {
       const json = JSON.parse(data) as Song[];
       if (json) {
-        songs.set(json);
+        for(const song of json) {
+          songs.replace(song, (s) => `${s.artist}${s.title}`);
+        }
+        snackbar.open(`Found ${json.length} songs. Total songs: ${songs.length}`);
       }
     }
 
@@ -71,6 +76,8 @@
   <FileDrop on:addJson="{({ detail }) => importJSON(detail)}">
     <Table bind:element={table} {columns} />
   </FileDrop>
+  
+  <Snackbar bind:this={snackbar} />
 </div>
 
 <style>
