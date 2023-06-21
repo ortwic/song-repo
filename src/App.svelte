@@ -40,10 +40,12 @@
 <style>
   div.header {
     display: flex;
+    color: black;
     background-color: whitesmoke;
     border-bottom: 1px solid silver;
     width: 100%;
   }
+
   div.header div {
     padding: .2rem 1rem;
     vertical-align: middle;
@@ -53,4 +55,11 @@
   div.login {
     text-align: right;
   }
+ 
+  @media (prefers-color-scheme: dark) {
+  :root {
+    color: whitesmoke;
+    background-color: #404040;
+  }
+}
 </style>

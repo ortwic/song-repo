@@ -1,5 +1,4 @@
-import Color from "color";
-import type { CellComponent, ColumnDefinition, ListEditorParams } from "tabulator-tables";
+import type { ColumnDefinition } from "tabulator-tables";
 
 type Sorter = undefined
     | 'string'
@@ -31,28 +30,5 @@ export const comboBoxEditor: Partial<ColumnDefinition> = {
         allowEmpty: true,
         listOnEmpty: true,
         freetext: true
-    }
-};
-
-export const autoFilter: Partial<ColumnDefinition> = {
-    headerFilter: 'list',
-    headerFilterParams: comboBoxEditor.editorParams
-};
-
-export const progressColumn: Partial<ColumnDefinition> = {
-    headerFilter: 'number',
-    headerFilterParams: {
-        min: 0,
-        max: 100,
-        step: 5
-    },
-    formatter: 'progress',
-    formatterParams: {
-        min: 0,
-        max: 100,
-        color: [ '#FF0000', '#FFC000', '#00E000' ],
-        legend: (v: number) => `${v} %`,
-        legendColor:"#000000",
-        legendAlign:"center",
     }
 };

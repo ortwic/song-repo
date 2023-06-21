@@ -11,10 +11,18 @@
     onMount(() => {
       const table = new TabulatorFull(tableComponent, {
         columns,
-        maxHeight: "100%",
+        clipboard: true,
+        movableColumns: true,
+        movableRows: true,
         reactiveData: true,
+        // responsiveLayout: 'collapse',
         pagination: true,
-        paginationSize: 50
+        paginationSize: 50,
+        // persistence:{
+        //   sort:true,
+        //   filter:true,
+        //   columns:true,
+        // }
       });
 
       element = fromEvent(table, 'tableBuilt').pipe(take(1), map(() => table));

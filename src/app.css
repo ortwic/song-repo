@@ -4,8 +4,8 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: #213547;
+  background-color: #ffffff;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -14,10 +14,15 @@
   -webkit-text-size-adjust: 100%;
 }
 
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: dark) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    color: whitesmoke;
+    background-color: #242424;
+  }
+
+  span.label {
+    border: 1px solid gray;
+    background-color: #242424;
   }
 }
 
@@ -26,10 +31,10 @@ body {
 }
 
 span.label {
+  border: 1px solid silver;
+  background-color: whitesmoke;
   margin: .4rem .2rem;
   padding: .2rem .6rem;
-  border: 1px solid silver;
   border-radius: 1rem;
-  background-color: whitesmoke;
   font-size: smaller;
 }

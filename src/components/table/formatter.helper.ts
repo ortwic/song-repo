@@ -32,6 +32,18 @@ export const statusFormatter: Partial<ColumnDefinition> = {
     }
 };
 
+export const progressFormatter: Partial<ColumnDefinition> = {
+    formatter: 'progress',
+    formatterParams: {
+        min: 0,
+        max: 100,
+        color: [ '#FF0000', '#FFC000', '#00E000' ],
+        legend: (v: number) => `${v} %`,
+        legendColor:"#000000",
+        legendAlign:"center",
+    }
+};
+
 export const genreFormatter: Partial<ColumnDefinition> = {
     formatter(cell: CellComponent): string {
         const value = cell.getValue();

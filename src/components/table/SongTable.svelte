@@ -1,11 +1,12 @@
 <script lang="ts">
-    import 'tabulator-tables/dist/css/tabulator_bulma.min.css';
+    import { onMount } from 'svelte';
     import Menu from '@smui/menu';
     import List, { Item, Text } from '@smui/list';
     import Button, { Group } from '@smui/button';
     import type { TabulatorFull as Tabulator, ColumnDefinition } from 'tabulator-tables';
-    import { column, autoFilter, comboBoxEditor, progressColumn } from './column.helper';
-    import { favColumn, statusFormatter, genreFormatter, labelFormatter } from './formatter.helper';
+    import { column, comboBoxEditor } from './column.helper';
+    import { autoFilter, rangeFilter } from './filter.helper';
+    import { favColumn, statusFormatter, genreFormatter, labelFormatter, progressFormatter } from './formatter.helper';
     import Table from './Table.svelte'
     import FileDrop from './FileDrop.svelte';
     import Snackbar from '../Snackbar.svelte';
@@ -20,14 +21,23 @@
     // https://tabulator.info/docs/5.4/edit#editor-list
     const columns: ColumnDefinition[] = [
       column("✩", "fav", "4%", undefined, favColumn),
-      column("?", "status", "4%", "string", autoFilter, statusFormatter),
-      column("Progress", "progress", "14%", "number", progressColumn, { editor: 'range' }),
-      column("Title", "title", "25%", "string", autoFilter, { editor: 'input' }),
-      column("Artist", "artist", "25%", "string", autoFilter, comboBoxEditor),
-      column("Genre", "genre", "14%", "string", autoFilter, genreFormatter, comboBoxEditor),
-      column("Labels", "tags", "14%", "string", autoFilter, labelFormatter, { editor: 'input' }),
-      column("Learned", "learnedOn", "14%", "date", autoFilter, { editor: 'input' }),
+      column("?", "status", "4%", "string", autoFilter(), statusFormatter),
+      column("Progress", "progress", "14%", "number", rangeFilter(), progressFormatter, { editor: 'range' }),
+      column("Title", "title", "25%", "string", autoFilter(), { editor: 'input' }),
+      column("Artist", "artist", "25%", "string", autoFilter(), comboBoxEditor),
+      column("Genre", "genre", "14%", "string", autoFilter(), genreFormatter, comboBoxEditor),
+      column("Labels", "tags", "14%", "string", autoFilter(), labelFormatter, { editor: 'input' }),
+      column("Learned", "learnedOn", "14%", "date", autoFilter(), { editor: 'input' }),
     ];
+
+    onMount(async () => {
+      const darkTheme = window?.matchMedia?.('(prefers-color-scheme:dark)')?.matches;
+      if (darkTheme) {
+        await import('tabulator-tables/dist/css/tabulator_midnight.min.css');
+      } else {
+        await import('tabulator-tables/dist/css/tabulator_bulma.min.css');
+      }
+    });
 
     const newSong = (): Song => ({ status: 'todo', progress: 0, tags: [] } as Song);
         
