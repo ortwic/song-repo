@@ -1,7 +1,9 @@
 import Color from "color";
 import type { ColumnDefinition, CellComponent } from "tabulator-tables";
+import ProgressBar from "./templates/ProgressBar.class";
 import genres from '../../data/genres.json';
 import colornames from '../../data/colornames.json';
+import type { Song } from "../../model/song.model";
 
 export const favColumn: Partial<ColumnDefinition> = {
     hozAlign: 'center',
@@ -33,14 +35,25 @@ export const statusFormatter: Partial<ColumnDefinition> = {
 };
 
 export const progressFormatter: Partial<ColumnDefinition> = {
-    formatter: 'progress',
-    formatterParams: {
-        min: 0,
-        max: 100,
-        color: [ '#FF0000', '#FFC000', '#00E000' ],
-        legend: (v: number) => `${v} %`,
-        legendColor:"#000000",
-        legendAlign:"center",
+    formatter(cell: CellComponent): HTMLElement {
+        const song = cell.getData() as Song;
+        const bar = ProgressBar.create(cell.getElement(), cell.getValue());
+        bar.element.addEventListener('change', (ev: CustomEvent) => {
+            const [newValue, oldValue] = ev.detail;
+            cell.setValue(newValue);
+
+            if (newValue > 99) {
+                song.status = 'done';
+            } else if (newValue < 1) {
+                song.status = 'removed';
+            } else if (newValue < oldValue) {
+                song.status = 'repeat';
+            } else if (oldValue < newValue) {
+                song.status = 'wip';
+            }
+            console.log({ [song.status]: ev.detail.join() });
+        });
+        return bar.element;
     }
 };
 

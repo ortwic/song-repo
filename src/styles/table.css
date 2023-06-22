@@ -1,0 +1,72 @@
+/* progress bar column */
+div.progress-bar-container {
+    position: relative;
+    width: 100%;
+    height: 30px;
+    background: linear-gradient(to right, firebrick, red 20%, orange 33%, yellow 45%, yellowgreen, darkgreen);
+    border: 1px solid gray;
+}
+
+div.progress-bar {
+    position: absolute;
+    height: 100%;
+    background-color: whitesmoke;
+}
+
+div.percent-value {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    font-weight: bold;
+    user-select: none;
+}
+
+/* favorite column */
+div.tabulator-cell.fav {
+    font-size: larger;
+    color: lightgray;
+}
+
+div.tabulator-cell.fav.active {
+    color: gold;
+}
+
+/* status column */
+div.tabulator-cell.status {
+    font-weight: bold;
+}
+
+div.tabulator-cell.status.unkown::before {
+    content: '?';
+    color: silver;
+}
+
+div.tabulator-cell.status.todo::before {
+    content: ' ';
+}
+
+div.tabulator-cell.status.wip::before {
+    content: '>';
+    color: orange
+}
+
+div.tabulator-cell.status.done::before {
+    content: '✓';
+    color: green
+}
+
+div.tabulator-cell.status.repeat::before {
+    content: '<';
+    color: red;
+}
+
+div.tabulator-cell.status.removed::before {
+    content: '✗';
+    color: purple;
+}

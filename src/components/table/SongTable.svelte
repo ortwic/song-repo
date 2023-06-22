@@ -1,4 +1,5 @@
 <script lang="ts">
+    import '../../styles/table.css';
     import { onMount } from 'svelte';
     import Menu from '@smui/menu';
     import List, { Item, Text } from '@smui/list';
@@ -22,7 +23,7 @@
     const columns: ColumnDefinition[] = [
       column("✩", "fav", "4%", undefined, favColumn),
       column("?", "status", "4%", "string", autoFilter(), statusFormatter),
-      column("Progress", "progress", "14%", "number", rangeFilter(), progressFormatter, { editor: 'range' }),
+      column("Progress", "progress", "14%", "number", rangeFilter(), progressFormatter),
       column("Title", "title", "25%", "string", autoFilter(), { editor: 'input' }),
       column("Artist", "artist", "25%", "string", autoFilter(), comboBoxEditor),
       column("Genre", "genre", "14%", "string", autoFilter(), genreFormatter, comboBoxEditor),
@@ -98,48 +99,6 @@
     div#export-menu {
       display: inline-block;
       min-width: 100px;
-    }
-
-    :global(div.tabulator-cell.fav) {
-      font-size: larger;
-      color: lightgray;
-    }
-
-    :global(div.tabulator-cell.fav.active) {
-      color: gold;
-    }
-
-    :global(div.tabulator-cell.status) {
-      font-weight: bold;
-    }
-
-    :global(div.tabulator-cell.status.unkown::before) {
-      content: '?';
-      color: silver;
-    }
-
-    :global(div.tabulator-cell.status.todo::before) {
-      content: ' ';
-    }
-
-    :global(div.tabulator-cell.status.wip::before) {
-      content: '>';
-      color: orange
-    }
-
-    :global(div.tabulator-cell.status.done::before) {
-      content: '✓';
-      color: green
-    }
-
-    :global(div.tabulator-cell.status.repeat::before) {
-      content: '<';
-      color: red;
-    }
-
-    :global(div.tabulator-cell.status.removed::before) {
-      content: '✗';
-      color: purple;
     }
 </style>
   
