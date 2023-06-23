@@ -1,4 +1,4 @@
-import type { ColumnDefinition } from "tabulator-tables";
+import type { ColumnDefinition, EditorParams } from "tabulator-tables";
 
 type Sorter = undefined
     | 'string'
@@ -21,14 +21,17 @@ export const column = (title: string, field: string, width: string, sorter: Sort
     }, ...more);
 };
 
-export const comboBoxEditor: Partial<ColumnDefinition> = {
-    editor: 'list',
-    editorParams: {
-        valuesLookup: 'active',
+export const comboBoxEditor = (values?: string[]): Partial<ColumnDefinition> => {
+    const editorParams: EditorParams = {
+        values,
         autocomplete: true,
         clearable: true,
         allowEmpty: true,
         listOnEmpty: true,
         freetext: true
+    };
+    if (!values) {
+        editorParams.valuesLookup = 'active';
     }
+    return { editor: 'list', editorParams };
 };

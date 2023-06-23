@@ -30,9 +30,9 @@ class ArrayStore<T> {
         return popped;
     }
 
-    public replace(newItem: T, getKey: (item: T) => string): void {
+    public replace(newItem: T, keyProp: keyof T): void {
         this._store.update(items => {
-            const index = findIndex(items, (item: T) => getKey(item) === getKey(newItem));
+            const index = findIndex(items, (item: T) => item[keyProp] === newItem[keyProp]);
 
             if (index !== -1) {
                 items[index] = newItem;

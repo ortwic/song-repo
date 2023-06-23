@@ -4,7 +4,7 @@ import { comboBoxEditor } from "./column.helper";
 export const autoFilter = (operator: FilterType = 'like'): Partial<ColumnDefinition> => {
     return {
         headerFilter: 'list',
-        headerFilterParams: comboBoxEditor.editorParams,
+        headerFilterParams: comboBoxEditor().editorParams,
         headerFilterFunc: operator as FilterType
     }
 };
