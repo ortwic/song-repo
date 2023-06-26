@@ -1,32 +1,34 @@
 import { switchMap } from 'rxjs';
 import { currentUser } from './auth.service';
 import FirestoreService from './firestore.service';
-import type { Song } from '../model/song.model';
-import { songs } from '../store/song.store';
+import type { Song, UserSong } from '../model/song.model';
+import { usersongs } from '../store/song.store';
 
 const uniqueKey = (s: string) => s?.trim().toLowerCase().replaceAll(' ', '_').replaceAll(/\W/g, '');
-export const newSong = (): Song => ({ status: 'todo', progress: 0, tags: [] } as Song);
+export const newSong = (): UserSong => ({ status: 'todo', progress: 0, tags: [] } as UserSong);
 
 export default class SongService {
     public readonly store = new FirestoreService('songs');
-    private uid: string;
-
-    private appendKeys = (s: Song) => Object.assign(s, {
-        id: uniqueKey(`${s.artist}_${s.title}`),
-        uid: this.uid
-    });
+    private uid = '';
+    
+    private appendKeys = (song: UserSong): UserSong => (
+        Object.assign(song, {
+            id: uniqueKey(`${song.artist}_${song.title}`),
+            uid: this.uid
+        })
+    );
 
     constructor() {
         currentUser.subscribe(user => this.uid = user?.uid);
         currentUser.pipe(
             switchMap(user => user ? this.store.getDocuments(user.uid) : [])
-        ).subscribe((value) => songs.set(value as Song[]));
+        ).subscribe((value) => usersongs.set(value as UserSong[]));
     }
 
-    importSongs(data: Song[]): Song[] {
+    importSongs(data: UserSong[]): UserSong[] {
         if (data) {
-            for(const song of data.map(this.appendKeys)) {
-                songs.replace(song, 'id');
+            for(const song of data.map((s) => this.appendKeys(s))) {
+                usersongs.replace(song, 'id');
             }
             return data;
         }

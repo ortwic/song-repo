@@ -61,12 +61,11 @@ export const genreFormatter: Partial<ColumnDefinition> = {
     formatter(cell: CellComponent): string {
         const value = cell.getValue();
         try {
-            const hexcolor = genres[value] && colornames[genres[value].toLowerCase()];
-            if (hexcolor) {
-                const color = Color(hexcolor).isDark() ? 'white' : 'black';
+            const bgColor = genres[value]?.color && colornames[genres[value].color.toLowerCase()];
+            if (bgColor) {
                 const element = cell.getElement();
-                element.style.color = color;
-                element.style.backgroundColor = hexcolor;
+                element.style.color = Color(bgColor).isDark() ? 'white' : 'black';
+                element.style.backgroundColor = bgColor;
             }
         } catch {      
         }

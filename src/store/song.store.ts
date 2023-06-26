@@ -1,6 +1,6 @@
 import { writable } from "svelte/store";
-import { findIndex, setWith } from "lodash";
-import type { Song } from "../model/song.model";
+import { findIndex } from "lodash";
+import type { UserSong } from "../model/song.model";
 
 class ArrayStore<T> {
     private _store = writable([] as T[]);
@@ -59,4 +59,4 @@ class ArrayStore<T> {
     }
 }
 
-export const songs = new ArrayStore<Song>();
+export const usersongs = new ArrayStore<UserSong>();

@@ -2,10 +2,10 @@
     import Login from './components/login/Login.svelte';
     import Table from './components/table/SongTable.svelte';
     import { currentUser } from './service/auth.service';
-    import { songs } from './store/song.store';
+    import { usersongs } from './store/song.store';
   
     function demo() {
-      songs.set([
+      usersongs.set([
         { id: "rock_piano_fried_chicken", uid: "0", title: "Fried Chicken", artist: "Jürgen Moser", status: 'todo', genre: 'Rock', tags: [], fav: false },
         { id: "p_pietschmann_interstellar", uid: "0", title: "Interstellar", artist: "Hans Zimmer / Pietschmann", status: 'wip', genre: 'Movie Score', progress: 60, tags: ["new"], fav: true },
         { id: "l_beethoven_fr_elisec", uid: "0", title: "Für Elise", artist: "L. Beethoven", status: 'done', genre: 'Classic', progress: 100, tags: [], fav: false },

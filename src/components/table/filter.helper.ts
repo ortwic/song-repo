@@ -1,10 +1,16 @@
 import type { ColumnDefinition, FilterType } from "tabulator-tables";
-import { comboBoxEditor } from "./column.helper";
 
 export const autoFilter = (operator: FilterType = 'like'): Partial<ColumnDefinition> => {
     return {
         headerFilter: 'list',
-        headerFilterParams: comboBoxEditor().editorParams,
+        headerFilterParams: {
+            valuesLookup: 'active',
+            autocomplete: true,
+            clearable: true,
+            allowEmpty: true,
+            listOnEmpty: true,
+            freetext: true
+        },
         headerFilterFunc: operator as FilterType
     }
 };

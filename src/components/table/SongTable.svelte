@@ -13,13 +13,15 @@
     import FileDrop from './FileDrop.svelte';
     import Snackbar from '../Snackbar.svelte';
     import SongService, { newSong } from '../../service/song.service';
-    import { songs } from '../../store/song.store';
+    import { usersongs } from '../../store/song.store';
     import genres from '../../data/genres.json';
 
     let service = new SongService();
     let snackbar: Snackbar;
     let exportMenu: Menu;
     let table: Observable<Tabulator>;
+
+    const genreSelector = comboBoxEditor(Object.keys(genres));
 
     // https://tabulator.info/docs/5.4/edit#editor-list
     const columns: ColumnDefinition[] = [
@@ -28,9 +30,10 @@
       column("✩", "fav", "4%", undefined, favColumn, { cellEdited }),
       column("?", "status", "4%", "string", autoFilter(), statusFormatter),
       column("Progress", "progress", "14%", "number", rangeFilter(), progressFormatter, { cellEdited }),
-      column("Title", "title", "25%", "string", autoFilter(), { editor: 'input', cellEdited }),
+      column("Genre", "genre", "14%", "string", autoFilter(), genreFormatter, genreSelector, { cellEdited }),
+      column("Style", "style", "25%", "string", autoFilter(), genreFormatter, comboBoxEditor(), { cellEdited }),
       column("Artist", "artist", "25%", "string", autoFilter(), comboBoxEditor(), { cellEdited }),
-      column("Genre", "genre", "14%", "string", autoFilter(), genreFormatter, comboBoxEditor(Object.keys(genres)), { cellEdited }),
+      column("Title", "title", "25%", "string", autoFilter(), { editor: 'input', cellEdited }),
       column("Labels", "tags", "14%", "string", autoFilter(), labelFormatter, { editor: 'input', cellEdited }),
       column("Learned", "learnedOn", "14%", "date", autoFilter(), { editor: 'input', cellEdited }),
     ];
@@ -50,7 +53,7 @@
     
     function importJSON(data: string) {
       const result = service.importSongs(JSON.parse(data));
-      snackbar.open(`Found ${result.length} songs. Total songs: ${songs.length}`);
+      snackbar.open(`Found ${result.length} songs. Total songs: ${usersongs.length}`);
     }
 
     function downloadXlsx() {
@@ -65,7 +68,7 @@
 
     $: {
       if ($table) {
-        $table.replaceData($songs);
+        $table.replaceData($usersongs);
       }
     }
 </script>
@@ -79,8 +82,8 @@
 <div>
   <div id="export-menu">
     <Group>
-      <Button title="add row before" variant="raised" color="secondary" on:click={() => songs.unshift(newSong())}>+[]</Button>
-      <Button title="add row after" variant="raised" color="secondary" on:click={() => songs.push(newSong())}>[]+</Button>
+      <Button title="add row before" variant="raised" color="secondary" on:click={() => usersongs.unshift(newSong())}>+[]</Button>
+      <Button title="add row after" variant="raised" color="secondary" on:click={() => usersongs.push(newSong())}>[]+</Button>
     </Group>
     <Button title="export table data" variant="raised" color="secondary" on:click={() => exportMenu.setOpen(true)}>Export</Button>
     <Menu bind:this={exportMenu}>

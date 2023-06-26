@@ -1,8 +1,9 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { songs } from './song.store';
-import type { Song } from '../model/song.model';
+import { usersongs } from './song.store';
+import type { UserSong } from '../model/song.model';
 
-const demoSong: Song = {
+const demoSong: UserSong = {
+    id: 'abc',
     uid: 'xyz',
     status: 'todo',
     title: 'example',
@@ -13,61 +14,60 @@ const demoSong: Song = {
 
 describe("song store", () => {
 
-    beforeEach(() => songs.set([]));
+    beforeEach(() => usersongs.set([]));
 
     it("should push an item", () => {
-        expect(songs.isEmpty).toBe(true);
+        expect(usersongs.isEmpty).toBe(true);
 
-        songs.push(demoSong);
-        expect(songs.isEmpty).toBe(false);
+        usersongs.push(demoSong);
+        expect(usersongs.isEmpty).toBe(false);
     });
 
     it("should pop an item from the store", () => {
-        expect(songs.isEmpty).toBe(true);
-        songs.push(demoSong);
+        expect(usersongs.isEmpty).toBe(true);
+        usersongs.push(demoSong);
 
-        expect(songs.pop()).toBe(demoSong);
-        expect(songs.isEmpty).toBe(true);
+        expect(usersongs.pop()).toBe(demoSong);
+        expect(usersongs.isEmpty).toBe(true);
 
-        expect(songs.pop()).toBeUndefined();
-        expect(songs.isEmpty).toBe(true);
+        expect(usersongs.pop()).toBeUndefined();
+        expect(usersongs.isEmpty).toBe(true);
     });
 
     it("should replace or add item", () => {
-        const song1: Song = { uid: 'a', title: 'Song 1', tags: [], status: 'todo' };
-        const song2: Song = { uid: 'b', title: 'Song 2', tags: [], status: 'wip' };
-        const getKey = (item: Song) => item.uid;
+        const song1 = { id: 'a', title: 'Song 1', tags: [], status: 'todo' } as UserSong;
+        const song2 = { id: 'b', title: 'Song 2', tags: [], status: 'wip' } as UserSong;
         const getAll = () => {
-            let result: Song[];
-            songs.subscribe(items => result = items);
+            let result: UserSong[];
+            usersongs.subscribe(items => result = items);
             return result;
         };
         
         // Arrange
-        songs.set([song1, song2]);
-        expect(songs.length).toBe(2);
+        usersongs.set([song1, song2]);
+        expect(usersongs.length).toBe(2);
     
         // Replace an existing item
-        songs.replace({ uid: 'b', title: 'Updated Song', status: 'done' } as Song, getKey);
-        const replacedItem = getAll().find(s => s.uid === 'b');
+        usersongs.replace({ id: 'b', title: 'Updated Song', status: 'done' } as UserSong, 'id');
+        const replacedItem = getAll().find(s => s.id === 'b');
         expect(replacedItem.status).toBe('done');
         expect(replacedItem.title).toBe('Updated Song');
-        expect(songs.length).toBe(2);
+        expect(usersongs.length).toBe(2);
     
         // Add a new item
-        songs.replace({ uid: 'c', title: 'New Song' } as Song, getKey);
-        const newItem = getAll().find(s => s.uid === 'c');
+        usersongs.replace({ id: 'c', title: 'New Song' } as UserSong, 'id');
+        const newItem = getAll().find(s => s.id === 'c');
         expect(newItem.title).toBe('New Song');
-        expect(songs.length).toBe(3);
+        expect(usersongs.length).toBe(3);
     });
 
     it("should check if empty", () => {
-        expect(songs.isEmpty).toBe(true);
+        expect(usersongs.isEmpty).toBe(true);
 
-        songs.push(demoSong);
-        expect(songs.isEmpty).toBe(false);
+        usersongs.push(demoSong);
+        expect(usersongs.isEmpty).toBe(false);
 
-        songs.set([]);
-        expect(songs.isEmpty).toBe(true);
+        usersongs.set([]);
+        expect(usersongs.isEmpty).toBe(true);
     });
 });
