@@ -27,7 +27,7 @@
 
 <div title='Drop file here to import data'
   on:dragover|preventDefault="{() => { }}" 
-  on:dragenter|preventDefault="{() => { }}" 
+  on:dragenter|preventDefault="{() => dispatch('enter')}" 
   on:dragleave|preventDefault="{() => { }}"
   on:drop|preventDefault="{handleDrop}">
   <slot></slot>

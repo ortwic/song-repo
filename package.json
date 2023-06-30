@@ -12,17 +12,6 @@
     "test:unit": "vitest"
   },
   "devDependencies": {
-    "@smui-extra/autocomplete": "^7.0.0-beta.0",
-    "@smui/button": "^7.0.0-beta.0",
-    "@smui/card": "^7.0.0-beta.0",
-    "@smui/chips": "^7.0.0-beta.0",
-    "@smui/icon-button": "^7.0.0-beta.0",
-    "@smui/layout-grid": "^7.0.0-beta.0",
-    "@smui/list": "7.0.0-beta.8",
-    "@smui/menu": "^7.0.0-beta.8",
-    "@smui/snackbar": "7.0.0-beta.8",
-    "@smui/switch": "^7.0.0-beta.1",
-    "@smui/textfield": "^7.0.0-beta.0",
     "@sveltejs/vite-plugin-svelte": "^2.0.3",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/svelte": "^3.2.2",
@@ -47,8 +36,5 @@
     "vite": "^4.2.0",
     "vite-plugin-pwa": "^0.15.1",
     "vitest": "^0.32.2"
-  },
-  "dependencies": {
-    "svelte-material-ui": "^7.0.0-beta.0"
   }
 }

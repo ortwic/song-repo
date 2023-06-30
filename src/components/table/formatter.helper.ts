@@ -18,6 +18,7 @@ export const favColumn: Partial<ColumnDefinition> = {
         element.addEventListener('click', () => cell.setValue(!value));
         element.classList.add('fav');
         if (value) {
+            element.title = 'favorite';
             element.classList.add('active');
             return '✮';
         }
@@ -30,6 +31,7 @@ export const statusFormatter: Partial<ColumnDefinition> = {
     formatter(cell: CellComponent): string {
         const value = cell.getValue().toString();
         const element = cell.getElement();
+        element.title = value;
         element.classList.add('status', value);
         return `<span style='display:none'>${value}</span>`;
     }

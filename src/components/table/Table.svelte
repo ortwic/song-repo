@@ -11,11 +11,13 @@
     onMount(() => {
       const table = new TabulatorFull(tableComponent, {
         columns,
+        placeholder: '#placeholder',
         clipboard: true,
         movableColumns: true,
         reactiveData: true,
         pagination: true,
         paginationSize: 50,
+        footerElement: '#footer',
         persistence:{
           sort:true,
           filter:true,
@@ -27,13 +29,33 @@
     });
 </script>
 
-<div id="table" bind:this="{tableComponent}">
+<div id="table" bind:this={tableComponent}>
 </div>
+<p id="placeholder">
+  <slot name="placeholder"></slot>
+</p>
+<span id="footer">
+  <slot name="footer"></slot>
+</span>
 
 <style>
-    div#table {
+    #table {
       overflow: auto;
       max-height: 100%;
+    }
+
+    #placeholder {
+      font-style: italic;
+      text-align: center;
+    }
+
+    #footer {
+      width: 100%;
+    }
+
+    :global(span.tabulator-paginator) {
+      float: right;
+      padding: 10px;
     }
 </style>
   

@@ -35,7 +35,6 @@ export default class SongService {
     }
 
     async setSong(data: Partial<Song>): Promise<void> {
-        console.log(data);
         if (this.uid) {
             return this.store.addDocument(data, data.id, { merge: true });
         }

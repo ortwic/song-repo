@@ -1,6 +1,4 @@
 <script lang="ts">
-    import Button, {Icon } from "@smui/icon-button";
-
     export let displayName: string;
     export let photoURL: string;
     export let email: string;

@@ -30,39 +30,43 @@ div.percent-value {
 /* favorite column */
 div.tabulator-cell.fav {
     font-size: larger;
-    color: lightgray;
+    color: silver;
 }
 
 div.tabulator-cell.fav.active {
     color: gold;
+    text-shadow: 1px 1px 1px gray;
 }
 
 /* status column */
 div.tabulator-cell.status {
-    font-weight: bold;
+    text-shadow: 1px 1px 1px gray;
 }
 
 div.tabulator-cell.status.unkown::before {
     content: '?';
-    color: silver;
+    color: lightgray;
 }
 
 div.tabulator-cell.status.todo::before {
-    content: ' ';
+    content: '○';
+    color: gray;
 }
 
 div.tabulator-cell.status.wip::before {
-    content: '>';
-    color: orange
+    content: '>>';
+    letter-spacing: -.25em;
+    color: steelblue;
 }
 
 div.tabulator-cell.status.done::before {
     content: '✓';
-    color: green
+    color: green;
 }
 
 div.tabulator-cell.status.repeat::before {
-    content: '<';
+    content: '<<';
+    letter-spacing: -.25em;
     color: red;
 }
 
