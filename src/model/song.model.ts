@@ -1,3 +1,4 @@
+import type { Timestamp } from "firebase/firestore";
 import type { Complete, Status } from "./types";
 
 export interface Song {
@@ -14,7 +15,7 @@ export interface UserSong extends Song {
     status: Status;
     progress?: number;
     complete?: Complete;
-    learnedOn?: Date;
+    learnedOn?: Timestamp;
     fav?: boolean;
     tags?: string[];
 };

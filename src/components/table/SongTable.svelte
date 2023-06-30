@@ -8,7 +8,7 @@
     import type { TabulatorFull as Tabulator, ColumnDefinition, CellComponent } from 'tabulator-tables';
     import { column, comboBoxEditor } from './column.helper';
     import { autoFilter, rangeFilter } from './filter.helper';
-    import { favColumn, statusFormatter, genreFormatter, labelFormatter, progressFormatter } from './formatter.helper';
+    import { favColumn, statusFormatter, genreFormatter, labelFormatter, progressFormatter, timestampFormatter } from './formatter.helper';
     import Table from './Table.svelte'
     import FileDrop from './FileDrop.svelte';
     import Snackbar from '../Snackbar.svelte';
@@ -35,7 +35,7 @@
       column("Artist", "artist", "25%", "string", autoFilter(), comboBoxEditor(), { cellEdited }),
       column("Title", "title", "25%", "string", autoFilter(), { editor: 'input', cellEdited }),
       column("Labels", "tags", "14%", "string", autoFilter(), labelFormatter, { editor: 'input', cellEdited }),
-      column("Learned", "learnedOn", "14%", "date", autoFilter(), { editor: 'input', cellEdited }),
+      column("Learned", "learnedOn", "14%", "date", autoFilter(), timestampFormatter, { editor: 'date', cellEdited }),
     ];
 
     onMount(async () => {

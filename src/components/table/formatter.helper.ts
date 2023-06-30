@@ -3,7 +3,8 @@ import type { ColumnDefinition, CellComponent } from "tabulator-tables";
 import ProgressBar from "./templates/ProgressBar.class";
 import genres from '../../data/genres.json';
 import colornames from '../../data/colornames.json';
-import type { Song } from "../../model/song.model";
+import type { UserSong } from "../../model/song.model";
+import { Timestamp } from "firebase/firestore";
 
 export const favColumn: Partial<ColumnDefinition> = {
     hozAlign: 'center',
@@ -36,7 +37,7 @@ export const statusFormatter: Partial<ColumnDefinition> = {
 
 export const progressFormatter: Partial<ColumnDefinition> = {
     formatter(cell: CellComponent): HTMLElement {
-        const song = cell.getData() as Song;
+        const song = cell.getData() as UserSong;
         const bar = ProgressBar.create(cell.getElement(), cell.getValue());
         bar.element.addEventListener('change', (ev: CustomEvent) => {
             const [newValue, oldValue] = ev.detail;
@@ -79,5 +80,15 @@ export const labelFormatter: Partial<ColumnDefinition> = {
         if (value) {
             return value.split(',').map(v => `<span class='label'>${v}</span>`).join('');
         }
+    }
+};
+
+export const timestampFormatter: Partial<ColumnDefinition> = {
+    formatter(cell: CellComponent): string {
+        const value = cell.getValue();
+        if (value instanceof Timestamp) {
+            return `${value.toDate()?.getFullYear()}`;
+        }
+        return value;
     }
 };
