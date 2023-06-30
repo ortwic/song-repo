@@ -3,17 +3,9 @@
     import Table from './components/table/SongTable.svelte';
 </script>
 
-<svelte:head>
-	<link rel="stylesheet" href="node_modules/svelte-material-ui/bare.css"/>
-</svelte:head>
-
 <main>
   <div class="header">
-    <div>
-    </div>
-    <div class="login">
-      <Login />
-    </div>
+    <Login />
   </div>
   
   <div>
@@ -24,21 +16,11 @@
 
 <style>
   div.header {
-    display: flex;
-    color: black;
-    background-color: whitesmoke;
-    border-bottom: 1px solid silver;
-    width: 100%;
-  }
-
-  div.header div {
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 1;
     padding: .2rem 1rem;
-    vertical-align: middle;
-    width: 50%;  
-  }
-
-  div.login {
-    text-align: right;
   }
  
   @media (prefers-color-scheme: dark) {

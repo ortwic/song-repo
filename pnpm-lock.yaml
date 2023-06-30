@@ -54,7 +54,7 @@ devDependencies:
     specifier: ^7.8.0
     version: 7.8.0
   svelte:
-    specifier: ^3.55.1
+    specifier: ^3.57.0
     version: 3.57.0
   svelte-check:
     specifier: ^2.10.3
@@ -4660,6 +4660,14 @@ packages:
       - sass
       - stylus
       - sugarss
+    dev: true
+
+  /svelte-dialogs@1.2.2(svelte@3.57.0):
+    resolution: {integrity: sha512-Pf25Xua2nDIIR4v45PNbn+yFrFLNc0ns9+sO8Ms77Hm/CdxFuXm01XO8Qkw8Ej66BvboX+kIJ3TCm8uwP/XmyQ==}
+    peerDependencies:
+      svelte: ^3.5.0
+    dependencies:
+      svelte: 3.57.0
     dev: true
 
   /svelte-hmr@0.15.1(svelte@3.57.0):

@@ -11,7 +11,7 @@
     onMount(() => {
       const table = new TabulatorFull(tableComponent, {
         columns,
-        placeholder: '#placeholder',
+        placeholder: '',
         clipboard: true,
         movableColumns: true,
         reactiveData: true,

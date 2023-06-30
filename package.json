@@ -28,7 +28,7 @@
     "nanoid": "^4.0.2",
     "rxfire": "^6.0.3",
     "rxjs": "^7.8.0",
-    "svelte": "^3.55.1",
+    "svelte": "^3.57.0",
     "svelte-check": "^2.10.3",
     "tabulator-tables": "^5.5.0",
     "tslib": "^2.5.0",
