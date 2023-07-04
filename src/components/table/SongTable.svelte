@@ -9,8 +9,9 @@
     import Table from './Table.svelte'
     import FileDrop from './FileDrop.svelte';
     import Snackbar from '../Snackbar.svelte';
-    import SongService, { newSong } from '../../service/song.service';
+    import SongService from '../../service/song.service';
     import { currentUser } from '../../service/auth.service';
+    import type { UserSong } from '../../model/song.model';
     import { usersongs } from '../../store/song.store';
     import genres from '../../data/genres.json';
 
@@ -32,7 +33,7 @@
       column("Artist", "artist", "25%", "string", autoFilter(), comboBoxEditor(), { cellEdited }),
       column("Title", "title", "25%", "string", autoFilter(), { editor: 'input', cellEdited }),
       column("Labels", "tags", "14%", "string", autoFilter(), labelFormatter, { editor: 'input', cellEdited }),
-      column("Learned", "learnedOn", "14%", "date", autoFilter(), timestampFormatter, { editor: 'date', cellEdited }),
+      column("Learned", "createdAt", "14%", "date", autoFilter(), timestampFormatter, { editor: 'date', cellEdited }),
     ];
 
     onMount(async () => {
@@ -45,7 +46,7 @@
     });
     
     function cellEdited(cell: CellComponent) {
-      return service.setSong(cell.getData());
+      return service.setSong(cell.getData() as UserSong);
     }
     
     function importJSON(data: string) {
@@ -81,7 +82,7 @@
     $: {
       if ($table) {
         $table.replaceData($usersongs);
-        console.log(`Set ${$usersongs.length} entries.`);
+        console.log(`Set ${$usersongs.length} entries.`, $usersongs.map(s => s.title));
       }
     }
 </script>
@@ -105,8 +106,8 @@
         {/if}
       </span>
       <span slot="footer">
-        <button title="add row before" on:click={() => usersongs.unshift(newSong())}>+[]</button>
-        <button title="add row after" on:click={() => usersongs.push(newSong())}>[]+</button>
+        <button title="add row before" on:click={() => usersongs.unshift(service.newSong())}>+[]</button>
+        <button title="add row after" on:click={() => usersongs.push(service.newSong())}>[]+</button>
         <ul>
           <li>
             <a href="#/" role="button" title="Download CSV"

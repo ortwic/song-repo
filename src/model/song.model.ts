@@ -7,7 +7,7 @@ export interface Song {
     artist: string;
     album?: string;
     genre?: string;
-    styles?: string[];
+    style?: string;
 };
 
 export interface UserSong extends Song {
@@ -15,7 +15,7 @@ export interface UserSong extends Song {
     status: Status;
     progress?: number;
     complete?: Complete;
-    learnedOn?: Timestamp;
+    createdAt?: Timestamp;
     fav?: boolean;
     tags?: string[];
 };

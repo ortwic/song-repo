@@ -31,7 +31,7 @@ export default class FirestoreService {
         return collectionData(q, { idField: 'id' }).pipe(startWith([]));
     }
     
-    public async addDocument(data: unknown, id?: string, options?: SetOptions): Promise<void> {
+    public async setDocument(data: unknown, id?: string, options?: SetOptions): Promise<void> {
         const docRef = doc(this.db, this.path, id);
         await setDoc(docRef, data, options);
     }

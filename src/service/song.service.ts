@@ -3,19 +3,19 @@ import { currentUser } from './auth.service';
 import FirestoreService from './firestore.service';
 import type { Song, UserSong } from '../model/song.model';
 import { usersongs } from '../store/song.store';
+import { Timestamp } from 'firebase/firestore';
 
 const uniqueKey = (s: string) => s?.trim().toLowerCase().replaceAll(' ', '_').replaceAll(/\W/g, '');
-export const newSong = (): UserSong => ({ status: 'todo', progress: 0, tags: [] } as UserSong);
 
 export default class SongService {
     public readonly store = new FirestoreService('songs');
     private uid = '';
     
     private appendKeys = (song: UserSong): UserSong => (
-        Object.assign(song, {
+        song.artist && song.title ? Object.assign(song, {
             id: uniqueKey(`${song.artist}_${song.title}`),
             uid: this.uid
-        })
+        }) : song
     );
 
     constructor() {
@@ -34,9 +34,30 @@ export default class SongService {
         }
     }
 
-    async setSong(data: Partial<Song>): Promise<void> {
+    newSong(): UserSong {
+        return {
+            id: '',
+            uid: this.uid,
+            fav: false,
+            status: 'todo',
+            progress: 0,
+            genre: '',
+            style: '',
+            artist: '',
+            title: '',
+            tags: [],
+            createdAt: Timestamp.now()
+        };
+    }
+
+    async setSong(song: UserSong): Promise<void> {
         if (this.uid) {
-            return this.store.addDocument(data, data.id, { merge: true });
+            if (!song.id) {
+                song = this.appendKeys(song);
+            }
+            if (song.id) {
+                return this.store.setDocument(song, song.id, { merge: true });
+            }
         }
     }
 }
