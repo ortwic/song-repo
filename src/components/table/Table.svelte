@@ -15,13 +15,26 @@
         placeholder: '',
         clipboard: true,
         movableColumns: true,
-        pagination: true,
+        pagination: false,
         paginationSize: 50,
+        paginationSizeSelector: [50, 100, true],
         footerElement: '#footer',
         persistence:{
           sort:true,
           filter:true,
           columns:true,
+        },
+        locale: 'en-us',
+        langs: {
+          'en-us': {
+            pagination: {
+              'page_size': '',
+              'first': '<<',
+              'last': '>>',
+              'prev': '<',
+              'next': '>',
+            }
+          }
         }
       });
 

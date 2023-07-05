@@ -1,3 +1,11 @@
+button.tabulator-page,
+select.tabulator-page-size {
+    border: 0;
+    background-color: transparent;
+    box-shadow: unset;
+    padding: .1rem .4rem;
+}
+
 /* progress bar column */
 div.progress-bar-container {
     position: relative;

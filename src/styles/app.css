@@ -57,7 +57,8 @@ h1 {
 
 button, 
 input[type=reset], 
-input[type=submit] {
+input[type=submit],
+select {
   border-radius: 4px;
   border: 1px solid #606060;
   padding: .4em 1.2em;
