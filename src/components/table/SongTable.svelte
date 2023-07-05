@@ -1,8 +1,7 @@
 <script lang="ts">
     import '../../styles/table.css';
     import { onMount } from 'svelte';
-    import type { Observable } from 'rxjs';
-    import type { TabulatorFull as Tabulator, ColumnDefinition, CellComponent } from 'tabulator-tables';
+    import type { ColumnDefinition, CellComponent } from 'tabulator-tables';
     import { column, comboBoxEditor } from './column.helper';
     import { autoFilter, rangeFilter } from './filter.helper';
     import { favColumn, statusFormatter, genreFormatter, labelFormatter, progressFormatter, timestampFormatter } from './formatter.helper';
@@ -17,7 +16,7 @@
 
     let service = new SongService();
     let snackbar: Snackbar;
-    let table: Observable<Tabulator>;
+    let table: Table;
 
     const genreSelector = comboBoxEditor(Object.keys(genres));
 
@@ -56,7 +55,7 @@
 
     function downloadXlsx() {
       try {
-        $table.download("xlsx", "songs.xlsx", { sheetName: "My song repertoire" });
+        table.download("xlsx", "songs.xlsx", { sheetName: "My song repertoire" });
       } catch (error) {
         snackbar.error(error.message)        
       }
@@ -64,7 +63,7 @@
 
     function downloadPdf() {
       try {
-        $table.download("pdf", "songs.pdf", { title: "My song repertoire" });
+        table.download("pdf", "songs.pdf", { title: "My song repertoire" });
       } catch (error) {
         snackbar.error(error.message)
       }
@@ -79,11 +78,9 @@
       ]);
     }
 
-    $: {
-      if ($table) {
-        $table.replaceData($usersongs);
-        console.log(`Set ${$usersongs.length} entries.`, $usersongs.map(s => s.title));
-      }
+    $: if (table) {
+      table.setData($usersongs);
+      console.log(`Set ${$usersongs.length} entries.`, $usersongs.map(s => s.title));
     }
 </script>
 
@@ -95,7 +92,7 @@
 
 <div>  
   <FileDrop on:enter={() => snackbar.open('Start importing...')} on:addJson={({ detail }) => importJSON(detail)}>
-    <Table bind:element={table} {columns}>
+    <Table bind:this={table} {columns}>
       <span slot="placeholder">
         {#if !$usersongs.length}
           No songs added.<br />
@@ -111,11 +108,11 @@
         <ul>
           <li>
             <a href="#/" role="button" title="Download CSV"
-              on:click|preventDefault={() => ($table.download("csv", "songs.csv", { delimiter: ";" }))}>CSV</a>
+              on:click|preventDefault={() => (table.download("csv", "songs", { delimiter: ";" }))}>CSV</a>
           </li>
           <li>
             <a href="#/" role="button" title="Download JSON"
-              on:click|preventDefault={() => ($table.download("json", "songs.json"))}>JSON</a>
+              on:click|preventDefault={() => (table.download("json", "songs"))}>JSON</a>
           </li>
           <li>
             <a href="#/" role="button" title="Download XLSX"

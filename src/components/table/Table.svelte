@@ -1,20 +1,20 @@
 <script lang="ts">
     import 'tabulator-tables/dist/css/tabulator_bulma.min.css';
-    import { TabulatorFull, type ColumnDefinition } from 'tabulator-tables';
+    import { TabulatorFull, type ColumnDefinition, type DownloadOptions, type DownloadType } from 'tabulator-tables';
     import { onMount } from 'svelte';
     import { Observable, fromEvent, map, take } from 'rxjs';
 
     export let columns: ColumnDefinition[];
-    export let element: Observable<TabulatorFull>;
+    let element: Observable<TabulatorFull>;
     let tableComponent: HTMLElement;
 
     onMount(() => {
       const table = new TabulatorFull(tableComponent, {
         columns,
+        index: 'id',
         placeholder: '',
         clipboard: true,
         movableColumns: true,
-        reactiveData: true,
         pagination: true,
         paginationSize: 50,
         footerElement: '#footer',
@@ -27,6 +27,18 @@
 
       element = fromEvent(table, 'tableBuilt').pipe(take(1), map(() => table));
     });
+
+    export async function setData<T>(data: T): Promise<void> {
+      if ($element) {
+        return $element.setData(data);
+      }      
+    }
+
+    export async function download(downloadType: DownloadType, filename: string, params?: DownloadOptions): Promise<void> {
+      if ($element) {
+        return $element.download(downloadType, `${filename}.${downloadType}`, params);
+      }      
+    }
 </script>
 
 <div id="table" bind:this={tableComponent}>
