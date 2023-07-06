@@ -27,10 +27,11 @@
       column("", "fav", "4%", undefined, favColumn, { cellEdited }),
       column("", "status", "4%", "string", autoFilter(), statusFormatter),
       column("Progress", "progress", "14%", "number", rangeFilter(), progressFormatter, { cellEdited }),
-      column("Genre", "genre", "14%", "string", autoFilter(), genreFormatter, genreSelector, { cellEdited }),
-      column("Style", "style", "14%", "string", autoFilter(), genreFormatter, comboBoxEditor(), { cellEdited }),
+      column("Genre", "genre", "13%", "string", autoFilter(), genreFormatter, genreSelector, { cellEdited }),
+      column("Style", "style", "13%", "string", autoFilter(), genreFormatter, comboBoxEditor(), { cellEdited }),
       column("Artist", "artist", "25%", "string", autoFilter(), comboBoxEditor(), { cellEdited }),
       column("Title", "title", "25%", "string", autoFilter(), { editor: 'input', cellEdited }),
+      column("Publication", "source", "25%", "string", autoFilter(), { editor: 'input', cellEdited }),
       column("Labels", "tags", "14%", "string", autoFilter(), labelFormatter, { editor: 'input', cellEdited }),
       column("Learned", "createdAt", "14%", "date", autoFilter(), timestampFormatter, { editor: 'date', cellEdited }),
     ];
@@ -48,8 +49,8 @@
       return service.setSong(cell.getData() as UserSong);
     }
     
-    function importJSON(data: string) {
-      const result = service.importSongs(JSON.parse(data));
+    async function importJSON(data: string) {
+      const result = await service.importSongs(JSON.parse(data));
       snackbar.open(`Found ${result.length} songs. Total songs: ${usersongs.length}`);
     }
 
@@ -71,16 +72,16 @@
   
     function demo() {
       usersongs.set([
-        { id: "rock_piano_fried_chicken", uid: "0", title: "Fried Chicken", artist: "Jürgen Moser", status: 'todo', genre: 'Rock', tags: [], fav: false },
-        { id: "p_pietschmann_interstellar", uid: "0", title: "Interstellar", artist: "Hans Zimmer / Pietschmann", status: 'wip', genre: 'Movie Score', progress: 60, tags: ["new"], fav: true },
-        { id: "l_beethoven_fr_elisec", uid: "0", title: "Für Elise", artist: "L. Beethoven", status: 'done', genre: 'Classical', progress: 100, tags: [], fav: false },
-        { id: "d_brubeck_take_5", uid: "0", title: "Take 5", artist: "Dave Brubeck", status: 'repeat', genre: "Jazz", progress: 80, tags: ["improv", "lead sheet"], fav: false },
+        { id: "JMoserFriedChicken", uid: "0", title: "Fried Chicken", artist: "Jürgen Moser", status: 'todo', genre: 'Rock', tags: [], fav: false },
+        { id: "PPietschmannInterstellar", uid: "0", title: "Interstellar", artist: "Hans Zimmer / Pietschmann", status: 'wip', genre: 'Movie Score', progress: 60, tags: ["new"], fav: true },
+        { id: "LBeethovenFrElisec", uid: "0", title: "Für Elise", artist: "L. Beethoven", status: 'done', genre: 'Classical', progress: 100, tags: [], fav: false },
+        { id: "DBrubeckTake5", uid: "0", title: "Take 5", artist: "Dave Brubeck", status: 'repeat', genre: "Jazz", progress: 80, tags: ["improv", "lead sheet"], fav: false },
       ]);
     }
 
     $: if (table) {
       table.setData($usersongs);
-      console.log(`Set ${$usersongs.length} entries.`, $usersongs.map(s => s.title));
+      console.log(`Set ${$usersongs.length} entries.`);
     }
 </script>
 

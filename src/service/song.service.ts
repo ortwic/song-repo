@@ -1,20 +1,21 @@
 import { switchMap } from 'rxjs';
 import { currentUser } from './auth.service';
 import FirestoreService from './firestore.service';
-import type { Song, UserSong } from '../model/song.model';
+import type { UserSong } from '../model/song.model';
 import { usersongs } from '../store/song.store';
 import { Timestamp } from 'firebase/firestore';
 
-const uniqueKey = (s: string) => s?.trim().toLowerCase().replaceAll(' ', '_').replaceAll(/\W/g, '');
+const uniqueKey = (...array: string[]) => array.join('').trim().replaceAll(/\W/g, '');
 
 export default class SongService {
     public readonly store = new FirestoreService('songs');
     private uid = '';
     
     private appendKeys = (song: UserSong): UserSong => (
-        song.artist && song.title ? Object.assign(song, {
-            id: uniqueKey(`${song.artist}_${song.title}`),
-            uid: this.uid
+        song.title ? Object.assign(song, {
+            id: uniqueKey(this.uid?.slice(0,6) ?? '', song.artist ?? 'n/a', song.title),
+            uid: this.uid,
+            createdAt: new Date()
         }) : song
     );
 
@@ -23,15 +24,6 @@ export default class SongService {
         currentUser.pipe(
             switchMap(user => user ? this.store.getDocuments(user.uid) : [])
         ).subscribe((value) => usersongs.set(value as UserSong[]));
-    }
-
-    importSongs(data: UserSong[]): UserSong[] {
-        if (data) {
-            for(const song of data.map((s) => this.appendKeys(s))) {
-                usersongs.replace(song, 'id');
-            }
-            return data;
-        }
     }
 
     newSong(): UserSong {
@@ -45,6 +37,7 @@ export default class SongService {
             style: '',
             artist: '',
             title: '',
+            source: '',
             tags: [],
             createdAt: Timestamp.now()
         };
@@ -56,8 +49,20 @@ export default class SongService {
                 song = this.appendKeys(song);
             }
             if (song.id) {
-                return this.store.setDocument(song, song.id, { merge: true });
+                return this.store.setDocument(song, { merge: true });
             }
+        }
+    }
+
+    async importSongs(data: UserSong[]): Promise<UserSong[]> {
+        if (data) {
+            const songs = data.map((s) => this.appendKeys(s));
+            if (this.uid) {
+                await this.store.setDocuments(songs, { merge: true });                
+            } else {
+                usersongs.set(songs);
+            }
+            return data;
         }
     }
 }

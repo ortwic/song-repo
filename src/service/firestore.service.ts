@@ -6,10 +6,10 @@ import {
     where,
     orderBy,
     doc,
-    getDoc,
     setDoc,
     updateDoc,
     deleteDoc,
+    writeBatch,
     type DocumentData,
     type SetOptions
 } from "firebase/firestore";
@@ -31,9 +31,18 @@ export default class FirestoreService {
         return collectionData(q, { idField: 'id' }).pipe(startWith([]));
     }
     
-    public async setDocument(data: unknown, id?: string, options?: SetOptions): Promise<void> {
-        const docRef = doc(this.db, this.path, id);
+    public async setDocument<T extends { id: string }>(data: T, options?: SetOptions): Promise<void> {
+        const docRef = doc(this.db, this.path, data.id);
         await setDoc(docRef, data, options);
+    }
+
+    public async setDocuments<T extends { id: string }>(array: T[], options?: SetOptions): Promise<void> {
+        const batch = writeBatch(this.db);
+        array.forEach(data => {
+            const docRef = doc(this.db, this.path, data.id);
+            batch.set(docRef, data, options);
+        });
+        await batch.commit();
     }
     
     public async updateDocument(data: Partial<unknown>, id: string): Promise<void> {
