@@ -5,19 +5,18 @@
     import { Observable, fromEvent, map, take } from 'rxjs';
 
     export let columns: ColumnDefinition[];
-    let element: Observable<TabulatorFull>;
-    let tableComponent: HTMLElement;
+    export let placeholder = '';
+    let table: Observable<TabulatorFull>;
+    let tableContainer: HTMLElement;
 
     onMount(() => {
-      const table = new TabulatorFull(tableComponent, {
+      const tableInstance = new TabulatorFull(tableContainer, {
         columns,
+        placeholder,
         index: 'id',
-        placeholder: '',
         clipboard: true,
         movableColumns: true,
         pagination: false,
-        paginationSize: 50,
-        paginationSizeSelector: [50, 100, true],
         footerElement: '#footer',
         persistence:{
           sort:true,
@@ -38,27 +37,24 @@
         }
       });
 
-      element = fromEvent(table, 'tableBuilt').pipe(take(1), map(() => table));
+      table = fromEvent(tableInstance, 'tableBuilt').pipe(take(1), map(() => tableInstance));
     });
 
     export async function setData<T>(data: T): Promise<void> {
-      if ($element) {
-        return $element.setData(data);
+      if ($table) {
+        return $table.setData(data);
       }      
     }
 
     export async function download(downloadType: DownloadType, filename: string, params?: DownloadOptions): Promise<void> {
-      if ($element) {
-        return $element.download(downloadType, `${filename}.${downloadType}`, params);
+      if ($table) {
+        return $table.download(downloadType, `${filename}.${downloadType}`, params);
       }      
     }
 </script>
 
-<div id="table" bind:this={tableComponent}>
+<div id="table" bind:this={tableContainer}>
 </div>
-<p id="placeholder">
-  <slot name="placeholder"></slot>
-</p>
 <span id="footer">
   <slot name="footer"></slot>
 </span>
@@ -66,12 +62,10 @@
 <style>
     #table {
       overflow: auto;
+      width: 100%;
+      height: 100%;
       max-height: 100%;
-    }
-
-    #placeholder {
-      font-style: italic;
-      text-align: center;
+      overflow: hidden;
     }
 
     #footer {

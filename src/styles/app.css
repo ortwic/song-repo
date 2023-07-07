@@ -22,19 +22,10 @@
   --secghost: hsl(22, 42%, 68%); 
 }
 
-html {
-  display: flex;
-  flex-flow: row nowrap;  
-  justify-content: center;
-  align-content: center;
-  align-items: center;
-}
-
 body {
   margin: 0;
-  flex: 0 1 auto;
-  align-self: auto;
-  width: 100%;
+  padding: 0;
+  overflow: hidden;
 }
 
 a {
@@ -94,6 +85,18 @@ input[type=submit]:disabled {
   background-color: whitesmoke;
   text-shadow: unset;
   box-shadow: 0px 2px 6px hsla(0, 0%, 80%);
+}
+
+button.icon {
+  padding: 0;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 1.5rem;
+  opacity: .7;
+}
+
+button.icon:hover {
+  opacity: 1;
 }
 
 input.error, input.mark:focus {

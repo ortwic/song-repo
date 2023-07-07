@@ -90,69 +90,69 @@
   <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
   <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/2.3.2/jspdf.plugin.autotable.js"></script>
 </svelte:head>
+ 
+<FileDrop on:enter={() => snackbar.open('Start importing...')} on:addJson={({ detail }) => importJSON(detail)}>
+  <Table bind:this={table} {columns} placeholder='No songs added.' />
+</FileDrop>
+<section class="footer">
+  {#if !$currentUser}
+      <a href="#/" role="button" title="Load some random demo samples"
+        on:click|preventDefault={demo}><i>Demo</i></a>
+  {/if}
+  <ul>
+    <li>
+      <a href="#/" role="button" title="Download CSV"
+        on:click|preventDefault={() => (table.download("csv", "songs", { delimiter: ";" }))}>CSV</a>
+    </li>
+    <li>
+      <a href="#/" role="button" title="Download JSON"
+        on:click|preventDefault={() => (table.download("json", "songs"))}>JSON</a>
+    </li>
+    <li>
+      <a href="#/" role="button" title="Download XLSX"
+        on:click|preventDefault={downloadXlsx}>XLSX</a>
+    </li>
+    <li>
+      <a href="#/" role="button" title="Download PDF"
+        on:click|preventDefault={downloadPdf}>PDF</a>
+    </li>
+  </ul>
+  <button class="primary icon" title="add row after" on:click={() => usersongs.push(service.newSong())}>+</button>
+</section>
 
-<div>  
-  <FileDrop on:enter={() => snackbar.open('Start importing...')} on:addJson={({ detail }) => importJSON(detail)}>
-    <Table bind:this={table} {columns}>
-      <span slot="placeholder">
-        {#if !$usersongs.length}
-          No songs added.<br />
-          {#if !$currentUser}
-              <a href="#/" role="button" title="Load some random samples"
-                on:click|preventDefault={demo}>Load some demo samples.</a>
-          {/if}
-        {/if}
-      </span>
-      <span slot="footer">
-        <button title="add row before" on:click={() => usersongs.unshift(service.newSong())}>+[]</button>
-        <button title="add row after" on:click={() => usersongs.push(service.newSong())}>[]+</button>
-        <ul>
-          <li>
-            <a href="#/" role="button" title="Download CSV"
-              on:click|preventDefault={() => (table.download("csv", "songs", { delimiter: ";" }))}>CSV</a>
-          </li>
-          <li>
-            <a href="#/" role="button" title="Download JSON"
-              on:click|preventDefault={() => (table.download("json", "songs"))}>JSON</a>
-          </li>
-          <li>
-            <a href="#/" role="button" title="Download XLSX"
-              on:click|preventDefault={downloadXlsx}>XLSX</a>
-          </li>
-          <li>
-            <a href="#/" role="button" title="Download PDF"
-              on:click|preventDefault={downloadPdf}>PDF</a>
-          </li>
-        </ul>
-      </span>
-    </Table>
-  </FileDrop>
-  
-  <Snackbar bind:this={snackbar} />
-</div>
+<Snackbar bind:this={snackbar} />
 
 <style>
-    div {
-        margin: 4px;
-    }
+  ul {
+    display: inline-block;
+    padding: 0 .6rem;
+    list-style: none;
+  }
 
-    ul {
-      display: inline-block;
-      padding: 0 .6rem;
-      list-style: none;
-    }
+  ul li {
+    display: inline-block;
+  }
 
-    ul li {
-      display: inline-block;
-    }
+  ul li:not(:last-child)::after {
+    content: '·';
+    padding: 0 .4rem;
+  }
 
-    ul li:not(:last-child)::after {
-      content: '·';
-      padding: 0 .4rem;
-    }
+  ul li a {
+    font-weight: normal;
+  }
 
-    ul li a {
-      font-weight: normal;
-    }
+  section.footer {
+    position: sticky;
+    margin-right: .2rem;
+    bottom: calc(48px + .4rem);
+    z-index: 1;
+    height: 0;
+    text-align: right;
+  }
+
+  section.footer button.icon {
+    font-size: 1.6rem;
+  }
 </style>
   

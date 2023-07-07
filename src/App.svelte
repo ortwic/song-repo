@@ -3,24 +3,26 @@
     import Table from './components/table/SongTable.svelte';
 </script>
 
-<main>
-  <div class="header">
-    <Login />
-  </div>
-  
-  <div>
-    <Table />
-  </div>
+<header>
+  <Login />
+</header>
 
+<main> 
+  <Table />
 </main>
 
 <style>
-  div.header {
-    position: fixed;
-    right: 0;
-    top: 0;
+  header {
+    position: sticky;
+    top: .4rem;
     z-index: 1;
-    padding: .2rem 1rem;
+    height: 0;
+    text-align: right;
+  }
+
+  main {
+    height: 100vh;
+    overflow: hidden;
   }
  
   @media (prefers-color-scheme: dark) {

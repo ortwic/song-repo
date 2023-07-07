@@ -1,3 +1,8 @@
+div.tabulator div.tabulator-header {
+    background-color: whitesmoke;
+    border-bottom: 1px solid silver;
+}
+
 button.tabulator-page,
 select.tabulator-page-size {
     border: 0;
