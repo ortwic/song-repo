@@ -13,7 +13,9 @@
     import type { UserSong } from '../../model/song.model';
     import { usersongs } from '../../store/song.store';
     import genres from '../../data/genres.json';
+    import samples from '../../data/samples.json';
 
+    const demosamples = samples as unknown as UserSong[];
     let service = new SongService();
     let snackbar: Snackbar;
     let table: Table;
@@ -70,15 +72,6 @@
       }
     }
   
-    function demo() {
-      usersongs.set([
-        { id: "JMoserFriedChicken", uid: "0", title: "Fried Chicken", artist: "Jürgen Moser", status: 'todo', genre: 'Rock', tags: [], fav: false },
-        { id: "PPietschmannInterstellar", uid: "0", title: "Interstellar", artist: "Hans Zimmer / Pietschmann", status: 'wip', genre: 'Movie Score', progress: 60, tags: ["new"], fav: true },
-        { id: "LBeethovenFrElisec", uid: "0", title: "Für Elise", artist: "L. Beethoven", status: 'done', genre: 'Classical', progress: 100, tags: [], fav: false },
-        { id: "DBrubeckTake5", uid: "0", title: "Take 5", artist: "Dave Brubeck", status: 'repeat', genre: "Jazz", progress: 80, tags: ["improv", "lead sheet"], fav: false },
-      ]);
-    }
-
     $: if (table) {
       table.setData($usersongs);
       console.log(`Set ${$usersongs.length} entries.`);
@@ -97,7 +90,7 @@
 <section class="footer">
   {#if !$currentUser}
       <a href="#/" role="button" title="Load some random demo samples"
-        on:click|preventDefault={demo}><i>Demo</i></a>
+        on:click|preventDefault={() => usersongs.set(demosamples)}><i>Samples</i></a>
   {/if}
   <ul>
     <li>
