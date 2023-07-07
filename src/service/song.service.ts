@@ -11,12 +11,12 @@ export default class SongService {
     public readonly store = new FirestoreService('songs');
     private uid = '';
     
-    private appendKeys = (song: UserSong): UserSong => (
-        song.title ? Object.assign(song, {
+    private appendId = (song: UserSong, ...more: object[]): UserSong => (
+        !song.id && song.title ? Object.assign(song, {
             id: uniqueKey(this.uid?.slice(0,6) ?? '', song.artist ?? 'n/a', song.title),
             uid: this.uid,
             createdAt: new Date()
-        }) : song
+        }, ...more) : song
     );
 
     constructor() {
@@ -45,9 +45,7 @@ export default class SongService {
 
     async setSong(song: UserSong): Promise<void> {
         if (this.uid) {
-            if (!song.id) {
-                song = this.appendKeys(song);
-            }
+            song = this.appendId(song);
             if (song.id) {
                 return this.store.setDocument(song, { merge: true });
             }
@@ -56,7 +54,7 @@ export default class SongService {
 
     async importSongs(data: UserSong[]): Promise<UserSong[]> {
         if (data) {
-            const songs = data.map((s) => this.appendKeys(s));
+            const songs = data.map((s) => this.appendId(s, { importedAt: new Date() }));
             if (this.uid) {
                 await this.store.setDocuments(songs, { merge: true });                
             } else {

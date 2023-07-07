@@ -17,6 +17,16 @@ import { collectionData } from 'rxfire/firestore';
 import { startWith } from 'rxjs/operators';
 import type { Observable } from 'rxjs';
 
+// firestore does not like undefined values so omit them
+const omitUndefinedFields = (data: object) => {
+    Object.keys(data).forEach(key => {
+        if (data[key] === undefined) {
+          delete data[key];
+        }
+    })
+    return data;
+};
+
 export default class FirestoreService {
     private db = getFirestore(app);
 
@@ -33,14 +43,14 @@ export default class FirestoreService {
     
     public async setDocument<T extends { id: string }>(data: T, options?: SetOptions): Promise<void> {
         const docRef = doc(this.db, this.path, data.id);
-        await setDoc(docRef, data, options);
+        await setDoc(docRef, omitUndefinedFields(data), options);
     }
 
     public async setDocuments<T extends { id: string }>(array: T[], options?: SetOptions): Promise<void> {
         const batch = writeBatch(this.db);
         array.forEach(data => {
             const docRef = doc(this.db, this.path, data.id);
-            batch.set(docRef, data, options);
+            batch.set(docRef, omitUndefinedFields(data), options);
         });
         await batch.commit();
     }
