@@ -131,10 +131,10 @@
   export function toggleGroup(field: string, element?: HTMLElement) {
     if (!isGroupedBy(field)) {
       rowGroups[field] = true;
-      element.classList.add('primary');
+      element?.classList.add('primary');
     } else {
       delete rowGroups[field];
-      element.classList.remove('primary');
+      element?.classList.remove('primary');
     }
     $table.setGroupBy(Object.keys(rowGroups));
   }

@@ -95,18 +95,32 @@ export const timestampFormatter: Partial<ColumnDefinition> = {
     }
 };
 
+const redToGreenGradient = (value: number, maxLight = 50, minLight = 36, margin = 25) => {
+    const greenMax = 1.2;
+    let outer = 0;
+    if (value <= margin) {
+        outer = margin - value;
+    } 
+    if (value >= 100 - margin) {
+        outer = margin - (100 - value);
+    }
+    const percent = Math.pow(outer * (1/margin), 2);
+    const lightness = maxLight - (percent * (maxLight - minLight));
+    return Color.hsl(value * greenMax, 100, lightness);
+};
+
 export const groupByFormatter = (value: unknown, count: number, data: UserSong[], group: GroupComponent) => {
     const sumUp = (accumulator: number, current: number) => accumulator + current;
-    let info = `<span class='info'>${count} items</span>`;
+    let info = `<span class='info'>Σ ${count}</span>`;
     if (data.length) {
         const tags = [...new Set(data.flatMap(f => f.tags))];
         const avg = count > 0 ? data.map(f => +f.progress).reduce(sumUp) / count : 0;
-        const bgColor = Color.hsl(avg * 1.2, 100, 50);
+        const bgColor = redToGreenGradient(avg);
 
         const element = group.getElement();
-        element.style.color = Color(bgColor).isDark() ? 'white' : 'black';
+        element.style.color = bgColor.isDark() ? 'white' : 'black';
         element.style.backgroundColor = bgColor.hex();
-        info += `<span class='info'>${avg.toFixed()}% avg.</span> 
+        info = `<span class='info'>Ø ${avg.toFixed()}%</span>${info}
             ${tags.map(t => `<span class='label'>${t}</span>`).join('')}`
     }
     return `<span class='title'>${value || 'n/a'}</span>${info}`;
