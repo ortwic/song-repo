@@ -1,5 +1,5 @@
 import Color from "color";
-import type { ColumnDefinition, CellComponent } from "tabulator-tables";
+import type { ColumnDefinition, CellComponent, GroupComponent } from "tabulator-tables";
 import ProgressBar from "./templates/ProgressBar.class";
 import genres from '../../data/genres.json';
 import colornames from '../../data/colornames.json';
@@ -93,4 +93,21 @@ export const timestampFormatter: Partial<ColumnDefinition> = {
         }
         return value;
     }
+};
+
+export const groupByFormatter = (value: unknown, count: number, data: UserSong[], group: GroupComponent) => {
+    const sumUp = (accumulator: number, current: number) => accumulator + current;
+    let info = `<span class='info'>${count} items</span>`;
+    if (data.length) {
+        const tags = [...new Set(data.flatMap(f => f.tags))];
+        const avg = count > 0 ? data.map(f => +f.progress).reduce(sumUp) / count : 0;
+        const bgColor = Color.hsl(avg * 1.2, 100, 50);
+
+        const element = group.getElement();
+        element.style.color = Color(bgColor).isDark() ? 'white' : 'black';
+        element.style.backgroundColor = bgColor.hex();
+        info += `<span class='info'>${avg.toFixed()}% avg.</span> 
+            ${tags.map(t => `<span class='label'>${t}</span>`).join('')}`
+    }
+    return `<span class='title'>${value || 'n/a'}</span>${info}`;
 };

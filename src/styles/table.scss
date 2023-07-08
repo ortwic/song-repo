@@ -1,14 +1,46 @@
-div.tabulator div.tabulator-header {
-    background-color: whitesmoke;
-    border-bottom: 1px solid silver;
-}
+div.tabulator {
+    div.tabulator-header {
+        background-color: whitesmoke;
+        border-bottom: 1px solid silver;
+    }
 
-button.tabulator-page,
-select.tabulator-page-size {
-    border: 0;
-    background-color: transparent;
-    box-shadow: unset;
-    padding: .1rem .4rem;
+    div.tabulator-table {
+        div.tabulator-group {
+            border-top: 0;
+            background-color: whitesmoke;
+
+            span {
+                display: inline-block;
+                color: black;
+                border-right: 1px solid #404040;
+                margin-top: .2rem;
+                margin-bottom: .2rem;
+                padding-right: .6rem;
+            }
+
+            span.title {
+                min-width: 8rem;
+            }
+
+            span.info {
+                display: inline-block;
+                font-weight: normal;
+            }
+
+            span.label {
+                font-weight: 500;
+                box-shadow: 2px 2px 4px #404040A0;
+            }
+        }
+    }
+
+    button.tabulator-page,
+    select.tabulator-page-size {
+        border: 0;
+        background-color: transparent;
+        box-shadow: unset;
+        padding: .1rem .4rem;
+    }
 }
 
 /* progress bar column */

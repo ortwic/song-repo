@@ -1,10 +1,10 @@
 <script lang="ts">
-    import '../../styles/table.css';
+    import '../../styles/table.scss';
     import { onMount } from 'svelte';
     import type { ColumnDefinition, CellComponent } from 'tabulator-tables';
     import { column, comboBoxEditor } from './column.helper';
     import { autoFilter, rangeFilter } from './filter.helper';
-    import { favColumn, statusFormatter, genreFormatter, labelFormatter, progressFormatter, timestampFormatter } from './formatter.helper';
+    import { favColumn, statusFormatter, genreFormatter, labelFormatter, progressFormatter, timestampFormatter, groupByFormatter } from './formatter.helper';
     import Table from './Table.svelte'
     import FileDrop from './FileDrop.svelte';
     import Snackbar from '../Snackbar.svelte';
@@ -24,18 +24,18 @@
 
     // https://tabulator.info/docs/5.4/edit#editor-list
     const columns: ColumnDefinition[] = [
-      { title: "id", field: "id", visible: false },
-      { title: "uid", field: "uid", visible: false },
-      column("", "fav", "4%", undefined, favColumn, { cellEdited }),
-      column("", "status", "4%", "string", autoFilter(), statusFormatter),
+      column("Favorite", "fav", "50", undefined, favColumn, { cellEdited }),
+      column("Status", "status", "50", "string", autoFilter(), statusFormatter),
       column("Progress", "progress", "14%", "number", rangeFilter(), progressFormatter, { cellEdited }),
       column("Genre", "genre", "13%", "string", autoFilter(), genreFormatter, genreSelector, { cellEdited }),
-      column("Style", "style", "13%", "string", autoFilter(), genreFormatter, comboBoxEditor(), { cellEdited }),
+      column("Style", "style", "13%", "string", autoFilter(), comboBoxEditor(), { cellEdited }),
       column("Artist", "artist", "25%", "string", autoFilter(), comboBoxEditor(), { cellEdited }),
       column("Title", "title", "25%", "string", autoFilter(), { editor: 'input', cellEdited }),
-      column("Publication", "source", "25%", "string", autoFilter(), { editor: 'input', cellEdited }),
+      column("Source", "source", "25%", "string", autoFilter(), { editor: 'input', cellEdited }),
       column("Labels", "tags", "14%", "string", autoFilter(), labelFormatter, { editor: 'input', cellEdited }),
       column("Learned", "createdAt", "14%", "date", autoFilter(), timestampFormatter, { editor: 'date', cellEdited }),
+      { title: "id", field: "id", visible: false },
+      { title: "uid", field: "uid", visible: false },
     ];
 
     onMount(async () => {
@@ -50,25 +50,20 @@
     function cellEdited(cell: CellComponent) {
       return service.setSong(cell.getData() as UserSong);
     }
+
+    async function deleteRow(song: UserSong): Promise<void> {
+      return service.deleteSong(song);
+    }
     
     async function importJSON(data: string) {
       const result = await service.importSongs(JSON.parse(data));
       snackbar.open(`Found ${result.length} songs. Total songs: ${usersongs.length}`);
     }
 
-    function downloadXlsx() {
-      try {
-        table.download("xlsx", "songs.xlsx", { sheetName: "My song repertoire" });
-      } catch (error) {
-        snackbar.error(error.message)        
-      }
-    }
-
-    function downloadPdf() {
-      try {
-        table.download("pdf", "songs.pdf", { title: "My song repertoire" });
-      } catch (error) {
-        snackbar.error(error.message)
+    function showSamples() {
+      usersongs.set(demosamples);
+      if (!table.isGroupedBy('genre')) {
+        table.toggleGroup('genre');
       }
     }
   
@@ -85,56 +80,25 @@
 </svelte:head>
  
 <FileDrop on:enter={() => snackbar.open('Start importing...')} on:addJson={({ detail }) => importJSON(detail)}>
-  <Table bind:this={table} {columns} placeholder='No songs added.' />
+  <Table bind:this={table} {columns} 
+    placeholder='No songs added.' 
+    exportTitle='My song repertoire'
+    groupHeader={groupByFormatter}
+    on:error={({ detail }) => snackbar.error(detail)}
+    on:deleteRow={({ detail }) => deleteRow(detail)}
+  />
 </FileDrop>
 <section class="footer">
   {#if !$currentUser}
-      <a href="#/" role="button" title="Load some random demo samples"
-        on:click|preventDefault={() => usersongs.set(demosamples)}><i>Samples</i></a>
+    <a href="#/" role="button" title="Load some random demo samples"
+      on:click|preventDefault={showSamples}><i>Samples</i></a>
   {/if}
-  <ul>
-    <li>
-      <a href="#/" role="button" title="Download CSV"
-        on:click|preventDefault={() => (table.download("csv", "songs", { delimiter: ";" }))}>CSV</a>
-    </li>
-    <li>
-      <a href="#/" role="button" title="Download JSON"
-        on:click|preventDefault={() => (table.download("json", "songs"))}>JSON</a>
-    </li>
-    <li>
-      <a href="#/" role="button" title="Download XLSX"
-        on:click|preventDefault={downloadXlsx}>XLSX</a>
-    </li>
-    <li>
-      <a href="#/" role="button" title="Download PDF"
-        on:click|preventDefault={downloadPdf}>PDF</a>
-    </li>
-  </ul>
   <button class="primary icon" title="add row after" on:click={() => usersongs.push(service.newSong())}>+</button>
 </section>
 
 <Snackbar bind:this={snackbar} />
 
-<style>
-  ul {
-    display: inline-block;
-    padding: 0 .6rem;
-    list-style: none;
-  }
-
-  ul li {
-    display: inline-block;
-  }
-
-  ul li:not(:last-child)::after {
-    content: '·';
-    padding: 0 .4rem;
-  }
-
-  ul li a {
-    font-weight: normal;
-  }
-
+<style lang="scss">
   section.footer {
     position: sticky;
     margin-right: .2rem;
@@ -144,8 +108,10 @@
     text-align: right;
   }
 
-  section.footer button.icon {
-    font-size: 1.6rem;
+  section.footer  {
+    button.icon {
+      font-size: 1.6rem;
+    }
   }
 </style>
   

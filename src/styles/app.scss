@@ -113,6 +113,19 @@ input.valid, input.valid:focus {
   box-shadow: 0px 0px 8px var(--primary);
 }
 
+.fa-square::before {
+  content: '☐ ';
+}
+
+.fa-check-square::before {
+  content: '☑ ';
+}
+
+.fa-trash::before {
+  content: '✗ ';
+  color: red;
+}
+
 .primary {
   color: var(--primary);
 }

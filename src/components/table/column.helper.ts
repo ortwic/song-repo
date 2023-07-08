@@ -17,7 +17,8 @@ export const column = (title: string, field: string, width: string, sorter: Sort
         field,
         width,
         sorter,
-        resizable: true
+        resizable: true,
+        headerMenu: []
     }, ...more);
 };
 

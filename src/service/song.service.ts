@@ -52,6 +52,12 @@ export default class SongService {
         }
     }
 
+    async deleteSong(song: UserSong): Promise<void> {
+        if (this.uid) {
+            return this.store.removeDocument(song.id);
+        }
+    }
+
     async importSongs(data: UserSong[]): Promise<UserSong[]> {
         if (data) {
             const songs = data.map((s) => this.appendId(s, { importedAt: new Date() }));
