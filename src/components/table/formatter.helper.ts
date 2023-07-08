@@ -45,10 +45,10 @@ export const progressFormatter: Partial<ColumnDefinition> = {
             const [newValue, oldValue] = ev.detail;
             cell.setValue(newValue);
 
-            if (newValue > 99) {
+            if (newValue > 90) {
                 song.status = 'done';
-            } else if (newValue < 1) {
-                song.status = 'removed';
+            } else if (newValue < 10) {
+                song.status = 'archived';
             } else if (newValue < oldValue) {
                 song.status = 'repeat';
             } else if (oldValue < newValue) {

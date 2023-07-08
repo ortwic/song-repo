@@ -901,7 +901,7 @@
 	},
 	{
 		"fav": false,
-		"status": "repeat",
+		"status": "archived",
 		"progress": "15",
 		"title": "Hit The Road Jack",
 		"artist": "R. Charles",
@@ -914,7 +914,7 @@
 	},
 	{
 		"fav": false,
-		"status": "wip",
+		"status": "archived",
 		"progress": "10",
 		"title": "Teardrop",
 		"artist": "Massive Attack",
@@ -1081,7 +1081,7 @@
 	},
 	{
 		"fav": false,
-		"status": "removed",
+		"status": "archived",
 		"progress": "0",
 		"title": "River Flows In You",
 		"artist": "Yiruma",

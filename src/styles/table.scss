@@ -115,7 +115,7 @@ div.tabulator-cell.status.repeat::before {
     color: red;
 }
 
-div.tabulator-cell.status.removed::before {
+div.tabulator-cell.status.archived::before {
     content: '✗';
     color: purple;
 }
