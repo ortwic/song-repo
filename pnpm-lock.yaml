@@ -26,6 +26,9 @@ devDependencies:
   '@types/lodash':
     specifier: ^4.14.192
     version: 4.14.192
+  '@types/marked':
+    specifier: ^5.0.0
+    version: 5.0.0
   '@types/tabulator-tables':
     specifier: ^5.4.6
     version: 5.4.6
@@ -44,6 +47,9 @@ devDependencies:
   lodash:
     specifier: ^4.17.21
     version: 4.17.21
+  marked:
+    specifier: ^5.1.1
+    version: 5.1.1
   nanoid:
     specifier: ^4.0.2
     version: 4.0.2
@@ -2337,6 +2343,10 @@ packages:
     resolution: {integrity: sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==}
     dev: true
 
+  /@types/marked@5.0.0:
+    resolution: {integrity: sha512-YcZe50jhltsCq7rc9MNZC/4QB/OnA2Pd6hrOSTOFajtabN+38slqgDDCeE/0F83SjkKBQcsZUj7VLWR0H5cKRA==}
+    dev: true
+
   /@types/node@18.15.6:
     resolution: {integrity: sha512-YErOafCZpK4g+Rp3Q/PBgZNAsWKGunQTm9FA3/Pbcm0VCriTEzcrutQ/SxSc0rytAp0NoFWue669jmKhEtd0sA==}
     dev: true
@@ -3908,6 +3918,12 @@ packages:
       semver: 6.3.0
     dev: true
 
+  /marked@5.1.1:
+    resolution: {integrity: sha512-bTmmGdEINWmOMDjnPWDxGPQ4qkDLeYorpYbEtFOXzOruTwUE671q4Guiuchn4N8h/v6NGd7916kXsm3Iz4iUSg==}
+    engines: {node: '>= 18'}
+    hasBin: true
+    dev: true
+
   /md5-hex@3.0.1:
     resolution: {integrity: sha512-BUiRtTtV39LIJwinWBjqVsU9xhdnz7/i889V859IBFpuqGAj6LuOvHv5XLbgZ2R7ptJoJaEcxkv88/h25T7Ciw==}
     engines: {node: '>=8'}
@@ -4660,14 +4676,6 @@ packages:
       - sass
       - stylus
       - sugarss
-    dev: true
-
-  /svelte-dialogs@1.2.2(svelte@3.57.0):
-    resolution: {integrity: sha512-Pf25Xua2nDIIR4v45PNbn+yFrFLNc0ns9+sO8Ms77Hm/CdxFuXm01XO8Qkw8Ej66BvboX+kIJ3TCm8uwP/XmyQ==}
-    peerDependencies:
-      svelte: ^3.5.0
-    dependencies:
-      svelte: 3.57.0
     dev: true
 
   /svelte-hmr@0.15.1(svelte@3.57.0):

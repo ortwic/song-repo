@@ -32,6 +32,12 @@ div.tabulator {
                 border-color: silver;
             }
         }
+
+        div.tabulator-cell {
+            p {
+                margin: 0;
+            }
+        }
     }
 
     button.tabulator-page,

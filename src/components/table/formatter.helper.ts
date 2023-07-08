@@ -1,4 +1,5 @@
 import Color from "color";
+import { marked } from "marked";
 import type { ColumnDefinition, CellComponent, GroupComponent } from "tabulator-tables";
 import ProgressBar from "./templates/ProgressBar.class";
 import genres from '../../data/genres.json';
@@ -76,6 +77,13 @@ export const genreFormatter: Partial<ColumnDefinition> = {
     }
 };
 
+export const markedFormatter: Partial<ColumnDefinition> = {    
+    formatter(cell: CellComponent): string {
+        const value = cell.getValue();
+        return value ? marked(value, { mangle: false, headerIds: false }) : value;
+    }
+};
+
 export const labelFormatter: Partial<ColumnDefinition> = {
     formatter(cell: CellComponent): string {
         const value = cell.getValue().toString();
@@ -125,3 +133,14 @@ export const groupByFormatter = (value: unknown, count: number, data: UserSong[]
     }
     return `<span class='title'>${value || 'n/a'}</span>${info}`;
 };
+
+export default {
+    favColumn,
+    status: statusFormatter,
+    progress: progressFormatter,
+    genre: genreFormatter,
+    marked: markedFormatter,
+    label: labelFormatter,
+    timestamp: timestampFormatter,
+    groupBy: groupByFormatter,
+}
