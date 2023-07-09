@@ -30,14 +30,14 @@ const omitUndefinedFields = (data: object) => {
 export default class FirestoreService {
     private db = getFirestore(app);
 
-    constructor(public path: string) {        
+    constructor(public path: string) {
     }
 
     public getDocuments(uid: string): Observable<DocumentData[]> {
         const items = collection(this.db, this.path);
 
         // Query requires an index, see screenshot below
-        const q = query(items, where('uid', '==', uid), orderBy('createdAt'));        
+        const q = query(items, where('uid', '==', uid), orderBy('id'));
         return collectionData(q, { idField: 'id' }).pipe(startWith([]));
     }
     

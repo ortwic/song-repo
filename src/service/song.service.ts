@@ -8,7 +8,7 @@ import { Timestamp } from 'firebase/firestore';
 const uniqueKey = (...array: string[]) => array.join('').trim().replaceAll(/\W/g, '');
 
 export default class SongService {
-    public readonly store = new FirestoreService('songs');
+    public readonly store = new FirestoreService('usersongs');
     private uid = '';
     
     private appendId = (song: UserSong, ...more: object[]): UserSong => (

@@ -61,7 +61,7 @@
           const id = await service.setSong(cell.getData() as UserSong);
 
           if (!id && nextField && currentRow) {
-            return table.focusField(currentRow, nextField);
+            await table.focusField(currentRow, nextField);
           } 
           currentRow = undefined;
         } catch (error) {
@@ -72,15 +72,19 @@
 
     async function deleteRow(song: UserSong): Promise<void> {
       try {
-        return service.deleteSong(song);
+        await service.deleteSong(song);
       } catch (error) {
-        snackbar.error(error.message);        
+        snackbar.error(error.message);
       }
     }
     
     async function importJSON(data: string): Promise<void> {
-      const result = await service.importSongs(JSON.parse(data));
-      snackbar.open(`Found ${result.length} songs. Total songs: ${usersongs.length}`);
+      try {
+        const result = await service.importSongs(JSON.parse(data));
+        snackbar.open(`Found ${result.length} songs. Total songs: ${usersongs.length}`);
+      } catch (error) {
+        snackbar.error(error.message);
+      }
     }
   
     $: if (table) {
