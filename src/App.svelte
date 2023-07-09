@@ -14,7 +14,8 @@
 <style>
   header {
     position: sticky;
-    top: .4rem;
+    top: 1rem;
+    margin-right: 1rem;
     z-index: 1;
     height: 0;
     text-align: right;

@@ -112,14 +112,49 @@
     table = fromEvent(tableInstance, 'tableBuilt').pipe(take(1), map(() => handleTableBuilt(tableInstance)));
   });
 
+  function isRequired(def: ColumnDefinition): boolean {
+    if (Array.isArray(def.validator)) {
+      return 'required' in def.validator;
+    }
+    return def.validator === 'required';
+  }
+
   function handleTableBuilt(table: TabulatorFull) {
-    const columnSelectors = table.getColumns().map(column => toggleVisibilityItem(column));
+    const columnSelectors = table.getColumns()
+      .filter(c => !isRequired(c.getDefinition()))
+      .map(column => toggleVisibilityItem(column));
+    
     columns.filter(c => c.headerMenu).forEach(c => c.headerMenu.push({
-      label: `Group by ${c.title}`,
+      label: `Group by ${c.title.toLowerCase()}`,
       action: (ev: Event, column: ColumnComponent) => toggleGroup(c.field, column.getElement())
     }, { separator: true }, ...columnSelectors));
+
     dispatch('init', table);
     return table;
+  }
+
+  export async function addRow<T>(data: T): Promise<RowComponent> {
+    try {
+      return $table.addRow(data);
+    } catch (error) {
+      // BUG from tabulator after ungrouping and calling table.addRow(data)
+      // "Cannot read properties of undefined (reading 'func')"
+      //    at GroupRows.assignRowToGroup (GroupRows.js:527:40)
+      //    at GroupRows.rowAddingIndex (GroupRows.js:208:9)
+      console.error(error);
+      dispatch('error', `Tabulator is unable to add a new row!\n${error.message}`);
+    }
+  }
+
+  export async function focusField(row: RowComponent, field: string): Promise<void> {
+    await row.scrollTo();
+    if (field) {
+      const cell = row.getCell(field);
+      if (cell.getColumn().isVisible()) {
+        // TODO if not visible focus next
+        cell.edit();
+      }
+    }
   }
 
   export async function setData<T>(data: T): Promise<void> {
@@ -167,11 +202,6 @@
 
     #footer {
       width: 100%;
-    }
-
-    :global(span.tabulator-paginator) {
-      float: right;
-      padding: 10px;
     }
 </style>
   

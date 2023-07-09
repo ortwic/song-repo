@@ -121,7 +121,7 @@ export const groupByFormatter = (value: unknown, count: number, data: UserSong[]
     const sumUp = (accumulator: number, current: number) => accumulator + current;
     let info = `<span class='info'>Σ ${count}</span>`;
     if (data.length) {
-        const tags = [...new Set(data.flatMap(f => f.tags))];
+        const tags = [...new Set(data.flatMap(f => f.tags || []))];
         const avg = count > 0 ? data.map(f => +f.progress).reduce(sumUp) / count : 0;
         const bgColor = redToGreenGradient(avg);
 

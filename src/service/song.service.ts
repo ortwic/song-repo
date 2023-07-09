@@ -43,11 +43,12 @@ export default class SongService {
         };
     }
 
-    async setSong(song: UserSong): Promise<void> {
+    async setSong(song: UserSong): Promise<string> {
         if (this.uid) {
             song = this.appendId(song);
             if (song.id) {
-                return this.store.setDocument(song, { merge: true });
+                await this.store.setDocument(song, { merge: true });
+                return song.id;
             }
         }
     }

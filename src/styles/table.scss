@@ -38,6 +38,21 @@ div.tabulator {
                 margin: 0;
             }
         }
+
+        div.tabulator-editing {
+            padding-right: .5em;
+            input {
+                margin: 0 .5em;
+                font-family: inherit;
+                font-size: inherit;
+            }
+        }
+
+        div.tabulator-validation-fail {
+            outline: 1px solid red;
+            border-color: red;
+            background-color: cornsilk;
+        }
     }
 
     button.tabulator-page,

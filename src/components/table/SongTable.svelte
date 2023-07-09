@@ -1,12 +1,13 @@
 <script lang="ts">
     import '../../styles/table.scss';
     import { onMount } from 'svelte';
-    import type { ColumnDefinition, CellComponent } from 'tabulator-tables';
+    import type { ColumnDefinition, CellComponent, CellEditEventCallback, RowComponent } from 'tabulator-tables';
     import { column, comboBoxEditor } from './column.helper';
     import { autoFilter, rangeFilter } from './filter.helper';
     import format from './formatter.helper';
     import Table from './Table.svelte'
     import FileDrop from './FileDrop.svelte';
+    import AddButton from '../ui/AddButton.svelte';
     import Snackbar from '../Snackbar.svelte';
     import SongService from '../../service/song.service';
     import { currentUser } from '../../service/auth.service';
@@ -19,21 +20,22 @@
     let service = new SongService();
     let snackbar: Snackbar;
     let table: Table;
+    let currentRow: RowComponent;
 
     const genreSelector = comboBoxEditor(Object.keys(genres));
 
     // https://tabulator.info/docs/5.4/edit#editor-list
     const columns: ColumnDefinition[] = [
-      column("Favorite", "fav", "50", undefined, format.favColumn, { cellEdited }),
+      column("Favorite", "fav", "50", undefined, format.favColumn, { cellEdited: updateHandler() }),
       column("Status", "status", "50", "string", autoFilter(), format.status),
-      column("Progress", "progress", "14%", "number", rangeFilter(), format.progress, { cellEdited }),
-      column("Genre", "genre", "13%", "string", autoFilter(), format.genre, genreSelector, { cellEdited }),
-      column("Style", "style", "13%", "string", autoFilter(), comboBoxEditor(), { cellEdited }),
-      column("Artist", "artist", "25%", "string", autoFilter(), comboBoxEditor(), { cellEdited }),
-      column("Title", "title", "25%", "string", autoFilter(), { editor: 'input', validator: 'required', cellEdited }),
-      column("Source", "source", "25%", "string", autoFilter(), format.marked, { editor: 'input', cellEdited }),
-      column("Labels", "tags", "14%", "string", autoFilter(), format.label, { editor: 'input', cellEdited }),
-      column("Learned", "learnedOn", "14%", "date", autoFilter(), format.timestamp, { editor: 'date', cellEdited }),
+      column("Progress", "progress", "14%", "number", rangeFilter(), format.progress, { cellEdited: updateHandler() }),
+      column("Genre", "genre", "13%", "string", autoFilter(), format.genre, genreSelector, { cellEdited: updateHandler('style') }),
+      column("Style", "style", "13%", "string", autoFilter(), comboBoxEditor(), { cellEdited: updateHandler('artist') }),
+      column("Artist", "artist", "25%", "string", autoFilter(), comboBoxEditor(), { validator: 'required', cellEdited: updateHandler('title') }),
+      column("Title", "title", "25%", "string", autoFilter(), { editor: 'input', validator: 'required', cellEdited: updateHandler() }),
+      column("Source", "source", "25%", "string", autoFilter(), format.marked, { editor: 'input', cellEdited: updateHandler() }),
+      column("Labels", "tags", "14%", "string", autoFilter(), format.label, { editor: 'input', cellEdited: updateHandler() }),
+      column("Learned", "learnedOn", "14%", "date", autoFilter(), format.timestamp, { editor: 'date', cellEdited: updateHandler() }),
       { title: "id", field: "id", visible: false },
       { title: "uid", field: "uid", visible: false },
     ];
@@ -46,26 +48,46 @@
         await import('tabulator-tables/dist/css/tabulator_bulma.min.css');
       }
       
-      if (import.meta.env.DEV) 
-        setTimeout(showSamples, 20);
+      // for debugging only
+      // if (import.meta.env.DEV) setTimeout(() => {if (!$currentUser) showSamples()}, 20);
     });
 
-    function showSamples() {
+    function showSamples(): void {
       usersongs.set(demosamples);
       if (!table.isGroupedBy('genre')) {
         table.toggleGroup('genre');
       }
     }
+
+    async function addRow(): Promise<void> {
+      currentRow = await table.addRow(service.newSong());
+      await table.focusField(currentRow, 'genre');
+    }
     
-    function cellEdited(cell: CellComponent) {
-      return service.setSong(cell.getData() as UserSong);
+    function updateHandler(nextField?: keyof UserSong): CellEditEventCallback {
+      return async (cell: CellComponent): Promise<void> => {
+        try {
+          const id = await service.setSong(cell.getData() as UserSong);
+
+          if (!id && nextField && currentRow) {
+            return table.focusField(currentRow, nextField);
+          } 
+          currentRow = undefined;
+        } catch (error) {
+          snackbar.error(error.message);
+        }
+      };
     }
 
     async function deleteRow(song: UserSong): Promise<void> {
-      return service.deleteSong(song);
+      try {
+        return service.deleteSong(song);
+      } catch (error) {
+        snackbar.error(error.message);        
+      }
     }
     
-    async function importJSON(data: string) {
+    async function importJSON(data: string): Promise<void> {
       const result = await service.importSongs(JSON.parse(data));
       snackbar.open(`Found ${result.length} songs. Total songs: ${usersongs.length}`);
     }
@@ -96,7 +118,7 @@
     <a href="#/" role="button" title="Load some random demo samples"
       on:click|preventDefault={showSamples}><i>Samples</i></a>
   {/if}
-  <button class="primary icon" title="add row after" on:click={() => usersongs.push(service.newSong())}>+</button>
+  <AddButton title="add row after" on:click={addRow}/>
 </section>
 
 <Snackbar bind:this={snackbar} />
@@ -104,17 +126,11 @@
 <style lang="scss">
   section.footer {
     position: sticky;
-    margin-right: .2rem;
-    bottom: calc(48px + .4rem);
-    z-index: 1;
+    bottom: calc(48px + 1rem);
+    margin-right: 1rem;
+    z-index: 10;
     height: 0;
     text-align: right;
-  }
-
-  section.footer  {
-    button.icon {
-      font-size: 1.6rem;
-    }
   }
 </style>
   

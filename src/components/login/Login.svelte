@@ -1,6 +1,6 @@
 <script lang='ts'>
-	import LoginIcon from './LoginIcon.svelte';
-	import LogoutIcon from './LogoutIcon.svelte';
+	import LoginIcon from '../ui/LoginIcon.svelte';
+	import LogoutIcon from '../ui/LogoutIcon.svelte';
 	import SignupDialog from './SignupDialog.svelte';
 	import AuthService, { currentUser } from '../../service/auth.service';
 

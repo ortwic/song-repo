@@ -88,10 +88,11 @@ input[type=submit]:disabled {
 }
 
 button.icon {
-  padding: 0;
+  padding: 2px 0 0 0;
   width: 3rem;
   height: 3rem;
   border-radius: 1.5rem;
+  outline: 0;
   opacity: .7;
 }
 
