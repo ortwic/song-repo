@@ -14,9 +14,7 @@
     import type { UserSong } from '../../model/song.model';
     import { usersongs } from '../../store/song.store';
     import genres from '../../data/genres.json';
-    import samples from '../../data/samples.json';
-
-    const demosamples = samples as unknown as UserSong[];
+    
     let service = new SongService();
     let snackbar: Snackbar;
     let table: Table;
@@ -51,13 +49,6 @@
       // for debugging only
       // if (import.meta.env.DEV) setTimeout(() => {if (!$currentUser) showSamples()}, 20);
     });
-
-    function showSamples(): void {
-      usersongs.set(demosamples);
-      if (!table.isGroupedBy('genre')) {
-        table.toggleGroup('genre');
-      }
-    }
 
     async function addRow(): Promise<void> {
       currentRow = await table.addRow(service.newSong());
@@ -114,10 +105,6 @@
   />
 </FileDrop>
 <section class="footer">
-  {#if !$currentUser}
-    <a href="#/" role="button" title="Load some random demo samples"
-      on:click|preventDefault={showSamples}><i>Samples</i></a>
-  {/if}
   <AddButton title="add row after" on:click={addRow}/>
 </section>
 

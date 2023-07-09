@@ -77,7 +77,7 @@
 	</form>
 </dialog>
 
-<style>
+<style lang="scss">
 	label, input[type=text], input[type=password] {
 		padding: .4rem;
 	}
@@ -88,55 +88,55 @@
 		box-shadow: 5px 5px 5px silver;
 		opacity: 0;
   		transition: transform .5s ease 0s, opacity .5s ease .5s;
+
+		header {
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			padding: .4rem 1rem;
+			font-size: large;
+			color: whitesmoke;
+			background-color: var(--primary);
+			
+			div {
+				float: left;
+			}
+
+			button.icon {
+				float: right;
+				color: whitesmoke;
+				background-color: transparent;
+				box-shadow: unset;
+				border: 0;
+				outline: 0;
+				padding: 0;
+			}
+
+			button.icon:hover {
+				text-shadow: 0 0 4px white;
+			}
+		}
+
+		main {
+			margin-top: 3rem;
+			margin-bottom: 1.8rem;
+
+			p input {
+				float: right;
+			}
+		}
+
+		footer button {
+			min-width: 10rem;
+		}
+
+		footer hr {
+			margin: 1rem 0;
+		}
 	}
 
 	dialog[open] {
 		opacity: 1;
-	}
-
-	dialog header {
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		padding: .4rem 1rem;
-		font-size: large;
-		color: whitesmoke;
-		background-color: var(--primary);
-	}
-
-	dialog header div {
-		float: left;
-	}
-
-	button.icon {
-		float: right;
-		color: whitesmoke;
-		background-color: transparent;
-		box-shadow: unset;
-		border: 0;
-		outline: 0;
-		padding: 0;
-	}
-
-	button.icon:hover {
-		text-shadow: 0 0 4px white;
-	}
-
-	dialog main {
-		margin-top: 3rem;
-		margin-bottom: 1.8rem;
-	}
-
-	dialog main p input {
-		float: right;
-	}
-
-	footer button {
-		min-width: 10rem;
-	}
-
-	footer hr {
-		margin: 1rem 0;
 	}
 </style>

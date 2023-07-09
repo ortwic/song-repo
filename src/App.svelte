@@ -1,11 +1,16 @@
 <script lang="ts">
-    import Login from './components/login/Login.svelte';
-    import Table from './components/table/SongTable.svelte';
+  import Table from './components/table/SongTable.svelte';
+  import Sidebar from './components/sidebar/Sidebar.svelte'
+  import BurgerButton from './components/ui/BurgerButton.svelte';
 </script>
 
 <header>
-  <Login />
+  <BurgerButton />
 </header>
+
+<nav>
+  <Sidebar version='0.1.0 pre-alpha' />
+</nav>
 
 <main> 
   <Table />
@@ -16,7 +21,7 @@
     position: sticky;
     top: 1rem;
     margin-right: 1rem;
-    z-index: 1;
+    z-index: 10;
     height: 0;
     text-align: right;
   }
