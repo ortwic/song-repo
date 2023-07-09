@@ -1,0 +1,1504 @@
+[
+	{
+		"fav": false,
+		"status": "done",
+		"progress": "100",
+		"title": "Prelude in Em",
+		"artist": "Fryderyk Chopin",
+		"genre": "Classical",
+		"style": "Romantic",
+		"tags": [],
+		"learnedOn": "2018"
+	},
+	{
+		"fav": false,
+		"status": "done",
+		"progress": "100",
+		"title": "Porz Goret",
+		"artist": "Yann Tiersen",
+		"genre": "Classical / Neo",
+		"style": "Minimal / Neo",
+		"tags": [],
+		"learnedOn": "2018"
+	},
+	{
+		"fav": false,
+		"status": "done",
+		"progress": "100",
+		"title": "Monday",
+		"artist": "Ludovico Einaudi",
+		"genre": "Classical / Neo",
+		"style": "Minimal / Neo",
+		"tags": [],
+		"learnedOn": "2022"
+	},
+	{
+		"fav": false,
+		"status": "done",
+		"progress": "100",
+		"title": "Alle meine Entchen",
+		"artist": "Traditionell",
+		"genre": "Kids Song",
+		"style": "Stride piano",
+		"tags": [],
+		"learnedOn": "2022"
+	},
+	{
+		"fav": false,
+		"status": "done",
+		"progress": "100",
+		"title": "Happy Birthday",
+		"artist": "Traditionell",
+		"genre": "Kids Song",
+		"tags": [],
+		"learnedOn": "2021"
+	},
+	{
+		"fav": false,
+		"status": "done",
+		"progress": "100",
+		"title": "Wie schön das du geboren bist",
+		"artist": "Rolf Zuckowski",
+		"genre": "Kids Song",
+		"tags": [],
+		"learnedOn": "2021"
+	},
+	{
+		"fav": false,
+		"status": "done",
+		"progress": "100",
+		"title": "Grün grün grün sind meine Kleider",
+		"artist": "Traditionell",
+		"genre": "Kids Song",
+		"tags": [],
+		"learnedOn": "2023"
+	},
+	{
+		"fav": false,
+		"status": "done",
+		"progress": "100",
+		"title": "Alle Vögel sind schon da",
+		"artist": "Traditionell",
+		"genre": "Kids Song",
+		"tags": [],
+		"learnedOn": "2023"
+	},
+	{
+		"fav": false,
+		"status": "done",
+		"progress": "100",
+		"title": "Clubbed To Death",
+		"artist": "Rob Dougan",
+		"source": "Matrix",
+		"genre": "Movie Score",
+		"style": "Epic",
+		"tags": [],
+		"learnedOn": "2015"
+	},
+	{
+		"fav": true,
+		"status": "done",
+		"progress": "100",
+		"title": "Children",
+		"artist": "Robert Miles",
+		"genre": "Electronic",
+		"style": "Dreamhouse",
+		"tags": [],
+		"learnedOn": "2015"
+	},
+	{
+		"fav": false,
+		"status": "done",
+		"progress": "100",
+		"title": "It's a grand illusion",
+		"artist": "David Magyel",
+		"genre": "Pop",
+		"style": "Rock",
+		"tags": [],
+		"learnedOn": "2019"
+	},
+	{
+		"fav": false,
+		"status": "done",
+		"progress": "100",
+		"title": "Yesterday",
+		"artist": "Beetles",
+		"genre": "Pop",
+		"style": "Ballad",
+		"tags": [],
+		"learnedOn": "2014"
+	},
+	{
+		"fav": false,
+		"status": "done",
+		"progress": "100",
+		"title": "Morning Shuffle",
+		"artist": "Frank Wollmann",
+		"source": "Rock Piano",
+		"genre": "Rock Ballad",
+		"tags": [],
+		"learnedOn": "2015"
+	},
+	{
+		"fav": false,
+		"status": "done",
+		"progress": "99",
+		"title": "Fuchs du hast die Gans gestohlen",
+		"artist": "Traditionell",
+		"genre": "Kids Song",
+		"style": "Stride piano",
+		"tags": [],
+		"learnedOn": "2022"
+	},
+	{
+		"fav": false,
+		"status": "done",
+		"progress": "99",
+		"title": "Backe Backe Kuchen Stomp",
+		"artist": "Traditionell",
+		"genre": "Kids Song",
+		"style": "Boogie",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "done",
+		"progress": "98",
+		"title": "Always look on the bright side of life",
+		"artist": "Eric Idle",
+		"genre": "Movie Score",
+		"style": "Swing",
+		"tags": [],
+		"learnedOn": "2014"
+	},
+	{
+		"fav": false,
+		"status": "done",
+		"progress": "95",
+		"title": "Auf der Mauer auf der Lauer",
+		"artist": "Traditionell",
+		"genre": "Kids Song",
+		"tags": [],
+		"learnedOn": "2023"
+	},
+	{
+		"fav": false,
+		"status": "done",
+		"progress": "98",
+		"title": "Weekend Fever",
+		"artist": "Jürgen Moser",
+		"source": "Rock Piano 2",
+		"genre": "Funk Rock",
+		"tags": [],
+		"learnedOn": "2015"
+	},
+	{
+		"fav": true,
+		"status": "done",
+		"progress": "95",
+		"title": "Life in the mines",
+		"artist": "David Wise",
+		"source": "DKC",
+		"genre": "Game Music",
+		"style": "Epic",
+		"tags": [
+			"Feinschliff"
+		],
+		"learnedOn": "2017"
+	},
+	{
+		"fav": false,
+		"status": "done",
+		"progress": "95",
+		"title": "Funky Piano",
+		"artist": "Jürgen Moser",
+		"source": "Rock Piano",
+		"genre": "Funk Rock",
+		"tags": [],
+		"learnedOn": "2014"
+	},
+	{
+		"fav": false,
+		"status": "done",
+		"progress": "95",
+		"title": "Highway Number One",
+		"artist": "Jürgen Moser",
+		"source": "Rock Piano 2",
+		"genre": "Rock",
+		"tags": [],
+		"learnedOn": "2022"
+	},
+	{
+		"fav": true,
+		"status": "done",
+		"progress": "90",
+		"title": "Hot Head Hop (Lava)",
+		"artist": "David Wise",
+		"source": "DKC2",
+		"genre": "Game Music",
+		"style": "Funky",
+		"tags": [
+			"Feinschliff"
+		],
+		"learnedOn": "2019"
+	},
+	{
+		"fav": true,
+		"status": "done",
+		"progress": "90",
+		"title": "Stickerbrush Symphony",
+		"artist": "David Wise",
+		"source": "DKC2",
+		"genre": "Game Music",
+		"style": "Easy",
+		"tags": [
+			"Feinschliff"
+		],
+		"learnedOn": "2017"
+	},
+	{
+		"fav": false,
+		"status": "done",
+		"progress": "90",
+		"title": "Requiem For A Dream",
+		"artist": "Clint Mansell",
+		"genre": "Movie Score",
+		"tags": [
+			"Ausbauen"
+		],
+		"learnedOn": "2015"
+	},
+	{
+		"fav": false,
+		"status": "done",
+		"progress": "90",
+		"title": "Space Walk",
+		"artist": "Jürgen Moser",
+		"source": "Rock Piano",
+		"genre": "Rock Ballad",
+		"tags": [],
+		"learnedOn": "2014"
+	},
+	{
+		"fav": false,
+		"status": "done",
+		"progress": "90",
+		"title": "Latin Special",
+		"artist": "Jürgen Moser",
+		"source": "Rock Piano",
+		"genre": "Latin Rock",
+		"tags": [
+			"Üben"
+		],
+		"learnedOn": "2015"
+	},
+	{
+		"fav": true,
+		"status": "done",
+		"progress": "90",
+		"title": "Fried Chicken",
+		"artist": "Jürgen Moser",
+		"source": "Rock Piano",
+		"genre": "Rock",
+		"tags": [],
+		"learnedOn": "2014"
+	},
+	{
+		"fav": true,
+		"status": "done",
+		"progress": "90",
+		"title": "Night Driver",
+		"artist": "Jürgen Moser",
+		"source": "Rock Piano 2",
+		"genre": "Rock",
+		"tags": [],
+		"learnedOn": "2020"
+	},
+	{
+		"fav": false,
+		"status": "done",
+		"progress": "90",
+		"title": "The Groover",
+		"artist": "Jürgen Moser",
+		"source": "Rock Piano",
+		"genre": "Rock",
+		"tags": [
+			"Ende üben"
+		],
+		"learnedOn": "2018"
+	},
+	{
+		"fav": false,
+		"status": "repeat",
+		"progress": "85",
+		"title": "Vielen Dank Für Die Blumen",
+		"artist": "Udo Jürgens",
+		"genre": "Movie Score",
+		"tags": [],
+		"learnedOn": "2014"
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "80",
+		"title": "Ein Schneider fing ne Maus",
+		"artist": "Traditionell",
+		"genre": "Kids Song",
+		"style": "Stride piano",
+		"tags": [],
+		"learnedOn": "2023"
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "80",
+		"title": "Funk Groove #5",
+		"artist": "Jonathon Wilson",
+		"source": "groovewindow",
+		"genre": "Funk Rock",
+		"tags": [
+			"Üben"
+		],
+		"learnedOn": "2021"
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "80",
+		"title": "I Feel Good",
+		"artist": "Jürgen Moser",
+		"source": "Rock Piano",
+		"genre": "Rock",
+		"tags": [],
+		"learnedOn": "2014"
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "80",
+		"title": "Competine d'un autre ete",
+		"artist": "Yann Tiersen",
+		"genre": "Classical / Neo",
+		"style": "Minimal / Neo",
+		"tags": [
+			"Ausbauen"
+		],
+		"learnedOn": "2015"
+	},
+	{
+		"fav": false,
+		"status": "done",
+		"progress": "90",
+		"title": "Rue des Cascades",
+		"artist": "Yann Tiersen",
+		"genre": "Classical / Neo",
+		"style": "Minimal / Neo",
+		"tags": [
+			"Ausbauen"
+		],
+		"learnedOn": "2015"
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "75",
+		"title": "Bear Necessities",
+		"artist": "Terry Gilkyson",
+		"source": "Jungle Book",
+		"genre": "Movie Score",
+		"tags": [
+			"Improv"
+		],
+		"learnedOn": "2017"
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "75",
+		"title": "Timekeeping",
+		"artist": "Jürgen Moser",
+		"source": "Rock Piano 2",
+		"genre": "Funk Rock",
+		"tags": [
+			"Üben"
+		],
+		"learnedOn": "2018"
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "75",
+		"title": "Bright Eyes",
+		"artist": "Simon Garfunkel",
+		"genre": "Pop",
+		"style": "Ballad",
+		"tags": [],
+		"learnedOn": "1998"
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "75",
+		"title": "Do You Dig It?",
+		"artist": "Jürgen Moser",
+		"source": "Rock Piano",
+		"genre": "Rock",
+		"style": "Swing",
+		"tags": [
+			"Üben"
+		],
+		"learnedOn": "2014"
+	},
+	{
+		"fav": false,
+		"status": "repeat",
+		"progress": "70",
+		"title": "Carol Of The Bells",
+		"artist": "Rousseau",
+		"genre": "Classical",
+		"tags": [
+			"Technik verbessern"
+		],
+		"learnedOn": "2021"
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "85",
+		"title": "Night",
+		"artist": "Ludovico Einaudi",
+		"genre": "Classical / Neo",
+		"style": "Minimal / Neo",
+		"tags": [
+			"Feinschliff"
+		],
+		"learnedOn": "2022"
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "85",
+		"title": "Interstellar",
+		"artist": "Patrik Pietschmann",
+		"genre": "Movie Score",
+		"tags": [
+			"Technik verbessern"
+		],
+		"learnedOn": "2022"
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "65",
+		"title": "Weekend Fever",
+		"artist": "Daniel Hellbach",
+		"genre": "Funk Rock",
+		"tags": [
+			"Nur Noten"
+		],
+		"learnedOn": "2022"
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "65",
+		"title": "The Snow Is Falling",
+		"artist": "Jürgen Moser",
+		"source": "Rock Piano",
+		"genre": "Rock Ballad",
+		"tags": [
+			"Nur Noten"
+		],
+		"learnedOn": "2015"
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "65",
+		"title": "Smells like teenspirit",
+		"artist": "Nirvana",
+		"genre": "Rock",
+		"style": "Grunge",
+		"tags": [
+			"Nur Noten"
+		],
+		"learnedOn": "2019"
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "65",
+		"title": "Corner Kids",
+		"artist": "Jürgen Moser",
+		"source": "Rock Piano",
+		"genre": "Latin Rock",
+		"tags": [
+			"Improv"
+		],
+		"learnedOn": "2015"
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "60",
+		"title": "Prelude C#m",
+		"artist": "Rachmaninoff",
+		"genre": "Classical",
+		"style": "Epic",
+		"tags": [
+			"Technik verbessern"
+		],
+		"learnedOn": "2021"
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "60",
+		"title": "Für Elise",
+		"artist": "L. v. Beethoven",
+		"genre": "Classical",
+		"style": "Romantic",
+		"tags": [
+			"Ausbauen"
+		],
+		"learnedOn": "2014"
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "60",
+		"title": "Chameleon",
+		"artist": "Herbie Hancock",
+		"genre": "Jazz",
+		"tags": [
+			"Rythmus"
+		],
+		"learnedOn": "2018"
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "60",
+		"title": "Fairest Of Them All",
+		"artist": "K4mmerer",
+		"genre": "Electronic",
+		"tags": [
+			"Improv"
+		],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "50",
+		"title": "Cantaloupe Island",
+		"artist": "Herbie Hancock",
+		"genre": "Jazz",
+		"tags": [
+			"Improv"
+		],
+		"learnedOn": "2018"
+	},
+	{
+		"fav": false,
+		"status": "repeat",
+		"progress": "50",
+		"title": "Super Bell Hill",
+		"artist": "Konji Kondo",
+		"source": "SM3D",
+		"genre": "Game Music",
+		"tags": [
+			"Minikeyboard"
+		],
+		"learnedOn": "2020"
+	},
+	{
+		"fav": false,
+		"status": "repeat",
+		"progress": "50",
+		"title": "World Bowser",
+		"artist": "Konji Kondo",
+		"source": "SM3D",
+		"genre": "Game Music",
+		"tags": [
+			"Minikeyboard"
+		],
+		"learnedOn": "2020"
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "50",
+		"title": "Take 5 (YT sheet boss music)",
+		"artist": "Dave Brubeck",
+		"genre": "Jazz",
+		"tags": [],
+		"learnedOn": "2018"
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "50",
+		"title": "Maple Tree",
+		"artist": "Jürgen Moser",
+		"source": "Rock Piano",
+		"genre": "Rock Ballad",
+		"tags": [],
+		"learnedOn": "2014"
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "50",
+		"title": "Carol For Claudia",
+		"artist": "Jürgen Moser",
+		"source": "Rock Piano",
+		"genre": "Rock Ballad",
+		"tags": [],
+		"learnedOn": "2014"
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "50",
+		"title": "Sunshine Woman",
+		"artist": "Jürgen Grossardt/Jürgen Moser",
+		"source": "Rock Piano",
+		"genre": "Rock Ballad",
+		"tags": [],
+		"learnedOn": "2014"
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "50",
+		"title": "Broken Mirror",
+		"artist": "Jürgen Moser",
+		"source": "Rock Piano",
+		"genre": "Rock",
+		"tags": [],
+		"learnedOn": "2014"
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "50",
+		"title": "Blues in F",
+		"artist": "Axel Benthien",
+		"genre": "Blues",
+		"style": "Boogie",
+		"tags": [],
+		"learnedOn": "2020"
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "50",
+		"title": "Divenire",
+		"artist": "Ludovico Einaudi",
+		"genre": "Classical / Neo",
+		"style": "Minimal / Neo",
+		"tags": [
+			"Technik verbessern"
+		],
+		"learnedOn": "2021"
+	},
+	{
+		"fav": true,
+		"status": "wip",
+		"progress": "50",
+		"title": "Aquatic ambience",
+		"artist": "David Wise",
+		"source": "DKC",
+		"genre": "Game Music",
+		"tags": [
+			"Technik verbessern"
+		],
+		"learnedOn": "2022"
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "50",
+		"title": "Fear Factory",
+		"artist": "David Wise",
+		"source": "DKC",
+		"genre": "Game Music",
+		"tags": [],
+		"learnedOn": "2021"
+	},
+	{
+		"fav": false,
+		"status": "repeat",
+		"progress": "50",
+		"title": "Dire Dire Docks",
+		"artist": "Konji Kondo",
+		"source": "SM64",
+		"genre": "Game Music",
+		"tags": [
+			"Nur Noten"
+		],
+		"learnedOn": "2019"
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "50",
+		"title": "Des Wandern ist des Müllers Lust",
+		"artist": "Traditionell",
+		"genre": "Kids Song",
+		"tags": [],
+		"learnedOn": "2023"
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "50",
+		"title": "Axel F",
+		"artist": "Harold Flatermeyer",
+		"genre": "Movie Score",
+		"style": "Funky",
+		"tags": [
+			"Rythmus"
+		],
+		"learnedOn": "2019"
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "50",
+		"title": "The Hanging Tree",
+		"artist": "",
+		"genre": "Movie Score",
+		"style": "Epic",
+		"tags": [
+			"Improv"
+		],
+		"learnedOn": "2022"
+	},
+	{
+		"fav": false,
+		"status": "repeat",
+		"progress": "50",
+		"title": "4 Just 1 Day",
+		"artist": "Kai Tracid / ATB",
+		"genre": "Electronic",
+		"tags": [
+			"Improv"
+		],
+		"learnedOn": "2016"
+	},
+	{
+		"fav": false,
+		"status": "repeat",
+		"progress": "40",
+		"title": "Mahna Mahna",
+		"artist": "Muppet Show",
+		"genre": "Jazz",
+		"tags": [
+			"Improv"
+		],
+		"learnedOn": "2019"
+	},
+	{
+		"fav": false,
+		"status": "done",
+		"progress": "98",
+		"title": "Manhatten Skyline",
+		"artist": "Jürgen Moser",
+		"source": "Rock Piano 2",
+		"genre": "Rock Ballad",
+		"tags": [],
+		"learnedOn": "2023"
+	},
+	{
+		"fav": false,
+		"status": "repeat",
+		"progress": "38",
+		"title": "San Francisco",
+		"artist": "Scott McKenzie",
+		"genre": "Pop",
+		"style": "Ballad",
+		"tags": [],
+		"learnedOn": "1998"
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "30",
+		"title": "Wer hat an der Uhr gedreht",
+		"artist": "",
+		"source": "Pink Panther",
+		"genre": "Kids Song",
+		"tags": [],
+		"learnedOn": "2019"
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "30",
+		"title": "Samuels Lullaby",
+		"artist": "David Motola",
+		"source": "[YouTube](https://youtu.be/Ow0lbyPkpnU)",
+		"genre": "Kids Song",
+		"style": "Classical",
+		"tags": [],
+		"learnedOn": "2019"
+	},
+	{
+		"fav": false,
+		"status": "repeat",
+		"progress": "33",
+		"title": "Michelle",
+		"artist": "Beetles",
+		"genre": "Pop",
+		"style": "Ballad",
+		"tags": [],
+		"learnedOn": "2014"
+	},
+	{
+		"fav": false,
+		"status": "repeat",
+		"progress": "30",
+		"title": "Suitcase Blues",
+		"artist": "Jürgen Moser",
+		"source": "Rock Piano",
+		"genre": "Blues",
+		"style": "Slow",
+		"tags": [],
+		"learnedOn": "2015"
+	},
+	{
+		"fav": false,
+		"status": "repeat",
+		"progress": "30",
+		"title": "Funky in C",
+		"artist": "David Magyel",
+		"genre": "Funk Rock",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "20",
+		"title": "Autumn Leaves",
+		"artist": "Joseph Kosima",
+		"genre": "Jazz",
+		"tags": [
+			"Improv",
+			"Lead Sheet"
+		],
+		"learnedOn": "2022"
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "20",
+		"title": "Tj needs To Sleep",
+		"artist": "myself",
+		"genre": "Custom",
+		"tags": [
+			"Üben"
+		],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "archived",
+		"progress": "15",
+		"title": "Hit The Road Jack",
+		"artist": "R. Charles",
+		"genre": "Jazz",
+		"style": "R&B / Soul",
+		"tags": [
+			"Improv"
+		],
+		"learnedOn": "2016"
+	},
+	{
+		"fav": false,
+		"status": "archived",
+		"progress": "10",
+		"title": "Teardrop",
+		"artist": "Massive Attack",
+		"source": "vkgoeswild",
+		"genre": "Pop",
+		"style": "Rock",
+		"tags": [],
+		"learnedOn": "2016"
+	},
+	{
+		"fav": false,
+		"status": "repeat",
+		"progress": "10",
+		"title": "New Orleans Blues",
+		"artist": "Jürgen Moser",
+		"source": "Rock Piano",
+		"genre": "Blues",
+		"style": "Boogie",
+		"tags": [],
+		"learnedOn": "2020"
+	},
+	{
+		"fav": false,
+		"status": "repeat",
+		"progress": "10",
+		"title": "Mickeys Blues",
+		"artist": "",
+		"source": "Piano Teacher",
+		"genre": "Blues",
+		"style": "Boogie",
+		"tags": [],
+		"learnedOn": "2014"
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "10",
+		"title": "Tjs Welcome Carol",
+		"artist": "myself",
+		"genre": "Custom",
+		"tags": [
+			"Üben"
+		],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "5",
+		"title": "Funk Groove in C",
+		"artist": "Jonathon Wilson",
+		"source": "groovewindow",
+		"genre": "Funk Rock",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "2",
+		"title": "Athletic Theme (SMW2)",
+		"artist": "Konji Kondo",
+		"source": "SMW2",
+		"genre": "Game Music",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "2",
+		"title": "Sirens Of The Sea",
+		"artist": "Ocean Lab",
+		"source": "GeHeMaLe",
+		"genre": "Pop",
+		"style": "Rock",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "2",
+		"title": "Chasing Cars",
+		"artist": "Snowpatrol",
+		"genre": "Pop",
+		"style": "Ballad",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "1",
+		"title": "Snappiness",
+		"artist": "BBG",
+		"genre": "Electronic",
+		"tags": [
+			"Improv"
+		],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "1",
+		"title": "Flaming June",
+		"artist": "BT",
+		"genre": "Electronic",
+		"tags": [
+			"Improv"
+		],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "1",
+		"title": "Mindcircus",
+		"artist": "Way Out West",
+		"source": "Steven Pruis",
+		"genre": "Electronic",
+		"tags": [
+			"Improv"
+		],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "repeat",
+		"progress": "0",
+		"title": "Swedish Summer",
+		"artist": "Axel Benthien",
+		"source": "Keyboardspiel 4",
+		"genre": "Rock",
+		"tags": [],
+		"learnedOn": "2015"
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "0",
+		"title": "buzzmachines",
+		"artist": "Necros",
+		"genre": "Electronic",
+		"style": "Tracker",
+		"tags": [
+			"Komponieren"
+		],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "wip",
+		"progress": "0",
+		"title": "Nevada",
+		"artist": "Audioplacid",
+		"source": "mp3.com",
+		"genre": "Electronic",
+		"tags": [
+			"Improv"
+		],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "archived",
+		"progress": "0",
+		"title": "River Flows In You",
+		"artist": "Yiruma",
+		"genre": "Pop",
+		"style": "Rock",
+		"tags": [],
+		"learnedOn": "2016"
+	},
+	{
+		"fav": false,
+		"status": "todo",
+		"progress": "0",
+		"title": "Moonlight Sonata",
+		"artist": "L. v. Beethoven",
+		"genre": "Classical",
+		"style": "Romantic",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "todo",
+		"progress": "0",
+		"title": "Air",
+		"artist": "J.S. Bach",
+		"genre": "Classical",
+		"style": "Barock",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "todo",
+		"progress": "0",
+		"title": "Toccata Fugue",
+		"artist": "J.S. Bach",
+		"genre": "Classical",
+		"style": "Barock",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "todo",
+		"progress": "0",
+		"title": "G minor",
+		"artist": "J.S. Bach",
+		"genre": "Classical",
+		"style": "Barock",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "todo",
+		"progress": "0",
+		"title": "Jesu meine Freude",
+		"artist": "J.S. Bach",
+		"genre": "Classical",
+		"style": "Barock",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "todo",
+		"progress": "0",
+		"title": "4 Jahreszeiten",
+		"artist": "A. Vivaldi",
+		"genre": "Classical",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "todo",
+		"progress": "0",
+		"title": "Eine Kleine Nachtmusik",
+		"artist": "W. A. Mozart",
+		"genre": "Classical",
+		"style": "Romantic",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "todo",
+		"progress": "0",
+		"title": "Rolf der Wolf",
+		"artist": "myself",
+		"genre": "Custom",
+		"tags": [
+			"Komponieren"
+		],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "todo",
+		"progress": "0",
+		"title": "Gang Plank Galleon",
+		"artist": "David Wise",
+		"source": "DKC",
+		"genre": "Game Music",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "todo",
+		"progress": "0",
+		"title": "Swamp",
+		"artist": "David Wise",
+		"source": "DKC2",
+		"genre": "Game Music",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "todo",
+		"progress": "0",
+		"title": "Enchanted Wood",
+		"artist": "David Wise",
+		"source": "DKC2",
+		"genre": "Game Music",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "todo",
+		"progress": "0",
+		"title": "Mining Melanchony",
+		"artist": "David Wise",
+		"source": "DKC2",
+		"genre": "Game Music",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": true,
+		"status": "todo",
+		"progress": "0",
+		"title": "Amiss Abyss",
+		"artist": "David Wise",
+		"source": "DKC-TF",
+		"genre": "Game Music",
+		"style": "Easy",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "todo",
+		"progress": "0",
+		"title": "Knight Moves",
+		"artist": "Chilly Gonzales",
+		"genre": "Jazz",
+		"tags": [
+			"Improv"
+		],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "todo",
+		"progress": "0",
+		"title": "Kill Yourself",
+		"artist": "Boe Burnham",
+		"genre": "Comedy",
+		"style": "Cabaret",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "todo",
+		"progress": "0",
+		"title": "Regen",
+		"artist": "Bodo Wartke",
+		"genre": "Comedy",
+		"style": "Cabaret",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "todo",
+		"progress": "0",
+		"title": "Ich trau mich nicht",
+		"artist": "Bodo Wartke",
+		"genre": "Comedy",
+		"style": "Cabaret",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "todo",
+		"progress": "0",
+		"title": "Jurassic Park",
+		"artist": "John Williams",
+		"genre": "Movie Score",
+		"style": "Epic",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "todo",
+		"progress": "0",
+		"title": "Schindlers List",
+		"artist": "John Williams",
+		"source": "Patrik Pietschmann",
+		"genre": "Movie Score",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "todo",
+		"progress": "0",
+		"title": "Lullaby",
+		"artist": "The Cure",
+		"source": "vkgoeswild",
+		"genre": "Pop",
+		"style": "Rock",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "todo",
+		"progress": "0",
+		"title": "Schrei nach Liebe",
+		"artist": "Die Ärzte",
+		"source": "vkgoeswild",
+		"genre": "Pop",
+		"style": "Rock",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "todo",
+		"progress": "0",
+		"title": "Ignorama",
+		"artist": "Die Ärzte",
+		"genre": "Pop",
+		"style": "Rock",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "todo",
+		"progress": "0",
+		"title": "Evanescene",
+		"artist": "Bring me to life",
+		"source": "[Shedal](https://youtu.be/bUpaJqyfVjk)",
+		"genre": "Pop",
+		"style": "Rock",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "todo",
+		"progress": "0",
+		"title": "I like Chopin",
+		"artist": "Gazebo",
+		"source": "[YouTube](https://youtu.be/u7Di4EVlJQA)",
+		"genre": "Pop",
+		"style": "Rock",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "todo",
+		"progress": "0",
+		"title": "Happy",
+		"artist": "P. Williams",
+		"genre": "Pop",
+		"style": "Rock",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "todo",
+		"progress": "0",
+		"title": "Another Day In Paradise",
+		"artist": "P. Collins",
+		"genre": "Pop",
+		"style": "Rock",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "todo",
+		"progress": "0",
+		"title": "Radioactive",
+		"artist": "Imagine Dragons",
+		"genre": "Pop",
+		"style": "Rock",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "todo",
+		"progress": "0",
+		"title": "Carlifornia Dreaming",
+		"artist": "",
+		"genre": "Pop",
+		"style": "Rock",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "todo",
+		"progress": "0",
+		"title": "The Entertainer",
+		"artist": "S. Joplin",
+		"genre": "Ragtime",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "todo",
+		"progress": "0",
+		"title": "Maple Leaf Rag",
+		"artist": "S. Joplin",
+		"genre": "Ragtime",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "todo",
+		"progress": "0",
+		"title": "Boogie Woogie Stomp",
+		"artist": "A. Ammons",
+		"genre": "Blues",
+		"style": "Boogie",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "todo",
+		"progress": "0",
+		"title": "Key Engine",
+		"artist": "Luca",
+		"source": "[YouTube](https://youtu.be/B2xrLoBwk0E)",
+		"genre": "Blues",
+		"style": "Boogie",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "todo",
+		"progress": "0",
+		"title": "Stompin at the Funk",
+		"artist": "Axel Benthien",
+		"source": "Harry Völker",
+		"genre": "Funk Rock",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "todo",
+		"progress": "0",
+		"title": "November",
+		"artist": "Wolfgang Fuch",
+		"genre": "Rock Ballad",
+		"style": "Ballad",
+		"tags": [],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "todo",
+		"progress": "0",
+		"title": "Jarresque",
+		"artist": "Planisphere",
+		"source": "Cyborganic",
+		"genre": "Electronic",
+		"tags": [
+			"Komponieren"
+		],
+		"learnedOn": ""
+	},
+	{
+		"fav": false,
+		"status": "todo",
+		"progress": "0",
+		"title": "The Fifth",
+		"artist": "Stefan Obermaier",
+		"source": "Beethoven Reloaded",
+		"genre": "Electronic",
+		"style": "House",
+		"tags": [
+			"Improv"
+		],
+		"learnedOn": ""
+	}
+]
