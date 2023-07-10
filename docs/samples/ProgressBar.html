@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* progress bar column */
+        div.progress-bar-container {
+            position: relative;
+            width: 100%;
+            height: 30px;
+            z-index: 4;
+            background: linear-gradient(to right, firebrick, red 20%, orange 33%, yellow 45%, yellowgreen, darkgreen);
+            border: 1px solid gray;
+        }
+
+        div.progress-bar {
+            position: absolute;
+            height: 100%;
+            z-index: 5;
+            background-color: whitesmoke;
+        }
+
+        div.percent-value {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+            font-weight: bold;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="parent">
+
+    </div>
+    <script>
+        class ProgressBar {
+            isMouseDown = false;
+            oldValue = 0;
+            value = 0;
+            element = document.createElement('div');
+            progressBar = document.createElement('div');
+            percentValue = document.createElement('div');
+
+            constructor() {
+                this.element.classList.add('progress-bar-container');
+                this.progressBar.classList.add('progress-bar');
+                this.percentValue.classList.add('percent-value');
+
+                this.element.appendChild(this.progressBar);
+                this.element.appendChild(this.percentValue);
+            }
+
+            setProgress(value) {
+                this.value = value;
+                this.progressBar.style.width = (100 - value) + '%';
+                this.progressBar.style.marginLeft = value + '%';
+                this.percentValue.textContent = value + '%';
+            }
+
+            updateProgress(event) {
+                const rect = this.element.getBoundingClientRect();
+                const clickX = event.clientX - rect.left;
+                const percentage = Math.round((clickX / rect.width) * 100);
+                this.setProgress(percentage);
+            }
+            
+            static create(value = 0) {
+                const bar = new ProgressBar(parent);
+                bar.setProgress(value);
+
+                bar.element.addEventListener('mousedown', (event) => {
+                    bar.isMouseDown = true;
+                    bar.oldValue = bar.value;
+                    bar.updateProgress(event);
+                });
+
+                bar.element.addEventListener('mousemove', (event) => {
+                    if (bar.isMouseDown) {
+                        bar.updateProgress(event);
+                    }
+                });
+
+                document.addEventListener('mouseup', () => {
+                    // check to ensure to fire event for own instance only
+                    if (bar.isMouseDown) {
+                        bar.element.dispatchEvent(new CustomEvent('change', {
+                            detail: [bar.value, bar.oldValue]
+                        }));
+                    }
+                    bar.isMouseDown = false;
+                });
+                return bar;
+            }
+        }
+
+        const parent = document.getElementById('parent');
+        parent.appendChild(ProgressBar.create(20).element);
+        parent.appendChild(ProgressBar.create(80).element);
+    </script>
+</body>
+</html>

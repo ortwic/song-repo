@@ -1,0 +1,23 @@
+v0.1.0 (2023-07-09)
+-------------------
+- initial deployment
+- firebase integration
+  - firestore and
+  - auth with email/pwd or
+  - auth with google account
+- tabulator integration
+  - sortable columns
+  - inline editing with autocompletion
+  - genres list combo field
+  - custom tags/labels
+  - custom progress bar
+  - adding new row
+  - set column visibility
+  - column auto filters
+  - column grouping 
+  - average progress in grouping header
+  - samples.json
+  - import json (drag and drop)
+  - export json, csv, xlsx
+  - set favourite status
+- Buy me a coffee integration
