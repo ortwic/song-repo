@@ -39,9 +39,9 @@ export const statusFormatter: Partial<ColumnDefinition> = {
 };
 
 export const progressFormatter: Partial<ColumnDefinition> = {
-    formatter(cell: CellComponent): HTMLElement {
+    formatter(cell: CellComponent): HTMLElement | string {
         const song = cell.getData() as UserSong;
-        const bar = ProgressBar.create(cell.getElement(), cell.getValue());
+        const bar = ProgressBar.create(cell.getValue());
         bar.element.addEventListener('change', (ev: CustomEvent) => {
             const [newValue, oldValue] = ev.detail;
             cell.setValue(newValue);

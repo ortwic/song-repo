@@ -3,7 +3,7 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light;
+  color-scheme: dark light;
   color: #213547;
   background-color: white;
 
@@ -100,6 +100,25 @@ button.icon:hover {
   opacity: 1;
 }
 
+button.primary, 
+input[type=reset].primary, 
+input[type=submit].primary {
+  color: whitesmoke;
+  background-color: var(--primary);
+}
+
+button.primary:disabled, 
+input[type=reset].primary:disabled, 
+input[type=submit].primary:disabled {
+  color: gray;
+  background-color: var(--primghost);
+}
+
+input {
+  color: black;
+  background-color: white;
+}
+
 input.error, input.mark:focus {
   outline: 2px solid var(--secondary);
   outline-offset: 1px;
@@ -152,37 +171,11 @@ input.valid, input.valid:focus {
 }
 
 span.label {
-  border: 1px solid gray;
-  background-color: #242424;
-}
-
-@media (prefers-color-scheme: light) {
-  button.primary, 
-  input[type=reset].primary, 
-  input[type=submit].primary {
-    color: whitesmoke;
-    background-color: var(--primary);
-  }
-  button.primary:disabled, 
-  input[type=reset].primary:disabled, 
-  input[type=submit].primary:disabled {
-    color: gray;
-    background-color: var(--primghost);
-  }
-  button, 
-  input[type=reset], 
-  input[type=submit] {
-    color: var(--primary);
-    background-color: whitesmoke;
-  }
-
-  span.label {
-    border: 1px solid silver;
-    background-color: #F0F0F0C0;
-    box-shadow: 2px 2px 4px #80808060;
-    margin: .4rem .2rem;
-    padding: .2rem .6rem;
-    border-radius: 1rem;
-    font-size: smaller;
-  }
+  border: 1px solid silver;
+  background-color: #F0F0F0C0;
+  box-shadow: 2px 2px 4px #80808060;
+  margin: .4rem .2rem;
+  padding: .2rem .6rem;
+  border-radius: 1rem;
+  font-size: smaller;
 }

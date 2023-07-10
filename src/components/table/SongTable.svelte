@@ -10,7 +10,6 @@
     import AddButton from '../ui/AddButton.svelte';
     import Snackbar from '../Snackbar.svelte';
     import SongService from '../../service/song.service';
-    import { currentUser } from '../../service/auth.service';
     import type { UserSong } from '../../model/song.model';
     import { usersongs } from '../../store/song.store';
     import genres from '../../data/genres.json';
@@ -39,12 +38,12 @@
     ];
 
     onMount(async () => {
-      const darkTheme = window?.matchMedia?.('(prefers-color-scheme:dark)')?.matches;
-      if (darkTheme) {
-        await import('tabulator-tables/dist/css/tabulator_midnight.min.css');
-      } else {
+      // const darkTheme = window?.matchMedia?.('(prefers-color-scheme:dark)')?.matches;
+      // if (darkTheme) {
+      //   await import('tabulator-tables/dist/css/tabulator_midnight.min.css');
+      // } else {
         await import('tabulator-tables/dist/css/tabulator_bulma.min.css');
-      }
+      // }
       
       // for debugging only
       // if (import.meta.env.DEV) setTimeout(() => {if (!$currentUser) showSamples()}, 20);
