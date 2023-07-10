@@ -64,6 +64,7 @@
           } 
           currentRow = undefined;
         } catch (error) {
+          console.error(error);
           snackbar.error(error.message);
         }
       };
@@ -73,6 +74,7 @@
       try {
         await service.deleteSong(song);
       } catch (error) {
+        console.error(error);
         snackbar.error(error.message);
       }
     }
@@ -82,6 +84,7 @@
         const result = await service.importSongs(JSON.parse(data));
         snackbar.open(`Found ${result.length} songs. Total songs: ${usersongs.length}`);
       } catch (error) {
+        console.error(error);
         snackbar.error(error.message);
       }
     }
@@ -95,7 +98,7 @@
 <svelte:head>
   <script async type="text/javascript" src="https://oss.sheetjs.com/sheetjs/xlsx.full.min.js"></script>
   <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
-  <!-- <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/2.3.2/jspdf.plugin.autotable.js"></script> -->
+  <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/2.3.2/jspdf.plugin.autotable.js"></script>
 </svelte:head>
  
 <FileDrop on:enter={() => snackbar.open('Start importing...')} on:addJson={({ detail }) => importJSON(detail)}>

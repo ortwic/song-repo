@@ -137,10 +137,6 @@
     try {
       return $table.addRow(data);
     } catch (error) {
-      // BUG from tabulator after ungrouping and calling table.addRow(data)
-      // "Cannot read properties of undefined (reading 'func')"
-      //    at GroupRows.assignRowToGroup (GroupRows.js:527:40)
-      //    at GroupRows.rowAddingIndex (GroupRows.js:208:9)
       console.error(error);
       dispatch('error', `Tabulator is unable to add a new row!\n${error.message}`);
     }
@@ -171,7 +167,8 @@
       delete rowGroups[field];
       element?.classList.remove('primary');
     }
-    $table.setGroupBy(Object.keys(rowGroups));
+    const groups = Object.keys(rowGroups);
+    $table.setGroupBy(groups.length ? groups : undefined);
   }
 
   function download(downloadType: DownloadType, params?: DownloadOptions): void {
@@ -179,6 +176,7 @@
       try {
         $table.download(downloadType, `${exportTitle}.${downloadType}`, params);
       } catch (error) {
+        console.error(error);
         dispatch('error', error.message);
       }
     }      
