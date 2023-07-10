@@ -14,4 +14,5 @@ jobs:
         run: |
           npm i -g pnpm
           pnpm install
+          pnpm test:unit
           pnpm build
