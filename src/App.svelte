@@ -4,6 +4,10 @@
   import BurgerButton from './components/ui/BurgerButton.svelte';
 </script>
 
+<svelte:head>
+  <title>{import.meta.env.DEV ? 'DEBUG Song Repo' : 'My Song Repertoire'}</title>
+</svelte:head>
+
 <header>
   <BurgerButton />
 </header>
@@ -31,10 +35,4 @@
     overflow: hidden;
   }
  
-  @media (prefers-color-scheme: dark) {
-  :root {
-    color: whitesmoke;
-    background-color: #404040;
-  }
-}
 </style>

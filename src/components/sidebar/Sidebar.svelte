@@ -256,14 +256,5 @@ aside {
         min-height: 3em;
     }
 }
-
-img {
-    vertical-align: middle;
-    border-radius: 2em;
-}
-
-.center {
-    text-align: center;
-}
 </style>
   

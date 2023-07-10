@@ -6,14 +6,13 @@ export default class ProgressBar {
     private progressBar = document.createElement('div');
     private percentValue = document.createElement('div');
 
-    constructor(parent: HTMLElement) {
+    constructor() {
         this.element.classList.add('progress-bar-container');
         this.progressBar.classList.add('progress-bar');
         this.percentValue.classList.add('percent-value');
 
         this.element.appendChild(this.progressBar);
         this.element.appendChild(this.percentValue);
-        parent.appendChild(this.element);
     }
 
     public setProgress(value: number): void {
@@ -30,8 +29,8 @@ export default class ProgressBar {
         this.setProgress(percentage);
     }
     
-    public static create(parent: HTMLElement, value = 0): ProgressBar {
-        const bar = new ProgressBar(parent);
+    public static create(value = 0): ProgressBar {
+        const bar = new ProgressBar();
         bar.setProgress(value);
 
         bar.element.addEventListener('mousedown', (event) => {

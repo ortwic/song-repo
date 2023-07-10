@@ -1,47 +1,102 @@
-# mysongrep
+<a name="readme-top"></a>
 
-An overview for musicians for their personal song repertoire.
+# My song repertoire
+v0.1.0 pre alpha
 
-## Recommended IDE Setup
+## About the project
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+[![Product Name Screen Shot][product-screenshot]](https://song-repo.web.app)
 
-## Need an official Svelte framework?
+An [app](https://song-repo.web.app) for musicians to keep an overview of their personal song repertoire.
 
-Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
+### Built With
 
-## Technical considerations
+* [![Svelte][Svelte.dev]][Svelte-url]
+* [![Typescript][Typescript.dev]][Typescript-url]
+* [![Tabulator][Tabulator.dev]][Tabulator-url]
 
-**Why use this over SvelteKit?**
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-- It brings its own routing solution which might not be preferable for some users.
-- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
+## Getting Started
 
-This template contains as little as possible to get started with Vite + TypeScript + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
+### Prerequisites
 
-Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
+You should install [nodejs](https://nodejs.org) and [pnpm](https://pnpm.io). I'd recommend [Visual Studio Code](https://code.visualstudio.com) for developing.
 
-**Why `global.d.ts` instead of `compilerOptions.types` inside `jsconfig.json` or `tsconfig.json`?**
+### Installation
 
-Setting `compilerOptions.types` shuts out all other types not explicitly listed in the configuration. Using triple-slash references keeps the default TypeScript setting of accepting type information from the entire workspace, while also adding `svelte` and `vite/client` type information.
+_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
 
-**Why include `.vscode/extensions.json`?**
+1. Clone the repo
+   ```sh
+   git clone https://github.com/ortwic/song-repoe.git
+   ```
+2. Install NPM packages
+   ```sh
+   pnpm install
+   ```
+3. Start app in debug mode
+   ```js
+   pnpm dev
+   ```
 
-Other templates indirectly recommend extensions via the README, but this file allows VS Code to prompt the user to install the recommended extension upon opening the project.
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-**Why enable `allowJs` in the TS template?**
+## Roadmap
 
-While `allowJs: false` would indeed prevent the use of `.js` files in the project, it does not prevent the use of JavaScript syntax in `.svelte` files. In addition, it would force `checkJs: false`, bringing the worst of both worlds: not being able to guarantee the entire codebase is TypeScript, and also having worse typechecking for the existing JavaScript. In addition, there are valid use cases in which a mixed codebase may be relevant.
+See the [open issues](https://github.com/users/ortwic/projects/2/views/1) for a full list of proposed features (and known issues).
 
-**Why is HMR not preserving my local component state?**
+- [x] Add tabulator component
+- [x] Firestore persistance
+- [x] Auth with email/pwd or Google account
+- [ ] CI/CD and unit tests
+- [ ] Song name suggestion API
+- [ ] Manage genres, artists, etc.
+- [ ] Share song list
+- [ ] Dark skin
+- [ ] Kanban board view
 
-HMR state preservation comes with a number of gotchas! It has been disabled by default in both `svelte-hmr` and `@sveltejs/vite-plugin-svelte` due to its often surprising behavior. You can read the details [here](https://github.com/rixo/svelte-hmr#svelte-hmr).
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-If you have state that's important to retain within a component, consider creating an external store which would not be replaced by HMR.
+## Contributing
 
-```ts
-// store.ts
-// An extremely simple external store
-import { writable } from 'svelte/store'
-export default writable(0)
-```
+Really? This project is very small yet. Contact me if you really desire...
+
+## License
+
+Distributed under the BSD 3-Clause License. See `LICENSE` for more information.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Contact
+
+Ortwin - [@ortwin](https://muenchen.social/@ortwin) - ocsoft42@gmail.com
+
+Project Link: [https://github.com/your_username/repo_name](https://github.com/ortwic/song-repo)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Acknowledgments
+
+Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
+
+* [Choose an Open Source License](https://choosealicense.com)
+* [GitHub Pages](https://pages.github.com)
+* [Tabulator](https://tabulator.info)
+* Images
+  * [Boxicons](https://boxicons.com)
+  * [SVG Repo](https://www.svgrepo.com/)
+  * [Flaticon](https://www.flaticon.com/)
+* HTML/CSS
+  * [Malven's Flexbox Cheatsheet](https://flexbox.malven.co/)
+  * [Malven's Grid Cheatsheet](https://grid.malven.co/)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+[product-screenshot]: docs/images/screenshot.png
+[Svelte.dev]: https://img.shields.io/badge/Svelte-4A4A55?style=for-the-badge&logo=svelte&logoColor=FF3E00
+[Svelte-url]: https://svelte.dev/
+[Typescript.dev]: https://img.shields.io/badge/Typescript-3178c6?style=for-the-badge&logo=typescript&logoColor=FFFFFF
+[Typescript-url]: https://www.typescriptlang.org/
+[Tabulator.dev]: https://img.shields.io/badge/Tabulator-4A4A55?style=for-the-badge&logo=tabulator&logoColor=3FB449
+[Tabulator-url]: https://www.tabulator.info/
