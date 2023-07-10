@@ -70,15 +70,13 @@ Distributed under the BSD 3-Clause License. See `LICENSE` for more information.
 
 ## Contact
 
-Ortwin - [@ortwin](https://muenchen.social/@ortwin) - ocsoft42@gmail.com
+Ortwin - [Portfolio](https://ortwic.github.io/) - ocsoft42@gmail.com
 
-Project Link: [https://github.com/your_username/repo_name](https://github.com/ortwic/song-repo)
+Project Link: [https://github.com/ortwic/song-repo](https://github.com/ortwic/song-repo)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Acknowledgments
-
-Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
 
 * [Choose an Open Source License](https://choosealicense.com)
 * [GitHub Pages](https://pages.github.com)
