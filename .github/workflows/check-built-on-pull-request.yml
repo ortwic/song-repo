@@ -9,6 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: npm i -g pnpm
-      - run: pnpm install
-      - run: pnpm build
+
+      - name: Install and Build
+        run: |
+          npm i -g pnpm
+          pnpm install
+          pnpm build
