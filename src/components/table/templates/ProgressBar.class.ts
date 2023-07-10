@@ -17,7 +17,7 @@ export default class ProgressBar {
 
     public setProgress(value: number): void {
         this.value = value;
-        this.progressBar.style.width = (100 - value) + '%';
+        this.progressBar.style.width = 100 - value + '%';
         this.progressBar.style.marginLeft = value + '%';
         this.percentValue.textContent = value + '%';
     }
@@ -28,7 +28,7 @@ export default class ProgressBar {
         const percentage = Math.round((clickX / rect.width) * 100);
         this.setProgress(percentage);
     }
-    
+
     public static create(value = 0): ProgressBar {
         const bar = new ProgressBar();
         bar.setProgress(value);
@@ -48,9 +48,11 @@ export default class ProgressBar {
         document.addEventListener('mouseup', () => {
             // check to ensure to fire event for own instance only
             if (bar.isMouseDown) {
-                bar.element.dispatchEvent(new CustomEvent<number[]>('change', {
-                    detail: [bar.value, bar.oldValue]
-                }));
+                bar.element.dispatchEvent(
+                    new CustomEvent<number[]>('change', {
+                        detail: [bar.value, bar.oldValue],
+                    })
+                );
             }
             bar.isMouseDown = false;
         });
