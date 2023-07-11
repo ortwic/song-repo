@@ -5,6 +5,7 @@
   import { onMount, createEventDispatcher } from 'svelte';
   import { Observable, fromEvent, map, take } from 'rxjs';
   import { toggleVisibilityItem } from './menu.helper';
+  import { showError } from '../../store/notification.store';
 
   type GroupFormatter<T> = (value: unknown, count: number, data: T[], group?: GroupComponent) => string;
 
@@ -138,7 +139,7 @@
       return $table.addRow(data);
     } catch (error) {
       console.error(error);
-      dispatch('error', `Tabulator is unable to add a new row!\n${error.message}`);
+      showError(`Tabulator is unable to add a new row!\n${error.message}`);
     }
   }
 
@@ -177,7 +178,7 @@
         $table.download(downloadType, `${exportTitle}.${downloadType}`, params);
       } catch (error) {
         console.error(error);
-        dispatch('error', error.message);
+        showError(error.message);
       }
     }      
   }

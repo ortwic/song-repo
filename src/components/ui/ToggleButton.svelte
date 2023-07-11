@@ -1,8 +1,10 @@
-<script>
-    import { menuOpened } from "../../store/menu.store";
+<script lang="ts">
+    import { createEventDispatcher } from "svelte";
+
+    const dispatch = createEventDispatcher();
 </script>
 
-<button class="icon" class:open on:click={() => menuOpened.set(!$menuOpened)}>
+<button id="toggle" class="icon" on:click={() => dispatch('toggle')}>
     <svg width=32 height=24>
         <line id="top" x1=0 y1=2 x2=32 y2=2/>
         <line id="middle" x1=0 y1=12 x2=32 y2=12/>

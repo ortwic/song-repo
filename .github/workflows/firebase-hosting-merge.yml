@@ -11,10 +11,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: npm i -g pnpm
-      - run: pnpm install
-      - run: pnpm build
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+
+      - name: Install and Build
+        run: |
+          npm i -g pnpm
+          pnpm install
+          pnpm test:unit
+          pnpm build
+
+      - name: Deploy on firebase
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_SONG_REPO }}'

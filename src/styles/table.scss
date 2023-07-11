@@ -1,17 +1,17 @@
 div.tabulator {
     div.tabulator-header {
-        background-color: whitesmoke;
+        background-color: var(--primback);
         border-bottom: 1px solid silver;
     }
 
     div.tabulator-table {
         div.tabulator-group {
             border-top: 0;
-            background-color: whitesmoke;
+            background-color: var(--primback);
 
             span {
                 display: inline-block;
-                color: black;
+                color: var(--text);
                 border-right: 1px solid #404040;
                 margin-top: .2rem;
                 margin-bottom: .2rem;
@@ -33,6 +33,22 @@ div.tabulator {
             }
         }
 
+        div.tabulator-row {
+            transition: all .2s ease-in-out;
+        }
+
+        div.tabulator-row:hover {
+            background-color: var(--primback);
+        }
+
+        div.tabulator-row.tabulator-selected {
+            background-color: var(--primselect) !important;
+        }
+
+        div.tabulator-row.tabulator-selected:hover {
+            background-color: var(--primghost) !important;
+        }
+
         div.tabulator-cell {
             p {
                 margin: 0;
@@ -51,7 +67,7 @@ div.tabulator {
         div.tabulator-validation-fail {
             outline: 1px solid red;
             border-color: red;
-            background-color: cornsilk;
+            background-color: var(--primback);
         }
     }
 
@@ -76,7 +92,7 @@ div.progress-bar-container {
 div.progress-bar {
     position: absolute;
     height: 100%;
-    background-color: whitesmoke;
+    background-color: var(--primback);
 }
 
 div.percent-value {
