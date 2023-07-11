@@ -1,8 +1,9 @@
 <script>
     import { createEventDispatcher } from "svelte";
+    import { getCssVariable } from "../../styles/style.helper";
 
     export let title = '';
-    export let color = 'whitesmoke';
+    export let color = getCssVariable('--primback');
     export let width = '32px';
     export let height = '32px';
 

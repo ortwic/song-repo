@@ -13,18 +13,19 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
   
-  --primary: #109392;
-  --primactive: hsl(180, 100%, 42%); 
-  --primghost: hsl(180, 42%, 68%); 
-  --primlight: hsl(180, 42%, 92%); 
-  --secondary: #e9702b; 
-  --secactive: hsl(22, 81%, 54%); 
-  --secghost: hsl(22, 42%, 68%); 
+  /* https://coolors.co/e9e3d6-e0d7c7-bfb9aa-a71908-0b0802 */
+  --primary: #A71908;
+  --primselect: #BFB9AA;
+  --primghost: #E0D7C7;
+  --primback: #E9E3D6;
+  --text: #0B0802;
+  --textghost: #0B080280;
 }
 
 body {
   margin: 0;
   padding: 0;
+  color: var(--text);
   overflow: hidden;
 }
 
@@ -38,7 +39,7 @@ a:hover, a:hover:visited {
 }
 a:visited {
   font-weight: 300;
-  color: var(--primghost);
+  color: var(--textghost);
 }
 
 h1 {
@@ -57,7 +58,7 @@ select {
   font-weight: 500;
   font-family: inherit;
   color: var(--primary);
-  background-color: whitesmoke;
+  background-color: var(--primback);
   cursor: pointer;
   transition: border-color 0.25s;
   text-shadow: 0px 0px 2px rgba(0, 0, 0, 20%);
@@ -80,9 +81,9 @@ button:disabled,
 input[type=reset]:disabled, 
 input[type=submit]:disabled {
   cursor: default;
-  color: var(--primghost);
+  color: var(--textghost);
   border-color: var(--primghost);
-  background-color: whitesmoke;
+  background-color: var(--primback);
   text-shadow: unset;
   box-shadow: 0px 2px 6px hsla(0, 0%, 80%);
 }
@@ -103,19 +104,19 @@ button.icon:hover {
 button.primary, 
 input[type=reset].primary, 
 input[type=submit].primary {
-  color: whitesmoke;
+  color: var(--primback);
   background-color: var(--primary);
 }
 
 button.primary:disabled, 
 input[type=reset].primary:disabled, 
 input[type=submit].primary:disabled {
-  color: gray;
+  color: var(--textghost);
   background-color: var(--primghost);
 }
 
 input {
-  color: black;
+  color: var(--text);
   background-color: white;
 }
 

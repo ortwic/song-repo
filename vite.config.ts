@@ -15,8 +15,8 @@ export default defineConfig({
                 description:
                     'Your tool to keep an overview of your song repertoire.',
                 display: 'standalone',
-                background_color: '#ffffff',
-                theme_color: '#109392',
+                background_color: '#E9E3D6',
+                theme_color: '#A71908',
                 icons: [
                     {
                         src: 'logo-192.png',

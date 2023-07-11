@@ -11,7 +11,9 @@
 
 <style lang="scss">
     div {
-        color: whitesmoke;
+        display: flex;
+        justify-content: space-between;
+        color: var(--primback);
         background-color: var(--primary);
         white-space: nowrap;
         font-weight: 500;
@@ -23,10 +25,10 @@
         }
     
         button.close {
-            float: right;
             color: inherit;
             background-color: transparent;
             box-shadow: unset;
+            padding: .2em 1.2em .4em 1.2em;
             border: 0;
             outline: 0;
             transition: all .2s ease-in-out;

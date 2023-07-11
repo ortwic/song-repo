@@ -7,8 +7,8 @@
   import Snackbar from './components/ui/Snackbar.svelte';
   import { currentMenu } from './store/app.store';
 
-  const title = 'My song repertoire';
-  const footer = 'Version 0.1.0 pre-alpha';
+  const title = 'My song repertory';
+  const footer = 'Version 0.1.1 pre-alpha';
   let currentMenuPage = 'login';
   let snackbar: Snackbar;
 
@@ -24,7 +24,7 @@
 </script>
 
 <svelte:head>
-  <title>{import.meta.env.DEV ? 'DEBUG Song Repo' : 'My Song Repertoire'}</title>
+  <title>{import.meta.env.DEV ? 'DEV song repertory' : title}</title>
   <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
 </svelte:head>
 

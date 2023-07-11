@@ -5,7 +5,6 @@
     
     const dispatch = createEventDispatcher();
 	const authService = new AuthService();
-    const color = '#109392';
 	let email = import.meta.env.DEV ? 'john.doe@example.com' : '';
 	let password = import.meta.env.DEV ? 'john.doe@example.com' : '';
 
@@ -30,10 +29,9 @@
 
 <section class="menu">
     {#if $currentUser}
-    <Profil {color} 
+    <Profil email={$currentUser.email}
         photoURL={$currentUser.photoURL} 
         displayName={$currentUser.displayName} 
-        email={$currentUser.email}
     />
     <div>
         <button id='signout' title="Sign out '{$currentUser.email}'" on:click={authService.signOut}>

@@ -1,8 +1,10 @@
 <script lang='ts'>
+    import { getCssVariable } from "../../styles/style.helper";
+
     export let displayName: string;
     export let photoURL: string;
     export let email: string;
-	export let color = 'gray';
+	export let color = getCssVariable('--primary');
 
     const emailParts = email.split('@');
 </script>
@@ -16,8 +18,8 @@
 			<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
 			<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
 			<g id="SVGRepo_iconCarrier"> 
+				<circle cx="12" cy="12" r="10" stroke={color} fill="white" stroke-width="1.5"></circle> 
 				<circle opacity="0.5" cx="12" cy="9" r="3" stroke={color} stroke-width="1.5"></circle> 
-				<circle cx="12" cy="12" r="10" stroke={color} stroke-width="1.5"></circle> 
 				<path opacity="0.5" d="M17.9691 20C17.81 17.1085 16.9247 15 11.9999 15C7.07521 15 6.18991 17.1085 6.03076 20" stroke={color} stroke-width="1.5" stroke-linecap="round"></path> 
 			</g>
 		</svg>

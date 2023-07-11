@@ -15,7 +15,7 @@
     }
 </script>
 
-<aside in:slide={{duration: 200, axis: 'x'}} out:slide={{duration: 200, axis: 'x'}} >
+<aside in:slide={{ duration: 200, axis: 'x' }} out:slide={{ duration: 200, axis: 'x' }} >
     <Titlebar>{title}</Titlebar>
     <section>
         <slot></slot>
@@ -52,7 +52,7 @@ aside {
     right: 0;
     height: 100%;
     z-index: 100;
-    background-color: whitesmoke;
+    background-color: var(--primback);
     box-shadow: 0 0 2em #00000080;
 
     section {
@@ -64,11 +64,11 @@ aside {
     div.info {
         color: whitesmoke;
         background-color: silver;
-        padding-top: .6em;
+        padding-top: .4em;
         font-size: small;
         text-align: center;
         text-shadow: 1px 1px 0 gray;
-        min-height: 3em;
+        min-height: 2.2em;
     }
 }
 </style>
