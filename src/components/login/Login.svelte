@@ -2,6 +2,7 @@
     import { createEventDispatcher } from 'svelte';
     import Profil from '../login/Profil.svelte';
 	import AuthService, { currentUser } from '../../service/auth.service';
+    import { showError } from '../../store/notification.store';
     
     const dispatch = createEventDispatcher();
 	const authService = new AuthService();
@@ -13,7 +14,7 @@
 			await authService.signIn(email, password);
 		} catch (error) {
             console.error(error);
-            dispatch('error', error.message);
+            showError(error.message);
 		}
 	}
     
@@ -22,7 +23,7 @@
 			await authService.loginWithGoogle();
 		} catch (error) {
             console.error(error);
-            dispatch('error', error.message);
+            showError(error.message);
 		}
 	}
 </script>

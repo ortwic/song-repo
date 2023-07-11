@@ -65,9 +65,6 @@ devDependencies:
   jsdom:
     specifier: ^22.1.0
     version: 22.1.0
-  lodash:
-    specifier: ^4.17.21
-    version: 4.17.21
   marked:
     specifier: ^5.1.1
     version: 5.1.1

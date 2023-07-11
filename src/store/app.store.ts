@@ -1,5 +1,4 @@
 import { writable } from 'svelte/store';
-
-type MenuPages = 'none' | 'login' | 'signup';
+import type { MenuPages } from '../model/types';
 
 export const currentMenu = writable<MenuPages>('login');

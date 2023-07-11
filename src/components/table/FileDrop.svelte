@@ -1,5 +1,6 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
+    import { showError } from '../../store/notification.store';
 
     const dispatch = createEventDispatcher();
     
@@ -12,7 +13,7 @@
           } else if (file.type === 'text/csv') {
             readFile(file, (data) => dispatch('addCsv', data));
           } else {
-            console.error('Unsupported file type:', file.type);
+            showError(`Unsupported file type: ${file.type}`);
           }
         }
       }

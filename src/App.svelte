@@ -7,10 +7,8 @@
   import Snackbar from './components/ui/Snackbar.svelte';
   import { currentMenu } from './store/app.store';
 
-  const title = 'My song repertory';
+  const title = `${import.meta.env.DEV ? 'DEV' : 'My'} song repertory`;
   const footer = 'Version 0.1.1 pre-alpha';
-  let currentMenuPage = 'login';
-  let snackbar: Snackbar;
 
   function submit(ev: SubmitEvent) {
     if (ev.submitter.id == 'toggle') {
@@ -24,7 +22,7 @@
 </script>
 
 <svelte:head>
-  <title>{import.meta.env.DEV ? 'DEV song repertory' : title}</title>
+  <title>{title}</title>
   <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
 </svelte:head>
 
@@ -36,15 +34,11 @@
   <nav>
     {#if $currentMenu == 'login'}
     <Sidebar {title} {footer}>
-      <Login on:signup={() => currentMenuPage = 'signup'}
-        on:error={({ detail }) => snackbar.error(detail)} 
-        />
+      <Login />
     </Sidebar>
     {:else if $currentMenu == 'signup'}
     <Sidebar title="Sign up" {footer}>
-      <Signup
-        on:error={({ detail }) => snackbar.error(detail)} 
-        />
+      <Signup />
     </Sidebar>
     {/if}
   </nav>
@@ -54,7 +48,7 @@
   <SongTable />
 </main>
 
-<Snackbar bind:this={snackbar} />
+<Snackbar />
 
 <style>
   header {

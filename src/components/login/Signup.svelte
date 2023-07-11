@@ -1,8 +1,7 @@
 <script lang="ts">
-    import { createEventDispatcher } from 'svelte';
 	import AuthService from '../../service/auth.service';
+    import { showError } from '../../store/notification.store';
 
-    const dispatch = createEventDispatcher();
 	const authService = new AuthService();
 	let email = import.meta.env.DEV ? 'john.doe@example.com' : '';
 	let password = import.meta.env.DEV ? 'john.doe@example.com' : '';
@@ -13,7 +12,7 @@
 			await authService.signUp(email, password);
 		} catch (error) {
             console.error(error);
-            dispatch('error', error.message);
+        	showError(error.message);
 		}
 	}
 	
@@ -22,7 +21,7 @@
 			await authService.loginWithGoogle();
 		} catch (error) {
             console.error(error);
-            dispatch('error', error.message);
+        	showError(error.message);
 		}
 	}
 </script>

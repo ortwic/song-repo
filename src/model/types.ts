@@ -14,3 +14,5 @@ export type Status =
     | 'done'
     | 'repeat'
     | 'archived';
+
+export type MenuPages = 'none' | 'login' | 'signup';

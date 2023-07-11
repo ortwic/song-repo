@@ -8,14 +8,13 @@
     import Table from './Table.svelte'
     import FileDrop from './FileDrop.svelte';
     import AddButton from '../ui/AddButton.svelte';
-    import Snackbar from '../ui/Snackbar.svelte';
     import SongService from '../../service/song.service';
     import type { UserSong } from '../../model/song.model';
+    import { showError, showInfo } from '../../store/notification.store';
     import { usersongs } from '../../store/song.store';
     import genres from '../../data/genres.json';
     
     let service = new SongService();
-    let snackbar: Snackbar;
     let table: Table;
     let currentRow: RowComponent;
 
@@ -46,7 +45,7 @@
       // }
       
       // for debugging only
-      // if (import.meta.env.DEV) setTimeout(() => {if (!$currentUser) showSamples()}, 20);
+      // if (import.meta.env.DEV) setTimeout(() => {if (!$currentUser) showSamples()}, 20);      
     });
 
     async function addRow(): Promise<void> {
@@ -65,7 +64,7 @@
           currentRow = undefined;
         } catch (error) {
           console.error(error);
-          snackbar.error(error.message);
+          showError(error.message);
         }
       };
     }
@@ -75,17 +74,17 @@
         await service.deleteSong(song);
       } catch (error) {
         console.error(error);
-        snackbar.error(error.message);
+        showError(error.message);
       }
     }
     
     async function importJSON(data: string): Promise<void> {
       try {
         const result = await service.importSongs(JSON.parse(data));
-        snackbar.open(`Found ${result.length} songs. Total songs: ${usersongs.length}`);
+        showInfo(`Found ${result.length} songs. Total songs: ${usersongs.length}`);
       } catch (error) {
         console.error(error);
-        snackbar.error(error.message);
+        showError(error.message);
       }
     }
   
@@ -101,12 +100,12 @@
   <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/2.3.2/jspdf.plugin.autotable.js"></script>
 </svelte:head>
  
-<FileDrop on:enter={() => snackbar.open('Start importing...')} on:addJson={({ detail }) => importJSON(detail)}>
+<FileDrop on:enter={() => showInfo('Start importing...')} on:addJson={({ detail }) => importJSON(detail)}>
   <Table bind:this={table} {columns}
     placeholder='No songs added.' 
     exportTitle='My song repertoire'
     groupHeader={format.groupBy}
-    on:error={({ detail }) => snackbar.error(detail)}
+    on:error={({ detail }) => showError(detail)}
     on:deleteRow={({ detail }) => deleteRow(detail)}
   />
 </FileDrop>
@@ -114,14 +113,12 @@
   <AddButton title="add row after" on:click={addRow}/>
 </section>
 
-<Snackbar bind:this={snackbar} />
-
 <style lang="scss">
   section.footer {
     position: sticky;
     bottom: calc(48px + 1rem);
     margin-right: 1rem;
-    z-index: 10;
+    z-index: 20;
     height: 0;
     text-align: right;
   }
