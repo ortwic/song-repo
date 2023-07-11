@@ -8,7 +8,7 @@
     import Table from './Table.svelte'
     import FileDrop from './FileDrop.svelte';
     import AddButton from '../ui/AddButton.svelte';
-    import Snackbar from '../Snackbar.svelte';
+    import Snackbar from '../ui/Snackbar.svelte';
     import SongService from '../../service/song.service';
     import type { UserSong } from '../../model/song.model';
     import { usersongs } from '../../store/song.store';

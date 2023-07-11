@@ -1,0 +1,94 @@
+.menu {
+
+    div {
+        border-top: 1px solid silver;
+        white-space: nowrap;
+        width: 100%;
+    }
+    
+    label, 
+    input[type=text], 
+    input[type=password] {
+        display: block;
+        margin: 0 1rem;
+        padding: .4rem;
+        text-align: left;
+    }
+
+    p {
+        margin: .6rem 1rem;
+        text-align: left;
+    }
+    
+    input[type=text], 
+    input[type=password] {
+        border: 1px solid gray;
+        transition: all .2s ease-in-out;
+    }
+
+    input[type=text]:focus, 
+    input[type=password]:focus {
+        outline: 1px solid var(--primary);
+    }
+
+    p {
+        padding: 0;
+    }
+    
+    button, 
+    a[role="button"] {
+        width: 100%;
+        border: 0;
+        border-radius: 0;
+        box-shadow: unset;
+        min-height: 3em;
+        text-align: center;
+        transition: all .2s ease-in-out;
+
+        span {
+            display: inline-block;
+            padding: 6px;
+        }
+    }
+
+    button.w50 {
+        width: 50%;
+        border-left: 1px solid silver;
+    }
+
+    button.highlight {
+        border: 1px solid var(--primary);
+    }
+
+    button:hover, 
+    a[role="button"]:hover {
+        background-color: white;
+    }
+
+    button:disabled, 
+    a[role="button"]:disabled {
+        background-color: transparent;
+    }
+
+    button i, 
+    a[role="button"] i {
+        border: 1px solid silver;
+        border-radius: 1em;
+        background-color: white;
+        padding: 4px;
+    }
+
+    a[role="button"] {
+        display: block;
+
+        span {
+            color: var(--primary);
+            padding-top: .6em;
+            vertical-align: middle;
+        }
+    }
+
+    div:last-child {        
+        border-bottom: 1px solid silver;
+    }
+}

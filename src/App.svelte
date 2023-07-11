@@ -1,30 +1,66 @@
 <script lang="ts">
-  import Table from './components/table/SongTable.svelte';
-  import Sidebar from './components/sidebar/Sidebar.svelte'
-  import BurgerButton from './components/ui/BurgerButton.svelte';
+  import Login from './components/login/Login.svelte';
+  import Signup from './components/login/Signup.svelte';
+  import SongTable from './components/table/SongTable.svelte';
+  import ToggleButton from './components/ui/ToggleButton.svelte';
+  import Sidebar from './components/ui/Sidebar.svelte'
+  import Snackbar from './components/ui/Snackbar.svelte';
+  import { currentMenu } from './store/app.store';
+
+  const title = 'My song repertoire';
+  const footer = 'Version 0.1.0 pre-alpha';
+  let currentMenuPage = 'login';
+  let snackbar: Snackbar;
+
+  function submit(ev: SubmitEvent) {
+    if (ev.submitter.id == 'toggle') {
+      currentMenu.set($currentMenu == 'none' ? 'login' : 'none');
+    } else if (ev.submitter.id == 'signup') {
+      currentMenu.set('signup');
+    } else {
+      currentMenu.set('none');
+    }
+  }
 </script>
 
 <svelte:head>
   <title>{import.meta.env.DEV ? 'DEBUG Song Repo' : 'My Song Repertoire'}</title>
+  <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
 </svelte:head>
 
-<header>
-  <BurgerButton />
-</header>
 
-<nav>
-  <Sidebar version='0.1.0 pre-alpha' />
-</nav>
+<form on:submit|preventDefault={submit}>
+  <header>
+    <ToggleButton />
+  </header>
+  <nav>
+    {#if $currentMenu == 'login'}
+    <Sidebar {title} {footer}>
+      <Login on:signup={() => currentMenuPage = 'signup'}
+        on:error={({ detail }) => snackbar.error(detail)} 
+        />
+    </Sidebar>
+    {:else if $currentMenu == 'signup'}
+    <Sidebar title="Sign up" {footer}>
+      <Signup
+        on:error={({ detail }) => snackbar.error(detail)} 
+        />
+    </Sidebar>
+    {/if}
+  </nav>
+</form>
 
 <main> 
-  <Table />
+  <SongTable />
 </main>
+
+<Snackbar bind:this={snackbar} />
 
 <style>
   header {
-    position: sticky;
+    position: absolute;
     top: 1rem;
-    margin-right: 1rem;
+    right: 1rem;
     z-index: 10;
     height: 0;
     text-align: right;

@@ -1,6 +1,5 @@
 <script lang="ts">
-    import { fade, slide, type SlideParams } from 'svelte/transition';
-    import { cubicOut } from 'svelte/easing';
+    import { slideFade } from "./transition.helper";
 
     let snackbar: HTMLDivElement;
     let snackbarMessage = '';
@@ -8,38 +7,31 @@
     let className = '';
     let timeoutId: NodeJS.Timeout; 
 
-    export const open = (text: string, timeoutMs = 3000) => {
+    export const open = (text = '', timeoutMs = 3000): void => {
       show(text, timeoutMs);
     };
 
-    export const error = (text: string, timeoutMs = 3000) => {
+    export const error = (text = '', timeoutMs = 3000): void => {
       className = 'error';
       show(text, timeoutMs);
     };
 
-    export const close = () => {
+    export const close = (): void => {
       snackbarMessage = '';
       className = '';
       visible = false;
     };
 
-    function show(text: string, timoutMs: number) {
+    function show(text: string, timeoutMs: number) {
       visible = true;
       snackbarMessage = text;
 
       clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => close(), timoutMs);
+      if (timeoutMs > 0) {
+        timeoutId = setTimeout(() => close(), timeoutMs);
+      }
     }
 
-    const slideFade = (node: Element, { delay = 0, duration = 400 }: SlideParams) => ({
-      delay,
-      duration,
-      css: (t: number, u: number) => {
-        const slideTransition = slide(node, { delay, duration, easing: cubicOut });
-        const fadeTransition = fade(node, { delay, duration, easing: cubicOut });
-        return `${slideTransition.css(t, u)} ${fadeTransition.css(t, u)}`;
-      }
-    })
 </script>
 
 {#if visible}
@@ -48,6 +40,7 @@
   out:slideFade={{duration: 200}} 
   bind:this={snackbar}>
   {snackbarMessage}
+  <slot name="message"></slot>
 </div>
 {/if}
 
