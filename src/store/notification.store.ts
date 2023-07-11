@@ -1,5 +1,8 @@
-import { ArrayStore } from "./array.class";
-import type { Notification, NotificationType } from '../model/notification.model';
+import { ArrayStore } from './array.class';
+import type {
+    Notification,
+    NotificationType,
+} from '../model/notification.model';
 
 function show(type: NotificationType, message: string, timeoutMs: number) {
     messageStack.unshift({ type, message });
@@ -10,6 +13,9 @@ function show(type: NotificationType, message: string, timeoutMs: number) {
 }
 
 export const messageStack = new ArrayStore<Notification>();
-export const showInfo = (message: string, timeoutMs = 3000) => show('info', message, timeoutMs);
-export const showWarn = (message: string, timeoutMs = 3000) => show('warn', message, timeoutMs);
-export const showError = (message: string, timeoutMs = 3000) => show('error', message, timeoutMs);
+export const showInfo = (message: string, timeoutMs = 3000) =>
+    show('info', message, timeoutMs);
+export const showWarn = (message: string, timeoutMs = 3000) =>
+    show('warn', message, timeoutMs);
+export const showError = (message: string, timeoutMs = 3000) =>
+    show('error', message, timeoutMs);
