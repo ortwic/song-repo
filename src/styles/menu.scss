@@ -28,6 +28,7 @@
     
     input[type=text], 
     input[type=email],
+    input[type=number],
     input[type=password] {
         @include row;
         border: 1px solid gray;

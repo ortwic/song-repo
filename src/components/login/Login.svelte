@@ -4,11 +4,13 @@
     import ConfirmDialog from '../ui/ConfirmDialog.svelte';
 	import AuthService, { currentUser } from '../../service/auth.service';
     import { showError, showInfo } from '../../store/notification.store';
+    import FeedbackDialog from './FeedbackDialog.svelte';
     
     const dispatch = createEventDispatcher();
 	const authService = new AuthService();
 	let email = import.meta.env.DEV ? 'john.doe@example.com' : '';
 	let password = import.meta.env.DEV ? 'john.doe@example.com' : '';
+    let showFeedbackForm = false;
     let showConfirmDelete = false;
 
 	async function signIn(ev: Event) {
@@ -41,6 +43,11 @@
 </script>
 
 <section class="menu">
+    <div>
+        <button title="Send feedback" on:click={() => showFeedbackForm = true}>
+            <span><i class='bx bx-mail-send'></i> Send feedback</span>
+        </button>
+    </div>
     {#if $currentUser}
     <Profil email={$currentUser.email}
         photoURL={$currentUser.photoURL} 
@@ -78,6 +85,8 @@
         </button>
     </div>
     {/if}
+
+    <FeedbackDialog visible={showFeedbackForm}></FeedbackDialog>
 
     {#if showConfirmDelete}
     <ConfirmDialog title='Confirm deletion' size='auto' target='login' on:closed={deleteProfile}>
