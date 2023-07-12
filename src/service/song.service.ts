@@ -40,6 +40,8 @@ export default class SongService {
             .subscribe((value) => usersongs.set(value as UserSong[]));
     }
 
+    hasUser = () => !!this.uid;
+
     newSong(): UserSong {
         return {
             id: '',

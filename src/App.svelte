@@ -2,26 +2,28 @@
   import Login from './components/login/Login.svelte';
   import Signup from './components/login/Signup.svelte';
   import SongTable from './components/table/SongTable.svelte';
-  import ToggleButton from './components/ui/ToggleButton.svelte';
+  import MenuButton from './components/ui/MenuButton.svelte';
   import Sidebar from './components/ui/Sidebar.svelte'
   import Snackbar from './components/ui/Snackbar.svelte';
+  import type { MenuPages } from './model/types';
   import { currentMenu } from './store/app.store';
 
   const title = `${import.meta.env.DEV ? 'DEV' : 'My'} song repertory`;
-  const footer = 'Version 0.1.1 pre-alpha';
+  const version = '0.1.1';
+  const footer = `Version ${version} alpha`;
 
   function submit(ev: SubmitEvent) {
-    if (ev.submitter.id == 'toggle') {
-      currentMenu.set($currentMenu == 'none' ? 'login' : 'none');
-    } else if (ev.submitter.id == 'signup') {
-      currentMenu.set('signup');
-    } else {
-      currentMenu.set('none');
+    const target = ev.submitter.getAttribute('data-target') as MenuPages;
+    if (target) {
+      currentMenu.set(target);
+    } else if (ev.submitter.getAttribute('data-close') !== null) {
+      currentMenu.set('root');
     }
   }
 </script>
 
 <svelte:head>
+  <meta name="author" content="OCSoft, ocsoft42@gmail.com">
   <title>{title}</title>
   <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
 </svelte:head>
@@ -29,7 +31,7 @@
 
 <form on:submit|preventDefault={submit}>
   <header>
-    <ToggleButton />
+    <MenuButton target='login' />
   </header>
   <nav>
     {#if $currentMenu == 'login'}
@@ -37,7 +39,7 @@
       <Login />
     </Sidebar>
     {:else if $currentMenu == 'signup'}
-    <Sidebar title="Sign up" {footer}>
+    <Sidebar title="Sign up to use app" {footer}>
       <Signup />
     </Sidebar>
     {/if}

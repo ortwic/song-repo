@@ -10,7 +10,7 @@
     import AddButton from '../ui/AddButton.svelte';
     import SongService from '../../service/song.service';
     import type { UserSong } from '../../model/song.model';
-    import { showError, showInfo } from '../../store/notification.store';
+    import { showError, showInfo, showWarn } from '../../store/notification.store';
     import { usersongs } from '../../store/song.store';
     import genres from '../../data/genres.json';
     
@@ -49,6 +49,10 @@
     });
 
     async function addRow(): Promise<void> {
+      if (!service.hasUser()) {
+        showWarn('You are not signed in, so data won\'t be persisted after leaving the app!', 12);
+      }
+
       currentRow = await table.addRow(service.newSong());
       await table.focusField(currentRow, 'genre');
     }

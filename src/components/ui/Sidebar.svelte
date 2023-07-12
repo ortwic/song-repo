@@ -16,14 +16,15 @@
 </script>
 
 <aside in:slide={{ duration: 200, axis: 'x' }} out:slide={{ duration: 200, axis: 'x' }} >
-    <Titlebar>{title}</Titlebar>
+    <Titlebar target="root">{title}</Titlebar>
     <section>
         <slot></slot>
     </section>
     <footer class="menu">
+        <slot name="footer"></slot>
         {#if !$currentUser}
         <div>
-            <button title="Load demo sample data" on:click={loadSamples}>
+            <button data-close title="Load demo sample data" on:click={loadSamples}>
                 <i class='bx bx-test-tube'></i> Load samples
             </button>
         </div>

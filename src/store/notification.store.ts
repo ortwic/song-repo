@@ -4,18 +4,20 @@ import type {
     NotificationType,
 } from '../model/notification.model';
 
-function show(type: NotificationType, message: string, timeoutMs: number) {
+const defaultTimeout = 3;
+
+function show(type: NotificationType, message: string, timeoutSec: number) {
     messageStack.unshift({ type, message });
 
-    if (timeoutMs > 0) {
-        setTimeout(() => messageStack.pop(), timeoutMs);
+    if (timeoutSec > 0) {
+        setTimeout(() => messageStack.pop(), timeoutSec * 1000);
     }
 }
 
 export const messageStack = new ArrayStore<Notification>();
-export const showInfo = (message: string, timeoutMs = 3000) =>
-    show('info', message, timeoutMs);
-export const showWarn = (message: string, timeoutMs = 3000) =>
-    show('warn', message, timeoutMs);
-export const showError = (message: string, timeoutMs = 3000) =>
-    show('error', message, timeoutMs);
+export const showInfo = (message: string, timeoutSec = defaultTimeout) =>
+    show('info', message, timeoutSec);
+export const showWarn = (message: string, timeoutSec = defaultTimeout) =>
+    show('warn', message, timeoutSec);
+export const showError = (message: string, timeoutSec = defaultTimeout) =>
+    show('error', message, timeoutSec);

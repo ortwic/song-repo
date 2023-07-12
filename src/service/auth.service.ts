@@ -5,6 +5,7 @@ import {
     signInWithEmailAndPassword,
     onAuthStateChanged,
     signOut,
+    deleteUser,
 } from 'firebase/auth';
 import { authState } from 'rxfire/auth';
 import { auth } from './firebase.setup';
@@ -17,29 +18,31 @@ const googleProvider = new GoogleAuthProvider();
 // googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
 
 onAuthStateChanged(auth, (user) => {
-    currentMenu.set(user ? 'none' : 'login');
+    currentMenu.set(user ? 'root' : 'login');
     if (user) {
         showInfo(`${user.displayName || user.email} has signed in.`);
-    } else {
-        showInfo(`You've signed out!`);
     }
 });
 
 export default class AuthService {
-    async loginWithGoogle() {
-        return signInWithPopup(auth, googleProvider);
+    async loginWithGoogle(): Promise<void> {
+        await signInWithPopup(auth, googleProvider);
     }
 
-    async signUp(email: string, password: string) {
-        return createUserWithEmailAndPassword(auth, email, password);
+    async signUp(email: string, password: string): Promise<void> {
+        await createUserWithEmailAndPassword(auth, email, password);
     }
 
-    async signIn(email: string, password: string) {
-        return signInWithEmailAndPassword(auth, email, password);
+    async signIn(email: string, password: string): Promise<void> {
+        await signInWithEmailAndPassword(auth, email, password);
     }
 
-    async signOut() {
-        signOut(auth);
+    async signOut(): Promise<void> {
+        await signOut(auth);
         usersongs.set([]);
+    }
+
+    async deleteUser(): Promise<void> {
+        return deleteUser(auth.currentUser);
     }
 }

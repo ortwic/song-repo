@@ -1,18 +1,24 @@
 .menu {
 
+    @mixin row {
+        display: block;
+        margin: 0 1rem;
+        padding: .4rem;
+        text-align: left;
+    }
+
     div {
         border-top: 1px solid silver;
         white-space: nowrap;
         width: 100%;
     }
+
+    div:last-child {
+        border-bottom: 1px solid silver;
+    }
     
-    label, 
-    input[type=text], 
-    input[type=password] {
-        display: block;
-        margin: 0 1rem;
-        padding: .4rem;
-        text-align: left;
+    label {
+        @include row;
     }
 
     p {
@@ -21,14 +27,15 @@
     }
     
     input[type=text], 
+    input[type=email],
     input[type=password] {
+        @include row;
         border: 1px solid gray;
         transition: all .2s ease-in-out;
-    }
 
-    input[type=text]:focus, 
-    input[type=password]:focus {
-        outline: 1px solid var(--primary);
+        &:focus {
+            outline: 1px solid var(--primary);
+        }
     }
 
     p {
@@ -49,33 +56,30 @@
             display: inline-block;
             padding: 6px;
         }
-    }
 
-    button.w50 {
-        width: 50%;
-        border-left: 1px solid silver;
-    }
+        i:not(.bx-sm) {
+            border: 1px solid silver;
+            border-radius: 1em;
+            background-color: white;
+            padding: 4px;
+        }
 
-    button.highlight {
-        border: 1px solid var(--primary);
-    }
+        &:hover {
+            background-color: white;
+        }
 
-    button:hover, 
-    a[role="button"]:hover {
-        background-color: white;
-    }
+        &:disabled {
+            background-color: transparent;
+        }
+        
+        &.w50 {
+            width: 50%;
+            border-left: 1px solid silver;
+        }
 
-    button:disabled, 
-    a[role="button"]:disabled {
-        background-color: transparent;
-    }
-
-    button i, 
-    a[role="button"] i {
-        border: 1px solid silver;
-        border-radius: 1em;
-        background-color: white;
-        padding: 4px;
+        &.highlight {
+            border: 1px solid var(--primary);
+        }
     }
 
     a[role="button"] {
@@ -88,7 +92,11 @@
         }
     }
 
-    div:last-child {        
-        border-bottom: 1px solid silver;
+    .success-text {
+        color: DodgerBlue;
+    }
+
+    .danger-text {
+        color: Red;
     }
 }

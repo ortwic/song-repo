@@ -1,10 +1,13 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
+    import type { MenuPages } from "../../model/types";
 
     const dispatch = createEventDispatcher();
+
+    export let target: MenuPages;
 </script>
 
-<button id="toggle" class="icon" on:click={() => dispatch('toggle')}>
+<button data-target={target} class="icon" on:click={() => dispatch('click')}>
     <svg width=32 height=24>
         <line id="top" x1=0 y1=2 x2=32 y2=2/>
         <line id="middle" x1=0 y1=12 x2=32 y2=12/>
