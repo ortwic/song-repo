@@ -1,4 +1,4 @@
-<script>
+<script lang='ts'>
     import ConfirmDialog from "../ui/ConfirmDialog.svelte";
 
     export let visible = false;
@@ -24,36 +24,33 @@
     let ideas = '';
 
     function handleForm({ detail: confirm }) {
-        if (!confirm) {
-            visible = false;
-            return;
+        if (confirm) {
+            let subject = "User Feedback for 'My Song Repetory'";
+            let body = `
+            Import CSV: ${imcsv}
+            Export CSV: ${excsv}
+            Export XLSX: ${xlsx}
+            Export PDF: ${pdf}
+
+            Autocomplete:
+            Genre: ${genre}
+            Künstler: ${artist}
+            Titel: ${title}
+            Verweis Lyrics: ${lyrics}
+            Verweis Akkorde: ${chords}
+            Suche nach Noten: ${notes}
+            Sonstiges: ${others}
+
+            Sharing:
+            Link: ${link}
+            User: ${user}
+            E-Mail: ${email}
+            Platform: ${platform}
+
+            Sonstige Ideen und Vorschläge: ${ideas}`;
+
+            window.open(`mailto:ocsoft42@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
         }
-
-        let subject = "User Feedback for 'My Song Repetory'";
-        let body = `
-        Import CSV: ${imcsv}
-        Export CSV: ${excsv}
-        Export XLSX: ${xlsx}
-        Export PDF: ${pdf}
-
-        Autocomplete:
-        Genre: ${genre}
-        Künstler: ${artist}
-        Titel: ${title}
-        Verweis Lyrics: ${lyrics}
-        Verweis Akkorde: ${chords}
-        Suche nach Noten: ${notes}
-        Sonstiges: ${others}
-
-        Sharing:
-        Link: ${link}
-        User: ${user}
-        E-Mail: ${email}
-        Platform: ${platform}
-
-        Sonstige Ideen und Vorschläge: ${ideas}`;
-        
-        window.open(`mailto:ocsoft42@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
         visible = false;
     }
 </script>
@@ -63,6 +60,7 @@
         margin: 1em 10%; 
         flex-grow: 1;
         hyphens: auto; 
+        overflow-y: auto;
     }
     input[type=number] { 
         width: 3.6em; 

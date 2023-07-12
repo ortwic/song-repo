@@ -8,27 +8,36 @@ export default defineConfig({
         svelte(),
         VitePWA({
             registerType: 'autoUpdate',
-            includeAssets: ['logo.svg'],
+            includeAssets: [],
             manifest: {
                 name: 'My Song Repertoire',
                 short_name: 'Song Repo',
+                start_url: '/',
                 description:
                     'Your tool to keep an overview of your song repertoire.',
                 display: 'standalone',
                 background_color: '#E9E3D6',
                 theme_color: '#A71908',
+                lang: 'en',
+                scope: '/',
                 icons: [
                     {
                         src: 'logo-192.png',
                         sizes: '192x192',
                         type: 'image/png',
+                        purpose: "any"
                     },
                     {
                         src: 'logo-512.png',
                         sizes: '512x512',
                         type: 'image/png',
+                        purpose: "maskable"
                     },
                 ],
+                display_override: [
+                    "window-controls-overlay"
+                ],
+                orientation: "natural",
             },
             workbox: {
                 globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
