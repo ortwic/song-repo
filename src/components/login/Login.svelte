@@ -15,7 +15,6 @@
 		try {
 			await authService.signIn(email, password);
 		} catch (error) {
-            console.error(error);
             showError(error.message);
 		}
 	}
@@ -24,7 +23,6 @@
 		try {
 			await authService.loginWithGoogle();
 		} catch (error) {
-            console.error(error);
             showError(error.message);
 		}
 	}
@@ -36,7 +34,6 @@
                 await authService.deleteUser();
                 showInfo('Your account was deleted successfully!');
             } catch (error) {
-                console.log(error);
                 showError(error.message);
             }
         }

@@ -67,7 +67,6 @@
           } 
           currentRow = undefined;
         } catch (error) {
-          console.error(error);
           showError(error.message);
         }
       };
@@ -77,7 +76,6 @@
       try {
         await service.deleteSong(song);
       } catch (error) {
-        console.error(error);
         showError(error.message);
       }
     }
@@ -87,7 +85,6 @@
         const result = await service.importSongs(JSON.parse(data));
         showInfo(`Found ${result.length} songs. Total songs: ${usersongs.length}`);
       } catch (error) {
-        console.error(error);
         showError(error.message);
       }
     }

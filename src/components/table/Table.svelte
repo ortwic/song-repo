@@ -138,7 +138,6 @@
     try {
       return $table.addRow(data);
     } catch (error) {
-      console.error(error);
       showError(`Tabulator is unable to add a new row!\n${error.message}`);
     }
   }
@@ -177,7 +176,6 @@
       try {
         $table.download(downloadType, `${exportTitle}.${downloadType}`, params);
       } catch (error) {
-        console.error(error);
         showError(error.message);
       }
     }      

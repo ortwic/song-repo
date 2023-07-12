@@ -7,11 +7,15 @@ import type {
 const defaultTimeout = 3;
 
 function show(type: NotificationType, message: string, timeoutSec: number) {
-    messageStack.unshift({ type, message });
+    console[type](message);
+    
+    if (!messageStack.exists('message', message)) {
+        messageStack.unshift({ type, message });
 
-    if (timeoutSec > 0) {
-        setTimeout(() => messageStack.pop(), timeoutSec * 1000);
-    }
+        if (timeoutSec > 0) {
+            setTimeout(() => messageStack.pop(), timeoutSec * 1000);
+        }
+    } 
 }
 
 export const messageStack = new ArrayStore<Notification>();

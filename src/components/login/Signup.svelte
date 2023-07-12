@@ -31,7 +31,6 @@
 		try {
 			await authService.signUp(email, password1);
 		} catch (error) {
-            console.error(error);
         	showError(error.message);
 		}
 	}
@@ -40,7 +39,6 @@
 		try {
 			await authService.loginWithGoogle();
 		} catch (error) {
-            console.error(error);
         	showError(error.message);
 		}
 	}
