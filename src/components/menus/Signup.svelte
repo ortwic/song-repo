@@ -104,7 +104,6 @@
 		padding: 2px;
 
 		span {
-			padding-bottom: .6em;
 			text-align: left;
 			min-width: 9rem;
 		}

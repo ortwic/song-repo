@@ -153,9 +153,18 @@
     }
   }
 
-  export async function setData<T>(data: T): Promise<void> {
-    if ($table) {
-      return $table.setData(data);
+  export async function setData<T extends { id: string }>(data: T[]): Promise<void> {
+    const areEquivalent = (source: T[]) => {
+      return source.length === data.length
+        && source.every(item => data.map((v: T) => v.id).indexOf(item.id) > -1);
+    }
+
+    if ($table && data) {
+      if (data.length && areEquivalent($table.getData())) {
+        await $table.updateData(data);
+      } else {
+        await $table.setData(data);
+      }
     }      
   }
 
