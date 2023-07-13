@@ -1,7 +1,11 @@
 <script lang='ts'>
     import ConfirmDialog from "../ui/ConfirmDialog.svelte";
 
-    export let visible = false;
+    let visible = false;
+
+    export function show() {
+        visible = true;
+    }
 
     let imcsv = '';
     let excsv = '';
@@ -60,7 +64,7 @@
         margin: 1em 10%; 
         flex-grow: 1;
         hyphens: auto; 
-        overflow-y: auto;
+        overflow: hidden auto;
     }
     input[type=number] { 
         width: 3.6em; 

@@ -1,6 +1,7 @@
 <script lang="ts">
-  import Login from './components/login/Login.svelte';
-  import Signup from './components/login/Signup.svelte';
+  import Login from './components/menus/Login.svelte';
+  import Signup from './components/menus/Signup.svelte';
+  import Info from './components/menus/Info.svelte';
   import SongTable from './components/table/SongTable.svelte';
   import MenuButton from './components/ui/MenuButton.svelte';
   import Sidebar from './components/ui/Sidebar.svelte'
@@ -9,7 +10,7 @@
   import { currentMenu } from './store/app.store';
 
   const title = `${import.meta.env.DEV ? 'DEV' : 'My'} song repertory`;
-  const version = '0.1.1';
+  const version = '0.1.2';
   const footer = `Version ${version} alpha`;
 
   function submit(ev: SubmitEvent) {
@@ -37,6 +38,9 @@
     {#if $currentMenu == 'login'}
     <Sidebar {title} {footer}>
       <Login />
+      <svelte:fragment slot="footer">
+        <Info />
+      </svelte:fragment>
     </Sidebar>
     {:else if $currentMenu == 'signup'}
     <Sidebar title="Sign up to use app" {footer}>

@@ -20,6 +20,7 @@ export default defineConfig({
                 theme_color: '#A71908',
                 lang: 'en',
                 scope: '/',
+                categories: ["music", "personalization", "utilities"],
                 icons: [
                     {
                         src: 'logo-192.png',
@@ -33,6 +34,14 @@ export default defineConfig({
                         type: 'image/png',
                         purpose: "maskable"
                     },
+                ],
+                screenshots: [
+                    {
+                        src: "images/screenshot.png",
+                        sizes: "800x600",
+                        platform: "windows",
+                        label: "Song list grouped by genre"
+                    }
                 ],
                 display_override: [
                     "window-controls-overlay"

@@ -1,16 +1,14 @@
 <script lang='ts'>
     import { createEventDispatcher } from 'svelte';
-    import Profil from '../login/Profil.svelte';
+    import Profil from './Profil.svelte';
     import ConfirmDialog from '../ui/ConfirmDialog.svelte';
 	import AuthService, { currentUser } from '../../service/auth.service';
     import { showError, showInfo } from '../../store/notification.store';
-    import FeedbackDialog from './FeedbackDialog.svelte';
     
     const dispatch = createEventDispatcher();
 	const authService = new AuthService();
 	let email = import.meta.env.DEV ? 'john.doe@example.com' : '';
 	let password = import.meta.env.DEV ? 'john.doe@example.com' : '';
-    let showFeedbackForm = false;
     let showConfirmDelete = false;
 
 	async function signIn(ev: Event) {
@@ -43,50 +41,44 @@
 </script>
 
 <section class="menu">
-    <div>
-        <button title="Send feedback" on:click={() => showFeedbackForm = true}>
-            <span><i class='bx bx-mail-send'></i> Send feedback</span>
-        </button>
-    </div>
     {#if $currentUser}
     <Profil email={$currentUser.email}
         photoURL={$currentUser.photoURL} 
         displayName={$currentUser.displayName} 
     />
-    <div>
+    <div class="row">
         <button data-close title="Sign out '{$currentUser.email}'" on:click={authService.signOut}>
             <span><i class='bx bx-log-out-circle'></i> Logout</span>
         </button>
     </div>
-    <div>
+    <div class="row">
         <button title="Delete account '{$currentUser.email}'" 
             on:click={() => showConfirmDelete = true}>
             <span><i class='bx bx-error danger-text'></i> Delete profil</span>
         </button>
     </div>
     {:else}
-    <div>
+    <div class="section">
         <label for="email">Email</label>
         <input id="email" autocomplete="email" type="text" placeholder="email" bind:value={email}>
         <label for="password">Password</label>
         <input id="password" autocomplete="password" type="password" placeholder="password" bind:value={password}>
         <br/>
     </div>
-    <div>
-        <button data-close class="w50 highlight" title="Sign in" on:click={signIn}>
+    <div class="row">
+        <button data-close class="highlight" title="Sign in" on:click={signIn}>
             <i class='bx bx-log-in-circle'></i> Login
-        </button><button data-target='signup' class="w50" title="Sign up" on:click={() => dispatch('signup')}>
+        </button>
+        <button data-target='signup' title="Sign up" on:click={() => dispatch('signup')}>
             <i class='bx bxs-edit'></i> Sign up
         </button>
     </div>
-    <div>
+    <div class="row">
         <button data-close title="Sign in with Google" on:click={useGoogle}>
             <i class='bx bxl-google'></i> Login with Google
         </button>
     </div>
     {/if}
-
-    <FeedbackDialog visible={showFeedbackForm}></FeedbackDialog>
 
     {#if showConfirmDelete}
     <ConfirmDialog title='Confirm deletion' size='auto' target='login' on:closed={deleteProfile}>

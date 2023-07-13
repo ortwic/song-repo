@@ -95,9 +95,9 @@ export const markedFormatter: Partial<ColumnDefinition> = {
 
 export const labelFormatter: Partial<ColumnDefinition> = {
     formatter(cell: CellComponent): string {
-        const value = cell.getValue().toString();
-        if (value) {
-            return value
+        const value = cell.getValue();
+        if (value?.length) {
+            return value.toString()
                 .split(',')
                 .map((v) => `<span class='label'>${v}</span>`)
                 .join('');

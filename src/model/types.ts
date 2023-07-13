@@ -15,4 +15,4 @@ export type Status =
     | 'repeat'
     | 'archived';
 
-export type MenuPages = 'root' | 'login' | 'signup';
+export type MenuPages = 'self' | 'root' | 'login' | 'signup';

@@ -8,6 +8,10 @@ export interface Song {
     source?: string;
     genre?: string;
     style?: string;
+    key?: string;
+    time?: string;
+    bpm?: string | number;
+    features?: string[];
 }
 
 export interface UserSong extends Song {

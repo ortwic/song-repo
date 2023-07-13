@@ -17,11 +17,12 @@
     out:fade={{ duration: 200, easing: cubicOut }}>
     <Titlebar {target} on:close={() => dispatch('closed', false)}>{title}</Titlebar>
     <slot></slot>
-    <div>
-        <button data-target={target} class="w50" 
+    <div class="row">
+        <button data-target={target} 
             on:click|stopPropagation={() => dispatch('closed', true)}>
             Confirm
-        </button><button data-target={target} class="w50" 
+        </button>
+        <button data-target={target} 
             on:click|stopPropagation={() => dispatch('closed', false)}>
             Decline
         </button>

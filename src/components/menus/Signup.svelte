@@ -47,7 +47,7 @@
 </script>
 
 <section class="menu">
-	<div>
+	<div class="section">
 		<label for="email">Email</label>
 		<input id="email" autocomplete="email" type="email" placeholder="email" bind:value={email}>
 		<label for="password">Password</label>
@@ -56,44 +56,44 @@
 		<input id="new-password" autocomplete="new-password" type="password" placeholder="repeat password" bind:value={password2}>
 		<br/>
 	</div>
-    <div>
-		<a role="button" title="Read privacy policy" href="#/" on:click={() => page = 'privacypolicy'}>
+    <div class="row">
+		<button title="Read privacy policy" on:click={() => page = 'privacypolicy'}>
 			<span class="caption">
 				<i class={checks.privacypolicy ? checkedIcon : uncheckedIcon}></i>
 				<span>Read privacy policy</span>
 			</span>
-		</a>
+		</button>
     </div>
-    <div>
-		<a role="button" title="Read terms of use" href="#/" on:click={() => page = 'termsofuse'}>
+    <div class="row">
+		<button title="Read terms of use" on:click={() => page = 'termsofuse'}>
 			<span class="caption">
 				<i class={checks.termsofuse ? checkedIcon : uncheckedIcon}></i>
 				<span>Read terms of use</span>
 			</span>
-		</a>
+		</button>
+
+		{#if page}
+		<ConfirmDialog target='signup' size='full' on:closed={confirm}>
+			<object title="Embedded page '{page}'" data="/docs/{page}.html#{navigator.language}">
+			</object>
+		</ConfirmDialog>
+		{/if}
     </div>
-    <div>
+    <div class="row">
         <button title="Sign up" on:click={signUp} 
 			disabled={!valid}>
             <i class='bx bxs-edit'></i> Sign up
         </button>
     </div>
-    <div>
+    <div class="row">
         <p>&ndash; or &ndash;</p>
     </div>
-    <div>
+    <div class="row">
         <button id='google' title="Sign up with Google" on:click={useGoogle}
 			disabled={!valid}>
             <i class='bx bxl-google'></i> With Google
         </button>
     </div>
-
-	{#if page}
-	<ConfirmDialog target='signup' size='full' on:closed={confirm}>
-		<object title="Embedded page '{page}'" data="/docs/{page}.html#{navigator.language}">
-		</object>
-	</ConfirmDialog>
-	{/if}
 </section>
 
 <style lang="scss">	

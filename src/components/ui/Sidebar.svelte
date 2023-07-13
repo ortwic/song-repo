@@ -2,17 +2,9 @@
     import '../../styles/menu.scss';
     import { slide } from 'svelte/transition';
     import Titlebar from './Titlebar.svelte';
-	import { currentUser } from '../../service/auth.service';
-    import { usersongs } from "../../store/song.store";
-    import type { UserSong } from "../../model/song.model";
 
     export let title = '';
     export let footer = '';
-    
-    async function loadSamples(): Promise<void> {
-        const { default: samples } = await import('../../data/samples.json');
-        usersongs.set(samples as unknown as UserSong[]);
-    }
 </script>
 
 <aside in:slide={{ duration: 200, axis: 'x' }} out:slide={{ duration: 200, axis: 'x' }} >
@@ -22,23 +14,6 @@
     </section>
     <footer class="menu">
         <slot name="footer"></slot>
-        {#if !$currentUser}
-        <div>
-            <button data-close title="Load demo sample data" on:click={loadSamples}>
-                <i class='bx bx-test-tube'></i> Load samples
-            </button>
-        </div>
-        {/if}
-        <div>
-            <a role="button" target="_blank" href="http://buymeacoffee.com/ortwic">
-                <span><i class='bx bxs-coffee'></i> Buy me a coffee</span>
-            </a>
-        </div>
-        <div>
-            <a role="button" target="_blank" href="https://github.com/users/ortwic/projects/2/views/1">
-                <span><i class="bx bxl-github"></i> Feature overview</span>
-            </a>
-        </div>
         <div class="info">
             {footer}
         </div>

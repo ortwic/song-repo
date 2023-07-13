@@ -54,7 +54,12 @@ export default class SongService {
             artist: '',
             title: '',
             source: '',
+            key: '',
+            time: '',
+            bpm: '',
+            features: [],
             tags: [],
+            learnedOn: new Date(),
             createdAt: Timestamp.now(),
         };
     }

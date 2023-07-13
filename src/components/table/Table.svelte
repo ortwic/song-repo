@@ -31,7 +31,7 @@
       }
     },
     {
-      label: "Advanced",
+      label: "<i class='bx bx-folder-open'></i> Advanced",
       menu: [
         {
           label: "<span class='fa-trash'> Delete Row</span>",
@@ -46,19 +46,19 @@
       separator: true
     },
     {
-      label: "Export as CSV",
+      label: "<i class='bx bxs-file-export'></i> Export as CSV",
       action: () => download('csv', { delimiter: ';' })
     },
     {
-      label: "Export as JSON",
+      label: "<i class='bx bxs-file-json'></i> Export as JSON",
       action: () => download('json')
     },
     {
-      label: "Export as XLSX",
+      label: "<i class='bx bxs-file-export'></i> Export as XLSX",
       action: () => download('xlsx', { sheetName: exportTitle })
     },
     {
-      label: "Export as PDF",
+      label: "<i class='bx bxs-file-pdf'></i> Export as PDF",
       action: () => download('pdf', { title: exportTitle })
     }
   ];
