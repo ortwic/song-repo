@@ -2,9 +2,10 @@
   import 'tabulator-tables/dist/css/tabulator_bulma.min.css';
   import { TabulatorFull } from 'tabulator-tables';
   import type { ColumnDefinition, DownloadOptions, DownloadType, GroupComponent, ColumnComponent, RowComponent } from 'tabulator-tables';
-  import { onMount, createEventDispatcher } from 'svelte';
+  import { onMount, createEventDispatcher, onDestroy } from 'svelte';
   import { Observable, fromEvent, map, take } from 'rxjs';
   import { toggleVisibilityItem } from './menu.helper';
+  import { downloadQueue, type DowloadItem } from '../../store/download.store';
   import { showError } from '../../store/notification.store';
 
   type GroupFormatter<T> = (value: unknown, count: number, data: T[], group?: GroupComponent) => string;
@@ -17,6 +18,7 @@
   export const isGroupedBy = (field: string) => field in rowGroups;
   let table: Observable<TabulatorFull>;
   let tableContainer: HTMLElement;
+  let unsubscribe = () => {};
 
   const dispatch = createEventDispatcher();
   const rowContextMenu = [
@@ -41,25 +43,6 @@
           }
         }
       ]
-    },
-    {
-      separator: true
-    },
-    {
-      label: "<i class='bx bxs-file-export'></i> Export as CSV",
-      action: () => download('csv', { delimiter: ';' })
-    },
-    {
-      label: "<i class='bx bxs-file-json'></i> Export as JSON",
-      action: () => download('json')
-    },
-    {
-      label: "<i class='bx bxs-file-export'></i> Export as XLSX",
-      action: () => download('xlsx', { sheetName: exportTitle })
-    },
-    {
-      label: "<i class='bx bxs-file-pdf'></i> Export as PDF",
-      action: () => download('pdf', { title: exportTitle })
     }
   ];
   const groupContextMenu = [
@@ -113,6 +96,8 @@
     table = fromEvent(tableInstance, 'tableBuilt').pipe(take(1), map(() => handleTableBuilt(tableInstance)));
   });
 
+  onDestroy(() => unsubscribe());
+
   function isRequired(def: ColumnDefinition): boolean {
     if (Array.isArray(def.validator)) {
       return 'required' in def.validator;
@@ -130,6 +115,7 @@
       action: (ev: Event, column: ColumnComponent) => toggleGroup(c.field, column.getElement())
     }, { separator: true }, ...columnSelectors));
 
+    unsubscribe = downloadQueue.subscribe((items) => download(table, items));
     dispatch('init', table);
     return table;
   }
@@ -180,14 +166,15 @@
     $table.setGroupBy(groups.length ? groups : undefined);
   }
 
-  function download(downloadType: DownloadType, params?: DownloadOptions): void {
-    if ($table) {
+  function download(table: TabulatorFull, items: DowloadItem[]): void {
+    if (items?.length) {
       try {
-        $table.download(downloadType, `${exportTitle}.${downloadType}`, params);
+        const { type, params } = items.pop();
+        table.download(type, `${exportTitle}.${type}`, params);
       } catch (error) {
         showError(error.message);
       }
-    }      
+    }
   }
 </script>
 

@@ -10,11 +10,11 @@ export default defineConfig({
             registerType: 'autoUpdate',
             includeAssets: [],
             manifest: {
-                name: 'My Song Repertoire',
+                name: 'My Song Repertory',
                 short_name: 'Song Repo',
                 start_url: '/',
                 description:
-                    'Your tool to keep an overview of your song repertoire.',
+                    'Your tool to keep an overview of your song repertory.',
                 display: 'standalone',
                 background_color: '#E9E3D6',
                 theme_color: '#A71908',

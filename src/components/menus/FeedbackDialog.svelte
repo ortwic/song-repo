@@ -29,7 +29,7 @@
 
     function handleForm({ detail: confirm }) {
         if (confirm) {
-            let subject = "User Feedback for 'My Song Repetory'";
+            let subject = "User Feedback for 'My Song Repertory'";
             let body = `
             Import CSV: ${imcsv}
             Export CSV: ${excsv}
@@ -93,7 +93,7 @@
             <li><input type="number" required placeholder="1-10" name="imcsv" bind:value={imcsv} min="1" max="10"> <label for="">Import CSV</label></li>
             <li><input type="number" required placeholder="1-10" name="excsv" bind:value={excsv} min="1" max="10"> <label for="">Export CSV</label></li>
             <li><input type="number" required placeholder="1-10" name="xlsx" bind:value={xlsx} min="1" max="10"> <label for="">Export XLSX</label></li>
-            <li><input type="number" required placeholder="1-10" name="pdf" bind:value={pdf} min="1" max="10"> <label for="">Export PDF (currently not working)</label></li>
+            <li><input type="number" required placeholder="1-10" name="pdf" bind:value={pdf} min="1" max="10"> <label for="">Export PDF</label></li>
         </ul>
 		<h4>2. Wie wichtig ist es dir, dass dir bei der Erstellung neuer Stücke Daten vorgeschlagen werden?</h4>
         <ul>

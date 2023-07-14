@@ -98,17 +98,11 @@
       console.debug('Σ', $usersongs.length);
     }
 </script>
-
-<svelte:head>
-  <script async type="text/javascript" src="https://oss.sheetjs.com/sheetjs/xlsx.full.min.js"></script>
-  <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
-  <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/2.3.2/jspdf.plugin.autotable.js"></script>
-</svelte:head>
  
 <FileDrop on:enter={() => showInfo('Start importing...')} on:addJson={({ detail }) => importJSON(detail)}>
   <Table bind:this={table} {columns}
     placeholder='No songs added.' 
-    exportTitle='My song repertoire'
+    exportTitle='My Song Repertory'
     groupHeader={format.groupBy}
     on:error={({ detail }) => showError(detail)}
     on:deleteRow={({ detail }) => deleteRow(detail)}

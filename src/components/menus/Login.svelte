@@ -1,15 +1,12 @@
 <script lang='ts'>
     import { createEventDispatcher } from 'svelte';
-    import Profil from './Profil.svelte';
-    import ConfirmDialog from '../ui/ConfirmDialog.svelte';
 	import AuthService, { currentUser } from '../../service/auth.service';
-    import { showError, showInfo } from '../../store/notification.store';
+    import { showError } from '../../store/notification.store';
     
     const dispatch = createEventDispatcher();
 	const authService = new AuthService();
 	let email = import.meta.env.DEV ? 'john.doe@example.com' : '';
 	let password = import.meta.env.DEV ? 'john.doe@example.com' : '';
-    let showConfirmDelete = false;
 
 	async function signIn(ev: Event) {
 		try {
@@ -26,38 +23,9 @@
             showError(error.message);
 		}
 	}
-    
-	async function deleteProfile({ detail: accepted }) {
-        showConfirmDelete = false;
-        if (accepted) {
-            try {                
-                await authService.deleteUser();
-                showInfo('Your account was deleted successfully!');
-            } catch (error) {
-                showError(error.message);
-            }
-        }
-	}
 </script>
 
 <section class="menu">
-    {#if $currentUser}
-    <Profil email={$currentUser.email}
-        photoURL={$currentUser.photoURL} 
-        displayName={$currentUser.displayName} 
-    />
-    <div class="row">
-        <button data-close title="Sign out '{$currentUser.email}'" on:click={authService.signOut}>
-            <span><i class='bx bx-log-out-circle'></i> Logout</span>
-        </button>
-    </div>
-    <div class="row">
-        <button title="Delete account '{$currentUser.email}'" 
-            on:click={() => showConfirmDelete = true}>
-            <span><i class='bx bx-error danger-text'></i> Delete profil</span>
-        </button>
-    </div>
-    {:else}
     <div class="section">
         <label for="email">Email</label>
         <input id="email" autocomplete="email" type="text" placeholder="email" bind:value={email}>
@@ -78,12 +46,4 @@
             <i class='bx bxl-google'></i> Login with Google
         </button>
     </div>
-    {/if}
-
-    {#if showConfirmDelete}
-    <ConfirmDialog title='Confirm deletion' size='auto' target='login' on:closed={deleteProfile}>
-        <p>Do you really like to delete account? All data will be lost.</p>
-        <p>You should export your data before deletion.</p>
-    </ConfirmDialog>
-    {/if}
 </section>
