@@ -47,7 +47,7 @@ export class ArrayStore<T> {
 
     public exists(key: keyof T, value: unknown): boolean {
         let result: unknown;
-        this._store.subscribe((items) => (result = items.map(v => v[key]).find(v => v === value)))();
+        this._store.subscribe((items) => (result = items.map((v) => v[key]).find((v) => v === value)))();
         return !!result;
     }
 

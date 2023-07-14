@@ -13,40 +13,37 @@ export default defineConfig({
                 name: 'My Song Repertory',
                 short_name: 'Song Repo',
                 start_url: '/',
-                description:
-                    'Your tool to keep an overview of your song repertory.',
+                description: 'Your tool to keep an overview of your song repertory.',
                 display: 'standalone',
                 background_color: '#E9E3D6',
                 theme_color: '#A71908',
                 lang: 'en',
                 scope: '/',
-                categories: ["music", "personalization", "utilities"],
+                categories: ['music', 'personalization', 'utilities'],
                 icons: [
                     {
                         src: 'logo-192.png',
                         sizes: '192x192',
                         type: 'image/png',
-                        purpose: "any"
+                        purpose: 'any',
                     },
                     {
                         src: 'logo-512.png',
                         sizes: '512x512',
                         type: 'image/png',
-                        purpose: "maskable"
+                        purpose: 'maskable',
                     },
                 ],
                 screenshots: [
                     {
-                        src: "images/screenshot.png",
-                        sizes: "800x600",
-                        platform: "windows",
-                        label: "Song list grouped by genre"
-                    }
+                        src: 'images/screenshot.png',
+                        sizes: '800x600',
+                        platform: 'windows',
+                        label: 'Song list grouped by genre',
+                    },
                 ],
-                display_override: [
-                    "window-controls-overlay"
-                ],
-                orientation: "natural",
+                display_override: ['window-controls-overlay'],
+                orientation: 'natural',
             },
             workbox: {
                 globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],

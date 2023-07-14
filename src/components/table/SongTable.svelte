@@ -2,9 +2,9 @@
     import '../../styles/table.scss';
     import { onMount } from 'svelte';
     import type { ColumnDefinition, CellComponent, CellEditEventCallback, RowComponent } from 'tabulator-tables';
-    import { column, comboBoxEditor } from './column.helper';
-    import { autoFilter, rangeFilter } from './filter.helper';
-    import format from './formatter.helper';
+    import { column, comboBoxEditor } from './templates/column.helper';
+    import { autoFilter, rangeFilter } from './templates/filter.helper';
+    import format from './templates/formatter.helper';
     import Table from './Table.svelte'
     import FileDrop from './FileDrop.svelte';
     import AddButton from '../ui/AddButton.svelte';

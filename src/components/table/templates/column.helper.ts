@@ -16,7 +16,7 @@ export const column = (
     title: string,
     field: string,
     width: string,
-    sorter: Sorter,
+    sorter: Sorter = 'string',
     ...more: Partial<ColumnDefinition>[]
 ): ColumnDefinition => {
     return Object.assign(
@@ -32,9 +32,7 @@ export const column = (
     );
 };
 
-export const comboBoxEditor = (
-    values?: string[]
-): Partial<ColumnDefinition> => {
+export const comboBoxEditor = (values?: string[]): Partial<ColumnDefinition> => {
     const editorParams: EditorParams = {
         values,
         autocomplete: true,

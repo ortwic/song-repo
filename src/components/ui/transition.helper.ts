@@ -1,10 +1,7 @@
 import { fade, slide, type SlideParams } from 'svelte/transition';
 import { cubicOut } from 'svelte/easing';
 
-export const slideFade = (
-    node: Element,
-    { delay = 0, duration = 400 }: SlideParams
-) => ({
+export const slideFade = (node: Element, { delay = 0, duration = 400 }: SlideParams) => ({
     delay,
     duration,
     css: (t: number, u: number) => {

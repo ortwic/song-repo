@@ -7,12 +7,6 @@ export enum Complete {
     Finishing = 0b0000000000000000000000000100000,
 }
 
-export type Status =
-    | 'unknown'
-    | 'todo'
-    | 'wip'
-    | 'done'
-    | 'repeat'
-    | 'archived';
+export type Status = 'unknown' | 'todo' | 'wip' | 'done' | 'repeat' | 'archived';
 
 export type MenuPages = 'self' | 'root' | 'login' | 'signup';

@@ -17,7 +17,7 @@
         display: flex;
         justify-content: space-between;
         color: var(--primback);
-        background-color: var(--primary);
+        background: linear-gradient(to right, var(--primdark) 20%, var(--primary));
         white-space: nowrap;
         font-weight: 500;
         max-height: 2.2em;
@@ -39,8 +39,7 @@
             max-width: 4em;
             max-height: inherit;
             transition: all .2s ease-in-out;
-            font-size: small;
-            scale: 1.25;
+            font-size: smaller;
 
             &:hover {
                 background-color: #F0F0F040;

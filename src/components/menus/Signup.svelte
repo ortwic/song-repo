@@ -73,7 +73,7 @@
 		</button>
 
 		{#if page}
-		<ConfirmDialog target='signup' size='full' on:closed={confirm}>
+		<ConfirmDialog title='Please read the document carefully' target='signup' size='full' on:closed={confirm}>
 			<object title="Embedded page '{page}'" data="/docs/{page}.html#{navigator.language}">
 			</object>
 		</ConfirmDialog>

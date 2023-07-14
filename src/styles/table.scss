@@ -22,7 +22,6 @@ div.tabulator {
             span {
                 display: inline-block;
                 color: var(--text);
-                border-right: 1px solid #404040;
                 margin-top: .2rem;
                 margin-bottom: .2rem;
                 padding-right: .6rem;
@@ -30,11 +29,6 @@ div.tabulator {
 
             span.title {
                 min-width: 8rem;
-            }
-
-            span.info {
-                display: inline-block;
-                font-weight: normal;
             }
 
             span.label {
@@ -103,6 +97,7 @@ div.progress-bar {
     position: absolute;
     height: 100%;
     background-color: var(--primback);
+    opacity: .8;
 }
 
 div.percent-value {

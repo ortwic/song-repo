@@ -15,7 +15,7 @@
 
   const title = `${import.meta.env.DEV ? 'DEV' : 'My'} song repertory`;
   const usertitle = currentUser.pipe(map(getUserTitle))
-  const version = '0.1.2';
+  const version = '0.1.3';
   const footer = `Version ${version} alpha`;
 
   function getUserTitle(user: { displayName: string; email: string; }): string {
@@ -59,8 +59,8 @@
       <Login />
       {/if}
       <svelte:fragment slot="footer">
-        <ExportTable />
         <Info />
+        <ExportTable />
       </svelte:fragment>
     </Sidebar>
     {:else if $currentMenu == 'signup'}

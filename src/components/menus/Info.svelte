@@ -16,7 +16,7 @@
 {#if !$currentUser}
 <div class="row">
     <button data-close title="Load demo sample data" on:click={loadSamples}>
-        <i class='bx bx-test-tube'></i> Load samples
+        <i class='bx bx-test-tube'></i> Demo samples
     </button>
 </div>
 {/if}

@@ -31,7 +31,7 @@ const omitUndefinedFields = (data: object) => {
 export default class FirestoreService {
     private db = getFirestore(app);
 
-    constructor(public path: string, ...constraints: QueryConstraint[]) {}
+    constructor(public path: string) {}
 
     public getDocuments<T>(uid: string, ...constraints: QueryConstraint[]): Observable<T[]> {
         const items = collection(this.db, this.path) as CollectionReference<T>;
@@ -41,18 +41,12 @@ export default class FirestoreService {
         return collectionData<T>(q, { idField: 'id' }).pipe(startWith([]));
     }
 
-    public async setDocument<T extends { id: string }>(
-        data: T,
-        options?: SetOptions
-    ): Promise<void> {
+    public async setDocument<T extends { id: string }>(data: T, options?: SetOptions): Promise<void> {
         const docRef = doc(this.db, this.path, data.id);
         await setDoc(docRef, omitUndefinedFields(data), options);
     }
 
-    public async setDocuments<T extends { id: string }>(
-        array: T[],
-        options?: SetOptions
-    ): Promise<void> {
+    public async setDocuments<T extends { id: string }>(array: T[], options?: SetOptions): Promise<void> {
         const batch = writeBatch(this.db);
         array.forEach((data) => {
             const docRef = doc(this.db, this.path, data.id);
@@ -61,10 +55,7 @@ export default class FirestoreService {
         await batch.commit();
     }
 
-    public async updateDocument(
-        data: Partial<unknown>,
-        id: string
-    ): Promise<void> {
+    public async updateDocument(data: Partial<unknown>, id: string): Promise<void> {
         const docRef = doc(this.db, this.path, id);
         await updateDoc(docRef, data);
     }

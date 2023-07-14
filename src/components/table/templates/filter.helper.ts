@@ -1,8 +1,6 @@
 import type { ColumnDefinition, FilterType } from 'tabulator-tables';
 
-export const autoFilter = (
-    operator: FilterType = 'like'
-): Partial<ColumnDefinition> => {
+export const autoFilter = (operator: FilterType = 'like'): Partial<ColumnDefinition> => {
     return {
         headerFilter: 'list',
         headerFilterParams: {
@@ -17,11 +15,7 @@ export const autoFilter = (
     };
 };
 
-export const rangeFilter = (
-    min = 0,
-    max = 100,
-    step = 5
-): Partial<ColumnDefinition> => {
+export const rangeFilter = (min = 0, max = 100, step = 5): Partial<ColumnDefinition> => {
     return {
         headerFilter: minMaxFilterEditor,
         headerFilterParams: { min, max, step },
@@ -30,13 +24,7 @@ export const rangeFilter = (
 };
 
 // copied from example // https://tabulator.info/examples/5.5#filter-header
-const minMaxFilterEditor = (
-    cell,
-    onRendered,
-    success,
-    cancel,
-    editorParams
-) => {
+const minMaxFilterEditor = (cell, onRendered, success, cancel, editorParams) => {
     const container = document.createElement('span');
 
     //create and style inputs
@@ -95,9 +83,7 @@ function minMaxFilterFunction(headerValue, rowValue, rowData, filterParams) {
     if (rowValue) {
         if (headerValue.start != '') {
             if (headerValue.end != '') {
-                return (
-                    rowValue >= headerValue.start && rowValue <= headerValue.end
-                );
+                return rowValue >= headerValue.start && rowValue <= headerValue.end;
             } else {
                 return rowValue >= headerValue.start;
             }

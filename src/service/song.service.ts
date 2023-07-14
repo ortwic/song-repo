@@ -8,8 +8,7 @@ import { Timestamp, where } from 'firebase/firestore';
 const sharedFields: (keyof UserSong)[] = ['id', 'artist', 'title', 'genre', 'style', 'key', 'time', 'bpm'];
 const sharedUid = new URLSearchParams(location.search).get('share');
 const store = new FirestoreService('usersongs');
-const uniqueKey = (...array: string[]) =>
-    array.join('').trim().replaceAll(/\W/g, '');
+const uniqueKey = (...array: string[]) => array.join('').trim().replaceAll(/\W/g, '');
 
 export default class SongService {
     private uid = '';
@@ -21,11 +20,7 @@ export default class SongService {
             ? Object.assign(
                   song,
                   {
-                      id: uniqueKey(
-                          this.uid?.slice(0, 6) ?? '',
-                          song.artist ?? 'n/a',
-                          song.title
-                      ),
+                      id: uniqueKey(this.uid?.slice(0, 6) ?? '', song.artist ?? 'n/a', song.title),
                       uid: this.uid,
                       createdAt: new Date(),
                   },
@@ -35,11 +30,10 @@ export default class SongService {
 
     constructor() {
         currentUser.subscribe((user) => (this.uid = user?.uid));
-        currentUser.pipe(switchMap(this.loadSongs))
-            .subscribe((value) => usersongs.set(value));
+        currentUser.pipe(switchMap(this.loadSongs)).subscribe((value) => usersongs.set(value));
     }
-    
-    private loadSongs(user: { uid: string; }): Observable<UserSong[]> {
+
+    private loadSongs(user: { uid: string }): Observable<UserSong[]> {
         if (user) {
             return store.getDocuments(user.uid);
         }
@@ -91,9 +85,7 @@ export default class SongService {
 
     async importSongs(data: UserSong[]): Promise<UserSong[]> {
         if (data) {
-            const songs = data.map((s) =>
-                this.appendId(s, { importedAt: new Date() })
-            );
+            const songs = data.map((s) => this.appendId(s, { importedAt: new Date() }));
             if (this.uid) {
                 await store.setDocuments(songs, { merge: true });
             } else {

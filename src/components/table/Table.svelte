@@ -1,21 +1,23 @@
 <script lang="ts">
   import 'tabulator-tables/dist/css/tabulator_bulma.min.css';
   import { TabulatorFull } from 'tabulator-tables';
-  import type { ColumnDefinition, DownloadOptions, DownloadType, GroupComponent, ColumnComponent, RowComponent } from 'tabulator-tables';
+  import type { ColumnDefinition, GroupComponent, ColumnComponent, RowComponent } from 'tabulator-tables';
   import { onMount, createEventDispatcher, onDestroy } from 'svelte';
   import { Observable, fromEvent, map, take } from 'rxjs';
-  import { toggleVisibilityItem } from './menu.helper';
+  import { toggleVisibilityItem } from './templates/menu.helper';
   import { downloadQueue, type DowloadItem } from '../../store/download.store';
   import { showError } from '../../store/notification.store';
 
   type GroupFormatter<T> = (value: unknown, count: number, data: T[], group?: GroupComponent) => string;
 
   const rowGroups = {};
-  export let columns: ColumnDefinition[];
+  export let columns: ColumnDefinition[] = undefined;
+  export let data: unknown[] = undefined;
   export let placeholder = '';
   export let exportTitle = 'export';
   export let groupHeader: GroupFormatter<unknown> = undefined;
   export const isGroupedBy = (field: string) => field in rowGroups;
+  export let usePersistance = true;
   let table: Observable<TabulatorFull>;
   let tableContainer: HTMLElement;
   let unsubscribe = () => {};
@@ -59,12 +61,12 @@
       }
     }
   ];
-
+  
   onMount(() => {
     const tableInstance = new TabulatorFull(tableContainer, {
       columns,
+      data,
       placeholder,
-      index: 'id',
       clipboard: true,
       movableColumns: true,
       rowContextMenu,
@@ -73,11 +75,12 @@
       groupToggleElement: 'header',
       groupUpdateOnCellEdit: true,
       footerElement: '#footer',
+      persistenceID: columns.map(c => c.field[0]).join(''),
       persistence: {
-        sort: true,
-        filter: true,
-        columns: true,
-        group: true
+        sort: usePersistance,
+        filter: usePersistance,
+        columns: usePersistance,
+        group: usePersistance
       },
       locale: 'en-us',
       langs: {
@@ -96,7 +99,10 @@
     table = fromEvent(tableInstance, 'tableBuilt').pipe(take(1), map(() => handleTableBuilt(tableInstance)));
   });
 
-  onDestroy(() => unsubscribe());
+  onDestroy(() => {
+    unsubscribe();
+    $table.destroy();
+  });
 
   function isRequired(def: ColumnDefinition): boolean {
     if (Array.isArray(def.validator)) {
@@ -110,7 +116,7 @@
       .filter(c => !isRequired(c.getDefinition()))
       .map(column => toggleVisibilityItem(column));
     
-    columns.filter(c => c.headerMenu).forEach(c => c.headerMenu.push({
+    columns?.filter(c => c.headerMenu).forEach(c => c.headerMenu.push({
       label: `Group by ${c.title.toLowerCase()}`,
       action: (ev: Event, column: ColumnComponent) => toggleGroup(c.field, column.getElement())
     }, { separator: true }, ...columnSelectors));
@@ -139,14 +145,14 @@
     }
   }
 
-  export async function setData<T extends { id: string }>(data: T[]): Promise<void> {
+  export async function setData<T>(data: T[], idField?: keyof T): Promise<void> {
     const areEquivalent = (source: T[]) => {
       return source.length === data.length
-        && source.every(item => data.map((v: T) => v.id).indexOf(item.id) > -1);
+        && source.every(item => data.map((v: T) => v[idField]).indexOf(item[idField]) > -1);
     }
 
     if ($table && data) {
-      if (data.length && areEquivalent($table.getData())) {
+      if (data.length && idField && areEquivalent($table.getData())) {
         await $table.updateData(data);
       } else {
         await $table.setData(data);

@@ -1,3 +1,5 @@
+import { redToGreenGradient } from "../../../styles/style.helper";
+
 export default class ProgressBar {
     private isMouseDown = false;
     private oldValue = 0;
@@ -20,6 +22,16 @@ export default class ProgressBar {
         this.progressBar.style.width = 100 - value + '%';
         this.progressBar.style.marginLeft = value + '%';
         this.percentValue.textContent = value + '%';
+
+        this.setColorGradient(value, .3);
+    }
+
+    private setColorGradient(value: number, offset: number):void  {        
+        const s = redToGreenGradient(value - value * offset);
+        const m = redToGreenGradient(value);
+        const e = redToGreenGradient(value + (100 - value) * offset);
+        this.element.style.background = `linear-gradient(to right, ${s.hex()}, ${m.hex()}, ${e.hex()})`;
+        this.element.style.boxShadow = `0 0 12px ${m.hex()}80`;
     }
 
     updateProgress(event: MouseEvent): void {
@@ -31,7 +43,7 @@ export default class ProgressBar {
 
     public static create(value = 0): ProgressBar {
         const bar = new ProgressBar();
-        bar.setProgress(value);
+        bar.setProgress(+value);
 
         bar.element.addEventListener('mousedown', (event) => {
             bar.isMouseDown = true;
