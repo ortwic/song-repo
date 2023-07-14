@@ -1,16 +1,20 @@
-import { switchMap } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 import { currentUser } from './auth.service';
 import FirestoreService from './firestore.service';
 import type { UserSong } from '../model/song.model';
 import { usersongs } from '../store/song.store';
-import { Timestamp } from 'firebase/firestore';
+import { Timestamp, where } from 'firebase/firestore';
 
+const sharedFields: (keyof UserSong)[] = ['id', 'artist', 'title', 'genre', 'style', 'key', 'time', 'bpm'];
+const sharedUid = new URLSearchParams(location.search).get('share');
+const store = new FirestoreService('usersongs');
 const uniqueKey = (...array: string[]) =>
     array.join('').trim().replaceAll(/\W/g, '');
 
 export default class SongService {
-    public readonly store = new FirestoreService('usersongs');
     private uid = '';
+    hasUser = () => !!this.uid;
+    isShared = () => !!sharedUid;
 
     private appendId = (song: UserSong, ...more: object[]): UserSong =>
         !song.id && song.title
@@ -31,16 +35,21 @@ export default class SongService {
 
     constructor() {
         currentUser.subscribe((user) => (this.uid = user?.uid));
-        currentUser
-            .pipe(
-                switchMap((user) =>
-                    user ? this.store.getDocuments(user.uid) : []
-                )
-            )
-            .subscribe((value) => usersongs.set(value as UserSong[]));
+        currentUser.pipe(switchMap(this.loadSongs))
+            .subscribe((value) => usersongs.set(value));
     }
+    
+    private loadSongs(user: { uid: string; }): Observable<UserSong[]> {
+        if (user) {
+            return store.getDocuments(user.uid);
+        }
 
-    hasUser = () => !!this.uid;
+        if (sharedUid) {
+            return store.getDocuments(sharedUid, where('status', '==', 'done'));
+        }
+
+        return of([]);
+    }
 
     newSong(): UserSong {
         return {
@@ -68,7 +77,7 @@ export default class SongService {
         if (this.uid) {
             song = this.appendId(song);
             if (song.id) {
-                await this.store.setDocument(song, { merge: true });
+                await store.setDocument(song, { merge: true });
                 return song.id;
             }
         }
@@ -76,7 +85,7 @@ export default class SongService {
 
     async deleteSong(song: UserSong): Promise<void> {
         if (this.uid) {
-            return this.store.removeDocument(song.id);
+            return store.removeDocument(song.id);
         }
     }
 
@@ -86,7 +95,7 @@ export default class SongService {
                 this.appendId(s, { importedAt: new Date() })
             );
             if (this.uid) {
-                await this.store.setDocuments(songs, { merge: true });
+                await store.setDocuments(songs, { merge: true });
             } else {
                 usersongs.set(songs);
             }

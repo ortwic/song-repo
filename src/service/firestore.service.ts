@@ -10,8 +10,9 @@ import {
     updateDoc,
     deleteDoc,
     writeBatch,
-    type DocumentData,
     type SetOptions,
+    CollectionReference,
+    QueryConstraint,
 } from 'firebase/firestore';
 import { collectionData } from 'rxfire/firestore';
 import { startWith } from 'rxjs/operators';
@@ -30,14 +31,14 @@ const omitUndefinedFields = (data: object) => {
 export default class FirestoreService {
     private db = getFirestore(app);
 
-    constructor(public path: string) {}
+    constructor(public path: string, ...constraints: QueryConstraint[]) {}
 
-    public getDocuments(uid: string): Observable<DocumentData[]> {
-        const items = collection(this.db, this.path);
+    public getDocuments<T>(uid: string, ...constraints: QueryConstraint[]): Observable<T[]> {
+        const items = collection(this.db, this.path) as CollectionReference<T>;
 
         // Query requires an index, see screenshot below
-        const q = query(items, where('uid', '==', uid), orderBy('id'));
-        return collectionData(q, { idField: 'id' }).pipe(startWith([]));
+        const q = query<T>(items, where('uid', '==', uid), orderBy('id'), ...constraints);
+        return collectionData<T>(q, { idField: 'id' }).pipe(startWith([]));
     }
 
     public async setDocument<T extends { id: string }>(

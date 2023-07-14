@@ -108,9 +108,12 @@
     on:deleteRow={({ detail }) => deleteRow(detail)}
   />
 </FileDrop>
+
+{#if !service.isShared()}
 <section class="footer">
   <AddButton title="add row after" on:click={addRow}/>
 </section>
+{/if}
 
 <style lang="scss">
   section.footer {

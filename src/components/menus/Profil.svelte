@@ -1,6 +1,6 @@
 <script lang='ts'>
     import ConfirmDialog from '../ui/ConfirmDialog.svelte';
-    import AuthService from "../../service/auth.service";
+    import AuthService, { currentUser } from "../../service/auth.service";
     import { getCssVariable } from "../../styles/style.helper";
     import { showError, showInfo } from '../../store/notification.store';
 
@@ -12,6 +12,16 @@
 
     const emailParts = email.split('@');
 	const authService = new AuthService();
+
+	async function copyLink(): Promise<void> {
+		try {
+			const link = `${location.origin}?share=${$currentUser.uid}`;
+			await navigator.clipboard.writeText(link);
+			showInfo('Copied link for sharing into clipboard.');
+		} catch (error) {
+			showError(error);
+		}
+	}
     
 	async function deleteProfile({ detail: accepted }) {
         showConfirmDelete = false;
@@ -59,6 +69,11 @@
 		<button title="Delete account '{email}'" 
 			on:click={() => showConfirmDelete = true}>
 			<span><i class='bx bx-error danger-text'></i> Delete profil</span>
+		</button>
+	</div>
+	<div class="row">
+		<button title="Copy link to share" on:click={copyLink}>
+			<i class='bx bx-link'></i> Copy link to share
 		</button>
 	</div>
 
