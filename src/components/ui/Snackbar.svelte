@@ -17,7 +17,7 @@
 <style lang="scss">
 section {
   position: fixed; 
-  z-index: 10;
+  z-index: 2e3;
   left: 0;
   bottom: 0;
   width: 100%;

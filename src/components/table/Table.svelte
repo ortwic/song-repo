@@ -101,7 +101,7 @@
 
   onDestroy(() => {
     unsubscribe();
-    $table.destroy();
+    $table?.destroy();
   });
 
   function isRequired(def: ColumnDefinition): boolean {

@@ -30,7 +30,7 @@ export default class ProgressBar {
         const s = redToGreenGradient(value - value * offset);
         const m = redToGreenGradient(value);
         const e = redToGreenGradient(value + (100 - value) * offset);
-        this.element.style.background = `linear-gradient(to right, ${s.hex()}, ${m.hex()}, ${e.hex()})`;
+        this.element.style.background = `linear-gradient(to right, ${s.hex()}, ${m.hex()} ${value}%, ${e.hex()})`;
         this.element.style.boxShadow = `0 0 12px ${m.hex()}80`;
     }
 

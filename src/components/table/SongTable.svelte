@@ -18,7 +18,7 @@
     let table: Table;
     let currentRow: RowComponent;
 
-    const genreSelector = comboBoxEditor(Object.keys(genres));
+    const genreSelector = comboBoxEditor(genres.map(v => v.name));
 
     // https://tabulator.info/docs/5.4/edit#editor-list
     const columns: ColumnDefinition[] = [
@@ -37,7 +37,6 @@
       column("Labels", "tags", "14%", "string", autoFilter(), format.label, { editor: 'input', cellEdited: updateHandler() }),
       column("Learned", "learnedOn", "14%", "date", autoFilter(), format.timestamp, { editor: 'date', cellEdited: updateHandler() }),
       { title: "id", field: "id", visible: false },
-      { title: "uid", field: "uid", visible: false },
     ];
 
     onMount(async () => {
@@ -94,7 +93,7 @@
     }
   
     $: if (table) {
-      table.setData($usersongs);
+      table.setData($usersongs, 'id');
       console.debug('Σ', $usersongs.length);
     }
 </script>

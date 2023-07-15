@@ -27,17 +27,22 @@ const omitUndefinedFields = (data: object) => {
     });
     return data;
 };
+export const uniqueKey = (...array: string[]) => array.join('').trim().replaceAll(/\W/g, '');
 
 export default class FirestoreService {
     private db = getFirestore(app);
 
     constructor(public path: string) {}
 
-    public getDocuments<T>(uid: string, ...constraints: QueryConstraint[]): Observable<T[]> {
+    public getDocuments<T>(uid?: string, ...constraints: QueryConstraint[]): Observable<T[]> {
         const items = collection(this.db, this.path) as CollectionReference<T>;
 
+        if (uid) {
+            constraints = [ where('uid', '==', uid), ...constraints ];
+        }
+
         // Query requires an index, see screenshot below
-        const q = query<T>(items, where('uid', '==', uid), orderBy('id'), ...constraints);
+        const q = query<T>(items, orderBy('id'), ...constraints);
         return collectionData<T>(q, { idField: 'id' }).pipe(startWith([]));
     }
 
