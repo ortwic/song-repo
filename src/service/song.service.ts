@@ -41,7 +41,7 @@ export default class SongService {
             return store.getDocuments(sharedUid, where('status', '==', 'done'));
         }
 
-        return of([]);
+        return of(undefined);
     }
 
     newSong(): UserSong {

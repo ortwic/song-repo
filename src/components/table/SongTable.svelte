@@ -46,9 +46,6 @@
       // } else {
         await import('tabulator-tables/dist/css/tabulator_bulma.min.css');
       // }
-      
-      // for debugging only
-      // if (import.meta.env.DEV) setTimeout(() => {if (!$currentUser) showSamples()}, 20);      
     });
 
     async function addRow(): Promise<void> {
@@ -94,7 +91,6 @@
   
     $: if (table) {
       table.setData($usersongs, 'id');
-      console.debug('Σ', $usersongs.length);
     }
 </script>
  

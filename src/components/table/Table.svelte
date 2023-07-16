@@ -154,8 +154,10 @@
     if ($table && data) {
       if (data.length && idField && areEquivalent($table.getData())) {
         await $table.updateData(data);
+        console.debug('upd', data.length);
       } else {
         await $table.setData(data);
+        console.debug('set', data.length);
       }
     }      
   }

@@ -9,7 +9,6 @@ import {
 } from 'firebase/auth';
 import { authState } from 'rxfire/auth';
 import { auth } from './firebase.setup';
-import { usersongs } from '../store/song.store';
 import { currentMenu } from '../store/app.store';
 import { showInfo } from '../store/notification.store';
 
@@ -39,7 +38,6 @@ export default class AuthService {
 
     async signOut(): Promise<void> {
         await signOut(auth);
-        usersongs.set([]);
     }
 
     async deleteUser(): Promise<void> {

@@ -3,6 +3,7 @@
     import AuthService, { currentUser } from "../../service/auth.service";
     import { getCssVariable } from "../../styles/style.helper";
     import { showError, showInfo } from '../../store/notification.store';
+    import { usersongs } from '../../store/song.store';
 
     export let displayName: string;
     export let photoURL: string;
@@ -21,6 +22,12 @@
 		} catch (error) {
 			showError(error);
 		}
+	}
+
+	async function signOut(): Promise<void> {
+		await authService.signOut();
+        usersongs.set([]);
+    	history.pushState(null, '', location.origin);
 	}
     
 	async function deleteProfile({ detail: accepted }) {
@@ -61,7 +68,7 @@
 	</span> 
 
 	<div class="row">
-		<button data-close title="Sign out '{email}'" on:click={authService.signOut}>
+		<button data-close title="Sign out '{email}'" on:click={signOut}>
 			<span><i class='bx bx-log-out-circle'></i> Logout</span>
 		</button>
 	</div>

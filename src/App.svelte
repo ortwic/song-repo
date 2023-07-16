@@ -1,5 +1,6 @@
 <script lang="ts">
   import { map } from 'rxjs';
+  import type { User } from 'firebase/auth';
   import Login from './components/menus/Login.svelte';
   import Signup from './components/menus/Signup.svelte';
   import Profil from './components/menus/Profil.svelte';
@@ -14,12 +15,13 @@
   import { currentMenu } from './store/app.store';
 
   const title = `${import.meta.env.DEV ? 'DEV' : 'My'} song repertory`;
-  const usertitle = currentUser.pipe(map(getUserTitle))
+  const usertitle = currentUser.pipe(map(setPageInfo))
   const version = '0.1.3';
   const footer = `Version ${version} alpha`;
 
-  function getUserTitle(user: { displayName: string; email: string; }): string {
+  function setPageInfo(user: User): string {
     if (user) {
+      history.pushState(null, '', `${location.origin}#${user.uid}`);
       const name = user.displayName || user.email.split('@')[0]?.replace('.', ' ');
       return `${name}'s known songs`;
     }

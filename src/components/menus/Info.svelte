@@ -4,8 +4,15 @@
 	import { currentUser } from '../../service/auth.service';
     import { usersongs } from "../../store/song.store";
     import type { UserSong } from "../../model/song.model";
+    import { onMount } from 'svelte';
 
     let feedbackForm: FeedbackDialog;
+
+    onMount(async () => {
+      if (location.search.indexOf('demo=samples') > 1 || location.hash.indexOf('samples')) {
+        await loadSamples();
+      }   
+    })
     
     async function loadSamples(): Promise<void> {
         const { default: samples } = await import('../../data/samples.json');
