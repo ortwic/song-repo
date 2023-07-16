@@ -1,32 +1,10 @@
 <script lang='ts'>
     import '../../styles/menu.scss';
     import FeedbackDialog from './FeedbackDialog.svelte';
-	import { currentUser } from '../../service/auth.service';
-    import { usersongs } from "../../store/song.store";
-    import type { UserSong } from "../../model/song.model";
-    import { onMount } from 'svelte';
 
     let feedbackForm: FeedbackDialog;
-
-    onMount(async () => {
-      if (location.search.indexOf('demo=samples') > 1 || location.hash.indexOf('samples')) {
-        await loadSamples();
-      }   
-    })
-    
-    async function loadSamples(): Promise<void> {
-        const { default: samples } = await import('../../data/samples.json');
-        usersongs.set(samples as unknown as UserSong[]);
-    }
 </script>
 
-{#if !$currentUser}
-<div class="row">
-    <button data-close title="Load demo sample data" on:click={loadSamples}>
-        <i class='bx bx-test-tube'></i> Demo samples
-    </button>
-</div>
-{/if}
 <div class="row">
   <button data-close title="Send feedback" on:click={feedbackForm.show}>
       <span><i class='bx bx-mail-send'></i> Send feedback</span>

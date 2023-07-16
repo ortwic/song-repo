@@ -28,14 +28,14 @@
 </aside>
 
 <style lang="scss">
-@use "../../styles/menu.scss";
+@use "../../styles/vars.scss";
 
 aside {
     display: flex;
     flex-direction: column;
     position: absolute;
     right: 0;
-    width: menu.$sidebar-width;
+    width: vars.$sidebar-width;
     height: 100%;
     z-index: 100;
     background-color: var(--primback);

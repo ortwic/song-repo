@@ -1,6 +1,7 @@
 <script lang="ts">
     import '../../styles/table.scss';
     import { onMount } from 'svelte';
+    import { marked } from 'marked';
     import type { ColumnDefinition, CellComponent, CellEditEventCallback, RowComponent } from 'tabulator-tables';
     import { column, comboBoxEditor } from './templates/column.helper';
     import { autoFilter, rangeFilter } from './templates/filter.helper';
@@ -8,11 +9,13 @@
     import Table from './Table.svelte'
     import FileDrop from './FileDrop.svelte';
     import AddButton from '../ui/AddButton.svelte';
+    import { currentUser } from '../../service/auth.service';
     import SongService from '../../service/song.service';
     import type { UserSong } from '../../model/song.model';
     import { showError, showInfo, showWarn } from '../../store/notification.store';
     import { usersongs } from '../../store/song.store';
     import genres from '../../data/genres.json';
+    import welcome from '../../data/welcome.json';
     
     let service = new SongService();
     let table: Table;
@@ -46,7 +49,16 @@
       // } else {
         await import('tabulator-tables/dist/css/tabulator_bulma.min.css');
       // }
+      
+      await loadSamples();
     });
+    
+    async function loadSamples(): Promise<void> {
+        if (location.href.endsWith('samples')) {
+            const { default: samples } = await import('../../data/samples.json');
+            usersongs.set(samples as unknown as UserSong[]);
+        }
+    }
 
     async function addRow(): Promise<void> {
       if (!service.hasUser()) {
@@ -88,6 +100,11 @@
         showError(error.message);
       }
     }
+
+    function welcomeText(): string {
+      const lang = navigator.language.startsWith('de') ? 'de-DE' : 'en-US';
+      return `<div class='welcome'>${marked(welcome[lang])}</div>`;
+    }
   
     $: if (table) {
       table.setData($usersongs, 'id');
@@ -96,7 +113,7 @@
  
 <FileDrop on:enter={() => showInfo('Start importing...')} on:addJson={({ detail }) => importJSON(detail)}>
   <Table bind:this={table} {columns}
-    placeholder='No songs added.' 
+    placeholder={$currentUser ? 'No songs added.' : welcomeText()}
     exportTitle='My Song Repertory'
     groupHeader={format.groupBy}
     on:error={({ detail }) => showError(detail)}

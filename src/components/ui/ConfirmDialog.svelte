@@ -35,7 +35,7 @@
 {/if}
 
 <style lang="scss">
-@use "../../styles/menu.scss";
+@use "../../styles/vars.scss";
 
 @mixin layout {
     display: flex;
@@ -62,7 +62,7 @@ div.max {
     top: 0;
     left: 0;
     bottom: 0;
-    right: menu.$sidebar-width;
+    right: vars.$sidebar-width;
     border-right: 1px solid gray;
 }
 
