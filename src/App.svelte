@@ -17,11 +17,13 @@
   const title = `${import.meta.env.DEV ? 'DEV' : 'My'} song repertory`;
   const usertitle = currentUser.pipe(map(setPageInfo))
   const version = '0.1.3';
-  const footer = `Version ${version} alpha`;
+  const footer = `Version ${version} beta`;
 
   function setPageInfo(user: User): string {
     if (user) {
-      history.pushState(null, '', `${location.origin}#${user.uid}`);
+      if (location.href.indexOf('@') < 0) {
+        history.pushState(null, '', `${location.origin}/#${user.uid}`);
+      }
       const name = user.displayName || user.email.split('@')[0]?.replace('.', ' ');
       return `${name}'s known songs`;
     }

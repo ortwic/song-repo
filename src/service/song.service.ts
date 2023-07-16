@@ -6,7 +6,7 @@ import { usersongs } from '../store/song.store';
 import { Timestamp, where } from 'firebase/firestore';
 
 const sharedFields: (keyof UserSong)[] = ['id', 'artist', 'title', 'genre', 'style', 'key', 'time', 'bpm'];
-const sharedUid = new URLSearchParams(location.search).get('share');
+const sharedUid = location.href.split('@')[1];
 const store = new FirestoreService('usersongs');
 
 export default class SongService {
