@@ -119,7 +119,10 @@
     columns?.filter(c => c.headerMenu).forEach(c => c.headerMenu.push({
       label: `Group by ${c.title.toLowerCase()}`,
       action: (ev: Event, column: ColumnComponent) => toggleGroup(c.field, column.getElement())
-    }, { separator: true }, ...columnSelectors));
+    }, { separator: true }, {
+      label: 'Choose columns',
+      menu: [ ...columnSelectors ]
+    }));
 
     unsubscribe = downloadQueue.subscribe((items) => download(table, items));
     dispatch('init', table);

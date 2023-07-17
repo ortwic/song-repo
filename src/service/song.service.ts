@@ -1,4 +1,4 @@
-import { Observable, of, switchMap } from 'rxjs';
+import { Observable, of, switchMap, from, map } from 'rxjs';
 import { currentUser } from './auth.service';
 import FirestoreService, { uniqueKey } from './firestore.service';
 import type { UserSong } from '../model/song.model';
@@ -8,6 +8,9 @@ import { Timestamp, where } from 'firebase/firestore';
 const sharedFields: (keyof UserSong)[] = ['id', 'artist', 'title', 'genre', 'style', 'key', 'time', 'bpm'];
 const sharedUid = location.href.split('@')[1];
 const store = new FirestoreService('usersongs');
+
+export const samples = from(import('../data/samples.json'))
+    .pipe(map(({ default: data }) => data as unknown as UserSong[]));
 
 export default class SongService {
     private uid = '';

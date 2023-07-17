@@ -74,6 +74,11 @@ div.tabulator {
             background-color: var(--primback);
         }
     }
+    
+    div.tabulator-placeholder:has(div.tabulator-placeholder-contents div.welcome) {
+        justify-content: start;
+        align-items: start;
+    }
 
     div.tabulator-placeholder-contents {
         color: var(--primghost);
