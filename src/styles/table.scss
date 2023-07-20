@@ -1,20 +1,20 @@
 div#table.tabulator {
-    div.tabulator-tableholder {
-        div.tabulator-header {
-            background-color: var(--primback);
-            border-bottom: 1px solid silver;
-            
-            div.tabulator-col {
-                border-right: 1px solid silver;
-                // height: 68px;
-            }
-            
-            span.tabulator-col-resize-handle {
-                box-sizing: border-box;
-                // height: 68px;
-            }
+    div.tabulator-header {
+        background-color: var(--primback);
+        border-bottom: 1px solid silver;
+        
+        div.tabulator-col {
+            border-right: 1px solid silver;
+            // height: 68px;
         }
+        
+        span.tabulator-col-resize-handle {
+            box-sizing: border-box;
+            // height: 68px;
+        }
+    }
 
+    div.tabulator-tableholder {
         div.tabulator-table {
             div.tabulator-group {
                 border-top: 0;
