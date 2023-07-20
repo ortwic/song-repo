@@ -17,14 +17,14 @@ export const autoFilter = (operator: FilterType = 'like'): Partial<ColumnDefinit
 
 export const rangeFilter = (min = 0, max = 100, step = 5): Partial<ColumnDefinition> => {
     return {
-        headerFilter: minMaxFilterEditor,
+        headerFilter: minMaxFilterEditorElement,
         headerFilterParams: { min, max, step },
         headerFilterFunc: minMaxFilterFunction,
     };
 };
 
 // copied from example // https://tabulator.info/examples/5.5#filter-header
-const minMaxFilterEditor = (cell, onRendered, success, cancel, editorParams) => {
+const minMaxFilterEditorElement = (cell, _onRendered, success, cancel, editorParams) => {
     const container = document.createElement('span');
 
     //create and style inputs
@@ -73,26 +73,33 @@ const minMaxFilterEditor = (cell, onRendered, success, cancel, editorParams) => 
     return container;
 };
 
-//custom max min filter function
-function minMaxFilterFunction(headerValue, rowValue, rowData, filterParams) {
-    //headerValue - the value of the header filter element
-    //rowValue - the value of the column in this row
-    //rowData - the data for the row being filtered
-    //filterParams - params object passed to the headerFilterFuncParams property
+interface HeaderMinMaxValue {
+    start?: number;
+    end?: number;
+}
 
-    if (rowValue) {
-        if (headerValue.start != '') {
-            if (headerValue.end != '') {
-                return rowValue >= headerValue.start && rowValue <= headerValue.end;
+/**
+ * custom max min filter function
+ * @param headerValue - the value of the header filter element
+ * @param rowValue - the value of the column in this row
+ * @param rowData - the data for the row being filtered
+ * @param filterParams - params object passed to the headerFilterFuncParams property
+ * @returns must return a boolean, true if it passes the filter.
+ */
+function minMaxFilterFunction(headerValue: HeaderMinMaxValue, rowValue: number) {
+    const hasValue = <T>(value: T) => value === 0 || value;
+    
+    if (hasValue(rowValue)) {
+        if (hasValue(headerValue.start)) {
+            if (hasValue(headerValue.end)) {
+                return +rowValue >= headerValue.start && +rowValue <= headerValue.end;
             } else {
-                return rowValue >= headerValue.start;
+                return +rowValue >= headerValue.start;
             }
-        } else {
-            if (headerValue.end != '') {
-                return rowValue <= headerValue.end;
-            }
+        } else if (hasValue(headerValue.end)) {
+            return +rowValue <= headerValue.end;
         }
     }
 
-    return true; //must return a boolean, true if it passes the filter.
+    return true;
 }

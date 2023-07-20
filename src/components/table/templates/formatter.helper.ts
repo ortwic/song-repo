@@ -1,7 +1,7 @@
 import Color from 'color';
 import { marked } from 'marked';
 import { Timestamp } from 'firebase/firestore';
-import type { ColumnDefinition, CellComponent, GroupComponent } from 'tabulator-tables';
+import type { ColumnDefinition, CellComponent } from 'tabulator-tables';
 import ProgressBar from './ProgressBar.class';
 import genres from '../../../data/genres.json';
 import colornames from '../../../data/colornames.json';
@@ -97,7 +97,7 @@ export const timestampFormatter: Partial<ColumnDefinition> = {
     },
 };
 
-export const groupByFormatter = (value: unknown, count: number, data: UserSong[], group: GroupComponent) => {
+export const groupByFormatter = (value: unknown, count: number, data: UserSong[]) => {
     const sumUp = (accumulator: number, current: number) => accumulator + current;
     let info = `<span class='label' style='min-width: 2em'>Σ ${count}</span>`;
     if (data.length) {
