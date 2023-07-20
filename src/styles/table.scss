@@ -82,31 +82,27 @@ div#table.tabulator {
             align-items: start;
     
             div.tabulator-placeholder-contents {
-                color: var(--primghost);
-        
-                div.welcome {
-                    margin: 1em 10%;
-                    color: var(--text);
-                    font-weight: normal;
-                    text-align: left;
-                    max-width: 40em;
-        
-                    a, h1, h2 {
-                        color: var(--primary);
-        
-                        i, em {
-                            text-decoration: underline;
-                            color: var(--primary);
-                        }
-                    }
-        
-                    a:hover {
-                        text-decoration: underline;
-                    }
-        
+                padding: 1em 5%;
+                color: var(--text);
+                font-weight: normal;
+                text-align: left;
+                max-width: 40em;
+    
+                a, h1, h2 {
+                    color: var(--primary);
+    
                     i, em {
-                        color: var(--primselect);
+                        text-decoration: underline;
+                        color: var(--primary);
                     }
+                }
+    
+                a:hover {
+                    text-decoration: underline;
+                }
+    
+                i, em {
+                    color: var(--primselect);
                 }
             }
         }

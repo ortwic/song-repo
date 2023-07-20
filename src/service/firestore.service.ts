@@ -38,7 +38,7 @@ export default class FirestoreService {
         const items = collection(this.db, this.path) as CollectionReference<T>;
 
         if (uid) {
-            constraints = [ where('uid', '==', uid), ...constraints ];
+            constraints = [where('uid', '==', uid), ...constraints];
         }
 
         // Query requires an index, see screenshot below

@@ -10,8 +10,7 @@
     import Table from './Table.svelte'
     import FileDrop from './FileDrop.svelte';
     import AddButton from '../ui/AddButton.svelte';
-    import { currentUser } from '../../service/auth.service';
-    import SongService from '../../service/song.service';
+    import SongService, { samples } from '../../service/song.service';
     import type { UserSong } from '../../model/song.model';
     import { showError, showInfo, showWarn } from '../../store/notification.store';
     import { usersongs } from '../../store/song.store';
@@ -53,13 +52,13 @@
         await import('tabulator-tables/dist/css/tabulator_bulma.min.css');
       // }
       
-      await loadSamples();
+      window.addEventListener('popstate', loadSamples);
+      loadSamples();
     });
     
-    async function loadSamples(): Promise<void> {
-      if (location.href.endsWith('samples')) {
-        const { default: samples } = await import('../../data/samples.json');
-        usersongs.set(samples as unknown as UserSong[]);
+    function loadSamples(): void {
+      if (!service.hasUser()) {
+        usersongs.set(location.href.endsWith('samples') ? $samples : []);
       }
     }
 
@@ -103,10 +102,6 @@
         showError(error.message);
       }
     }
-
-    function welcomeText(): string {
-      return `<div class='welcome'>${marked(welcome[lang], { mangle: false, headerIds: false })}</div>`;
-    }
   
     $: if (table) {
       table.setData($usersongs, 'id');
@@ -117,7 +112,7 @@
  
 <FileDrop on:enter={() => showInfo('Start importing...')} on:addJson={({ detail }) => importJSON(detail)}>
   <Table bind:this={table} {columns}
-    placeholder={$currentUser ? 'No songs added.' : welcomeText()}
+    placeholder={marked(welcome[lang], { mangle: false, headerIds: false })}
     exportTitle='My Song Repertory'
     groupHeader={format.groupBy}
     on:error={({ detail }) => showError(detail)}

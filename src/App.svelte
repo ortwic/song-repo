@@ -16,7 +16,7 @@
 
   const title = `${import.meta.env.DEV ? 'DEV' : 'My'} song repertory`;
   const usertitle = currentUser.pipe(map(setPageInfo))
-  const version = '0.1.3';
+  const version = '0.1.4';
   const footer = `Version ${version} beta`;
 
   function setPageInfo(user: User): string {

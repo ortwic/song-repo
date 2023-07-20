@@ -9,8 +9,10 @@ const sharedFields: (keyof UserSong)[] = ['id', 'artist', 'title', 'genre', 'sty
 const sharedUid = location.href.split('@')[1];
 const store = new FirestoreService('usersongs');
 
-export const samples = from(import('../data/samples.json'))
+const samplesFromFile = from(import('../data/samples.json'))
     .pipe(map(({ default: data }) => data as unknown as UserSong[]));
+export const samples = store.getDocuments('R3VSxFand4d3helVN7aTxWNmzDi1')
+    .pipe(switchMap(docs => docs.length ? of(docs as UserSong[]) : samplesFromFile));
 
 export default class SongService {
     private uid = '';
@@ -20,14 +22,14 @@ export default class SongService {
     private appendId = (song: UserSong, ...more: object[]): UserSong =>
         !song.id && song.title
             ? Object.assign(
-                  song,
-                  {
-                      id: uniqueKey(this.uid?.slice(0, 6) ?? '', song.artist ?? 'n/a', song.title),
-                      uid: this.uid,
-                      createdAt: new Date(),
-                  },
-                  ...more
-              )
+                song,
+                {
+                    id: uniqueKey(this.uid?.slice(0, 6) ?? '', song.artist ?? 'n/a', song.title),
+                    uid: this.uid,
+                    createdAt: new Date(),
+                },
+                ...more
+            )
             : song;
 
     constructor() {
