@@ -30,7 +30,7 @@
         <label for="email">Email</label>
         <input id="email" autocomplete="email" type="text" placeholder="email" bind:value={email}>
         <label for="password">Password</label>
-        <input id="password" autocomplete="password" type="password" placeholder="password" bind:value={password}>
+        <input id="password" type="password" placeholder="password" bind:value={password}>
         <br/>
     </div>
     <div class="row">

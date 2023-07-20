@@ -6,6 +6,7 @@
     import { column, comboBoxEditor } from './templates/column.helper';
     import { autoFilter, rangeFilter } from './templates/filter.helper';
     import format from './templates/formatter.helper';
+    import StatusElement from './templates/StatusElement.svelte';
     import Table from './Table.svelte'
     import FileDrop from './FileDrop.svelte';
     import AddButton from '../ui/AddButton.svelte';
@@ -17,16 +18,18 @@
     import genres from '../../data/genres.json';
     import welcome from '../../data/welcome.json';
     
+    const lang = navigator.language.startsWith('de') ? 'de-DE' : 'en-US';
     let service = new SongService();
     let table: Table;
     let currentRow: RowComponent;
+    let statusFormatter: (cell: CellComponent)  => string;
 
     const genreSelector = comboBoxEditor(genres.map(v => v.name));
 
     // https://tabulator.info/docs/5.4/edit#editor-list
     const columns: ColumnDefinition[] = [
       column("Favorite", "fav", "50", undefined, format.favColumn, { cellEdited: updateHandler() }),
-      column("Status", "status", "50", "string", autoFilter(), format.status),
+      column("Status", "status", "50", "string", autoFilter(), { hozAlign: 'center', formatter: (cell) => statusFormatter(cell), cellEdited: updateHandler() }),
       column("Progress", "progress", "14%", "number", rangeFilter(), format.progress, { cellEdited: updateHandler() }),
       column("Genre", "genre", "13%", "string", autoFilter(), format.genre, genreSelector, { cellEdited: updateHandler('style') }),
       column("Style", "style", "13%", "string", autoFilter(), comboBoxEditor(), { cellEdited: updateHandler('artist') }),
@@ -54,10 +57,10 @@
     });
     
     async function loadSamples(): Promise<void> {
-        if (location.href.endsWith('samples')) {
-            const { default: samples } = await import('../../data/samples.json');
-            usersongs.set(samples as unknown as UserSong[]);
-        }
+      if (location.href.endsWith('samples')) {
+        const { default: samples } = await import('../../data/samples.json');
+        usersongs.set(samples as unknown as UserSong[]);
+      }
     }
 
     async function addRow(): Promise<void> {
@@ -102,14 +105,15 @@
     }
 
     function welcomeText(): string {
-      const lang = navigator.language.startsWith('de') ? 'de-DE' : 'en-US';
-      return `<div class='welcome'>${marked(welcome[lang])}</div>`;
+      return `<div class='welcome'>${marked(welcome[lang], { mangle: false, headerIds: false })}</div>`;
     }
   
     $: if (table) {
       table.setData($usersongs, 'id');
     }
 </script>
+
+<StatusElement bind:statusFormatter on:delete={({ detail }) => deleteRow(detail)}/>
  
 <FileDrop on:enter={() => showInfo('Start importing...')} on:addJson={({ detail }) => importJSON(detail)}>
   <Table bind:this={table} {columns}
@@ -117,7 +121,6 @@
     exportTitle='My Song Repertory'
     groupHeader={format.groupBy}
     on:error={({ detail }) => showError(detail)}
-    on:deleteRow={({ detail }) => deleteRow(detail)}
   />
 </FileDrop>
 

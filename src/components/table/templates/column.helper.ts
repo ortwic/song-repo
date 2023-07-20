@@ -20,18 +20,18 @@ export const column = (
     width: string,
     sorter: Sorter = 'string',
     ...more: Partial<ColumnDefinition>[]
-    ): ColumnDefinition => {
-        return Object.assign(
-            {
-                title,
-                field,
-                width,
-                sorter,
-                resizable: true,
-                headerMenu: [],
-            },
-            ...more
-        );
+): ColumnDefinition => {
+    return Object.assign(
+        {
+            title,
+            field,
+            width,
+            sorter,
+            resizable: true,
+            headerMenu: [],
+        },
+        ...more
+    );
 };
 
 export const autoColumns = <T>(data: T[]) => {

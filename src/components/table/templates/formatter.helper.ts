@@ -28,17 +28,6 @@ export const favColumn: Partial<ColumnDefinition> = {
     },
 };
 
-export const statusFormatter: Partial<ColumnDefinition> = {
-    hozAlign: 'center',
-    formatter(cell: CellComponent): string {
-        const value = cell.getValue().toString();
-        const element = cell.getElement();
-        element.title = value;
-        element.classList.add('status', value);
-        return `<span style='display:none'>${value}</span>`;
-    },
-};
-
 export const progressFormatter: Partial<ColumnDefinition> = {
     formatter(cell: CellComponent): HTMLElement | string {
         const song = cell.getData() as UserSong;
@@ -73,7 +62,7 @@ export const genreFormatter: Partial<ColumnDefinition> = {
                 element.style.color = Color(bgColor).isDark() ? 'white' : 'black';
                 element.style.backgroundColor = bgColor;
             }
-        } catch {}
+        } catch { /* empty */ }
         return value;
     },
 };
@@ -108,7 +97,6 @@ export const timestampFormatter: Partial<ColumnDefinition> = {
     },
 };
 
-
 export const groupByFormatter = (value: unknown, count: number, data: UserSong[], group: GroupComponent) => {
     const sumUp = (accumulator: number, current: number) => accumulator + current;
     let info = `<span class='label' style='min-width: 2em'>Σ ${count}</span>`;
@@ -126,7 +114,6 @@ export const groupByFormatter = (value: unknown, count: number, data: UserSong[]
 
 export default {
     favColumn,
-    status: statusFormatter,
     progress: progressFormatter,
     genre: genreFormatter,
     marked: markedFormatter,

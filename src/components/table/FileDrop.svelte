@@ -26,7 +26,7 @@
     }
 </script>
 
-<div title='Drop file here to import data'
+<div title='Drop file here to import data' aria-hidden="true"
   on:dragover|preventDefault="{() => { }}" 
   on:dragenter|preventDefault="{() => dispatch('enter')}" 
   on:dragleave|preventDefault="{() => { }}"

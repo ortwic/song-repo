@@ -20,8 +20,7 @@
         {/if}
         <slot name="footer"></slot>
         <div class="info">
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <div on:click={() => counter++} on:contextmenu={() => counter = counter > 5 ? 5e5 : 0}></div>
+            <div aria-hidden="true" on:click={() => counter++} on:contextmenu={() => counter = counter > 5 ? 5e5 : 0}></div>
             {footer}
         </div>
     </footer>

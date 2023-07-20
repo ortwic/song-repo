@@ -1,4 +1,4 @@
-import { redToGreenGradient } from "../../../styles/style.helper";
+import { redToGreenGradient } from '../../../styles/style.helper';
 
 export default class ProgressBar {
     private isMouseDown = false;
@@ -23,10 +23,10 @@ export default class ProgressBar {
         this.progressBar.style.marginLeft = value + '%';
         this.percentValue.textContent = value + '%';
 
-        this.setColorGradient(value, .3);
+        this.setColorGradient(value, 0.3);
     }
 
-    private setColorGradient(value: number, offset: number):void  {        
+    private setColorGradient(value: number, offset: number): void {
         const s = redToGreenGradient(value - value * offset);
         const m = redToGreenGradient(value);
         const e = redToGreenGradient(value + (100 - value) * offset);

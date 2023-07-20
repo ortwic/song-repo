@@ -51,9 +51,9 @@
 		<label for="email">Email</label>
 		<input id="email" autocomplete="email" type="email" placeholder="email" bind:value={email}>
 		<label for="password">Password</label>
-		<input id="password" autocomplete="password" type="password" placeholder="password" bind:value={password1}>
+		<input id="password" type="password" placeholder="password" bind:value={password1}>
 		<label for="new-password">Repeat password</label>
-		<input id="new-password" autocomplete="new-password" type="password" placeholder="repeat password" bind:value={password2}>
+		<input id="new-password" type="password" placeholder="repeat password" bind:value={password2}>
 		<br/>
 	</div>
     <div class="row">

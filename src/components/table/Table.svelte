@@ -23,30 +23,6 @@
   let unsubscribe = () => {};
 
   const dispatch = createEventDispatcher();
-  const rowContextMenu = [
-    {
-      label: "<span class='fa-check-square'>Select Row</span>",
-      action(ev: Event, row: RowComponent){
-        if (row.isSelected()) {
-          row.deselect();
-        } else {
-          row.select();
-        }
-      }
-    },
-    {
-      label: "<i class='bx bx-folder-open'></i> Advanced",
-      menu: [
-        {
-          label: "<span class='fa-trash'> Delete Row</span>",
-          action(ev: Event, row: RowComponent) {
-            row.delete();
-            dispatch('deleteRow', row.getData());
-          }
-        }
-      ]
-    }
-  ];
   const groupContextMenu = [
     {
       label: 'Open all', // TODO not working
@@ -69,7 +45,6 @@
       placeholder,
       clipboard: true,
       movableColumns: true,
-      rowContextMenu,
       pagination: false,
       groupHeader,
       groupToggleElement: 'header',
