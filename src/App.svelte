@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { marked } from 'marked';
   import { map } from 'rxjs';
   import type { User } from 'firebase/auth';
   import Login from './components/menus/Login.svelte';
@@ -12,17 +13,21 @@
   import Snackbar from './components/ui/Snackbar.svelte';
   import type { MenuPages } from './model/types';
   import { currentUser } from './service/auth.service';
-  import { currentMenu } from './store/app.store';
-
+  import { currentMenu, showTable } from './store/app.store';
+  import welcome from './data/welcome.json';
+    
   const title = `${import.meta.env.DEV ? 'DEV' : 'My'} song repertory`;
-  const usertitle = currentUser.pipe(map(setPageInfo))
+  const usertitle = currentUser.pipe(map(setPageInfo));
+  const lang = navigator.language.startsWith('de') ? 'de-DE' : 'en-US';
   const version = '0.1.4';
   const footer = `Version ${version} beta`;
 
   function setPageInfo(user: User): string {
     if (user) {
-      if (location.href.indexOf('@') < 0) {
-        history.pushState(null, '', `${location.origin}/#${user.uid}`);
+      showTable.set(true);
+      const isNotShared = location.href.indexOf('@') < 0;
+      if (isNotShared) {
+          history.pushState(null, '', `${location.origin}/#${user.uid}`);
       }
       const name = user.displayName || user.email.split('@')[0]?.replace('.', ' ');
       return `${name}'s known songs`;
@@ -30,7 +35,7 @@
     return `${title} | Login`;
   }
 
-  function submit(ev: SubmitEvent) {
+  function handleMenuNav(ev: SubmitEvent) {
     const target = ev.submitter.getAttribute('data-target') as MenuPages;
     if (target) {
       currentMenu.set(target);
@@ -47,7 +52,7 @@
 </svelte:head>
 
 
-<form on:submit|preventDefault={submit}>
+<form on:submit|preventDefault={handleMenuNav}>
   <header>
     <MenuButton target='login' />
   </header>
@@ -76,7 +81,13 @@
 </form>
 
 <main> 
+  {#if $showTable}
   <SongTable />
+  {:else}
+    <div id='welcome'>
+      {@html marked(welcome[lang], { mangle: false, headerIds: false })}
+    </div>
+  {/if}
 </main>
 
 <Snackbar />

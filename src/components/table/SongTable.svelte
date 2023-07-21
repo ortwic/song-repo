@@ -1,7 +1,6 @@
 <script lang="ts">
     import '../../styles/table.scss';
     import { onMount } from 'svelte';
-    import { marked } from 'marked';
     import type { ColumnDefinition, CellComponent, CellEditEventCallback, RowComponent } from 'tabulator-tables';
     import { column, comboBoxEditor } from './templates/column.helper';
     import { autoFilter, rangeFilter } from './templates/filter.helper';
@@ -15,9 +14,6 @@
     import { showError, showInfo, showWarn } from '../../store/notification.store';
     import { usersongs } from '../../store/song.store';
     import genres from '../../data/genres.json';
-    import welcome from '../../data/welcome.json';
-    
-    const lang = navigator.language.startsWith('de') ? 'de-DE' : 'en-US';
     let service = new SongService();
     let table: Table;
     let currentRow: RowComponent;
@@ -109,10 +105,10 @@
 </script>
 
 <StatusElement bind:statusFormatter on:delete={({ detail }) => deleteRow(detail)}/>
- 
+
 <FileDrop on:enter={() => showInfo('Start importing...')} on:addJson={({ detail }) => importJSON(detail)}>
   <Table bind:this={table} {columns}
-    placeholder={marked(welcome[lang], { mangle: false, headerIds: false })}
+    placeholder='No songs added.'
     exportTitle='My Song Repertory'
     groupHeader={format.groupBy}
     on:error={({ detail }) => showError(detail)}
