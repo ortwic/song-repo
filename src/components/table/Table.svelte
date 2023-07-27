@@ -49,7 +49,7 @@
 
       data.forEach(({ title, value }) => {
           let item = document.createElement("div");
-          item.innerHTML = `<label>${title}</label><br/>${value}`;
+          item.innerHTML = `<label>${title}</label><p>${value !== undefined ? value : ''}</p>`;
           list.appendChild(item);
       });
       return list;
@@ -113,17 +113,8 @@
   }
 
   function handleTableBuilt(table: TabulatorFull) {
-    const columnSelectors = table.getColumns()
-      .filter(c => !isRequired(c.getDefinition()))
-      .map(column => toggleVisibilityItem(column));
-    
-    columns?.filter(c => c.headerMenu).forEach(c => c.headerMenu.push({
-      label: `Group by ${c.title.toLowerCase()}`,
-      action: (ev: Event, column: ColumnComponent) => toggleGroup(c.field, column.getElement())
-    }, { separator: true }, {
-      label: 'Choose columns',
-      menu: [ ...columnSelectors ]
-    }));
+    initHeaderMenu(table);
+    initGroupBy(table);
 
     unsubscribe = downloadQueue.subscribe((items) => download(table, items));
     dispatch('init', table);
@@ -163,7 +154,30 @@
         await $table.setData(data);
         console.debug('set', data.length);
       }
-    }      
+    }
+  }
+
+  function initHeaderMenu(table: TabulatorFull) {
+    const columnSelectors = table.getColumns()
+      .filter(c => !isRequired(c.getDefinition()))
+      .map(column => toggleVisibilityItem(column));
+
+    columns?.filter(c => c.headerMenu).forEach(c => c.headerMenu.push({
+      label: `Group by ${c.title.toLowerCase()}`,
+      action: (ev: Event, column: ColumnComponent) => toggleGroup(c.field, column.getElement())
+    }, { separator: true }, {
+      label: 'Choose columns',
+      menu: [ ...columnSelectors ]
+    }));
+  }
+
+  function initGroupBy(table: TabulatorFull) {
+    if (Array.isArray(table.options.groupBy)) {
+      table.options.groupBy.forEach(field => {
+        rowGroups[field] = true;
+        table.getColumn(field).getElement()?.classList.add('primary');
+      });
+    }
   }
 
   export function toggleGroup(field: string, element?: HTMLElement) {
