@@ -37,11 +37,37 @@
       }
     }
   ];
+
+  type CollapsedCellData = { field: string, title: string, value: string };
+  
+  const responsiveLayoutCollapseFormatter = (data: CollapsedCellData[]) => {
+    //data - an array of objects containing the column title and value for each cell
+    if (Object.keys(data).length) {
+      
+      const list = document.createElement("div");
+      list.classList.add('flex');
+
+      data.forEach(({ title, value }) => {
+          let item = document.createElement("div");
+          item.innerHTML = `<label>${title}</label><br/>${value}`;
+          list.appendChild(item);
+      });
+      return list;
+    }
+    return "";
+  };
   
   onMount(() => {
     const tableInstance = new TabulatorFull(tableContainer, {
-      columns,
+      columns: [ 
+        { title: '', formatter: "responsiveCollapse" , width:30, minWidth:30, hozAlign:"center", resizable:false, headerSort:false },
+        ...columns 
+      ],
       data,
+      layout: 'fitData',
+      responsiveLayout: 'collapse',
+      responsiveLayoutCollapseStartOpen: false,
+      responsiveLayoutCollapseFormatter,
       placeholder,
       clipboard: true,
       movableColumns: true,

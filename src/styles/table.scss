@@ -25,6 +25,14 @@ div#welcome {
     }
 }
 
+@mixin collapse-arrow {
+    content: '◥';
+    color: var(--primselect);
+    transform: rotate(45deg);
+    font-size: small;
+    transition: transform .2s ease-in-out;    
+}
+
 div#table.tabulator {
     div.tabulator-header {
         background-color: var(--primback);
@@ -46,6 +54,19 @@ div#table.tabulator {
             div.tabulator-group {
                 border-top: 0;
                 background-color: var(--primback);
+                
+                // &::before {
+                //     @include collapse-arrow();
+                // }
+
+                // &.tabulator-group-visible::before {
+                //     transform: rotate(90deg);
+                //     margin-left: 5px;
+                // }
+
+                // div.tabulator-group-toggle {
+                //     display: none;
+                // }
 
                 span {
                     display: inline-block;
@@ -84,6 +105,37 @@ div#table.tabulator {
             div.tabulator-cell {
                 p {
                     margin: 0;
+                }
+
+                div.tabulator-responsive-collapse-toggle {
+                    background-color: transparent;
+
+                    &::before {
+                        @include collapse-arrow();
+                    }
+
+                    &.open::before {
+                        transform: rotate(135deg);
+                    }
+                }
+            }
+
+            div.tabulator-responsive-collapse {
+                padding: 0;
+
+                div.flex {
+                    display: flex;
+                    justify-content: flex-start;
+                    align-content: center;
+                    flex-wrap: wrap;
+
+                    div {
+                        label {
+                            font-weight: 500;
+                        }
+
+                        padding: .2em 1em;
+                    }
                 }
             }
 
