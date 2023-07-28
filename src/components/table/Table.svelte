@@ -4,6 +4,7 @@
   import type { ColumnDefinition, GroupComponent, ColumnComponent, RowComponent } from 'tabulator-tables';
   import { onMount, createEventDispatcher, onDestroy } from 'svelte';
   import { Observable, fromEvent, map, take } from 'rxjs';
+  import { withResponsiveLayout } from './templates/responsive.helper';
   import { toggleVisibilityItem } from './templates/menu.helper';
   import { downloadQueue, type DowloadItem } from '../../store/download.store';
   import { showError } from '../../store/notification.store';
@@ -37,37 +38,12 @@
       }
     }
   ];
-
-  type CollapsedCellData = { field: string, title: string, value: string };
-  
-  const responsiveLayoutCollapseFormatter = (data: CollapsedCellData[]) => {
-    //data - an array of objects containing the column title and value for each cell
-    if (Object.keys(data).length) {
-      
-      const list = document.createElement("div");
-      list.classList.add('flex');
-
-      data.forEach(({ title, value }) => {
-          let item = document.createElement("div");
-          item.innerHTML = `<label>${title}</label><p>${value !== undefined ? value : ''}</p>`;
-          list.appendChild(item);
-      });
-      return list;
-    }
-    return "";
-  };
   
   onMount(() => {
-    const tableInstance = new TabulatorFull(tableContainer, {
-      columns: [ 
-        { title: '', formatter: "responsiveCollapse" , width:30, minWidth:30, hozAlign:"center", resizable:false, headerSort:false },
-        ...columns 
-      ],
+    const options = withResponsiveLayout({
+      columns,
       data,
       layout: 'fitData',
-      responsiveLayout: 'collapse',
-      responsiveLayoutCollapseStartOpen: false,
-      responsiveLayoutCollapseFormatter,
       placeholder,
       clipboard: true,
       movableColumns: true,
@@ -96,6 +72,7 @@
         }
       }
     });
+    const tableInstance = new TabulatorFull(tableContainer, options);
     
     table = fromEvent(tableInstance, 'tableBuilt').pipe(take(1), map(() => handleTableBuilt(tableInstance)));
   });
