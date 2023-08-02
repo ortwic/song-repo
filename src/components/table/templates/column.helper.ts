@@ -1,4 +1,4 @@
-import type { ColumnDefinition, EditorParams } from 'tabulator-tables';
+import type { ColumnComponent, ColumnDefinition, EditorParams, RowComponent, SortDirection } from 'tabulator-tables';
 import { autoFilter } from './filter.helper';
 import { labelFormatter } from './formatter.helper';
 
@@ -12,7 +12,16 @@ type Sorter =
     | 'date'
     | 'time'
     | 'datetime'
-    | 'array';
+    | 'array'
+    | (<T>(
+        a: T,
+        b: T,
+        aRow: RowComponent,
+        bRow: RowComponent,
+        column: ColumnComponent,
+        dir: SortDirection,
+        sorterParams: NonNullable<unknown>,
+    ) => number);
 
 export const column = (
     title: string,

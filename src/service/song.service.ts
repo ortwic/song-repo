@@ -5,7 +5,7 @@ import type { UserSong } from '../model/song.model';
 import { usersongs } from '../store/song.store';
 import { Timestamp, where } from 'firebase/firestore';
 
-const sharedFields: (keyof UserSong)[] = ['id', 'artist', 'title', 'genre', 'style', 'key', 'time', 'bpm'];
+// const sharedFields: (keyof UserSong)[] = ['id', 'artist', 'title', 'genre', 'style', 'key', 'time', 'bpm'];
 const sharedUid = location.href.split('@')[1];
 const store = new FirestoreService('usersongs');
 
@@ -34,7 +34,10 @@ export default class SongService {
 
     constructor() {
         currentUser.subscribe((user) => (this.uid = user?.uid));
-        currentUser.pipe(switchMap(this.loadSongs)).subscribe((value) => usersongs.set(value));
+        currentUser.pipe(switchMap(this.loadSongs)).subscribe((value) => {
+            console.debug('load', value.length);
+            return usersongs.set(value);
+        });
     }
 
     private loadSongs(user: { uid: string }): Observable<UserSong[]> {
@@ -56,6 +59,7 @@ export default class SongService {
             fav: false,
             status: 'todo',
             progress: 0,
+            progressLogs: [],
             genre: '',
             style: '',
             artist: '',
@@ -68,13 +72,19 @@ export default class SongService {
             tags: [],
             learnedOn: new Date(),
             createdAt: Timestamp.now(),
+            changedAt: Timestamp.now(),
         };
     }
 
     async setSong(song: UserSong): Promise<string> {
         if (this.uid) {
             song = this.appendId(song);
+            song.changedAt = Timestamp.now();
+            if (song.progress !== undefined) {
+                song.progressLogs.push(song.progress);
+            }
             if (song.id) {
+                console.debug('send', [ song.id, song.status, song.progress]);
                 await store.setDocument(song, { merge: true });
                 return song.id;
             }

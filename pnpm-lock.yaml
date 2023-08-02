@@ -30,8 +30,8 @@ devDependencies:
     specifier: ^5.0.0
     version: 5.0.0
   '@types/tabulator-tables':
-    specifier: ^5.4.6
-    version: 5.4.6
+    specifier: ^5.4.10
+    version: 5.4.10
   '@typescript-eslint/eslint-plugin':
     specifier: ^6.1.0
     version: 6.1.0(@typescript-eslint/parser@6.1.0)(eslint@8.44.0)(typescript@5.1.6)
@@ -97,7 +97,7 @@ devDependencies:
     version: 3.59.2
   svelte-check:
     specifier: ^3.4.6
-    version: 3.4.6(@babel/core@7.22.9)(postcss@8.4.26)(sass@1.64.1)(svelte@3.59.2)
+    version: 3.4.6(@babel/core@7.22.9)(postcss@8.4.26)(sass@1.64.2)(svelte@3.59.2)
   svelte-eslint-parser:
     specifier: ^0.32.1
     version: 0.32.1(svelte@3.59.2)
@@ -106,7 +106,7 @@ devDependencies:
     version: 2.2.0
   svelte-preprocess-sass:
     specifier: ^2.0.1
-    version: 2.0.1(sass@1.64.1)
+    version: 2.0.1(sass@1.64.2)
   tabulator-tables:
     specifier: ^5.5.1
     version: 5.5.1
@@ -118,13 +118,13 @@ devDependencies:
     version: 5.1.6
   vite:
     specifier: ^4.4.4
-    version: 4.4.4(@types/node@20.4.2)(sass@1.64.1)
+    version: 4.4.4(@types/node@20.4.2)(sass@1.64.2)
   vite-plugin-pwa:
     specifier: ^0.16.4
     version: 0.16.4(vite@4.4.4)(workbox-build@7.0.0)(workbox-window@7.0.0)
   vitest:
     specifier: ^0.33.0
-    version: 0.33.0(jsdom@22.1.0)(sass@1.64.1)
+    version: 0.33.0(jsdom@22.1.0)(sass@1.64.2)
 
 packages:
 
@@ -232,7 +232,7 @@ packages:
       '@babel/compat-data': 7.22.9
       '@babel/core': 7.22.9
       '@babel/helper-validator-option': 7.22.5
-      browserslist: 4.21.9
+      browserslist: 4.21.10
       lru-cache: 5.1.1
       semver: 6.3.1
     dev: true
@@ -1281,7 +1281,7 @@ packages:
       babel-plugin-polyfill-corejs2: 0.4.5(@babel/core@7.22.9)
       babel-plugin-polyfill-corejs3: 0.8.3(@babel/core@7.22.9)
       babel-plugin-polyfill-regenerator: 0.5.2(@babel/core@7.22.9)
-      core-js-compat: 3.31.1
+      core-js-compat: 3.32.0
       semver: 6.3.1
     transitivePeerDependencies:
       - supports-color
@@ -2328,7 +2328,7 @@ packages:
       magic-string: 0.29.0
       svelte: 3.59.2
       svelte-hmr: 0.15.1(svelte@3.59.2)
-      vite: 4.4.4(@types/node@20.4.2)(sass@1.64.1)
+      vite: 4.4.4(@types/node@20.4.2)(sass@1.64.2)
       vitefu: 0.2.4(vite@4.4.4)
     transitivePeerDependencies:
       - supports-color
@@ -2517,8 +2517,8 @@ packages:
     resolution: {integrity: sha512-Hl219/BT5fLAaz6NDkSuhzasy49dwQS/DSdu4MdggFB8zcXv7vflBI3xp7FEmkmdDkBUI2bPUNeMttp2knYdxw==}
     dev: true
 
-  /@types/tabulator-tables@5.4.6:
-    resolution: {integrity: sha512-WAPQkKYS8nOSr83+PFQ4VNPMbp62RtxT08gjqMh8LLfiqvm4XR6VGUQ/l1oQdftjG+7nuQz4FPNymitIMguLlQ==}
+  /@types/tabulator-tables@5.4.10:
+    resolution: {integrity: sha512-ale/wbhA7zsmSSz6lTnxferRCCbKq3oZtxaNY8osb7YND2k27ZlEhfZzlVfRq8b5t7shhP8M53HyAgm1M0O+FA==}
     dev: true
 
   /@types/testing-library__jest-dom@5.14.6:
@@ -2751,7 +2751,7 @@ packages:
       std-env: 3.3.3
       test-exclude: 6.0.0
       v8-to-istanbul: 9.1.0
-      vitest: 0.33.0(jsdom@22.1.0)(sass@1.64.1)
+      vitest: 0.33.0(jsdom@22.1.0)(sass@1.64.2)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -2995,7 +2995,7 @@ packages:
     dependencies:
       '@babel/core': 7.22.9
       '@babel/helper-define-polyfill-provider': 0.4.2(@babel/core@7.22.9)
-      core-js-compat: 3.31.1
+      core-js-compat: 3.32.0
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -3046,15 +3046,15 @@ packages:
       fill-range: 7.0.1
     dev: true
 
-  /browserslist@4.21.9:
-    resolution: {integrity: sha512-M0MFoZzbUrRU4KNfCrDLnvyE7gub+peetoTid3TBIqtunaDJyXlwhakT+/VkvSXcfIzFfK/nkCs4nmyTmxdNSg==}
+  /browserslist@4.21.10:
+    resolution: {integrity: sha512-bipEBdZfVH5/pwrvqc+Ub0kUPVfGUhlKxbvfD+z1BDnPEO/X98ruXGA1WP5ASpAFKan7Qr6j736IacbZQuAlKQ==}
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001517
-      electron-to-chromium: 1.4.474
+      caniuse-lite: 1.0.30001518
+      electron-to-chromium: 1.4.480
       node-releases: 2.0.13
-      update-browserslist-db: 1.0.11(browserslist@4.21.9)
+      update-browserslist-db: 1.0.11(browserslist@4.21.10)
     dev: true
 
   /btoa@1.2.1:
@@ -3099,8 +3099,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /caniuse-lite@1.0.30001517:
-    resolution: {integrity: sha512-Vdhm5S11DaFVLlyiKu4hiUTkpZu+y1KA/rZZqVQfOD5YdDT/eQKlkt7NaE0WGOFgX32diqt9MiP9CAiFeRklaA==}
+  /caniuse-lite@1.0.30001518:
+    resolution: {integrity: sha512-rup09/e3I0BKjncL+FesTayKtPrdwKhUufQFd3riFw1hHg8JmIFoInYfB102cFcY/pPgGmdyl/iy+jgiDi2vdA==}
     dev: true
 
   /canvg@3.0.10:
@@ -3110,7 +3110,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.22.0
       '@types/raf': 3.4.0
-      core-js: 3.31.1
+      core-js: 3.32.0
       raf: 3.4.1
       regenerator-runtime: 0.13.11
       rgbcolor: 1.0.1
@@ -3249,14 +3249,14 @@ packages:
     resolution: {integrity: sha512-ASFBup0Mz1uyiIjANan1jzLQami9z1PoYSZCiiYW2FczPbenXc45FZdBZLzOT+r6+iciuEModtmCti+hjaAk0A==}
     dev: true
 
-  /core-js-compat@3.31.1:
-    resolution: {integrity: sha512-wIDWd2s5/5aJSdpOJHfSibxNODxoGoWOBHt8JSPB41NOE94M7kuTPZCYLOlTtuoXTsBPKobpJ6T+y0SSy5L9SA==}
+  /core-js-compat@3.32.0:
+    resolution: {integrity: sha512-7a9a3D1k4UCVKnLhrgALyFcP7YCsLOQIxPd0dKjf/6GuPcgyiGP70ewWdCGrSK7evyhymi0qO4EqCmSJofDeYw==}
     dependencies:
-      browserslist: 4.21.9
+      browserslist: 4.21.10
     dev: true
 
-  /core-js@3.31.1:
-    resolution: {integrity: sha512-2sKLtfq1eFST7l7v62zaqXacPc7uG8ZAya8ogijLhTtaKNcpzpB4TMoTw2Si+8GYKRwFPMMtUT0263QFWFfqyQ==}
+  /core-js@3.32.0:
+    resolution: {integrity: sha512-rd4rYZNlF3WuoYuRIDEmbR/ga9CeuWX9U05umAvgrrZoHY4Z++cp/xwPQMvUpBB4Ag6J8KfD80G0zwCyaSxDww==}
     requiresBuild: true
     dev: true
     optional: true
@@ -3448,8 +3448,8 @@ packages:
       jake: 10.8.7
     dev: true
 
-  /electron-to-chromium@1.4.474:
-    resolution: {integrity: sha512-GsFT9gtxkFMkpHf13UeN/RFbWdLQVs4DMxA1aQv4xdUAT2qyXEoAQ0hodl2sUvWmztOlicM1UYnNPcoMdzQB5A==}
+  /electron-to-chromium@1.4.480:
+    resolution: {integrity: sha512-IXTgg+bITkQv/FLP9FjX6f9KFCs5hQWeh5uNSKxB9mqYj/JXhHDbu+ekS43LVvbkL3eW6/oZy4+r9Om6lan1Uw==}
     dev: true
 
   /emoji-regex@8.0.0:
@@ -4806,7 +4806,7 @@ packages:
       fflate: 0.4.8
     optionalDependencies:
       canvg: 3.0.10
-      core-js: 3.31.1
+      core-js: 3.32.0
       dompurify: 2.4.7
       html2canvas: 1.4.1
     dev: true
@@ -5632,8 +5632,8 @@ packages:
       rimraf: 2.7.1
     dev: true
 
-  /sass@1.64.1:
-    resolution: {integrity: sha512-16rRACSOFEE8VN7SCgBu1MpYCyN7urj9At898tyzdXFhC+a+yOX5dXwAR7L8/IdPJ1NB8OYoXmD55DM30B2kEQ==}
+  /sass@1.64.2:
+    resolution: {integrity: sha512-TnDlfc+CRnUAgLO9D8cQLFu/GIjJIzJCGkE7o4ekIGQOH7T3GetiRR/PsTWJUHhkzcSPrARkPI+gNWn5alCzDg==}
     engines: {node: '>=14.0.0'}
     hasBin: true
     dependencies:
@@ -5893,7 +5893,7 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
-  /svelte-check@3.4.6(@babel/core@7.22.9)(postcss@8.4.26)(sass@1.64.1)(svelte@3.59.2):
+  /svelte-check@3.4.6(@babel/core@7.22.9)(postcss@8.4.26)(sass@1.64.2)(svelte@3.59.2):
     resolution: {integrity: sha512-OBlY8866Zh1zHQTkBMPS6psPi7o2umTUyj6JWm4SacnIHXpWFm658pG32m3dKvKFL49V4ntAkfFHKo4ztH07og==}
     hasBin: true
     peerDependencies:
@@ -5906,7 +5906,7 @@ packages:
       picocolors: 1.0.0
       sade: 1.8.1
       svelte: 3.59.2
-      svelte-preprocess: 5.0.4(@babel/core@7.22.9)(postcss@8.4.26)(sass@1.64.1)(svelte@3.59.2)(typescript@5.1.6)
+      svelte-preprocess: 5.0.4(@babel/core@7.22.9)(postcss@8.4.26)(sass@1.64.2)(svelte@3.59.2)(typescript@5.1.6)
       typescript: 5.1.6
     transitivePeerDependencies:
       - '@babel/core'
@@ -5954,16 +5954,16 @@ packages:
     resolution: {integrity: sha512-92innv59nyEx24xbfcSurB5ocwC8qFdDtGli/JVMHzJsxyvV2yjQKIcbUqU9VIV5mKUWO2PoY93nncS2yF4ULQ==}
     dev: true
 
-  /svelte-preprocess-sass@2.0.1(sass@1.64.1):
+  /svelte-preprocess-sass@2.0.1(sass@1.64.2):
     resolution: {integrity: sha512-0y4FjRsRWcN7rJeNJnSfZ7LVAz6S7/j9Dg24XFRelr/rjMMjXORdEvXy4r38fUYmyk9Y7yjwlHCiqyGxMHhEbg==}
     peerDependencies:
       sass: ^1.35.2
     dependencies:
-      sass: 1.64.1
+      sass: 1.64.2
       svelte-preprocess-filter: 1.0.0
     dev: true
 
-  /svelte-preprocess@5.0.4(@babel/core@7.22.9)(postcss@8.4.26)(sass@1.64.1)(svelte@3.59.2)(typescript@5.1.6):
+  /svelte-preprocess@5.0.4(@babel/core@7.22.9)(postcss@8.4.26)(sass@1.64.2)(svelte@3.59.2)(typescript@5.1.6):
     resolution: {integrity: sha512-ABia2QegosxOGsVlsSBJvoWeXy1wUKSfF7SWJdTjLAbx/Y3SrVevvvbFNQqrSJw89+lNSsM58SipmZJ5SRi5iw==}
     engines: {node: '>= 14.10.0'}
     requiresBuild: true
@@ -6006,7 +6006,7 @@ packages:
       detect-indent: 6.1.0
       magic-string: 0.27.0
       postcss: 8.4.26
-      sass: 1.64.1
+      sass: 1.64.2
       sorcery: 0.11.0
       strip-indent: 3.0.0
       svelte: 3.59.2
@@ -6295,13 +6295,13 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
-  /update-browserslist-db@1.0.11(browserslist@4.21.9):
+  /update-browserslist-db@1.0.11(browserslist@4.21.10):
     resolution: {integrity: sha512-dCwEFf0/oT85M1fHBg4F0jtLwJrutGoHSQXCh7u4o2t1drG+c0a9Flnqww6XUKSfQMPpJBRjU8d4RXB09qtvaA==}
     hasBin: true
     peerDependencies:
       browserslist: '>= 4.21.0'
     dependencies:
-      browserslist: 4.21.9
+      browserslist: 4.21.10
       escalade: 3.1.1
       picocolors: 1.0.0
     dev: true
@@ -6339,7 +6339,7 @@ packages:
       convert-source-map: 1.9.0
     dev: true
 
-  /vite-node@0.33.0(@types/node@20.4.2)(sass@1.64.1):
+  /vite-node@0.33.0(@types/node@20.4.2)(sass@1.64.2):
     resolution: {integrity: sha512-19FpHYbwWWxDr73ruNahC+vtEdza52kA90Qb3La98yZ0xULqV8A5JLNPUff0f5zID4984tW7l3DH2przTJUZSw==}
     engines: {node: '>=v14.18.0'}
     hasBin: true
@@ -6349,7 +6349,7 @@ packages:
       mlly: 1.4.0
       pathe: 1.1.1
       picocolors: 1.0.0
-      vite: 4.4.4(@types/node@20.4.2)(sass@1.64.1)
+      vite: 4.4.4(@types/node@20.4.2)(sass@1.64.2)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -6372,14 +6372,14 @@ packages:
       debug: 4.3.4
       fast-glob: 3.3.0
       pretty-bytes: 6.1.1
-      vite: 4.4.4(@types/node@20.4.2)(sass@1.64.1)
+      vite: 4.4.4(@types/node@20.4.2)(sass@1.64.2)
       workbox-build: 7.0.0
       workbox-window: 7.0.0
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /vite@4.4.4(@types/node@20.4.2)(sass@1.64.1):
+  /vite@4.4.4(@types/node@20.4.2)(sass@1.64.2):
     resolution: {integrity: sha512-4mvsTxjkveWrKDJI70QmelfVqTm+ihFAb6+xf4sjEU2TmUCTlVX87tmg/QooPEMQb/lM9qGHT99ebqPziEd3wg==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -6411,7 +6411,7 @@ packages:
       esbuild: 0.18.14
       postcss: 8.4.26
       rollup: 3.26.3
-      sass: 1.64.1
+      sass: 1.64.2
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
@@ -6424,10 +6424,10 @@ packages:
       vite:
         optional: true
     dependencies:
-      vite: 4.4.4(@types/node@20.4.2)(sass@1.64.1)
+      vite: 4.4.4(@types/node@20.4.2)(sass@1.64.2)
     dev: true
 
-  /vitest@0.33.0(jsdom@22.1.0)(sass@1.64.1):
+  /vitest@0.33.0(jsdom@22.1.0)(sass@1.64.2):
     resolution: {integrity: sha512-1CxaugJ50xskkQ0e969R/hW47za4YXDUfWJDxip1hwbnhUjYolpfUn2AMOulqG/Dtd9WYAtkHmM/m3yKVrEejQ==}
     engines: {node: '>=v14.18.0'}
     hasBin: true
@@ -6480,8 +6480,8 @@ packages:
       strip-literal: 1.0.1
       tinybench: 2.5.0
       tinypool: 0.6.0
-      vite: 4.4.4(@types/node@20.4.2)(sass@1.64.1)
-      vite-node: 0.33.0(@types/node@20.4.2)(sass@1.64.1)
+      vite: 4.4.4(@types/node@20.4.2)(sass@1.64.2)
+      vite-node: 0.33.0(@types/node@20.4.2)(sass@1.64.2)
       why-is-node-running: 2.2.2
     transitivePeerDependencies:
       - less

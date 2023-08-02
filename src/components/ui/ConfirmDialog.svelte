@@ -12,7 +12,7 @@
     export let title = '';
 </script>
 
-<div class={size}
+<div class='dialog {size}'
     in:fade={{ duration: 200, easing: cubicOut }} 
     out:fade={{ duration: 200, easing: cubicOut }}>
     <Titlebar {target} on:close={() => dispatch('closed', false)}>

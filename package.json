@@ -22,7 +22,7 @@
     "@types/color": "^3.0.3",
     "@types/lodash": "^4.14.192",
     "@types/marked": "^5.0.0",
-    "@types/tabulator-tables": "^5.4.6",
+    "@types/tabulator-tables": "^5.4.10",
     "@typescript-eslint/eslint-plugin": "^6.1.0",
     "@typescript-eslint/parser": "^6.1.0",
     "@vitest/coverage-v8": "^0.32.2",

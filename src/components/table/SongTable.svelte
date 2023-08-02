@@ -25,8 +25,10 @@
     // https://tabulator.info/docs/5.4/edit#editor-list
     const columns: ColumnDefinition[] = [
       column("Favorite", "fav", "50", undefined, format.favColumn, { cellEdited: updateHandler() }),
+      column("Count", "progressLogs", "50", "array", format.length, { hozAlign: 'right', headerFilter: 'number' }),
       column("Progress", "progress", "136", "number", rangeFilter(), format.progress, { cellEdited: updateHandler() }),
       column("Status", "status", "50", "string", autoFilter(), { hozAlign: 'center', formatter: (cell) => statusFormatter(cell), cellEdited: updateHandler() }),
+      column("Level", "difficulty", "50", "number", autoFilter(), { editor: 'input', cellEdited: updateHandler() }),
       column("Title", "title", "200", "string", autoFilter(), { editor: 'input', validator: 'required', cellEdited: updateHandler() }),
       column("Artist", "artist", "200", "string", autoFilter(), comboBoxEditor(), { validator: 'required', cellEdited: updateHandler('title') }),
       column("Genre", "genre", "136", "string", autoFilter(), format.genre, genreSelector, { cellEdited: updateHandler('style') }),
@@ -38,6 +40,7 @@
       column("Features", "features", "200", "string", autoFilter(), format.label, { editor: 'input', cellEdited: updateHandler() }),
       column("Labels", "tags", "200", "string", autoFilter(), format.label, { editor: 'input', cellEdited: updateHandler() }),
       column("Learned", "learnedOn", "136", "date", autoFilter(), format.timestamp, { editor: 'date', cellEdited: updateHandler() }),
+      column("Last", "changedAt", "136", "date", autoFilter(), format.timestamp),
       { title: "id", field: "id", visible: false },
     ];
 

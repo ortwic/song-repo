@@ -28,11 +28,15 @@ export const favColumn: Partial<ColumnDefinition> = {
     },
 };
 
+export const lengthFormatter: Partial<ColumnDefinition> = {
+    formatter: (cell: CellComponent): string => cell.getValue()?.length
+};
+
 export const progressFormatter: Partial<ColumnDefinition> = {
     formatter(cell: CellComponent): HTMLElement | string {
         const song = cell.getData() as UserSong;
         const bar = ProgressBar.create(cell.getValue());
-        bar.element.addEventListener('change', (ev: CustomEvent) => {
+        bar.element.addEventListener('change', (ev: CustomEvent<number[]>) => {
             const [newValue, oldValue] = ev.detail;
             cell.setValue(newValue);
 
@@ -93,6 +97,9 @@ export const timestampFormatter: Partial<ColumnDefinition> = {
         if (value instanceof Timestamp) {
             return `${value.toDate()?.getFullYear()}`;
         }
+        if (value?.seconds) {
+            return `${new Date(value.seconds).getFullYear()}`;
+        }
         return value;
     },
 };
@@ -114,6 +121,7 @@ export const groupByFormatter = (value: unknown, count: number, data: UserSong[]
 
 export default {
     favColumn,
+    length: lengthFormatter,
     progress: progressFormatter,
     genre: genreFormatter,
     marked: markedFormatter,

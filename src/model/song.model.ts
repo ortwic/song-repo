@@ -18,8 +18,11 @@ export interface UserSong extends Song {
     uid: string;
     status: Status;
     progress?: number;
+    progressLogs?: number[];
+    difficulty?: number;
     complete?: Complete;
     createdAt?: Timestamp;
+    changedAt?: Timestamp;
     learnedOn?: Date;
     fav?: boolean;
     tags?: string[];
