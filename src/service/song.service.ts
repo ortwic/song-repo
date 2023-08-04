@@ -1,26 +1,25 @@
-import { Observable, of, switchMap, from, map } from 'rxjs';
+import { Observable, of, switchMap, from, map, auditTime, merge, BehaviorSubject } from 'rxjs';
 import { currentUser } from './auth.service';
 import FirestoreService, { uniqueKey } from './firestore.service';
 import type { UserSong } from '../model/song.model';
-import { usersongs } from '../store/song.store';
 import { Timestamp, where } from 'firebase/firestore';
 
 // const sharedFields: (keyof UserSong)[] = ['id', 'artist', 'title', 'genre', 'style', 'key', 'time', 'bpm'];
+const sampleId = 'R3VSxFand4d3helVN7aTxWNmzDi1';
+const showSamples = location.href.endsWith('samples');
 const sharedUid = location.href.split('@')[1];
+const localSubject = new BehaviorSubject<UserSong[]>([]);
 const store = new FirestoreService('usersongs');
-
-const samplesFromFile = from(import('../data/samples.json'))
-    .pipe(map(({ default: data }) => data as unknown as UserSong[]));
-export const samples = store.getDocuments('R3VSxFand4d3helVN7aTxWNmzDi1')
-    .pipe(switchMap(docs => docs.length ? of(docs as UserSong[]) : samplesFromFile));
 
 export default class SongService {
     private uid = '';
     hasUser = () => !!this.uid;
     isShared = () => !!sharedUid;
 
-    private appendId = (song: UserSong, ...more: object[]): UserSong =>
-        !song.id && song.title
+    readonly usersongs: Observable<UserSong[]>;
+
+    private appendId = (song: UserSong, ...more: object[]): UserSong => {
+        return !song.id && song.title
             ? Object.assign(
                 song,
                 {
@@ -31,16 +30,19 @@ export default class SongService {
                 ...more
             )
             : song;
+    };
 
     constructor() {
         currentUser.subscribe((user) => (this.uid = user?.uid));
-        currentUser.pipe(switchMap(this.loadSongs)).subscribe((value) => {
-            console.debug('load', value.length);
-            return usersongs.set(value);
-        });
+        this.usersongs = currentUser.pipe(
+            switchMap(user => this.loadSongs(user)),
+            auditTime(990)
+        );
     }
 
     private loadSongs(user: { uid: string }): Observable<UserSong[]> {
+        console.debug('load songs for ', user?.uid);
+
         if (user) {
             return store.getDocuments(user.uid);
         }
@@ -49,7 +51,15 @@ export default class SongService {
             return store.getDocuments(sharedUid, where('status', '==', 'done'));
         }
 
-        return of(undefined);
+        if (showSamples) {
+            const samplesFromFile = from(import('../data/samples.json'))
+                .pipe(map<{ default }, UserSong[]>(({ default: data }) => data));
+            const samples = store.getDocuments<UserSong>(sampleId)
+                .pipe(switchMap(docs => docs.length ? of(docs) : samplesFromFile));
+            return merge(samples, localSubject);
+        }
+
+        return localSubject;
     }
 
     newSong(): UserSong {
@@ -80,11 +90,10 @@ export default class SongService {
         if (this.uid) {
             song = this.appendId(song);
             song.changedAt = Timestamp.now();
-            if (song.progress !== undefined) {
+            if (song.progressLogs.at(-1) !== song.progress) {
                 song.progressLogs.push(song.progress);
             }
             if (song.id) {
-                console.debug('send', [ song.id, song.status, song.progress]);
                 await store.setDocument(song, { merge: true });
                 return song.id;
             }
@@ -102,8 +111,9 @@ export default class SongService {
             const songs = data.map((s) => this.appendId(s, { importedAt: new Date() }));
             if (this.uid) {
                 await store.setDocuments(songs, { merge: true });
-            } else {
-                usersongs.set(songs);
+            } else { 
+                // if user is not logged in
+                localSubject.next(songs);
             }
             return data;
         }

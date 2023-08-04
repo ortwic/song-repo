@@ -3,7 +3,6 @@
     import AuthService, { currentUser } from "../../service/auth.service";
     import { getCssVariable } from "../../styles/style.helper";
     import { showError, showInfo } from '../../store/notification.store';
-    import { usersongs } from '../../store/song.store';
 
     export let displayName: string;
     export let photoURL: string;
@@ -26,7 +25,6 @@
 
 	async function signOut(): Promise<void> {
 		await authService.signOut();
-        usersongs.set([]);
     	history.pushState(null, '', location.origin);
 	}
     

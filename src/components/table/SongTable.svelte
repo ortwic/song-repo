@@ -10,12 +10,13 @@
     import Table from './Table.svelte'
     import FileDrop from './FileDrop.svelte';
     import AddButton from '../ui/AddButton.svelte';
-    import SongService, { samples } from '../../service/song.service';
+    import SongService from '../../service/song.service';
     import type { UserSong } from '../../model/song.model';
     import { showError, showInfo, showWarn } from '../../store/notification.store';
-    import { usersongs } from '../../store/song.store';
     import genres from '../../data/genres.json';
-    let service = new SongService();
+
+    const service = new SongService();
+    const songs = service.usersongs;
     let table: Table;
     let currentRow: RowComponent;
     let statusFormatter: (cell: CellComponent)  => string;
@@ -28,7 +29,7 @@
       column("Count", "progressLogs", "50", "array", format.length, { hozAlign: 'right', headerFilter: 'number' }),
       column("Progress", "progress", "136", "number", rangeFilter(), format.progress, { cellEdited: updateHandler() }),
       column("Status", "status", "50", "string", autoFilter(), { hozAlign: 'center', formatter: (cell) => statusFormatter(cell), cellEdited: updateHandler() }),
-      column("Level", "difficulty", "50", "number", autoFilter(), { editor: 'input', cellEdited: updateHandler() }),
+      column("Level", "difficulty", "50", "number", { headerFilter: 'number', editor: 'number', cellEdited: updateHandler() }),
       column("Title", "title", "200", "string", autoFilter(), { editor: 'input', validator: 'required', cellEdited: updateHandler() }),
       column("Artist", "artist", "200", "string", autoFilter(), comboBoxEditor(), { validator: 'required', cellEdited: updateHandler('title') }),
       column("Genre", "genre", "136", "string", autoFilter(), format.genre, genreSelector, { cellEdited: updateHandler('style') }),
@@ -51,17 +52,8 @@
       // } else {
         await import('tabulator-tables/dist/css/tabulator_bulma.min.css');
       // }
-      
-      window.addEventListener('popstate', loadSamples);
-      loadSamples();
     });
     
-    function loadSamples(): void {
-      if (!service.hasUser()) {
-        usersongs.set(location.href.endsWith('samples') ? $samples : []);
-      }
-    }
-
     async function addRow(): Promise<void> {
       if (!service.hasUser()) {
         showWarn('You are not signed in, so data won\'t be persisted after leaving the app!', 12);
@@ -97,14 +89,14 @@
     async function importJSON(data: string): Promise<void> {
       try {
         const result = await service.importSongs(JSON.parse(data));
-        showInfo(`Found ${result.length} songs. Total songs: ${usersongs.length}`);
+        showInfo(`Found ${result.length} songs. Total songs: ${$songs.length}`);
       } catch (error) {
         showError(error.message);
       }
     }
   
     $: if (table) {
-      table.setData($usersongs, 'id');
+      table.setData($songs, 'id');
     }
 </script>
 
