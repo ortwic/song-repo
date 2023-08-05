@@ -6,7 +6,7 @@ import ProgressBar from './ProgressBar.class';
 import genres from '../../../data/genres.json';
 import colornames from '../../../data/colornames.json';
 import type { UserSong } from '../../../model/song.model';
-import { redToGreenGradient } from '../../../styles/style.helper';
+import { redToGreenGradient, redToGreenRange } from '../../../styles/style.helper';
 
 export const favColumn: Partial<ColumnDefinition> = {
     hozAlign: 'center',
@@ -53,6 +53,29 @@ export const progressFormatter: Partial<ColumnDefinition> = {
         });
         return bar.element;
     },
+};
+
+export const difficultyFormatter: Partial<ColumnDefinition> = {
+    hozAlign: 'center',
+    headerFilter: 'number',
+    headerFilterParams: {
+        min: 1, 
+        max: 10
+    },
+    formatter(cell: CellComponent): HTMLElement {
+        const value = cell.getValue();
+        if (value) {
+            const element = cell.getElement();
+            const [ gradient ] = redToGreenGradient((10 - value) * 10, 'to left', .2);
+            element.style.background = gradient;
+        }
+        return value;
+    },
+    editor: 'number',
+    editorParams: { 
+        min: 1, 
+        max: 10 
+    }
 };
 
 export const genreFormatter: Partial<ColumnDefinition> = {
@@ -110,7 +133,7 @@ export const groupByFormatter = (value: unknown, count: number, data: UserSong[]
     if (data.length) {
         const tags = [...new Set(data.flatMap((f) => f.tags || []))];
         const avg = count > 0 ? data.map((f) => +f.progress).reduce(sumUp) / count : 0;
-        const bgColor = redToGreenGradient(avg);
+        const bgColor = redToGreenRange(avg);
         const color = bgColor.isDark() ? 'white' : 'black';
         const style = `min-width: 3em;background-color:${bgColor.hex()};color:${color}`;
         info += `<span class='label m10' style='${style}'>Ø ${avg.toFixed()}%</span>
@@ -123,6 +146,7 @@ export default {
     favColumn,
     length: lengthFormatter,
     progress: progressFormatter,
+    difficulty: difficultyFormatter,
     genre: genreFormatter,
     marked: markedFormatter,
     label: labelFormatter,

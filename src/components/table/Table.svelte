@@ -18,7 +18,7 @@
   export let exportTitle = 'export';
   export let groupHeader: GroupFormatter<unknown> = undefined;
   export const isGroupedBy = (field: string) => field in rowGroups;
-  export let usePersistance = true;
+  export let usePersistance = !import.meta.env.DEV;
   let table: Observable<TabulatorFull>;
   let tableContainer: HTMLElement;
   let unsubscribe = () => {};
