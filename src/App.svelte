@@ -9,6 +9,7 @@
   import SongTable from './components/table/SongTable.svelte';
   import ExportTable from './components/table/ExportTable.svelte';
   import MenuButton from './components/ui/MenuButton.svelte';
+  import AddEntry from './components/table/AddEntry.svelte';
   import Sidebar from './components/ui/Sidebar.svelte'
   import Snackbar from './components/ui/Snackbar.svelte';
   import type { MenuPages } from './model/types';
@@ -90,6 +91,10 @@
   {/if}
 </main>
 
+<footer>
+  <AddEntry />
+</footer>
+
 <Snackbar />
 
 <style>
@@ -105,6 +110,15 @@
   main {
     height: 100vh;
     overflow: hidden;
+  }
+
+  footer {
+    position: sticky;
+    bottom: calc(48px + 1rem);
+    margin-right: 1rem;
+    z-index: 20;
+    height: 0;
+    text-align: right;
   }
  
 </style>

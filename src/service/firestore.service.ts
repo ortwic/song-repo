@@ -3,9 +3,8 @@ import {
     getFirestore,
     collection,
     query,
-    where,
-    orderBy,
     doc,
+    getDoc,
     setDoc,
     updateDoc,
     deleteDoc,
@@ -34,16 +33,22 @@ export default class FirestoreService {
 
     constructor(public path: string) {}
 
-    public getDocuments<T>(uid?: string, ...constraints: QueryConstraint[]): Observable<T[]> {
+    public getDocuments<T>(...constraints: QueryConstraint[]): Observable<T[]> {
         const items = collection(this.db, this.path) as CollectionReference<T>;
 
-        if (uid) {
-            constraints = [where('uid', '==', uid), ...constraints];
-        }
-
         // Query requires an index, see screenshot below
-        const q = query<T>(items, orderBy('id'), ...constraints);
-        return collectionData<T>(q, { idField: 'id' }).pipe(startWith([]));
+        const q = query<T>(items, ...constraints);
+        return collectionData<T>(q).pipe(startWith([]));
+    }
+
+    public async getDocument<T>(id: string): Promise<T> {
+        const docRef = doc(this.db, this.path, id);
+        const snapshot = await getDoc(docRef);
+        if (snapshot.exists()) {
+            return snapshot.data({ serverTimestamps: 'none' }) as T;
+        }
+        
+        return Promise.resolve(undefined);
     }
 
     public async setDocument<T extends { id: string }>(data: T, options?: SetOptions): Promise<void> {

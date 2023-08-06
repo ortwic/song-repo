@@ -1,5 +1,5 @@
 <script lang="ts">
-    import FileIcon from "../ui/FileIcon.svelte";
+    import FileIcon from "../ui/elements/FileIcon.svelte";
     import { downloadQueue, type DowloadItem } from '../../store/download.store';
 
     export let exportTitle = 'export';

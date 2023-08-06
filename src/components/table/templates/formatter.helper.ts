@@ -32,6 +32,20 @@ export const lengthFormatter: Partial<ColumnDefinition> = {
     formatter: (cell: CellComponent): string => cell.getValue()?.length
 };
 
+export const bgImgFormatter: Partial<ColumnDefinition> = {
+    formatter(cell: CellComponent) {
+        const url = cell.getValue();
+        if (url) {
+            const element = cell.getElement();
+            element.style.backgroundImage = `url(${url})`;
+            element.style.backgroundRepeat = 'no-repeat';
+            element.style.backgroundPosition = 'center';
+            element.style.backgroundSize = 'cover';
+        }
+        return '';
+    },
+};
+
 export const progressFormatter: Partial<ColumnDefinition> = {
     formatter(cell: CellComponent): HTMLElement | string {
         const song = cell.getData() as UserSong;
@@ -80,9 +94,9 @@ export const difficultyFormatter: Partial<ColumnDefinition> = {
 
 export const genreFormatter: Partial<ColumnDefinition> = {
     formatter(cell: CellComponent): string {
-        const value = cell.getValue();
+        const value = cell.getValue()?.toLowerCase();
         try {
-            const color = genres.find((v) => v.name == value)?.color;
+            const color = genres.find((v) => v.name.toLowerCase() == value)?.color;
             const bgColor = color && colornames[color.toLowerCase()];
             if (bgColor) {
                 const element = cell.getElement();
@@ -123,7 +137,7 @@ export const timestampFormatter: Partial<ColumnDefinition> = {
         if (value?.seconds) {
             return `${new Date(value.seconds).getFullYear()}`;
         }
-        return value;
+        return `${value}`;
     },
 };
 
@@ -144,6 +158,7 @@ export const groupByFormatter = (value: unknown, count: number, data: UserSong[]
 
 export default {
     favColumn,
+    bgImg: bgImgFormatter,
     length: lengthFormatter,
     progress: progressFormatter,
     difficulty: difficultyFormatter,

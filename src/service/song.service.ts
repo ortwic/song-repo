@@ -2,19 +2,20 @@ import { Observable, of, switchMap, from, map, auditTime, merge, BehaviorSubject
 import { currentUser } from './auth.service';
 import FirestoreService, { uniqueKey } from './firestore.service';
 import type { UserSong } from '../model/song.model';
-import { Timestamp, where } from 'firebase/firestore';
+import { Timestamp, orderBy, where } from 'firebase/firestore';
 
 // const sharedFields: (keyof UserSong)[] = ['id', 'artist', 'title', 'genre', 'style', 'key', 'time', 'bpm'];
 const sampleId = 'R3VSxFand4d3helVN7aTxWNmzDi1';
-const showSamples = location.href.endsWith('samples');
-const sharedUid = location.href.split('@')[1];
+const showSamples = () => location.href.endsWith('samples');
+const sharedUid = () => location.href.split('@')[1];
+const localStore = {};
 const localSubject = new BehaviorSubject<UserSong[]>([]);
 const store = new FirestoreService('usersongs');
 
 export default class SongService {
     private uid = '';
     hasUser = () => !!this.uid;
-    isShared = () => !!sharedUid;
+    isShared = () => !!sharedUid();
 
     readonly usersongs: Observable<UserSong[]>;
 
@@ -25,7 +26,7 @@ export default class SongService {
                 {
                     id: uniqueKey(this.uid?.slice(0, 6) ?? '', song.artist ?? 'n/a', song.title),
                     uid: this.uid,
-                    createdAt: new Date(),
+                    createdAt: Timestamp.now(),
                 },
                 ...more
             )
@@ -41,20 +42,20 @@ export default class SongService {
     }
 
     private loadSongs(user: { uid: string }): Observable<UserSong[]> {
-        console.debug('load songs for ', user?.uid);
-
+        const byUser = (uid: string) => where('uid', '==', uid);
         if (user) {
-            return store.getDocuments(user.uid);
+            return store.getDocuments(byUser(user.uid), orderBy('changedAt', 'desc'));
         }
 
-        if (sharedUid) {
-            return store.getDocuments(sharedUid, where('status', '==', 'done'));
+        const uid = sharedUid();
+        if (uid) {
+            return store.getDocuments(byUser(uid), orderBy('id'), where('status', '==', 'done'));
         }
 
-        if (showSamples) {
+        if (showSamples()) {
             const samplesFromFile = from(import('../data/samples.json'))
                 .pipe(map<{ default }, UserSong[]>(({ default: data }) => data));
-            const samples = store.getDocuments<UserSong>(sampleId)
+            const samples = store.getDocuments<UserSong>(byUser(sampleId), orderBy('changedAt', 'desc'))
                 .pipe(switchMap(docs => docs.length ? of(docs) : samplesFromFile));
             return merge(samples, localSubject);
         }
@@ -62,33 +63,31 @@ export default class SongService {
         return localSubject;
     }
 
-    newSong(): UserSong {
-        return {
-            id: '',
-            uid: this.uid,
+    async addSong(song: Partial<UserSong>): Promise<string> {
+        const newSong = this.appendId({
             fav: false,
             status: 'todo',
             progress: 0,
             progressLogs: [],
             genre: '',
             style: '',
-            artist: '',
-            title: '',
-            source: '',
             key: '',
             time: '',
             bpm: '',
             features: [],
-            tags: [],
-            learnedOn: new Date(),
-            createdAt: Timestamp.now(),
-            changedAt: Timestamp.now(),
-        };
+            learnedOn: '',
+            ...song
+        } as UserSong);
+
+        if (!newSong.uid) {
+            localStore[newSong.id] = newSong;
+        }
+
+        return this.setSong(newSong);
     }
 
     async setSong(song: UserSong): Promise<string> {
         if (this.uid) {
-            song = this.appendId(song);
             song.changedAt = Timestamp.now();
             if (song.progressLogs.at(-1) !== song.progress) {
                 song.progressLogs.push(song.progress);
@@ -97,12 +96,17 @@ export default class SongService {
                 await store.setDocument(song, { merge: true });
                 return song.id;
             }
+        } else {
+            localSubject.next(Object.values(localStore));
         }
     }
 
     async deleteSong(song: UserSong): Promise<void> {
         if (this.uid) {
             return store.removeDocument(song.id);
+        } else {
+            delete localStore[song.id];
+            localSubject.next(Object.values(localStore));
         }
     }
 

@@ -27,7 +27,7 @@ export const column = (
     title: string,
     field: string,
     width: string,
-    sorter: Sorter = 'string',
+    sorter: Sorter,
     ...more: Partial<ColumnDefinition>[]
 ): ColumnDefinition => {
     return Object.assign(

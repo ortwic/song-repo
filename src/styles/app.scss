@@ -121,6 +121,11 @@ input {
   background-color: white;
 }
 
+input:disabled {
+  color: var(--text);
+  background-color: var(--primback);
+}
+
 input.error, input.mark:focus {
   outline: 2px solid var(--secondary);
   outline-offset: 1px;

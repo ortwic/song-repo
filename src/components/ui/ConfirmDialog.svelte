@@ -48,6 +48,11 @@
     background-color: var(--primback);
 }
 
+div.dialog {
+    max-width: 100vw;
+    max-height: 100vh;
+}
+
 div.full {
     @include layout;
     top: 0;
@@ -71,7 +76,7 @@ div.auto {
     top: 50%;
     left: 50%;
     border: 1px solid gray;
-    transform: translate(-50%, -60%);
+    transform: translate(-50%, -50%);
     box-shadow: .2em .2em .8em #00000080;
 }
 

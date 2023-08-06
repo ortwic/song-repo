@@ -101,9 +101,6 @@ devDependencies:
   svelte-eslint-parser:
     specifier: ^0.32.1
     version: 0.32.1(svelte@3.59.2)
-  svelte-portal:
-    specifier: ^2.2.0
-    version: 2.2.0
   svelte-preprocess-sass:
     specifier: ^2.0.1
     version: 2.0.1(sass@1.64.2)
@@ -5944,10 +5941,6 @@ packages:
       svelte: '>=3.19.0'
     dependencies:
       svelte: 3.59.2
-    dev: true
-
-  /svelte-portal@2.2.0:
-    resolution: {integrity: sha512-jhtZWtD6cUE2nMw46dJ5VXWYiqnER+JH+V/BmNBQ5fNP/YdsJCpJi+DemUy9msklqGb0f+wLhJPBtKHLWQvzjg==}
     dev: true
 
   /svelte-preprocess-filter@1.0.0:

@@ -3,21 +3,24 @@
     import Table from './Table.svelte';
     import { autoColumns } from './templates/column.helper';
     import ConfirmDialog from '../ui/ConfirmDialog.svelte';
+    import TabbedTitle from '../ui/TabbedTitle.svelte';
     import FirestoreService, { uniqueKey } from '../../service/firestore.service';
     import { showInfo, showError } from '../../store/notification.store';
+    
+    const pages = { genres: 'Genres', settings: 'Settings' };
+    type Pages = keyof typeof pages;
+    let active: Pages;
 
-    type Pages = 'none' | 'genres' | 'artists';
     const stores = {
         genres: new FirestoreService('genres'),
-        artists: new FirestoreService('artists'),
+        settings: new FirestoreService('settings'),
     }
-    let current: Pages = 'none';
     let sub: { unsubscribe: () => void; };
 
     async function changePage(page: Pages) {
-        current = page;
+        active = page;
         sub?.unsubscribe();
-        sub = stores[current].getDocuments().subscribe(result => {
+        sub = stores[active].getDocuments().subscribe(result => {
             columns = autoColumns(result);
             data = result;
         });
@@ -31,7 +34,7 @@
                 if (field) {
                     columns = autoColumns(json);
                     data = json.map(obj => ({ id: uniqueKey(obj[field]), ...obj }));
-                    await stores[current]?.setDocuments(data, { merge: true });
+                    await stores[active]?.setDocuments(data, { merge: true });
 
                     showInfo(`Found ${json.length} entries.`);
                 }
@@ -42,7 +45,7 @@
     }
 
     function done({ detail }) {
-        current = 'none';
+        active = undefined;
 
         if (detail) {
             showInfo('Done');
@@ -59,11 +62,10 @@
     </button>
 </div>
 
-{#if current != 'none'}
+{#if active}
 <ConfirmDialog target='login' size='max' on:closed={done}>
-    <span class='tabs' slot="title">
-        <button on:click={() => changePage('genres')}>Genre</button>
-        <button on:click={() => changePage('artists')}>Artists</button>
+    <span slot="title">
+        <TabbedTitle tabs={pages} {active} on:tabChange={({ detail }) => changePage(detail)} />
     </span>
     <FileDrop on:enter={() => showInfo('Start importing...')} on:addJson={importJSON}>
         {#if columns?.length}
@@ -77,14 +79,6 @@
 
 
 <style lang="scss">
-    span.tabs button {
-        color: black;
-
-        &:focus {
-            color: var(--primary);
-        }
-    }
-
     div.placeholder {
         width: 100%;
         height: 100%;
