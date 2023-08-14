@@ -20,7 +20,7 @@
   const title = `${import.meta.env.DEV ? 'DEV' : 'My'} song repertory`;
   const usertitle = currentUser.pipe(map(setPageInfo));
   const lang = navigator.language.startsWith('de') ? 'de-DE' : 'en-US';
-  const version = '0.1.5';
+  const version = '0.1.6';
   const footer = `Version ${version} beta`;
 
   function setPageInfo(user: User): string {

@@ -9,7 +9,6 @@ import {
 } from 'firebase/auth';
 import { authState } from 'rxfire/auth';
 import { auth } from './firebase.setup';
-import { currentMenu } from '../store/app.store';
 import { showInfo } from '../store/notification.store';
 
 export const currentUser = authState(auth);
@@ -17,7 +16,6 @@ const googleProvider = new GoogleAuthProvider();
 // googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
 
 onAuthStateChanged(auth, (user) => {
-    currentMenu.set(user ? 'root' : 'login');
     if (user) {
         showInfo(`${user.displayName || user.email} has signed in.`);
     }

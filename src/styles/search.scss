@@ -1,0 +1,4 @@
+@mixin input {
+    width: calc(100% - 3.4em);
+    min-width: 16rem;
+}

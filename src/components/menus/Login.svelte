@@ -26,7 +26,7 @@
 </script>
 
 <section class="menu">
-    <div class="section">
+    <div class="section indent">
         <label for="email">Email</label>
         <input id="email" autocomplete="email" type="text" placeholder="email" bind:value={email}>
         <label for="password">Password</label>

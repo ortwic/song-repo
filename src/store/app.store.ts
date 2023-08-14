@@ -8,5 +8,7 @@ window.addEventListener('DOMContentLoaded', setTableVisibility);
 window.addEventListener('popstate', setTableVisibility);
     
 function setTableVisibility(): void {
-    showTable.set(location.href.endsWith('samples') || /[#@]/.test(location.href));
+    const tableview = location.href.endsWith('samples') || /[#@]/.test(location.href);
+    showTable.set(tableview);
+    currentMenu.set(tableview ? 'root' : 'login');
 }

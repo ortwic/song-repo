@@ -140,6 +140,14 @@ input.valid, input.valid:focus {
   box-shadow: 0px 0px 8px var(--primary);
 }
 
+input.sm {
+    width: 5rem;
+}
+
+input.lg {
+    min-width: 16rem;
+}
+
 .fa-square::before {
   content: '☐ ';
 }

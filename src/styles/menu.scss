@@ -2,7 +2,6 @@
 
     @mixin row {
         display: block;
-        margin: 0 1rem;
         padding: .4rem;
         text-align: left;
     }
@@ -80,6 +79,10 @@
     }
     
     div.section {
+        &.indent {
+            margin: 0 1rem;
+        }
+
         label {
             @include row;
         }
