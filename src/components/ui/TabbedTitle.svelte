@@ -20,7 +20,7 @@
     {/each}
 </div>
 
-<style>
+<style lang="scss">
     div.tabs button {
         color: var(--primback);
         border: 0;

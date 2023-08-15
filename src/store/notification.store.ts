@@ -1,10 +1,15 @@
+import { getAnalytics, logEvent } from 'firebase/analytics';
 import { ArrayStore } from './array.class';
+import { app } from '../service/firebase.setup';
 import type { Notification, NotificationType } from '../model/notification.model';
+
+const analytics = getAnalytics(app);
 
 const defaultTimeout = 3;
 
 function show(type: NotificationType, message: string, timeoutSec: number) {
     console[type](message);
+    logEvent(analytics, 'notification', { [type]: message });
 
     if (!messageStack.exists('message', message)) {
         messageStack.unshift({ type, message });
