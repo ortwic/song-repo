@@ -5,6 +5,7 @@
     import AddButton from "../ui/AddButton.svelte";
     import ConfirmDialog from "../ui/ConfirmDialog.svelte";
     import Image from "../ui/elements/Image.svelte";
+    import SelectKey from '../ui/SelectKey.svelte';
     import LoadingBar from '../ui/elements/LoadingBar.svelte';
     import SongService from "../../service/song.service";
     import SearchService, { create } from "../../service/search.service";
@@ -181,12 +182,12 @@
                     </div>
                 </div>
                 <div>
-                    <label for="bpm">Tempo</label>
-                    <input id="bpm" class="sm" type="text" placeholder="120" bind:value={newSong.bpm} on:keydown={addLabel}>
+                    <label for="key">Key</label>
+                    <SelectKey bind:value={newSong.key} />
                 </div>
                 <div>
-                    <label for="key">Key</label>
-                    <input id="key" class="sm" type="text" placeholder="C" bind:value={newSong.key} on:keydown={addLabel}>
+                    <label for="bpm">Tempo</label>
+                    <input id="bpm" class="sm" type="text" placeholder="120" bind:value={newSong.bpm} on:keydown={addLabel}>
                 </div>
                 <div>
                     <label for="time">Time</label>
