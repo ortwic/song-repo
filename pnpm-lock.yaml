@@ -92,6 +92,9 @@ devDependencies:
   rxjs:
     specifier: ^7.8.0
     version: 7.8.0
+  simple-svelte-autocomplete:
+    specifier: ^2.5.2
+    version: 2.5.2
   svelte:
     specifier: ^3.59.2
     version: 3.59.2
@@ -5700,6 +5703,10 @@ packages:
 
   /siginfo@2.0.0:
     resolution: {integrity: sha512-ybx0WO1/8bSBLEWXZvEd7gMW3Sn3JFlW3TvX1nREbDLRNQNaeNN8WK0meBwPdAaOI7TtRRRJn/Es1zhrrCHu7g==}
+    dev: true
+
+  /simple-svelte-autocomplete@2.5.2:
+    resolution: {integrity: sha512-6+kZP3XQGb7zs0djTWoFv8tQorBZdv64YfCKrlsYIYBCFsEeikSiNsBSSYw1Om+LYmFeMEOAYSSKoEw+qpnBXQ==}
     dev: true
 
   /simple-swizzle@0.2.2:

@@ -145,7 +145,7 @@ input.sm {
 }
 
 input.lg {
-    min-width: 16rem;
+    width: 15rem;
 }
 
 .fa-square::before {
@@ -193,4 +193,40 @@ span.label {
   padding: .2rem .6rem;
   border-radius: 1rem;
   font-size: smaller;
+}
+
+div.autocomplete {
+  .input-container {
+    width: 16em;
+
+    .autocomplete-clear-button {
+      left: 14em;
+      right: unset !important;
+      transition: all .2s ease-in-out;
+
+      &:hover {
+        color: var(--primary);
+      }
+    }
+  }
+
+  div.autocomplete-list {
+    background-color: var(--primback) !important;
+    max-width: 100%;
+  
+    div.autocomplete-list-item {
+      padding: 0;
+  
+      &.selected,
+      &:hover {
+        color: black !important;
+        background-color: var(--primselect) !important;
+        transition: all .2s ease-in-out;
+      }
+    }
+
+    div.autocomplete-list-item-no-results {
+      padding: 0;
+    }
+  }
 }
