@@ -1,7 +1,7 @@
 <script lang='ts'>
     import '../../styles/menu.scss';
     import { slide } from 'svelte/transition';
-    import Titlebar from './Titlebar.svelte';
+    import Titlebar from './elements/Titlebar.svelte';
     import AdvanceTable from '../table/AdvanceTable.svelte';
 
     export let title = '';

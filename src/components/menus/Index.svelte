@@ -1,15 +1,15 @@
 <script lang='ts'>
     import '../../styles/menu.scss';
-    import FeedbackDialog from './FeedbackDialog.svelte';
-
-    let feedbackForm: FeedbackDialog;
+    import ExportTable from '../table/ExportTable.svelte';
+    import NavButton from '../ui/elements/NavButton.svelte';
 </script>
 
-<div class="row">
-  <button data-close title="Send feedback" on:click={feedbackForm.show}>
-      <span><i class='bx bx-mail-send'></i> Send feedback</span>
-  </button>
-</div>
+<NavButton href="/songs" title="Your songs">
+    <span><i class='bx bxs-playlist'></i> Your songs</span>
+</NavButton>
+<NavButton href="/feedback" title="Send feedback">
+    <span><i class='bx bx-mail-send'></i> Send feedback</span>
+</NavButton>
 <div class="row">
     <a role="button" target="_blank" href="http://buymeacoffee.com/ortwic">
         <span><i class='bx bxs-coffee'></i> Buy me a coffee</span>
@@ -20,5 +20,6 @@
         <span><i class="bx bxl-github"></i> Feature overview</span>
     </a>
 </div>
-
-<FeedbackDialog bind:this={feedbackForm}></FeedbackDialog>
+{#if location.href.includes('/songs')}
+<ExportTable />
+{/if}

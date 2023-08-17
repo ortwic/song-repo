@@ -1,0 +1,26 @@
+{
+    "en-US": [
+        "Oops, something went wrong.",
+        "We're sorry, but we can't find the page you're looking for.",
+        "Looks like this page is missing. Maybe it's been moved or deleted.",
+        "This page isn't available right now. Please check back later.",
+        "We're experiencing some technical difficulties. Please try again later.",
+        "We're sorry, but something seems to be wrong on our end.",
+        "We're working hard to fix this issue. Please bear with us.",
+        "This page is currently under maintenance. We apologize for any inconvenience.",
+        "We're sorry, but we're having trouble loading this page.",
+        "An unexpected error has occurred. We're on it."
+    ],
+    "de-DE": [
+        "Hoppla, etwas ist schief gelaufen.",
+        "Es tut uns leid, aber wir können die Seite, die Sie suchen, nicht finden.",
+        "Es sieht so aus, als ob diese Seite fehlt. Vielleicht wurde sie verschoben oder gelöscht.",
+        "Diese Seite ist gerade nicht verfügbar. Bitte schauen Sie später noch einmal vorbei.",
+        "Wir haben einige technische Schwierigkeiten. Bitte versuchen Sie es später noch einmal.",
+        "Es tut uns leid, aber etwas scheint bei uns schief zu laufen.",
+        "Wir arbeiten hart daran, dieses Problem zu beheben. Bitte haben Sie Geduld mit uns.",
+        "Diese Seite wird gerade gewartet. Wir entschuldigen uns für etwaige Unannehmlichkeiten.",
+        "Es tut uns leid, aber wir haben Probleme beim Laden dieser Seite.",
+        "Ein unerwarteter Fehler ist aufgetreten. Wir sind dran."
+    ]
+}

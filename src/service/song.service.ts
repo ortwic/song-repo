@@ -7,7 +7,6 @@ import { Timestamp, orderBy, where } from 'firebase/firestore';
 // const sharedFields: (keyof UserSong)[] = ['id', 'artist', 'title', 'genre', 'style', 'key', 'time', 'bpm'];
 const sampleId = 'R3VSxFand4d3helVN7aTxWNmzDi1';
 const showSamples = () => location.href.endsWith('samples');
-const sharedUid = () => location.href.split('@')[1];
 const localStore = {};
 const localSubject = new BehaviorSubject<UserSong[]>([]);
 const store = new FirestoreService('usersongs');
@@ -15,7 +14,7 @@ const store = new FirestoreService('usersongs');
 export default class SongService {
     private uid = '';
     hasUser = () => !!this.uid;
-    isShared = () => !!sharedUid();
+    isShared = () => !!this.sharedUid;
 
     readonly usersongs: Observable<UserSong[]>;
 
@@ -33,7 +32,7 @@ export default class SongService {
             : song;
     };
 
-    constructor() {
+    constructor(private sharedUid?: string) {
         currentUser.subscribe((user) => (this.uid = user?.uid));
         this.usersongs = currentUser.pipe(
             switchMap(user => this.loadSongs(user)),
@@ -43,13 +42,12 @@ export default class SongService {
 
     private loadSongs(user: { uid: string }): Observable<UserSong[]> {
         const byUser = (uid: string) => where('uid', '==', uid);
-        if (user) {
-            return store.getDocuments(byUser(user.uid), orderBy('changedAt', 'desc'));
+        if (this.sharedUid) {
+            return store.getDocuments(byUser(this.sharedUid), orderBy('id'), where('status', '==', 'done'));
         }
 
-        const uid = sharedUid();
-        if (uid) {
-            return store.getDocuments(byUser(uid), orderBy('id'), where('status', '==', 'done'));
+        if (user) {
+            return store.getDocuments(byUser(user.uid), orderBy('changedAt', 'desc'));
         }
 
         if (showSamples()) {

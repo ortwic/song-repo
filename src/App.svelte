@@ -1,35 +1,39 @@
 <script lang="ts">
-  import { marked } from 'marked';
+  import Router, { push } from "svelte-spa-router";
   import { map } from 'rxjs';
   import type { User } from 'firebase/auth';
   import Login from './components/menus/Login.svelte';
   import Signup from './components/menus/Signup.svelte';
   import Profil from './components/menus/Profil.svelte';
-  import Info from './components/menus/Info.svelte';
+  import General from './components/menus/Index.svelte';
   import SongTable from './components/table/SongTable.svelte';
-  import ExportTable from './components/table/ExportTable.svelte';
-  import MenuButton from './components/ui/MenuButton.svelte';
-  import AddEntry from './components/table/AddEntry.svelte';
+  import MenuButton from './components/ui/elements/MenuButton.svelte';
   import Sidebar from './components/ui/Sidebar.svelte'
   import Snackbar from './components/ui/Snackbar.svelte';
+  import Start from "./routes/Start.svelte";
+  import Feedback from "./routes/Feedback.svelte";
+  import NotFound from "./routes/NotFound.svelte";
   import type { MenuPages } from './model/types';
   import { currentUser } from './service/auth.service';
-  import { currentMenu, showTable } from './store/app.store';
-  import welcome from './data/welcome.json';
+  import { currentMenu } from './store/app.store';
     
   const title = `${import.meta.env.DEV ? 'DEV' : 'My'} song repertory`;
   const usertitle = currentUser.pipe(map(setPageInfo));
-  const lang = navigator.language.startsWith('de') ? 'de-DE' : 'en-US';
-  const version = '0.1.6';
+  const version = '0.2.0';
   const footer = `Version ${version} beta`;
+  
+  const routes = {
+    '/': Start,
+    '/songs': SongTable,
+    '/songs/:id': SongTable,
+    '/samples': SongTable,
+    '/feedback': Feedback,
+    '*': NotFound
+  };
 
   function setPageInfo(user: User): string {
     if (user) {
-      showTable.set(true);
-      const isNotShared = location.href.indexOf('@') < 0;
-      if (isNotShared) {
-          history.pushState(null, '', `${location.origin}/#${user.uid}`);
-      }
+      push(`/songs`);
       const name = user.displayName || user.email.split('@')[0]?.replace('.', ' ');
       return `${name}'s known songs`;
     }
@@ -69,8 +73,7 @@
       <Login />
       {/if}
       <svelte:fragment slot="footer">
-        <Info />
-        <ExportTable />
+        <General />
       </svelte:fragment>
     </Sidebar>
     {:else if $currentMenu == 'signup'}
@@ -81,19 +84,7 @@
   </nav>
 </form>
 
-<main> 
-  {#if $showTable}
-  <SongTable />
-  {:else}
-    <div id='welcome'>
-      {@html marked(welcome[lang], { mangle: false, headerIds: false })}
-    </div>
-  {/if}
-</main>
-
-<footer>
-  <AddEntry />
-</footer>
+<Router {routes}/>
 
 <Snackbar />
 
@@ -105,20 +96,5 @@
     z-index: 10;
     height: 0;
     text-align: right;
-  }
-
-  main {
-    height: 100vh;
-    overflow: hidden;
-  }
-
-  footer {
-    position: sticky;
-    bottom: calc(48px + 1rem);
-    margin-right: 1rem;
-    z-index: 20;
-    height: 0;
-    text-align: right;
-  }
- 
+  } 
 </style>

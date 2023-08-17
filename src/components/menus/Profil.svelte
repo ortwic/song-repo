@@ -15,7 +15,7 @@
 
 	async function copyLink(): Promise<void> {
 		try {
-			const link = `${location.origin}/@${$currentUser.uid}`;
+			const link = `${location.origin}/#/songs/@${$currentUser.uid}`;
 			await navigator.clipboard.writeText(link);
 			showInfo('Copied link for sharing into clipboard.');
 		} catch (error) {

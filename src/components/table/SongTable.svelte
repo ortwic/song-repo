@@ -7,13 +7,16 @@
   import format from './templates/formatter.helper';
   import StatusElement from './templates/StatusElement.svelte';
   import Table from './Table.svelte'
+  import AddEntry from './AddEntry.svelte';
   import FileDrop from './FileDrop.svelte';
   import SongService from '../../service/song.service';
   import type { UserSong } from '../../model/song.model';
   import { showError, showInfo } from '../../store/notification.store';
   import genres from '../../data/genres.json';
 
-  const service = new SongService();
+  export let params: { id?: string } = {};
+
+  const service = new SongService(params.id?.slice(1));
   const songs = service.usersongs;
   let table: Table;
   let statusFormatter: (cell: CellComponent)  => string;
@@ -75,13 +78,36 @@
   }
 </script>
 
-<StatusElement bind:statusFormatter on:delete={({ detail }) => deleteRow(detail)}/>
+<main> 
+  <StatusElement bind:statusFormatter on:delete={({ detail }) => deleteRow(detail)}/>
 
-<FileDrop on:enter={() => showInfo('Start importing...')} on:addJson={({ detail }) => importJSON(detail)}>
-  <Table bind:this={table} {columns}
-    placeholder='No songs added.'
-    exportTitle='My Song List'
-    groupHeader={format.groupBy}
-    on:error={({ detail }) => showError(detail)}
-  />
-</FileDrop>
+  <FileDrop on:enter={() => showInfo('Start importing...')} on:addJson={({ detail }) => importJSON(detail)}>
+    <Table bind:this={table} {columns}
+      placeholder='No songs added.'
+      exportTitle='My Song List'
+      groupHeader={format.groupBy}
+      on:error={({ detail }) => showError(detail)}
+    />
+  </FileDrop>
+</main>
+
+<footer>
+  <AddEntry />
+</footer>
+
+<style>
+  main {
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  footer {
+    position: sticky;
+    bottom: calc(48px + 1rem);
+    margin-right: 1rem;
+    z-index: 20;
+    height: 0;
+    text-align: right;
+  }
+ 
+</style>

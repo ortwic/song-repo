@@ -2,7 +2,7 @@
     import { createEventDispatcher } from "svelte";
     import { fade } from "svelte/transition";
     import { cubicOut } from 'svelte/easing';
-    import Titlebar from "./Titlebar.svelte";
+    import Titlebar from "./elements/Titlebar.svelte";
     import type { MenuPages } from "../../model/types";
     
     const dispatch = createEventDispatcher();
