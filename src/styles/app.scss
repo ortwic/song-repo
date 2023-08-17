@@ -30,6 +30,15 @@ body {
   overflow: hidden;
 }
 
+main {
+  height: 100vh;
+
+  &.content {
+    hyphens: auto; 
+    overflow: auto;
+  }
+}
+
 a {
   font-weight: 500;
   color: var(--primary);
@@ -49,6 +58,7 @@ h1 {
 }
 
 button, 
+a[role=button],
 input[type=reset], 
 input[type=submit],
 select {
@@ -67,6 +77,7 @@ select {
 }
 
 button:hover, 
+a[role=button]:hover,
 input[type=reset]:hover, 
 input[type=submit]:hover {
   border-color: gray;
@@ -103,13 +114,22 @@ button.icon:hover {
 }
 
 button.primary, 
+a[role=button].primary,
 input[type=reset].primary, 
 input[type=submit].primary {
   color: var(--primback);
   background-color: var(--primary);
 }
 
+button.primary:hover, 
+a[role=button].primary:hover,
+input[type=reset].primary:hover, 
+input[type=submit].primary:hover {
+  background-color: var(--primdark);
+}
+
 button.primary:disabled, 
+a[role=button].primary:disabled,
 input[type=reset].primary:disabled, 
 input[type=submit].primary:disabled {
   color: var(--textghost);
@@ -185,6 +205,20 @@ input.lg {
     color: red;
 }
 
+div.card {
+  padding: 4px;
+  display: flex;
+
+  a, span, p {
+      white-space: nowrap;
+  }
+
+  div.col {
+      padding: 0 1em;
+  }
+}
+
+a.label,
 span.label {
   border: 1px solid silver;
   background-color: #F0F0F0C0;
@@ -193,6 +227,10 @@ span.label {
   padding: .2rem .6rem;
   border-radius: 1rem;
   font-size: smaller;
+}
+
+a.label:hover {
+    background-color: white;
 }
 
 div.autocomplete {

@@ -2,7 +2,6 @@
     import { fade } from "svelte/transition";
     export let height = 'auto';
     export let isLoading = false;
-    const visible = 'hidden';
 
     export function set(value: boolean) {
         isLoading = value;

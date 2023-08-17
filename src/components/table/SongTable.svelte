@@ -96,11 +96,6 @@
 </footer>
 
 <style>
-  main {
-    height: 100vh;
-    overflow: hidden;
-  }
-
   footer {
     position: sticky;
     bottom: calc(48px + 1rem);

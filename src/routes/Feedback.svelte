@@ -1,4 +1,6 @@
 <script lang='ts'>
+    import Titlebar from "../components/ui/elements/Titlebar.svelte";
+
     let sent = false;
     let imcsv = false;
     let excsv = false;
@@ -52,12 +54,8 @@
 </script>
 
 <style lang="scss">
-    section { 
+    div.section { 
         padding: 1em 10%; 
-        flex-grow: 1;
-        hyphens: auto; 
-        overflow: hidden auto;
-        height: calc(100% - 2em);
     }
     input[type=number] { 
         width: 3.6em; 
@@ -77,7 +75,8 @@
     }
 </style>
 
-<section class="dialog">
+<main class="content dialog">
+    <Titlebar closable={false}>Send feedback</Titlebar>
     {#if !sent}
     <div class="section">
         <p>Direkt an ocsoft42@gmail.com schreiben oder</p>
@@ -118,4 +117,4 @@
     {:else}
     <p>Danke, dass du an dieser Feedback Befragung teil genommen hast. </p>
     {/if}
-</section>
+</main>

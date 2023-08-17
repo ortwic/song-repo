@@ -32,7 +32,7 @@
 aside {
     display: flex;
     flex-direction: column;
-    position: absolute;
+    position: fixed;
     right: 0;
     width: vars.$sidebar-width;
     height: 100%;

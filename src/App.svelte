@@ -11,6 +11,8 @@
   import Sidebar from './components/ui/Sidebar.svelte'
   import Snackbar from './components/ui/Snackbar.svelte';
   import Start from "./routes/Start.svelte";
+  import Blog from "./routes/Blog.svelte";
+  import BlogPost from "./routes/BlogPost.svelte";
   import Feedback from "./routes/Feedback.svelte";
   import NotFound from "./routes/NotFound.svelte";
   import type { MenuPages } from './model/types';
@@ -27,6 +29,9 @@
     '/songs': SongTable,
     '/songs/:id': SongTable,
     '/samples': SongTable,
+    '/blog': Blog,
+    '/blog/:label': Blog,
+    '/post/:id': BlogPost,
     '/feedback': Feedback,
     '*': NotFound
   };
@@ -90,7 +95,7 @@
 
 <style>
   header {
-    position: absolute;
+    position: fixed;
     top: 1rem;
     right: 1rem;
     z-index: 10;

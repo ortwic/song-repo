@@ -5,11 +5,14 @@
     const dispatch = createEventDispatcher();
 
     export let target: MenuPages = 'root';
+    export let closable = true;
 </script>
 
 <div>
     <span><slot></slot></span>
+    {#if closable}
     <button data-target={target} class="close" on:click={() => dispatch('close')}>✕</button>
+    {/if}
 </div>
 
 <style lang="scss">

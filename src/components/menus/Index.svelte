@@ -7,6 +7,9 @@
 <NavButton href="/songs" title="Your songs">
     <span><i class='bx bxs-playlist'></i> Your songs</span>
 </NavButton>
+<NavButton href="/blog" title="Making music blog">
+    <span><i class='bx bx-bulb'></i> Making music</span>
+</NavButton>
 <NavButton href="/feedback" title="Send feedback">
     <span><i class='bx bx-mail-send'></i> Send feedback</span>
 </NavButton>

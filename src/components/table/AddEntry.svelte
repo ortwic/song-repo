@@ -104,7 +104,7 @@
                         searchFunction={(value) => searchService.findArtists(value)}
                         onChange={(item) => setArtist(item)} clearSelection={() => setArtist()} showClear={true}
                         showLoadingIndicator={true}>
-                        <div class="option" slot="item" let:item>
+                        <div class="card" slot="item" let:item>
                             <Image src={item.img} />
                             <div class="col">
                                 <a title="Artist" href={item.uri} target="_blank">{item.name}</a>
@@ -128,7 +128,7 @@
                         searchFunction={(value) => searchService.findSongs(value, newSong.artist)} 
                         onChange={(item) => setSong(item)} clearSelection={() => setSong()} showClear={true}
                         showLoadingIndicator={true}>
-                        <div class="option" slot="item" let:item>
+                        <div class="card" slot="item" let:item>
                             <a title={item.album?.title} href={item.album?.uri ?? item.artist?.uri} target="_blank">
                                 <Image src={item.album?.img ?? item.artist?.img} />
                             </a>
@@ -259,19 +259,6 @@ form {
             i.bx {
                 color: gray;
                 font-size: smaller;
-            }
-        }
-
-        div.option {
-            padding: 4px;
-            display: flex;
-
-            a, span, p {
-                white-space: nowrap;
-            }
-
-            div.col {
-                padding: 0 1em;
             }
         }
     }
