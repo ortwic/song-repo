@@ -20,6 +20,7 @@
     let visible = false;
 
     let newSong: Partial<UserSong>;
+    const styles = (genre: string) => (genres.find(v => v.name === genre) ?? genres[0]).styles;
     let label = '';
 
     reset();
@@ -98,7 +99,7 @@
             <div class="section flex">
                 <div>
                     <label for="artist">Artist</label>
-                    <Autocomplete inputClassName="lg" labelFieldName="name" {required} placeholder="artist" 
+                    <Autocomplete inputClassName="lg" labelFieldName="name" {required} placeholder="artist"
                         delay={500} minCharactersToSearch={2} hideArrow={true} bind:text={newSong.artist}
                         searchFunction={(value) => searchService.findArtists(value)}
                         onChange={(item) => setArtist(item)} clearSelection={() => setArtist()} showClear={true}
@@ -122,7 +123,7 @@
                 </div>
                 <div>
                     <label for="title">Title</label>
-                    <Autocomplete inputClassName="lg" labelFieldName="title" {required} placeholder="title" 
+                    <Autocomplete inputClassName="lg" labelFieldName="title" {required} placeholder="title"
                         delay={newSong.artist ? 500 : 990} minCharactersToSearch={newSong.artist ? 0 : 3} hideArrow={true}
                         searchFunction={(value) => searchService.findSongs(value, newSong.artist)} 
                         onChange={(item) => setSong(item)} clearSelection={() => setSong()} showClear={true}
@@ -155,18 +156,24 @@
                 </div>
                 <div>
                     <label for="genre">Genre</label>
-                    <Autocomplete inputClassName="lg" labelFieldName="name" placeholder="genre" minCharactersToSearch={0}
-                        searchFunction="{() => genres}" showClear={true}
-                        bind:text={newSong.genre} hideArrow={true}>
+                    <Autocomplete inputClassName="lg" labelFieldName="name" placeholder="genre"
+                        minCharactersToSearch={0} items={genres} showClear={true}
+                        bind:text={newSong.genre} hideArrow={true}
+                        onChange={() => newSong.style = undefined}>
                         <svelte:fragment slot="item" let:item let:label>
-                            <div class="genre" style:background-color={item.color}></div>
-                            <span class="genre">{@html label}</span>
+                            <div class="square" style:background-color={item.color}></div>
+                            <span class="option">{@html label}</span>
                         </svelte:fragment>
                     </Autocomplete>
                 </div>
                 <div>
                     <label for="style">Styles</label>
-                    <input id="style" class="lg" type="text" placeholder="style" autocapitalize="words" bind:value={newSong.style} on:keydown={addLabel}>
+                    <Autocomplete inputClassName="lg" placeholder="style" hideArrow={true}
+                        minCharactersToSearch={0} searchFunction="{() => styles(newSong.genre[0])}" showClear={true}>
+                        <svelte:fragment slot="item" let:item let:label>
+                            <span class="option">{@html label}</span>
+                        </svelte:fragment>
+                    </Autocomplete>
                 </div>
                 <div>
                     <label for="source" title="markdown supported e.g. [link](http://example.com)">Source <i class='bx bx-help-circle'></i></label>
@@ -216,26 +223,26 @@ form {
         }
     }
 
-    div.genre {
+    div.square {
         display: inline-block;
         width: 1.2em;
         height: 1.2em;
     }
 
-    span.genre {
+    span.option {
         padding: .4em;
     }
 
     section {
         margin: 1em;
-        min-width: 50rem;
-        min-height: 50vh;
-        height: 100%;
-        overflow-y: auto;
+        min-width: 38em;
+
+        // not working as autocomplete-list not overlapping anymore
+        // overflow-y: auto; 
 
         div.flex {
             display: flex;
-            flex-flow: column wrap;
+            flex-flow: row wrap;
             max-height: 100%;
             
             & > div {
