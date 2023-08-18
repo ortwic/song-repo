@@ -12,7 +12,6 @@
   import Snackbar from './components/ui/Snackbar.svelte';
   import Start from "./routes/Start.svelte";
   import Blog from "./routes/Blog.svelte";
-  import BlogPost from "./routes/BlogPost.svelte";
   import Feedback from "./routes/Feedback.svelte";
   import NotFound from "./routes/NotFound.svelte";
   import type { MenuPages } from './model/types';
@@ -31,7 +30,6 @@
     '/samples': SongTable,
     '/blog': Blog,
     '/blog/:label': Blog,
-    '/post/:id': BlogPost,
     '/feedback': Feedback,
     '*': NotFound
   };

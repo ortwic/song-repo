@@ -1,50 +1,14 @@
 <script lang="ts">
     import Titlebar from "../components/ui/elements/Titlebar.svelte";
     import Image from "../components/ui/elements/Image.svelte";
+    import PostDetails from "../components/ui/PostDetails.svelte";
     import LoadingBar from "../components/ui/elements/LoadingBar.svelte";
     import { createBlogService } from "../service/blog.service";
   
     export let params: { label?: string } = {};
 
-    const entities = {
-        'amp': '&',
-        'apos': '\'',
-        '#x27': '\'',
-        '#x2F': '/',
-        '#39': '\'',
-        '#47': '/',
-        'lt': '<',
-        'gt': '>',
-        'nbsp': ' ',
-        'quot': '"'
-    };
-
     const blogPosts = createBlogService(true)
         .then(service => service.getBlogPosts(params.label));
-
-    function generateSnippet(html: string, maxWords = 12): string {
-        const text = parseHtml(html)[0];
-        if (text) {
-            const sentences = text.match(/(.+[\.\?\!\n])\s/g);
-            if (sentences) {
-                const first = sentences[0].replace(/&([^;]+);/gm, (e, m) => entities[e] || m);
-                const words = first.split(/\s/);
-                if (first.length > maxWords) {
-                    return words.splice(0, maxWords).join(' ') + ' ...';
-                }
-
-                return first.trim();
-            }
-        }
-        return '';
-    }
-
-    function parseHtml(html: string) {
-        const doc = new DOMParser().parseFromString(html, 'text/html');
-        const content = [];
-        doc.querySelectorAll('*').forEach(e => content.push((e as HTMLElement).innerText));
-        return content.filter(v => v);
-    }
 
   </script>
   
@@ -66,10 +30,7 @@
                 <Image src={post.images[0].url} width={120} height={120} />
                 {/if}
                 <div class="col">
-                    <a href="#/post/{post.id}">
-                        <h2>{post.title}</h2>
-                        <span>{generateSnippet(post.content)}</span>
-                    </a>
+                    <PostDetails title={post.title} html={post.content}/>
                     <div>   
                         {#each post.labels as label}
                         <a href="#/blog/{label}" class="label">{label}</a>
@@ -92,31 +53,19 @@
 main {
     color: var(--text);
 
-    h1 {
-        color: var(--primary);
-    }
-
     div.post {
         border-color: silver;
         border-style: solid;
         border-width: 1px 0 1px 0;
-        padding: 0 1rem;
-        transition: all .2s ease-in-out;
-    }
 
-    div.post:hover {
-        background-color: var(--primback);
-    }
+        div.col {
+            color: var(--primtext);
+            padding: 0 1rem;
+            width: 100%;
 
-    div.post div.col a {
-        color: var(--primtext);
-
-        h2 {
-            margin: .3em 0;
-        }
-
-        span {
-            font-weight: normal;
+            span {
+                font-weight: normal;
+            }
         }
     }
 
