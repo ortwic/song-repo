@@ -68,10 +68,6 @@
         margin: .3em 0;
         width: 100%;
         transition: all .2s ease-in-out;
-
-        &:hover {
-            background-color: var(--primback);
-        }
     }
 
     button.more {
