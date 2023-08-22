@@ -4,6 +4,7 @@
     import Image from "../components/ui/elements/Image.svelte";
     import PostDetails from "../components/ui/PostDetails.svelte";
     import BlogService, { createBlogService } from "../service/blog.service";
+    import { t } from "../service/i18n";
   
     export let params: { label?: string } = {};
 
@@ -29,7 +30,7 @@
 </svelte:head>
 
 <main on:scroll={scrollHandler} class="content">
-    <Titlebar closable={false}>Everthing about making music</Titlebar>
+    <Titlebar closable={false}><i class="bx bx-bulb"></i>&nbsp; { $t('blog.title') }</Titlebar>
     {#if $store?.length}
         {#each $store as post}
         <div class="post card">

@@ -66,7 +66,10 @@
   </header>
   <nav>
     {#if $currentMenu == 'login'}
-    <Sidebar {title} {footer}>
+    <Sidebar {footer}>
+      <svelte:fragment slot="title">
+        <a href="#/">{title}</a>
+      </svelte:fragment>
       {#if $currentUser}
       <Profil email={$currentUser.email}
           photoURL={$currentUser.photoURL} 
@@ -91,7 +94,7 @@
 
 <Snackbar />
 
-<style>
+<style lang="scss">
   header {
     position: fixed;
     top: 1rem;
@@ -100,4 +103,12 @@
     height: 0;
     text-align: right;
   } 
+
+  a {
+    color: inherit;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 </style>

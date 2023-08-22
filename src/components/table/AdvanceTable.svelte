@@ -7,13 +7,14 @@
     import FirestoreService, { uniqueKey } from '../../service/firestore.service';
     import { showInfo, showError } from '../../store/notification.store';
     
-    const pages = { genres: 'Genres', settings: 'Settings' };
+    const pages = { genres: 'Genres', settings: 'Settings', feedback: 'Feedback' };
     type Pages = keyof typeof pages;
     let active: Pages;
 
     const stores = {
         genres: new FirestoreService('genres'),
         settings: new FirestoreService('settings'),
+        feedback: new FirestoreService('feedback'),
     }
     let sub: { unsubscribe: () => void; };
 
@@ -55,10 +56,10 @@
     $: columns = [];
     $: data = [];
 </script>
-
-<div class="row">            
-    <button on:click={() => changePage('genres')}>
-        <i class='bx bxs-edit'></i> Edit master data
+           
+<div class="row">    
+    <button class='edit' title='Edit master data' on:click={() => changePage('genres')}>
+        <i class='bx bxs-edit'></i> <slot></slot>
     </button>
 </div>
 
@@ -83,5 +84,17 @@
         width: 100%;
         height: 100%;
         transform: translate(50%, 50%);
+    }
+
+    button.edit {
+        padding: 0;
+        outline: 0;
+        border: inherit;
+        box-shadow: inherit;
+        // cursor: inherit;
+        // color: inherit;
+        // background-color: inherit;
+        // font-weight: inherit;
+        // text-shadow: inherit;
     }
 </style>

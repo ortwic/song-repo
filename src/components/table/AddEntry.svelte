@@ -9,6 +9,7 @@
     import LoadingBar from '../ui/elements/LoadingBar.svelte';
     import SongService from "../../service/song.service";
     import SearchService, { create } from "../../service/search.service";
+    import { t } from '../../service/i18n';
     import type { UserSong } from "../../model/song.model";
     import type { ArtistResult, SongResult } from "../../model/songbpm.model";
     import genres from '../../data/genres.json';
@@ -93,12 +94,12 @@
 <form bind:this={form} on:submit|preventDefault>
     <ConfirmDialog size='auto' on:closed={done}>
         <div class="title" slot="title">
-            Search - powered by <a href="https://getsongbpm.com/api" target="_blank">GetSongbpm</a>
+            <i class="bx bx-search-alt-2"></i>&nbsp; { $t('songs.addTitle') } <a href="https://getsongbpm.com/api" target="_blank">GetSongbpm</a>
         </div>
         <section>
             <div class="section flex">
                 <div>
-                    <label for="artist">Artist</label>
+                    <label for="artist">{ $t('songs.columns.artist') }</label>
                     <Autocomplete inputClassName="lg" labelFieldName="name" {required} placeholder="artist"
                         delay={500} minCharactersToSearch={2} hideArrow={true} bind:text={newSong.artist}
                         searchFunction={(value) => searchService.findArtists(value)}
@@ -122,7 +123,7 @@
                     </Autocomplete>
                 </div>
                 <div>
-                    <label for="title">Title</label>
+                    <label for="title">{ $t('songs.columns.title') }</label>
                     <Autocomplete inputClassName="lg" labelFieldName="title" {required} placeholder="title"
                         delay={newSong.artist ? 500 : 990} minCharactersToSearch={newSong.artist ? 0 : 3} hideArrow={true}
                         searchFunction={(value) => searchService.findSongs(value, newSong.artist)} 
@@ -155,7 +156,7 @@
                     </Autocomplete>
                 </div>
                 <div>
-                    <label for="genre">Genre</label>
+                    <label for="genre">{ $t('songs.columns.genre') }</label>
                     <Autocomplete inputClassName="lg" labelFieldName="name" placeholder="genre"
                         minCharactersToSearch={0} items={genres} showClear={true}
                         bind:text={newSong.genre} hideArrow={true}
@@ -167,7 +168,7 @@
                     </Autocomplete>
                 </div>
                 <div>
-                    <label for="style">Styles</label>
+                    <label for="style">{ $t('songs.columns.style') }</label>
                     <Autocomplete inputClassName="lg" placeholder="style" hideArrow={true}
                         minCharactersToSearch={0} searchFunction="{() => styles(newSong.genre[0])}" showClear={true}>
                         <svelte:fragment slot="item" let:item let:label>
@@ -176,12 +177,12 @@
                     </Autocomplete>
                 </div>
                 <div>
-                    <label for="source" title="markdown supported e.g. [link](http://example.com)">Source <i class='bx bx-help-circle'></i></label>
-                    <input id="source" class="lg" type="text" placeholder="source" bind:value={newSong.source}>
+                    <label for="source" title="markdown supported e.g. [link](http://example.com)">{ $t('songs.columns.source') } <i class='bx bx-help-circle'></i></label>
+                    <input id="source" class="lg" type="text" bind:value={newSong.source}>
                 </div>
                 <div>
-                    <label for="tags" title="comma separated e.g. Foo, Bar">Labels <i class='bx bx-help-circle'></i></label>
-                    <input id="tags" class="lg" type="text" placeholder="tags" bind:value={label} on:keydown={addLabel}>
+                    <label for="tags" title="comma separated e.g. Foo, Bar">{ $t('songs.columns.tags') } <i class='bx bx-help-circle'></i></label>
+                    <input id="tags" class="lg" type="text" bind:value={label} on:keydown={addLabel}>
                     <div class="flex labels">
                         {#each newSong.tags as tag}
                         <span class='label'>{tag}</span>
@@ -189,21 +190,21 @@
                     </div>
                 </div>
                 <div>
-                    <label for="key">Key</label>
+                    <label for="key">{ $t('songs.columns.key') }</label>
                     <SelectKey bind:value={newSong.key} />
                 </div>
                 <div>
-                    <label for="bpm">Tempo</label>
-                    <input id="bpm" class="sm" type="text" placeholder="120" bind:value={newSong.bpm} on:keydown={addLabel}>
+                    <label for="bpm">{ $t('songs.columns.bpm') }</label>
+                    <input id="bpm" class="sm" type="text" bind:value={newSong.bpm} on:keydown={addLabel}>
                 </div>
                 <div>
-                    <label for="time">Time</label>
-                    <input id="time" class="sm" type="text" placeholder="4/4" bind:value={newSong.time} on:keydown={addLabel}>
+                    <label for="time">{ $t('songs.columns.time') }</label>
+                    <input id="time" class="sm" type="text" bind:value={newSong.time} on:keydown={addLabel}>
                 </div>
             </div>
         </section>
         {#if !songService.hasUser()}
-        <div class='warn'>You are not signed in, so data won't be persisted after leaving the app!</div>
+        <div class='warn'>{ $t('songs.noPersist') }</div>
         {/if}
     </ConfirmDialog>
 </form>

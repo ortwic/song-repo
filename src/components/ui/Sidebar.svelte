@@ -10,13 +10,17 @@
 </script>
 
 <aside in:slide={{ duration: 200, axis: 'x' }} out:slide={{ duration: 200, axis: 'x' }} >
-    <Titlebar target="root">{title}</Titlebar>
+    <Titlebar target="root">
+        <slot name="title">
+            {title}
+        </slot>    
+    </Titlebar>
     <section>
         <slot></slot>
     </section>
     <footer class="menu">
         {#if counter >= 5e5 || import.meta.env.DEV}
-        <AdvanceTable />
+        <AdvanceTable>Master data</AdvanceTable>
         {/if}
         <slot name="footer"></slot>
         <div class="info">

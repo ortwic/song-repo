@@ -1,8 +1,8 @@
 import type { blogger_v3 as B } from '@googleapis/blogger';
-import FirestoreService from './firestore.service';
-import { lang } from '../store/app.store';
-import { showError } from '../store/notification.store';
 import { writable, type Readable } from 'svelte/store';
+import FirestoreService from './firestore.service';
+import { lang } from './i18n';
+import { showError } from '../store/notification.store';
 
 const blogUrl = 'https://www.googleapis.com/blogger/v3/blogs';
 const empty = (item: unknown) => !item;

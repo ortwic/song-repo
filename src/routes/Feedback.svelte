@@ -1,5 +1,6 @@
 <script lang='ts'>
     import Titlebar from "../components/ui/elements/Titlebar.svelte";
+    import { t } from '../service/i18n';
 
     let sent = false;
     let imcsv = false;
@@ -76,45 +77,44 @@
 </style>
 
 <main class="content dialog">
-    <Titlebar closable={false}>Send feedback</Titlebar>
+    <Titlebar closable={false}><i class="bx bx-mail-send"></i>&nbsp; { $t('feedback.submit')}</Titlebar>
     {#if !sent}
     <div class="section">
-        <p>Direkt an ocsoft42@gmail.com schreiben oder</p>
-        <h2>E-Mail mit diesem Formular vorbereiten</h2>
-        <p>Bitte bewerte die Folgenden Fragen auf einer Skala von 1 bis 10 aufsteigend, wobei 10 dir am aller wichtigsten ist.</p>
-        <h4>1. Wie wichtig ist es dir, Daten importieren oder exportieren zu können?</h4>
+        <p>{ $t('feedback.note')}</p>
+        <h4>{ $t('feedback.dataImpExp')}</h4>
         <div class="flex">
-            <span><input type="checkbox" name="imcsv" bind:checked={imcsv}> Import CSV</span>
-            <span><input type="checkbox" name="excsv" bind:checked={excsv}> Export CSV</span>
-            <span><input type="checkbox" name="xlsx" bind:checked={xlsx}> Export XLSX</span>
-            <span><input type="checkbox" name="pdf" bind:checked={pdf}> Export PDF</span>
+            <span><input type="checkbox" name="imcsv" bind:checked={imcsv}> { $t('feedback.ImpCsv')}</span>
+            <span><input type="checkbox" name="excsv" bind:checked={excsv}> { $t('feedback.ExpCsv')}</span>
+            <span><input type="checkbox" name="xlsx" bind:checked={xlsx}> { $t('feedback.ExpXlsx')}</span>
+            <span><input type="checkbox" name="pdf" bind:checked={pdf}> { $t('feedback.ExpPdf')}</span>
         </div>
-        <h4>2. Wie wichtig ist es dir, dass dir bei der Erstellung neuer Stücke Daten vorgeschlagen werden?</h4>
+        <h4>{ $t('feedback.dataSug')}</h4>
         <ul>
-            <li><input type="number" placeholder="1-10" name="genre" bind:value={genre} min="1" max="10"> <label for="genre">Genre</label></li>
-            <li><input type="number" placeholder="1-10" name="artist" bind:value={artist} min="1" max="10"> <label for="artist">Künstler</label></li>
-            <li><input type="number" placeholder="1-10" name="title" bind:value={title} min="1" max="10"> <label for="">Titel</label></li>
-            <li><input type="number" placeholder="1-10" name="lyrics" bind:value={lyrics} min="1" max="10"> <label for="">Verweis Lyrics</label></li>
-            <li><input type="number" placeholder="1-10" name="chords" bind:value={chords} min="1" max="10"> <label for="">Verweis Akkorde</label></li>
-            <li><input type="number" placeholder="1-10" name="notes" bind:value={notes} min="1" max="10"> <label for="">Suche nach Noten</label></li>
-            <li><input type="text" name="others" bind:value={others}> <label for="">Sonstiges</label></li>
+            <li><input type="number" placeholder="1-10" name="genre" bind:value={genre} min="1" max="10"> <label for="genre">{ $t('feedback.genre')}</label></li>
+            <li><input type="number" placeholder="1-10" name="artist" bind:value={artist} min="1" max="10"> <label for="artist">{ $t('feedback.artist')}</label></li>
+            <li><input type="number" placeholder="1-10" name="title" bind:value={title} min="1" max="10"> <label for="">{ $t('feedback.title')}</label></li>
+            <li><input type="number" placeholder="1-10" name="lyrics" bind:value={lyrics} min="1" max="10"> <label for="">{ $t('feedback.refLyrics')}</label></li>
+            <li><input type="number" placeholder="1-10" name="chords" bind:value={chords} min="1" max="10"> <label for="">{ $t('feedback.refChords')}</label></li>
+            <li><input type="number" placeholder="1-10" name="notes" bind:value={notes} min="1" max="10"> <label for="">{ $t('feedback.searchNotes')}</label></li>
+            <li><input type="text" name="others" bind:value={others}> <label for="">{ $t('feedback.other')}</label></li>
         </ul>
-        <h4>3. Wie wichtig ist es für dich, deine Inhalte mit anderen Benutzern teilen zu können?</h4>
+        <h4>{ $t('feedback.shareCont')}</h4>
         <ul>
-            <li><input type="number" placeholder="1-10" name="link" bind:value={link} min="1" max="10"> <label for="">Öffentlicher Link</label></li>
-            <li><input type="number" placeholder="1-10" name="user" bind:value={user} min="1" max="10"> <label for="">Andere Benutzer der Plattform</label></li>
-            <li><input type="number" placeholder="1-10" name="email" bind:value={email} min="1" max="10"> <label for="">E-Mail Versand</label></li>
-            <li><input type="text" name="platform" bind:value={platform}> <label for="">Sonstige Plattform </label></li>
+            <li><input type="number" placeholder="1-10" name="link" bind:value={link} min="1" max="10"> <label for="">{ $t('feedback.pubLink')}</label></li>
+            <li><input type="number" placeholder="1-10" name="user" bind:value={user} min="1" max="10"> <label for="">{ $t('feedback.otherUsers')}</label></li>
+            <li><input type="number" placeholder="1-10" name="email" bind:value={email} min="1" max="10"> <label for="">{ $t('feedback.emailSend')}</label></li>
+            <li><input type="text" name="platform" bind:value={platform}> <label for="">{ $t('feedback.otherPlat')}</label></li>
         </ul>
-        <h4>4. Hast du noch sonstige Ideen und Vorschläge für die App oder sind dir schwerwiegende Bugs aufgefallen?</h4>
+        <h4>{ $t('feedback.ideas')}</h4>
         <textarea name="ideas" bind:value={ideas} rows="4" cols="50"></textarea><br>
     </div>
     <div class="section">
         <button on:click={handleForm}>
-            <span><i class='bx bx-mail-send'></i> E-Mail vorbereiten</span>
+            <span><i class='bx bx-mail-send'></i> { $t('feedback.submit')}</span>
         </button>
     </div>
     {:else}
-    <p>Danke, dass du an dieser Feedback Befragung teil genommen hast. </p>
+    <p>{ $t('feedback.ty')}</p>
     {/if}
 </main>
+

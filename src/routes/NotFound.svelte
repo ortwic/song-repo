@@ -1,14 +1,13 @@
 <script>
-    import { lang } from "../store/app.store";
-    import messages from '../data/notfound.json';
+    import { t } from '../service/i18n';
 
-    const no = Math.floor(Math.random() * messages[lang].length);
+    const no = Math.floor(Math.random() * $t('notfound.messages').length );
 </script>
 
 <div>
-    <h2>404 - Not Found</h2>
+    <h2>{ $t('notfound.title') }</h2>
     <p>
-        {messages[lang][no]}
+        { $t(`notfound.messages.${no}`) }
     </p>
     <p style="color: red">
         <slot></slot>

@@ -10,19 +10,25 @@
 <NavButton href="/blog" title="Making music blog">
     <span><i class='bx bx-bulb'></i> Making music</span>
 </NavButton>
-<NavButton href="/feedback" title="Send feedback">
-    <span><i class='bx bx-mail-send'></i> Send feedback</span>
-</NavButton>
 <div class="row">
-    <a role="button" target="_blank" href="http://buymeacoffee.com/ortwic">
+    <a class="coffee" role="button" target="_blank" href="http://buymeacoffee.com/ortwic">
         <span><i class='bx bxs-coffee'></i> Buy me a coffee</span>
-    </a>
-</div>
-<div class="row">
-    <a role="button" target="_blank" href="https://github.com/users/ortwic/projects/2/views/1">
-        <span><i class="bx bxl-github"></i> Feature overview</span>
     </a>
 </div>
 {#if location.href.includes('/songs')}
 <ExportTable />
 {/if}
+
+<style lang="scss">
+    div.row > a.coffee {
+        background-color: goldenrod;
+
+        &:hover {
+            background-color: wheat;
+        }
+
+        & > span {
+            color: black;
+        }
+    }
+</style>

@@ -1,58 +1,102 @@
 <script>
-    import { marked } from 'marked';
     import Titlebar from '../components/ui/elements/Titlebar.svelte';
-    import welcome from '../data/welcome.json';
-    import { lang } from '../store/app.store';
+    import { t } from '../service/i18n';
     
     const options = { mangle: false, headerIds: false };
 </script>
 
 <main class="content">
-    <Titlebar closable={false}>{welcome[lang][0]}</Titlebar>
-    <p>
-        {welcome[lang][1]}
-        {@html marked(welcome[lang][2], options)}
-    </p>
-    <p>
-        <a role="button" class="primary" href="#/songs">
-            <span><i class='bx bxs-playlist'></i> Start</span>
-        </a>
-        <a role="button" class="none" href="#/samples">
-            <span><i class='bx bx-test-tube'></i> {welcome[lang][3]}</span>
-        </a>
-    </p>
-    <p>
-        <i class='bx bx-error'></i>
-        <i>{welcome[lang][4]}</i>
-        <i class='bx bx-error'></i>
-    </p>
+    <Titlebar closable={false}>
+        <i class="bx bx-world"></i>&nbsp; { $t('start.hello')}
+    </Titlebar>
+    <div>
+        { $t('start.intro') }
+        <ul class="bx-ul">
+            <li class="bx-test-tube">
+                <span>{ $t('start.samples') }</span>
+                <span>
+                    <a role="button" href="#/samples">Demo</a>
+                </span>
+            </li>
+            <li class="bxs-playlist">
+                <span>{ $t('start.features.list') }</span>
+                <span>
+                    <a role="button" class="primary" href="#/songs">{ $t('start.features.create') }</a>
+                </span>
+            </li>
+            <li class="bx-bar-chart">{ $t('start.features.track') }</li>
+            <li class="bx-share-alt">
+                { $t('start.features.share') } 
+                <span class="smaller">
+                    Link, CSV, JSON, XLSX, PDF
+                </span>
+            </li>
+            <li class="bx-search-alt-2">
+                <span>
+                    { $t('start.features.search') } 
+                </span>
+                <a target="_blank" href="https://getsongbpm.com">getsongbpm.com</a>
+            </li>
+            <li class="bx-bulb">
+                <span>{ $t('start.features.blog') }</span>
+                <a role="button" href="#/blog">Blog</a>
+            </li>
+            <li class="bxl-github">
+                <span>{ $t('start.features.github') }</span>
+                <a role="button" target="_blank" href="https://github.com/users/ortwic/projects/2/views/1">Roadmap</a>
+            </li>
+            <li class="bx-mail-send">
+                <span>{ $t('start.features.feedback') }</span>
+                <span>
+                    <a role="button" class="primary" href="#/feedback">Feedback</a>
+                </span>
+            </li>
+        </ul>
+    </div>
 </main>
 
 <style lang="scss">
 main {
-    p {
+    & > div {
         padding: 1em 5%;
         max-width: 40em;
 
-        a.none {
-            box-shadow: unset;
-        }
+        ul.bx-ul {
+            list-style-type: neutral;
+            margin-left: .8em;
+            margin-bottom: 2em;
 
-        a:not([role="button"]), h1, h2 {
-            color: var(--primary);
+            li {
+                position: relative;
+                padding-left: 2em;
+                margin-bottom: 1.6em;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                
+                &:before {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    display: inline-block;
+                    font-family: "boxicons";
+                    font-size: larger;
+                    color: gray;
+                }
 
-            i, em {
-                text-decoration: underline;
-                color: var(--primary);
+                i.bx {
+                    position: inherit;
+                }
             }
         }
 
-        a:not([role="button"]):hover {
-            text-decoration: underline;
+        a[role="button"] {
+            margin-left: 1.5em;
+            white-space: nowrap;
         }
-
-        i, em {
-            color: var(--primselect);
+        
+        .smaller {
+            font-size: smaller;
         }
     }
 }

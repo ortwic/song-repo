@@ -1,0 +1,95 @@
+{
+  "start": {
+    "hello": "Hello musician!",
+    "intro": "This app was specifically designed for musicians like you to keep track of your repertoire and your progress. Some features of this app:",
+    "features": {
+      "list": "Create own list of songs you've mastered or want to learn. (Login to persist data)",
+      "create": "Create list",
+      "track": "Keep an overview of your progress.",
+      "share": "Share or export list of your repertoire.",
+      "search": "Search with autocomplete for genres, artists, and titles.",
+      "blog": "How-tos and further articles about making",
+      "github": "Planned feature overview and known bugs",
+      "feedback": "We hope you find our app useful and look forward to your"
+    },
+    "samples": "Load list with sample data"
+  },
+  "feedback": {
+    "submit": "Submit feedback",
+    "note": "Dote the following questions on a scale from 1 to 10 ascending, where 10 is the most important to you.",
+    "dataImpExp": "1. How important is it to you to be able to import or export data?",
+    "ImpCsv": "Import CSV",
+    "ExpCsv": "Export CSV",
+    "ExpXlsx": "Export XLSX",
+    "ExpPdf": "Export PDF",
+    "dataSug": "2. How important is it to you that data is suggested to you when creating new pieces?",
+    "genre": "Genre",
+    "artist": "Artist",
+    "title": "Title",
+    "refLyrics": "Reference Lyrics",
+    "refChords": "Reference Chords",
+    "searchNotes": "Search for Notes",
+    "other": "Other",
+    "shareCont": "3. How important is it for you to be able to share your content with other users?",
+    "pubLink": "Public Link",
+    "otherUsers": "Other Users of the Platform",
+    "emailSend": "E-Mail Delivery",
+    "otherPlat": "Other Platform",
+    "ideas": "4. Do you have any other ideas and suggestions for the app or have you noticed serious bugs?",
+    "ty": "Thank you for participating in this feedback survey."
+  },
+  "songs": {
+    "columns": {
+      "fav": "Favorite",
+      "progressLogs": "Count",
+      "progress": "Progress",
+      "status": "Status",
+      "artistImg": "▩",
+      "artist": "Artist",
+      "title": "Title",
+      "genre": "Genre",
+      "style": "Style",
+      "source": "Source",
+      "key": "Key",
+      "time": "Time",
+      "bpm": "BPM",
+      "difficulty": "Level",
+      "features": "Features",
+      "tags": "Labels",
+      "learnedOn": "Learned",
+      "changedAt": "Changed"
+    },
+    "nosongs": "No songs added.",
+    "exportTitle": "My Song List",
+    "import": "Start importing...",
+    "importDone": "Found {found} songs. Total songs: {total}",
+    "addTitle": "Search - powered by",
+    "noPersist": "You are not signed in, so data won't be persisted after leaving the app!"
+  },
+  "table": {
+    "selectColumns": "Choose columns",
+    "groupBy": "Group by {title}"
+  },
+  "blog": {
+    "title": "Everthing about making music"
+  },
+  "notfound": {
+    "title": "Not found",
+    "messages": [
+      "Oops, something went wrong.",
+      "We're sorry, but we can't find the page you're looking for.",
+      "Looks like this page is missing. Maybe it's been moved or deleted.",
+      "This page isn't available right now. Please check back later.",
+      "We're experiencing some technical difficulties. Please try again later.",
+      "We're sorry, but something seems to be wrong on our end.",
+      "We're working hard to fix this issue. Please bear with us.",
+      "This page is currently under maintenance. We apologize for any inconvenience.",
+      "We're sorry, but we're having trouble loading this page.",
+      "An unexpected error has occurred. We're on it."
+    ]
+  },
+  "dialog": {
+    "confirm": "Confirm",
+    "decline": "Decline"
+  }
+}

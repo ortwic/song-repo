@@ -3,6 +3,7 @@
     import { fade } from "svelte/transition";
     import { cubicOut } from 'svelte/easing';
     import Titlebar from "./elements/Titlebar.svelte";
+    import { t } from "../../service/i18n";
     import type { MenuPages } from "../../model/types";
     
     const dispatch = createEventDispatcher();
@@ -22,11 +23,11 @@
     <div class="row">
         <button data-target={target} 
             on:click|stopPropagation={() => dispatch('closed', true)}>
-            Confirm
+            { $t('dialog.confirm') }
         </button>
         <button data-target={target} 
             on:click|stopPropagation={() => dispatch('closed', false)}>
-            Decline
+            { $t('dialog.decline') }
         </button>
     </div>
 </div>
