@@ -1,54 +1,23 @@
 <script lang='ts'>
+    import { format } from 'fecha';
     import Titlebar from "../components/ui/elements/Titlebar.svelte";
+    import FirestoreService from "../service/firestore.service";
     import { t } from '../service/i18n';
+    import { showError } from '../store/notification.store';
 
+    const store = new FirestoreService('feedback');
     let sent = false;
-    let imcsv = false;
-    let excsv = false;
-    let xlsx = false;
-    let pdf = false;
-    
-    let genre = '';
-    let artist = '';
-    let title = '';
-    let lyrics = '';
-    let chords = '';
-    let notes = '';
-    let others = '';
 
-    let link = '';
-    let user = '';
-    let email = '';
-    let platform = '';
-
-    let ideas = '';
-
-    function handleForm() {
-        let subject = "User Feedback for 'My Song Repertory'";
-        let body = `
-        Import CSV: ${imcsv}
-        Export CSV: ${excsv}
-        Export XLSX: ${xlsx}
-        Export PDF: ${pdf}
-
-        Autocomplete:
-        Genre: ${genre}
-        Künstler: ${artist}
-        Titel: ${title}
-        Verweis Lyrics: ${lyrics}
-        Verweis Akkorde: ${chords}
-        Suche nach Noten: ${notes}
-        Sonstiges: ${others}
-
-        Sharing:
-        Link: ${link}
-        User: ${user}
-        E-Mail: ${email}
-        Platform: ${platform}
-
-        Sonstige Ideen und Vorschläge: ${ideas}`;
-
-        window.open(`mailto:ocsoft42@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
+    async function handleForm({ target }) {
+        const data = new FormData(target);
+        const json = Object.fromEntries(data.entries()) as { id: string };
+        console.table(json)
+        
+        try {
+            // await store.setDocument(json);
+        } catch (error) {
+            showError(error);
+        }
 
         sent = true;
     }
@@ -74,47 +43,79 @@
             white-space: nowrap;
         }
     }
+
+    fieldset {
+        border-color: whitesmoke;
+        border-left: 0;
+        border-right: 0;
+        border-bottom: 0;
+        margin-bottom: 1em;
+
+        legend {
+            font-weight: 500;
+            padding: 0 .6em;
+        }
+    }
 </style>
 
 <main class="content dialog">
     <Titlebar closable={false}><i class="bx bx-mail-send"></i>&nbsp; { $t('feedback.submit')}</Titlebar>
-    {#if !sent}
-    <div class="section">
-        <p>{ $t('feedback.note')}</p>
-        <h4>{ $t('feedback.dataImpExp')}</h4>
-        <div class="flex">
-            <span><input type="checkbox" name="imcsv" bind:checked={imcsv}> { $t('feedback.ImpCsv')}</span>
-            <span><input type="checkbox" name="excsv" bind:checked={excsv}> { $t('feedback.ExpCsv')}</span>
-            <span><input type="checkbox" name="xlsx" bind:checked={xlsx}> { $t('feedback.ExpXlsx')}</span>
-            <span><input type="checkbox" name="pdf" bind:checked={pdf}> { $t('feedback.ExpPdf')}</span>
+    <form on:submit|preventDefault={handleForm}>
+        <div class="section">
+            {#if !sent}
+            <p>{ $t('feedback.note')}</p>
+            <input type="hidden" name="id" value={format(new Date(), 'YYMMDD.HHmmss.SSS')}>
+            <fieldset name="backup">
+                <legend>{ $t('feedback.qBackup')}</legend>
+                <div class="flex">
+                    <span><input type="checkbox" name="import-csv"> Import CSV</span>
+                    <span><input type="checkbox" name="export-csv"> Export CSV</span>
+                    <span><input type="checkbox" name="export-xlsx"> Export XLSX</span>
+                    <span><input type="checkbox" name="export-pdf"> Export PDF</span>
+                </div>
+            </fieldset>
+            <fieldset name="search">
+                <legend>{ $t('feedback.qSearch')}</legend>
+                <ul>
+                    <li><input type="number" placeholder="1-10" name="search-genre" min="1" max="10"> <label for="search-genre">{ $t('feedback.genre')}</label></li>
+                    <li><input type="number" placeholder="1-10" name="search-title" min="1" max="10"> <label for="search-title">{ $t('feedback.title')}</label></li>
+                    <li><input type="number" placeholder="1-10" name="search-lyrics" min="1" max="10"> <label for="search-lyrics">{ $t('feedback.refLyrics')}</label></li>
+                    <li><input type="number" placeholder="1-10" name="search-chords" min="1" max="10"> <label for="search-chords">{ $t('feedback.refChords')}</label></li>
+                    <li><input type="number" placeholder="1-10" name="search-notes" min="1" max="10"> <label for="search-notes">{ $t('feedback.searchNotes')}</label></li>
+                    <li><input type="text" placeholder={ $t('feedback.other')} name="search-others"></li>
+                </ul>
+            </fieldset>
+            <fieldset name="share">
+                <legend>{ $t('feedback.qShare')}</legend>
+                <ul>
+                    <li><input type="number" placeholder="1-10" name="share-link" min="1" max="10"> <label for="share-link">{ $t('feedback.pubLink')}</label></li>
+                    <li><input type="number" placeholder="1-10" name="share-within" min="1" max="10"> <label for="share-within">{ $t('feedback.otherUsers')}</label></li>
+                    <li><input type="number" placeholder="1-10" name="share-email" min="1" max="10"> <label for="share-email">{ $t('feedback.emailSend')}</label></li>
+                    <li><input type="text" placeholder={ $t('feedback.other')} name="share-others"></li>
+                </ul>
+            </fieldset>
+            <fieldset name="blog">
+                <legend>{ $t('feedback.qBlog')}</legend>
+                <ul>
+                    <li><input type="number" placeholder="1-10" name="blog-howto" min="1" max="10"> <label for="share-link">{ $t('feedback.blogHowto')}</label></li>
+                    <li><input type="number" placeholder="1-10" name="blog-refs" min="1" max="10"> <label for="share-within">{ $t('feedback.blogRefs')}</label></li>
+                    <li><input type="number" placeholder="1-10" name="blog-theory" min="1" max="10"> <label for="share-email">{ $t('feedback.blogTheory')}</label></li>
+                    <li><input type="text" placeholder={ $t('feedback.other')} name="blog-others"></li>
+                </ul>
+            </fieldset>
+            <fieldset>
+                <legend>{ $t('feedback.qOther')}</legend>
+                <textarea required name="message" rows="4" cols="50"></textarea>
+                <p>
+                    <button type="submit">
+                        <span><i class='bx bx-mail-send'></i> { $t('feedback.submit')}</span>
+                    </button>
+                </p>
+            </fieldset>
+            {:else}
+            <p>{ $t('feedback.ty')}</p>
+            {/if}
         </div>
-        <h4>{ $t('feedback.dataSug')}</h4>
-        <ul>
-            <li><input type="number" placeholder="1-10" name="genre" bind:value={genre} min="1" max="10"> <label for="genre">{ $t('feedback.genre')}</label></li>
-            <li><input type="number" placeholder="1-10" name="artist" bind:value={artist} min="1" max="10"> <label for="artist">{ $t('feedback.artist')}</label></li>
-            <li><input type="number" placeholder="1-10" name="title" bind:value={title} min="1" max="10"> <label for="">{ $t('feedback.title')}</label></li>
-            <li><input type="number" placeholder="1-10" name="lyrics" bind:value={lyrics} min="1" max="10"> <label for="">{ $t('feedback.refLyrics')}</label></li>
-            <li><input type="number" placeholder="1-10" name="chords" bind:value={chords} min="1" max="10"> <label for="">{ $t('feedback.refChords')}</label></li>
-            <li><input type="number" placeholder="1-10" name="notes" bind:value={notes} min="1" max="10"> <label for="">{ $t('feedback.searchNotes')}</label></li>
-            <li><input type="text" name="others" bind:value={others}> <label for="">{ $t('feedback.other')}</label></li>
-        </ul>
-        <h4>{ $t('feedback.shareCont')}</h4>
-        <ul>
-            <li><input type="number" placeholder="1-10" name="link" bind:value={link} min="1" max="10"> <label for="">{ $t('feedback.pubLink')}</label></li>
-            <li><input type="number" placeholder="1-10" name="user" bind:value={user} min="1" max="10"> <label for="">{ $t('feedback.otherUsers')}</label></li>
-            <li><input type="number" placeholder="1-10" name="email" bind:value={email} min="1" max="10"> <label for="">{ $t('feedback.emailSend')}</label></li>
-            <li><input type="text" name="platform" bind:value={platform}> <label for="">{ $t('feedback.otherPlat')}</label></li>
-        </ul>
-        <h4>{ $t('feedback.ideas')}</h4>
-        <textarea name="ideas" bind:value={ideas} rows="4" cols="50"></textarea><br>
-    </div>
-    <div class="section">
-        <button on:click={handleForm}>
-            <span><i class='bx bx-mail-send'></i> { $t('feedback.submit')}</span>
-        </button>
-    </div>
-    {:else}
-    <p>{ $t('feedback.ty')}</p>
-    {/if}
+    </form>
 </main>
 

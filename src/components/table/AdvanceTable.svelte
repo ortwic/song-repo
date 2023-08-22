@@ -7,7 +7,7 @@
     import FirestoreService, { uniqueKey } from '../../service/firestore.service';
     import { showInfo, showError } from '../../store/notification.store';
     
-    const pages = { genres: 'Genres', settings: 'Settings', feedback: 'Feedback' };
+    const pages = { feedback: 'Feedback', settings: 'Settings', genres: 'Genres'  };
     type Pages = keyof typeof pages;
     let active: Pages;
 
@@ -58,7 +58,7 @@
 </script>
            
 <div class="row">    
-    <button class='edit' title='Edit master data' on:click={() => changePage('genres')}>
+    <button class='edit' title='Edit master data' on:click={() => changePage('feedback')}>
         <i class='bx bxs-edit'></i> <slot></slot>
     </button>
 </div>

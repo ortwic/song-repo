@@ -65,6 +65,9 @@ devDependencies:
   eslint-plugin-svelte:
     specifier: ^2.32.2
     version: 2.32.2(eslint@8.44.0)(svelte@3.59.2)
+  fecha:
+    specifier: ^4.2.3
+    version: 4.2.3
   firebase:
     specifier: ^9.18.0
     version: 9.18.0
@@ -4134,6 +4137,10 @@ packages:
     engines: {node: '>=0.8.0'}
     dependencies:
       websocket-driver: 0.7.4
+    dev: true
+
+  /fecha@4.2.3:
+    resolution: {integrity: sha512-OP2IUU6HeYKJi3i0z4A19kHMQoLVs4Hc+DPqqxI2h/DPZHTm/vjsfC6P0b4jCMy14XizLBqvndQ+UilD7707Jw==}
     dev: true
 
   /fflate@0.4.8:
