@@ -11,6 +11,7 @@
   import Sidebar from './components/ui/Sidebar.svelte'
   import Snackbar from './components/ui/Snackbar.svelte';
   import Start from "./routes/Start.svelte";
+  import Calendar from "./routes/Calendar.svelte";
   import Blog from "./routes/Blog.svelte";
   import Feedback from "./routes/Feedback.svelte";
   import NotFound from "./routes/NotFound.svelte";
@@ -28,6 +29,7 @@
     '/songs': SongTable,
     '/songs/:id': SongTable,
     '/samples': SongTable,
+    '/events': Calendar,
     '/blog': Blog,
     '/blog/:label': Blog,
     '/feedback': Feedback,

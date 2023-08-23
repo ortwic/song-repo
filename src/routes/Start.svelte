@@ -37,6 +37,14 @@
                 </span>
                 <a target="_blank" href="https://getsongbpm.com">getsongbpm.com</a>
             </li>
+            <li class="bx-calendar">
+                <span>
+                    { $t('start.features.events') } 
+                    <a target="_blank" href="https://openpianoforrefugees.com/standorte/#termine">Open Piano</a>, 
+                    <a target="_blank" href="http://www.streetpianos.com/">Play Me I'm Yours</a>
+                </span>
+                <a role="button" href="#/events">Events</a>
+            </li>
             <li class="bx-bulb">
                 <span>{ $t('start.features.blog') }</span>
                 <a role="button" href="#/blog">Blog</a>

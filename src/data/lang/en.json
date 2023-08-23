@@ -3,11 +3,12 @@
     "hello": "Hello musician!",
     "intro": "This app was specifically designed for musicians like you to keep track of your repertoire and your progress. Some features of this app:",
     "features": {
-      "list": "Create own list of songs you've mastered or want to learn. (Login to persist data)",
+      "list": "Create own list of songs you've mastered or want to learn (Login to persist data)",
       "create": "Create list",
-      "track": "Keep an overview of your progress.",
-      "share": "Share or export list of your repertoire.",
-      "search": "Search with autocomplete for genres, artists, and titles.",
+      "track": "Keep an overview of your progress",
+      "share": "Share or export list of your repertoire",
+      "search": "Search with autocomplete for genres, artists, and titles",
+      "events": "Public events like",
       "blog": "How-tos and further articles about making",
       "github": "Planned feature overview and known bugs",
       "feedback": "We hope you find our app useful and look forward to your"
@@ -89,5 +90,8 @@
   "dialog": {
     "confirm": "Confirm",
     "decline": "Decline"
+  },
+  "calendar": {
+    "title": "Event calendar"
   }
 }

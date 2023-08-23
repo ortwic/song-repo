@@ -5,9 +5,10 @@
     "features": {
       "list": "Eigene Liste mit Musikstücken erstellen, die Sie beherrschen oder noch lernen möchten. (Login um Daten zu speichern)",
       "create": "Liste erstellen",
-      "track": "Behalten Sie die Übersicht über Ihre Fortschritte.",
-      "share": "Liste des Repertoires öffentlich teilen oder exportieren.",
-      "search": "Suche mit Vervollständigung der Genres, Künstler und Titel.",
+      "track": "Übersicht über Ihre Fortschritte behalten",
+      "share": "Liste des Repertoires öffentlich teilen oder exportieren",
+      "search": "Suche mit Vervollständigung der Genres, Künstler und Titel",
+      "events": "Öffentliche events wie",
       "blog": "HowTo's und weitere Artikel über das musizieren",
       "github": "Überblick geplanter Features und bekannte Bugs",
       "feedback": "Wir hoffen, dass Sie unsere App nützlich finden."
