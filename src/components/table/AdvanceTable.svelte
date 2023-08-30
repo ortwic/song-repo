@@ -70,7 +70,7 @@
     </span>
     <FileDrop on:enter={() => showInfo('Start importing...')} on:addJson={importJSON}>
         {#if columns?.length}
-        <Table {data} {columns} usePersistance={false} />
+        <Table {data} {columns} />
         {:else}
         <div class='placeholder'>Drop json-file here to import data</div>
         {/if}

@@ -1,6 +1,6 @@
 <script lang="ts">
   import 'tabulator-tables/dist/css/tabulator_bulma.min.css';
-  import { TabulatorFull } from 'tabulator-tables';
+  import { Tabulator, EditModule, FilterModule, FormatModule, GroupRowsModule, MenuModule, ResponsiveLayoutModule, ResizeColumnsModule, SortModule } from 'tabulator-tables';
   import type { ColumnDefinition, GroupComponent, ColumnComponent, RowComponent } from 'tabulator-tables';
   import { onMount, createEventDispatcher, onDestroy } from 'svelte';
   import { Observable, fromEvent, map, take } from 'rxjs';
@@ -8,6 +8,17 @@
   import { toggleVisibilityItem } from './templates/menu.helper';
   import { downloadQueue, type DowloadItem } from '../../store/download.store';
   import { showError } from '../../store/notification.store';
+
+  Tabulator.registerModule([
+    EditModule,
+    FilterModule,
+    FormatModule,
+    GroupRowsModule,
+    MenuModule,
+    ResizeColumnsModule,
+    ResponsiveLayoutModule,
+    SortModule 
+  ]);
 
   type GroupFormatter<T> = (value: unknown, count: number, data: T[], group?: GroupComponent) => string;
 
@@ -18,8 +29,9 @@
   export let exportTitle = 'export';
   export let groupHeader: GroupFormatter<unknown> = undefined;
   export const isGroupedBy = (field: string) => field in rowGroups;
-  export let usePersistance = !import.meta.env.DEV;
-  let table: Observable<TabulatorFull>;
+  export let persistenceID = '';
+  let usePersistance = !import.meta.env.DEV || !!persistenceID;
+  let table: Observable<Tabulator>;
   let tableContainer: HTMLElement;
   let unsubscribe = () => {};
 
@@ -52,7 +64,7 @@
       groupToggleElement: 'header',
       groupUpdateOnCellEdit: true,
       footerElement: '#footer',
-      persistenceID: columns.map(c => c.field[0]).join(''),
+      persistenceID,
       persistence: {
         sort: usePersistance,
         filter: usePersistance,
@@ -72,7 +84,7 @@
         }
       }
     });
-    const tableInstance = new TabulatorFull(tableContainer, options);
+    const tableInstance = new Tabulator(tableContainer, options);
     
     table = fromEvent(tableInstance, 'tableBuilt').pipe(take(1), map(() => handleTableBuilt(tableInstance)));
   });
@@ -89,7 +101,7 @@
     return def.validator === 'required';
   }
 
-  function handleTableBuilt(table: TabulatorFull) {
+  function handleTableBuilt(table: Tabulator) {
     initHeaderMenu(table);
     initGroupBy(table);
 
@@ -111,7 +123,6 @@
     if (field) {
       const cell = row.getCell(field);
       if (cell.getColumn().isVisible()) {
-        // TODO if not visible focus next
         cell.edit();
       }
     }
@@ -134,7 +145,7 @@
     }
   }
 
-  function initHeaderMenu(table: TabulatorFull) {
+  function initHeaderMenu(table: Tabulator) {
     const columnSelectors = table.getColumns()
       .filter(c => !isRequired(c.getDefinition()))
       .map(column => toggleVisibilityItem(column));
@@ -148,7 +159,7 @@
     }));
   }
 
-  function initGroupBy(table: TabulatorFull) {
+  function initGroupBy(table: Tabulator) {
     if (Array.isArray(table.options.groupBy)) {
       table.options.groupBy.forEach(field => {
         rowGroups[field] = true;
@@ -169,7 +180,7 @@
     $table.setGroupBy(groups.length ? groups : undefined);
   }
 
-  function download(table: TabulatorFull, items: DowloadItem[]): void {
+  function download(table: Tabulator, items: DowloadItem[]): void {
     if (items?.length) {
       try {
         const { type, params } = items.pop();

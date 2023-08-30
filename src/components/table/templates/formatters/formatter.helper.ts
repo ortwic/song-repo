@@ -2,11 +2,11 @@ import Color from 'color';
 import { marked } from 'marked';
 import { Timestamp } from 'firebase/firestore';
 import type { ColumnDefinition, CellComponent } from 'tabulator-tables';
-import ProgressBar from './ProgressBar.class';
-import genres from '../../../data/genres.json';
-import colornames from '../../../data/colornames.json';
-import type { UserSong } from '../../../model/song.model';
-import { redToGreenGradient, redToGreenRange } from '../../../styles/style.helper';
+import ProgressBar from '../ProgressBar.class';
+import genres from '../../../../data/genres.json';
+import colornames from '../../../../data/colornames.json';
+import type { UserSong } from '../../../../model/song.model';
+import { redToGreenGradient, redToGreenRange } from '../../../../styles/style.helper';
 
 export const favColumn: Partial<ColumnDefinition> = {
     hozAlign: 'center',

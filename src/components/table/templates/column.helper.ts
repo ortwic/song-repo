@@ -1,6 +1,6 @@
 import type { ColumnComponent, ColumnDefinition, EditorParams, RowComponent, SortDirection } from 'tabulator-tables';
 import { autoFilter } from './filter.helper';
-import { labelFormatter } from './formatter.helper';
+import { labelFormatter } from './formatters/formatter.helper';
 
 type Sorter =
     | undefined

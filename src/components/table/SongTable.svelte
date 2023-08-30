@@ -4,7 +4,7 @@
   import type { ColumnDefinition, CellComponent, CellEditEventCallback } from 'tabulator-tables';
   import { column, comboBoxEditor } from './templates/column.helper';
   import { autoFilter, rangeFilter } from './templates/filter.helper';
-  import format from './templates/formatter.helper';
+  import format from './templates/formatters/formatter.helper';
   import StatusElement from './templates/StatusElement.svelte';
   import Table from './Table.svelte'
   import AddEntry from './AddEntry.svelte';
@@ -85,6 +85,7 @@
     <Table bind:this={table} {columns}
       placeholder='No songs added.'
       exportTitle='My Song List'
+      persistenceID='fppsdtagssktbftlci'
       groupHeader={format.groupBy}
       on:error={({ detail }) => showError(detail)}
     />
