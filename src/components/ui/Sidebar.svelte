@@ -2,11 +2,8 @@
     import '../../styles/menu.scss';
     import { slide } from 'svelte/transition';
     import Titlebar from './elements/Titlebar.svelte';
-    import AdvanceTable from '../table/AdvanceTable.svelte';
 
     export let title = '';
-    export let footer = '';
-    let counter = 0;
 </script>
 
 <aside in:slide={{ duration: 200, axis: 'x' }} out:slide={{ duration: 200, axis: 'x' }} >
@@ -19,13 +16,9 @@
         <slot></slot>
     </section>
     <footer class="menu">
-        {#if counter >= 5e5 || import.meta.env.DEV}
-        <AdvanceTable>Master data</AdvanceTable>
-        {/if}
-        <slot name="footer"></slot>
+        <slot name="lower"></slot>
         <div class="info">
-            <div aria-hidden="true" on:click={() => counter++} on:contextmenu={() => counter = counter > 5 ? 5e5 : 0}></div>
-            {footer}
+            <slot name="footer"></slot>
         </div>
     </footer>
 </aside>
@@ -59,13 +52,6 @@ aside {
         text-shadow: 1px 1px 0 gray;
         min-height: 2.2em;
         user-select: none;
-
-        div {
-            position: absolute;
-            right: 0;
-            width: 1.5em;
-            height: 1.5em;
-        }
     }
 }
 </style>
