@@ -1,4 +1,6 @@
 <script lang='ts'>
+    import { map, of, type Observable } from 'rxjs';
+    import type { ColumnDefinition } from 'tabulator-tables';
     import FileDrop from './FileDrop.svelte';
     import Table from './Table.svelte';
     import { autoColumns } from './templates/column.helper';
@@ -6,10 +8,14 @@
     import TabbedTitle from '../ui/TabbedTitle.svelte';
     import FirestoreService, { uniqueKey } from '../../service/firestore.service';
     import { showInfo, showError } from '../../store/notification.store';
+
+    type DataWithId = { id: string };
     
     const pages = { feedback: 'Feedback', settings: 'Settings', genres: 'Genres'  };
     type Pages = keyof typeof pages;
     let active: Pages;
+    let columns: Observable<ColumnDefinition[]>;
+    let data: Observable<DataWithId[]>;
 
     const stores = {
         genres: new FirestoreService('genres'),
@@ -21,10 +27,8 @@
     async function changePage(page: Pages) {
         active = page;
         sub?.unsubscribe();
-        sub = stores[active].getDocuments().subscribe(result => {
-            columns = autoColumns(result);
-            data = result;
-        });
+        data = stores[active].getDocuments();
+        columns = data.pipe(map(autoColumns));
     }
 
     async function importJSON(event: CustomEvent): Promise<void> {
@@ -33,9 +37,10 @@
             if (json?.length) {
                 const field = Object.keys(json[0])[0];
                 if (field) {
-                    columns = autoColumns(json);
-                    data = json.map(obj => ({ id: uniqueKey(obj[field]), ...obj }));
-                    await stores[active]?.setDocuments(data, { merge: true });
+                    columns = of(autoColumns(json));
+                    const dataWithId = json.map(obj => ({ id: uniqueKey(obj[field]), ...obj }));
+                    data = of(dataWithId);
+                    await stores[active]?.setDocuments(dataWithId, { merge: true });
 
                     showInfo(`Found ${json.length} entries.`);
                 }
@@ -52,9 +57,6 @@
             showInfo('Done');
         }
     }
-
-    $: columns = [];
-    $: data = [];
 </script>
            
 <div class="row">    
@@ -69,8 +71,8 @@
         <TabbedTitle tabs={pages} {active} on:tabChange={({ detail }) => changePage(detail)} />
     </span>
     <FileDrop on:enter={() => showInfo('Start importing...')} on:addJson={importJSON}>
-        {#if columns?.length}
-        <Table {data} {columns} />
+        {#if $columns?.length}
+        <Table {data} columns={$columns} idField='id' />
         {:else}
         <div class='placeholder'>Drop json-file here to import data</div>
         {/if}

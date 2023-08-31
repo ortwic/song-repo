@@ -43,22 +43,26 @@ export const column = (
     );
 };
 
-export const autoColumns = <T>(data: T[]) => {
-    const column = (key: string) => {
-        const def = {
-            title: key,
-            field: key,
-            width: `${100 / Object.keys(data[0]).length}%`,
-            editor: 'input',
-            ...autoFilter(),
+export const autoColumns = <T>(data: T[]): ColumnDefinition[] => {
+    if (data.length) {
+        const total = Object.keys(data[0]).length;
+        const column = (key: string) => {
+            const def = {
+                title: key,
+                field: key,
+                width: total < 6 ? `${100 / total}%` : '18%',
+                editor: 'input',
+                resizable: true,
+                ...autoFilter(),
+            };
+            if (Array.isArray(data[0][key])) {
+                def.formatter = labelFormatter.formatter;
+            }
+            return def as ColumnDefinition;
         };
-        if (Array.isArray(data[0][key])) {
-            def.formatter = labelFormatter.formatter;
+        if (total) {
+            return Object.keys(data[0]).map(column);
         }
-        return def;
-    };
-    if (data.length && Object.keys(data[0]).length) {
-        return Object.keys(data[0]).map(column);
     }
 };
 

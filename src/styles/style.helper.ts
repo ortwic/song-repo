@@ -6,8 +6,6 @@ export function getCssVariable(name: string): string {
     return getComputedStyle(root).getPropertyValue(name);
 }
 
-export const darkThemeEnabled = window?.matchMedia?.('(prefers-color-scheme:dark)')?.matches;
-
 export const redToGreenRange = (value: number, maxLight = 50, minLight = 36, margin = 25) => {
     const greenMax = 1.2;
     let outer = 0;

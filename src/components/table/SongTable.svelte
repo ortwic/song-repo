@@ -18,31 +18,30 @@
 
   const service = new SongService(params.id?.slice(1));
   const songs = service.usersongs;
-  let table: Table;
   let statusFormatter: (cell: CellComponent)  => string;
 
   const genreSelector = comboBoxEditor(genres.map(v => v.name));
 
   // https://tabulator.info/docs/5.4/edit#editor-list
   const columns: ColumnDefinition[] = [
-    column("Favorite", "fav", "50", undefined, format.favColumn, { cellEdited: updateHandler() }),
-    column("Count", "progressLogs", "50", "array", format.length, { hozAlign: 'right', headerFilter: 'number' }),
-    column("Progress", "progress", "136", "number", rangeFilter(), format.progress, { cellEdited: updateHandler() }),
-    column("Status", "status", "50", "string", autoFilter(), { hozAlign: 'center', formatter: (cell) => statusFormatter(cell), cellEdited: updateHandler() }),
-    column("▩", "artistImg", "30", undefined, format.bgImg),
-    column("Artist", "artist", "200", "string", autoFilter(), comboBoxEditor(), { validator: 'required', cellEdited: updateHandler() }),
-    column("Title", "title", "200", "string", autoFilter(), { editor: 'input', validator: 'required', cellEdited: updateHandler() }),
-    column("Genre", "genre", "136", "string", autoFilter(), format.genre, genreSelector, { cellEdited: updateHandler() }),
-    column("Style", "style", "136", "string", autoFilter(), comboBoxEditor(), { cellEdited: updateHandler() }),
-    column("Source", "source", "200", "string", autoFilter(), format.marked, { editor: 'input', cellEdited: updateHandler() }),
-    column("Key", "key", "80", "string", autoFilter(), { editor: 'input', cellEdited: updateHandler() }),
-    column("Time", "time", "80", "string", autoFilter(), { editor: 'input', cellEdited: updateHandler() }),
-    column("BPM", "bpm", "80", "string", autoFilter(), { editor: 'input', cellEdited: updateHandler() }),
-    column("Level", "difficulty", "50", "number", format.difficulty, { cellEdited: updateHandler() }),
-    column("Features", "features", "200", "string", autoFilter(), format.label, { editor: 'input', cellEdited: updateHandler() }),
-    column("Labels", "tags", "200", "string", autoFilter(), format.label, { editor: 'input', cellEdited: updateHandler() }),
-    column("Learned", "learnedOn", "136", "date", autoFilter(), format.timestamp, { editor: 'date', cellEdited: updateHandler() }),
-    column("Last", "changedAt", "136", "date", autoFilter(), format.timestamp),
+    column("Favorite", "fav", "50", undefined, format.favColumn, { cellEdited: updateHandler(), responsive: 3 }),
+    column("Count", "progressLogs", "50", "array", format.length, { hozAlign: 'right', headerFilter: 'number', responsive: 9 }),
+    column("Progress", "progress", "136", "number", rangeFilter(), format.progress, { cellEdited: updateHandler(), responsive: 2 }),
+    column("Status", "status", "50", "string", autoFilter(), { hozAlign: 'center', formatter: (cell) => statusFormatter(cell), cellEdited: updateHandler(), responsive: 1 }),
+    column("▩", "artistImg", "30", undefined, format.bgImg, { responsive: 9 }),
+    column("Artist", "artist", "200", "string", autoFilter(), comboBoxEditor(), { validator: 'required', responsive: 0, cellEdited: updateHandler() }),
+    column("Title", "title", "200", "string", autoFilter(), { editor: 'input', validator: 'required', responsive: 0, cellEdited: updateHandler() }),
+    column("Genre", "genre", "136", "string", autoFilter(), format.genre, genreSelector, { cellEdited: updateHandler(), responsive: 2 }),
+    column("Style", "style", "136", "string", autoFilter(), comboBoxEditor(), { cellEdited: updateHandler(), responsive: 2 }),
+    column("Source", "source", "200", "string", autoFilter(), format.marked, { editor: 'input', cellEdited: updateHandler(), responsive: 9 }),
+    column("Key", "key", "80", "string", autoFilter(), { editor: 'input', cellEdited: updateHandler(), responsive: 9 }),
+    column("Time", "time", "80", "string", autoFilter(), { editor: 'input', cellEdited: updateHandler(), responsive: 9 }),
+    column("BPM", "bpm", "80", "string", autoFilter(), { editor: 'input', cellEdited: updateHandler(), responsive: 9 }),
+    column("Level", "difficulty", "50", "number", format.difficulty, { cellEdited: updateHandler(), responsive: 5 }),
+    column("Features", "features", "200", "string", autoFilter(), format.label, { editor: 'input', cellEdited: updateHandler(), responsive: 9 }),
+    column("Labels", "tags", "200", "string", autoFilter(), format.label, { editor: 'input', cellEdited: updateHandler(), responsive: 9 }),
+    column("Learned", "learnedOn", "136", "date", autoFilter(), format.timestamp, { editor: 'date', cellEdited: updateHandler(), responsive: 9 }),
+    column("Last", "changedAt", "136", "date", autoFilter(), format.timestamp, { responsive: 9 }),
     { title: "id", field: "id", visible: false },
   ];
 
@@ -72,17 +71,15 @@
       showError(error.message);
     }
   }
-
-  $: if (table) {
-    table.setData($songs, 'id');
-  }
 </script>
 
 <main> 
   <StatusElement bind:statusFormatter on:delete={({ detail }) => deleteRow(detail)}/>
 
   <FileDrop on:enter={() => showInfo('Start importing...')} on:addJson={({ detail }) => importJSON(detail)}>
-    <Table bind:this={table} {columns}
+    <Table {columns}
+      data={songs}
+      idField='id'
       placeholder='No songs added.'
       exportTitle='My Song List'
       persistenceID='fppsdtagssktbftlci'
@@ -100,10 +97,10 @@
   footer {
     position: sticky;
     bottom: calc(48px + 1rem);
-    margin-right: 1rem;
+    margin-left: 1rem;
     z-index: 20;
     height: 0;
-    text-align: right;
+    text-align: left;
   }
  
 </style>

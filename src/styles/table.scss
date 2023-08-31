@@ -95,6 +95,14 @@ div#table.tabulator {
 
             div.tabulator-responsive-collapse {
                 padding: 0;
+                border: 0;
+                overflow: hidden;
+                max-height: 0;
+                transition: max-height .5s ease-in-out;
+
+                &.open {
+                    max-height: 100vh;
+                }
 
                 div.flex {
                     display: flex;

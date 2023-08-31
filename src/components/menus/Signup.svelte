@@ -12,9 +12,9 @@
 	const uncheckedIcon = 'bx bx-circle bx-sm';
 	const authService = new AuthService();
 
-	let email = import.meta.env.DEV ? 'john.doe@example.com' : '';
-	let password1 = import.meta.env.DEV ? 'john.doe@example.com' : '';
-	let password2 = import.meta.env.DEV ? 'john.doe@example.com' : '';
+	let email = import.meta.env.DEV ? 'john.dev@example.com' : '';
+	let password1 = import.meta.env.DEV ? 'john.dev@example.com' : '';
+	let password2 = import.meta.env.DEV ? 'john.dev@example.com' : '';
 	let page: keyof RequiredPageChecks;
 
 	const checks: RequiredPageChecks = {

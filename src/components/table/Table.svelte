@@ -1,13 +1,16 @@
 <script lang="ts">
   import 'tabulator-tables/dist/css/tabulator_bulma.min.css';
-  import { Tabulator, EditModule, FilterModule, FormatModule, GroupRowsModule, MenuModule, ResponsiveLayoutModule, ResizeColumnsModule, SortModule } from 'tabulator-tables';
-  import type { ColumnDefinition, GroupComponent, ColumnComponent, RowComponent } from 'tabulator-tables';
+  import { Tabulator, EditModule, FilterModule, FormatModule, GroupRowsModule, MenuModule, ResizeColumnsModule, SortModule } from 'tabulator-tables';
+  import { default as ResponsiveLayoutModule } from './tabulator/modules/ResponsiveLayout';
+  import type { ColumnDefinition, GroupComponent, ColumnComponent, Options, RowComponent } from 'tabulator-tables';
   import { onMount, createEventDispatcher, onDestroy } from 'svelte';
   import { Observable, fromEvent, map, take } from 'rxjs';
-  import { withResponsiveLayout } from './templates/responsive.helper';
+  import { useResponsiveLayout } from './templates/responsive.helper';
   import { toggleVisibilityItem } from './templates/menu.helper';
   import { downloadQueue, type DowloadItem } from '../../store/download.store';
+  import { orientation, type Orientation } from '../../store/media.store';
   import { showError } from '../../store/notification.store';
+  import responsiveCollapse from './tabulator/modules/formatters/responsiveCollapse';
 
   Tabulator.registerModule([
     EditModule,
@@ -20,20 +23,26 @@
     SortModule 
   ]);
 
-  type GroupFormatter<T> = (value: unknown, count: number, data: T[], group?: GroupComponent) => string;
+  Tabulator.extendModule('format', 'formatters', {
+    responsiveCollapse
+  });
+
+  type T = $$Generic;
+  type GroupFormatter = (value: unknown, count: number, data: T[], group?: GroupComponent) => string;
 
   const rowGroups = {};
+  export let idField: keyof T;
   export let columns: ColumnDefinition[] = undefined;
-  export let data: unknown[] = undefined;
+  export let data: Observable<T[]>;
   export let placeholder = '';
   export let exportTitle = 'export';
-  export let groupHeader: GroupFormatter<unknown> = undefined;
+  export let groupHeader: GroupFormatter = undefined;
   export const isGroupedBy = (field: string) => field in rowGroups;
   export let persistenceID = '';
-  let usePersistance = !import.meta.env.DEV || !!persistenceID;
   let table: Observable<Tabulator>;
   let tableContainer: HTMLElement;
-  let unsubscribe = () => {};
+  let endOrientation = () => {};
+  let endDownloadQueue = () => {};
 
   const dispatch = createEventDispatcher();
   const groupContextMenu = [
@@ -51,48 +60,40 @@
     }
   ];
   
-  onMount(() => {
-    const options = withResponsiveLayout({
-      columns,
-      data,
-      layout: 'fitData',
-      placeholder,
-      clipboard: true,
-      movableColumns: true,
-      pagination: false,
-      groupHeader,
-      groupToggleElement: 'header',
-      groupUpdateOnCellEdit: true,
-      footerElement: '#footer',
-      persistenceID,
-      persistence: {
-        sort: usePersistance,
-        filter: usePersistance,
-        columns: usePersistance,
-        group: usePersistance
-      },
-      locale: 'en-us',
-      langs: {
-        'en-us': {
-          pagination: {
-            'page_size': '',
-            'first': '<<',
-            'last': '>>',
-            'prev': '<',
-            'next': '>',
-          }
-        }
-      }
-    });
-    const tableInstance = new Tabulator(tableContainer, options);
-    
-    table = fromEvent(tableInstance, 'tableBuilt').pipe(take(1), map(() => handleTableBuilt(tableInstance)));
+  const usePersistance = !import.meta.env.DEV || !!persistenceID;
+  const options: Options = {
+    columns,
+    layout: 'fitData',
+    placeholder,
+    clipboard: true,
+    movableColumns: true,
+    pagination: false,
+    groupHeader,
+    groupToggleElement: 'header',
+    groupUpdateOnCellEdit: true,
+    footerElement: '#footer',
+    persistenceID,
+    persistence: {
+      sort: usePersistance,
+      filter: usePersistance,
+      columns: usePersistance,
+      group: usePersistance
+    }
+  };
+
+  onMount(() => endOrientation = orientation.subscribe(createTable));
+  onDestroy(() => {
+    $table?.destroy();
+    endOrientation();
   });
 
-  onDestroy(() => {
-    unsubscribe();
+  function createTable(orientation: Orientation) {
     $table?.destroy();
-  });
+
+    const tableInstance = new Tabulator(tableContainer, useResponsiveLayout(options, orientation === 'portrait'));
+    tableInstance.on('tableDestroyed', () => endDownloadQueue());
+    table = fromEvent(tableInstance, 'tableBuilt').pipe(take(1), map(() => handleTableBuilt(tableInstance)));
+  }
 
   function isRequired(def: ColumnDefinition): boolean {
     if (Array.isArray(def.validator)) {
@@ -105,9 +106,60 @@
     initHeaderMenu(table);
     initGroupBy(table);
 
-    unsubscribe = downloadQueue.subscribe((items) => download(table, items));
+    endDownloadQueue = downloadQueue.subscribe((items) => download(table, items));
     dispatch('init', table);
     return table;
+  }
+
+  function initHeaderMenu(table: Tabulator) {
+    const columnSelectors = table.getColumns()
+      .filter(c => !isRequired(c.getDefinition()))
+      .map(column => toggleVisibilityItem(column));
+
+    columns?.filter(c => c.headerMenu).forEach(c => {
+      if (c.headerMenu.length) {
+        c.headerMenu.length = 0;
+      }
+      c.headerMenu.push({
+        label: `Group by ${c.title.toLowerCase()}`,
+        action: (ev: Event, column: ColumnComponent) => toggleGroup(c.field, column.getElement())
+      }, { separator: true }, {
+        label: 'Choose columns',
+        menu: [ ...columnSelectors ]
+      });
+    });
+  }
+
+  function initGroupBy(table: Tabulator) {
+    if (Array.isArray(table.options.groupBy)) {
+      table.options.groupBy.forEach(field => {
+        rowGroups[field] = true;
+        table.getColumn(field).getElement()?.classList.add('primary');
+      });
+    }
+  }
+
+  function toggleGroup(field: string, element?: HTMLElement) {
+    if (!isGroupedBy(field)) {
+      rowGroups[field] = true;
+      element?.classList.add('primary');
+    } else {
+      delete rowGroups[field];
+      element?.classList.remove('primary');
+    }
+    const groups = Object.keys(rowGroups);
+    $table.setGroupBy(groups.length ? groups : undefined);
+  }
+
+  function download(table: Tabulator, items: DowloadItem[]): void {
+    if (items?.length) {
+      try {
+        const { type, params } = items.pop();
+        table.download(type, `${exportTitle}.${type}`, params);
+      } catch (error) {
+        showError(error.message);
+      }
+    }
   }
 
   export async function addRow<T>(data: T): Promise<RowComponent> {
@@ -128,65 +180,21 @@
     }
   }
 
-  export async function setData<T>(data: T[], idField?: keyof T): Promise<void> {
+  $: setData($table, $data);
+
+  async function setData(table: Tabulator, data: T[]): Promise<void> {
     const areEquivalent = (source: T[]) => {
       return source.length === data.length
         && source.every(item => data.map((v: T) => v[idField]).indexOf(item[idField]) > -1);
     }
 
-    if ($table && data) {
-      if (data.length && idField && areEquivalent($table.getData())) {
-        await $table.updateData(data);
+    if (table && data) {
+      if (data.length && idField && areEquivalent(table.getData())) {
+        await table.updateData(data);
         console.debug('upd', data.length);
       } else {
-        await $table.setData(data);
+        await table.setData(data);
         console.debug('set', data.length);
-      }
-    }
-  }
-
-  function initHeaderMenu(table: Tabulator) {
-    const columnSelectors = table.getColumns()
-      .filter(c => !isRequired(c.getDefinition()))
-      .map(column => toggleVisibilityItem(column));
-
-    columns?.filter(c => c.headerMenu).forEach(c => c.headerMenu.push({
-      label: `Group by ${c.title.toLowerCase()}`,
-      action: (ev: Event, column: ColumnComponent) => toggleGroup(c.field, column.getElement())
-    }, { separator: true }, {
-      label: 'Choose columns',
-      menu: [ ...columnSelectors ]
-    }));
-  }
-
-  function initGroupBy(table: Tabulator) {
-    if (Array.isArray(table.options.groupBy)) {
-      table.options.groupBy.forEach(field => {
-        rowGroups[field] = true;
-        table.getColumn(field).getElement()?.classList.add('primary');
-      });
-    }
-  }
-
-  export function toggleGroup(field: string, element?: HTMLElement) {
-    if (!isGroupedBy(field)) {
-      rowGroups[field] = true;
-      element?.classList.add('primary');
-    } else {
-      delete rowGroups[field];
-      element?.classList.remove('primary');
-    }
-    const groups = Object.keys(rowGroups);
-    $table.setGroupBy(groups.length ? groups : undefined);
-  }
-
-  function download(table: Tabulator, items: DowloadItem[]): void {
-    if (items?.length) {
-      try {
-        const { type, params } = items.pop();
-        table.download(type, `${exportTitle}.${type}`, params);
-      } catch (error) {
-        showError(error.message);
       }
     }
   }

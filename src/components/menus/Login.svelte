@@ -5,8 +5,8 @@
     
     const dispatch = createEventDispatcher();
 	const authService = new AuthService();
-	let email = import.meta.env.DEV ? 'john.doe@example.com' : '';
-	let password = import.meta.env.DEV ? 'john.doe@example.com' : '';
+	let email = import.meta.env.DEV ? 'john.dev@example.com' : '';
+	let password = import.meta.env.DEV ? 'john.dev@example.com' : '';
 
 	async function signIn(ev: Event) {
 		try {
