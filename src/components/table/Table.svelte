@@ -34,6 +34,7 @@
   export let idField: keyof T;
   export let columns: ColumnDefinition[] = undefined;
   export let data: Observable<T[]>;
+  export let groupBy: string[] = undefined;
   export let placeholder = '';
   export let exportTitle = 'export';
   export let groupHeader: GroupFormatter = undefined;
@@ -68,6 +69,7 @@
     clipboard: true,
     movableColumns: true,
     pagination: false,
+    groupBy,
     groupHeader,
     groupToggleElement: 'header',
     groupUpdateOnCellEdit: true,

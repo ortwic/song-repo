@@ -1,21 +1,19 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
     const dispatch = createEventDispatcher();
-    export let tabs: Record<string, string>;
+    export let tabs: string[];
     export let active = undefined;
 
-    type Pages = keyof typeof tabs;
-
-    function change(tab: Pages) {
+    function change(tab: string) {
         active = tab;
         dispatch('tabChange', tab);
     }
 </script>
 
 <div class="tabs">
-    {#each Object.keys(tabs) as key}
+    {#each tabs as key}
         <button class={ key === active ? 'active' : 'normal' } on:click={() => change(key)}>
-            { tabs[key] }
+            { key }
         </button>
     {/each}
 </div>

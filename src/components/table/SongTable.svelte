@@ -25,10 +25,10 @@
   // https://tabulator.info/docs/5.4/edit#editor-list
   const columns: ColumnDefinition[] = [
     column("Favorite", "fav", "50", undefined, format.favColumn, { cellEdited: updateHandler(), responsive: 3 }),
-    column("Count", "progressLogs", "50", "array", format.length, { hozAlign: 'right', headerFilter: 'number', responsive: 9 }),
+    column("Σ", "progressLogs", "50", "array", format.length, { hozAlign: 'right', headerFilter: 'number', responsive: 9 }),
     column("Progress", "progress", "136", "number", rangeFilter(), format.progress, { cellEdited: updateHandler(), responsive: 2 }),
     column("Status", "status", "50", "string", autoFilter(), { hozAlign: 'center', formatter: (cell) => statusFormatter(cell), cellEdited: updateHandler(), responsive: 1 }),
-    column("▩", "artistImg", "30", undefined, format.bgImg, { responsive: 9 }),
+    column("⛶", "artistImg", "30", undefined, format.bgImg, { responsive: 9 }),
     column("Artist", "artist", "200", "string", autoFilter(), comboBoxEditor(), { validator: 'required', responsive: 0, cellEdited: updateHandler() }),
     column("Title", "title", "200", "string", autoFilter(), { editor: 'input', validator: 'required', responsive: 0, cellEdited: updateHandler() }),
     column("Genre", "genre", "136", "string", autoFilter(), format.genre, genreSelector, { cellEdited: updateHandler(), responsive: 2 }),

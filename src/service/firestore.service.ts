@@ -30,15 +30,20 @@ export const uniqueKey = (...array: string[]) => array.join('').trim().replaceAl
 
 export default class FirestoreService {
     private db = getFirestore(app);
+    private options: { idField: string; };
 
-    constructor(public path: string) {}
+    constructor(public path: string, idField?: string) {
+        if (idField) {
+            this.options = { idField };
+        }
+    }
 
     public getDocuments<T>(...constraints: QueryConstraint[]): Observable<T[]> {
         const items = collection(this.db, this.path) as CollectionReference<T>;
 
         // Query requires an index, see screenshot below
         const q = query<T>(items, ...constraints);
-        return collectionData<T>(q).pipe(startWith([]));
+        return collectionData<T>(q, this.options).pipe(startWith([]));
     }
 
     public async getDocument<T>(id: string): Promise<T> {
