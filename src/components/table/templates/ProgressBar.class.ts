@@ -1,67 +1,77 @@
 import { redToGreenGradient } from '../../../styles/style.helper';
+import style from './ProgressBar.css?inline';
 
-export default class ProgressBar {
-    private isMouseDown = false;
-    private oldValue = 0;
-    public value = 0;
-    public readonly element = document.createElement('div');
-    private progressBar = document.createElement('div');
-    private percentValue = document.createElement('div');
+class ProgressBar extends HTMLElement {
+    isMouseDown = false;
+    oldValue = 0;
+    value = 0;
+    readonly progressBar = document.createElement('div');
+    readonly percentValue = document.createElement('span');
 
     constructor() {
-        this.element.classList.add('progress-bar-container');
-        this.progressBar.classList.add('progress-bar');
-        this.percentValue.classList.add('percent-value');
+        super();
+        const shadow = this.attachShadow({ mode: 'open' });
+        const styleElement = document.createElement('style');
+        styleElement.innerHTML = style;
 
-        this.element.appendChild(this.progressBar);
-        this.element.appendChild(this.percentValue);
+        shadow.appendChild(styleElement);
+        shadow.appendChild(this.progressBar);
+        shadow.appendChild(this.percentValue);
+        
+        this.addEventListener('mousedown', (event) => {
+            this.isMouseDown = true;
+            this.oldValue = this.value;
+            this.updateProgress(event);
+        });
+
+        this.addEventListener('mousemove', (event) => {
+            if (this.isMouseDown) {
+                this.updateProgress(event);
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            // check to ensure to fire event for own instance only
+            if (this.isMouseDown) {
+                this.dispatchEvent(
+                    new CustomEvent<number[]>('change', {
+                        detail: [this.value, this.oldValue],
+                    })
+                );
+            }
+            this.isMouseDown = false;
+        });
     }
 
-    public setProgress(value: number): void {
+    static get observedAttributes() {
+        return ['value'];
+    }
+
+    attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+        if (name === 'value') {
+            this.setProgress(+newValue);
+        }
+    }
+
+    setProgress(value: number) {
         this.value = value;
         this.progressBar.style.width = 100 - value + '%';
         this.progressBar.style.marginLeft = value + '%';
         this.percentValue.textContent = value + '%';
 
         const [ gradient, color ] = redToGreenGradient(value);
-        this.element.style.background = gradient;
-        this.element.style.boxShadow = `0 0 12px ${color}80`;
+        this.style.background = gradient;
+        this.style.boxShadow = `0 0 12px ${color}80`;
     }
 
     updateProgress(event: MouseEvent): void {
-        const rect = this.element.getBoundingClientRect();
+        const rect = this.getBoundingClientRect();
         const clickX = event.clientX - rect.left;
         const percentage = Math.round((clickX / rect.width) * 100);
         this.setProgress(percentage);
     }
+}
 
-    public static create(value = 0): ProgressBar {
-        const bar = new ProgressBar();
-        bar.setProgress(+value);
-
-        bar.element.addEventListener('mousedown', (event) => {
-            bar.isMouseDown = true;
-            bar.oldValue = bar.value;
-            bar.updateProgress(event);
-        });
-
-        bar.element.addEventListener('mousemove', (event) => {
-            if (bar.isMouseDown) {
-                bar.updateProgress(event);
-            }
-        });
-
-        document.addEventListener('mouseup', () => {
-            // check to ensure to fire event for own instance only
-            if (bar.isMouseDown) {
-                bar.element.dispatchEvent(
-                    new CustomEvent<number[]>('change', {
-                        detail: [bar.value, bar.oldValue],
-                    })
-                );
-            }
-            bar.isMouseDown = false;
-        });
-        return bar;
-    }
+if(!window.customElements.get('progress-bar')) {
+    window.customElements.define('progress-bar', ProgressBar);
 }

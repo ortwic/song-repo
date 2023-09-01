@@ -1,4 +1,4 @@
-import type { Tabulator } from 'tabulator-tables';
+import type { CellComponent, Tabulator } from 'tabulator-tables';
 import Module from 'tabulator-tables/src/js/core/Module';
 
 type Formatter = (data: CollapsedCellData[]) => HTMLElement;
@@ -263,21 +263,23 @@ export default class ResponsiveLayout extends Module{
             const value = column.getFieldValue(data);
             if(column.definition.title && field){
                 const format = column.modules.format;
+                const title = !column.modules.format.params?.hideTitle ? column.definition.title : '';
                 if(format && this.table.options.responsiveLayoutCollapseUseFormatters){
-                    const cell = row.getCell(field);
+                    const cell = <CellComponent>row.getCell(field);
                     const element = cell.getElement();
                     // TODO cloneNode() to fix show/hide column https://github.com/ortwic/song-repo/issues/31
                     // element = element.cloneNode(true);
+                    element.title = column.definition.title;
                     element.style.display = 'block';
                     output.push({
                         field,
-                        title: column.definition.title,
+                        title,
                         value: element
                     });
                 }else{
                     output.push({
                         field,
-                        title: column.definition.title,
+                        title,
                         value: value
                     });
                 }
@@ -293,19 +295,21 @@ export default class ResponsiveLayout extends Module{
 
         data.forEach(({ field, title, value }) => {
             const row = document.createElement('div');
-            const label = document.createElement('label');
-            row.appendChild(label);
+            if (title) {
+                const label = document.createElement('label');
+                row.appendChild(label);
                         
-            super.langBind('columns|' + field, (text) => {
-                label.innerHTML = text || title;
-            });
+                super.langBind('columns|' + field, (text) => {
+                    label.innerHTML = text || title;
+                });
+            }
 
+            const p = document.createElement('p');
+            row.appendChild(p);
             if(value instanceof Node){
                 row.appendChild(value);
-            }else{
-                const p = document.createElement('p');
+            }else if(value !== undefined){
                 p.innerHTML = value;
-                row.appendChild(p);
             }
 
             list.appendChild(row);

@@ -2,7 +2,7 @@ import Color from 'color';
 import { marked } from 'marked';
 import { Timestamp } from 'firebase/firestore';
 import type { ColumnDefinition, CellComponent } from 'tabulator-tables';
-import ProgressBar from '../ProgressBar.class';
+import '../ProgressBar.class';
 import genres from '../../../../data/genres.json';
 import colornames from '../../../../data/colornames.json';
 import type { UserSong } from '../../../../model/song.model';
@@ -26,10 +26,12 @@ export const favColumn: Partial<ColumnDefinition> = {
         }
         return '✩';
     },
+    formatterParams: { hideTitle: true }
 };
 
 export const lengthFormatter: Partial<ColumnDefinition> = {
-    formatter: (cell: CellComponent): string => cell.getValue()?.length
+    formatter: (cell: CellComponent): string => cell.getValue()?.length,
+    formatterParams: { hideTitle: true }
 };
 
 export const bgImgFormatter: Partial<ColumnDefinition> = {
@@ -44,13 +46,15 @@ export const bgImgFormatter: Partial<ColumnDefinition> = {
         }
         return '';
     },
+    formatterParams: { hideTitle: true }
 };
 
 export const progressFormatter: Partial<ColumnDefinition> = {
     formatter(cell: CellComponent): HTMLElement | string {
         const song = cell.getData() as UserSong;
-        const bar = ProgressBar.create(cell.getValue());
-        bar.element.addEventListener('change', (ev: CustomEvent<number[]>) => {
+        const bar = document.createElement('progress-bar');
+        bar.setAttribute('value', cell.getValue());
+        bar.addEventListener('change', (ev: CustomEvent<number[]>) => {
             const [newValue, oldValue] = ev.detail;
             cell.setValue(newValue);
 
@@ -63,9 +67,8 @@ export const progressFormatter: Partial<ColumnDefinition> = {
             } else if (oldValue < newValue) {
                 song.status = 'wip';
             }
-            console.log({ [song.status]: ev.detail.join() });
         });
-        return bar.element;
+        return bar;
     },
 };
 

@@ -163,36 +163,6 @@ div.tabulator-popup-container {
     }
 }
 
-/* progress bar column */
-div.progress-bar-container {
-    position: relative;
-    width: 100%;
-    height: 30px;
-    background: linear-gradient(to right, firebrick, red 20%, orange 33%, yellow 45%, yellowgreen, darkgreen);
-    border: 1px solid gray;
-}
-
-div.progress-bar {
-    position: absolute;
-    height: 100%;
-    background-color: var(--primback);
-    opacity: .8;
-}
-
-div.percent-value {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 16px;
-    font-weight: bold;
-    user-select: none;
-}
-
 /* favorite column */
 div.tabulator-cell.fav {
     font-size: larger;
