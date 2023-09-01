@@ -95,10 +95,10 @@
 
     nav {
         div.row > a.coffee {
-            background-color: goldenrod;
+            background-color: var(--secondary);
 
             &:hover {
-                background-color: wheat;
+                background-color: white;
             }
 
             & > span {
@@ -118,7 +118,7 @@
         color: inherit;
 
         &:hover {
-        text-decoration: underline;
+            text-decoration: underline;
         }
     }
 </style>

@@ -1,7 +1,7 @@
 <a name="readme-top"></a>
 
 # My song repertoire
-v0.1.0 pre alpha
+![logo](public/logo.svg)
 
 ## About the project
 

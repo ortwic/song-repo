@@ -17,6 +17,18 @@ export default defineConfig({
     },
     plugins: [
         svelte(),
+        {
+            name: 'vite-plugin-package-version',
+            config: (_, env) => {
+                if (env) {
+                    return {
+                        define: { 
+                            ['import.meta.env.PACKAGE_VERSION']: JSON.stringify(process.env.npm_package_version) 
+                        }
+                    };
+                }
+            }
+        },
         VitePWA({
             registerType: 'autoUpdate',
             includeAssets: [],

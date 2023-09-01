@@ -14,7 +14,7 @@
     
   const title = `${import.meta.env.DEV ? 'DEV' : 'My'} song repertory`;
   const usertitle = currentUser.pipe(map(setPageInfo));
-  const version = '0.2.0';
+  const version = import.meta.env.PACKAGE_VERSION;
   
   const routes = {
     '/': Start,
@@ -44,7 +44,7 @@
   <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
 </svelte:head>
 
-<Menu {title} footer="Version {version} beta" />
+<Menu {title} footer="Version {version}" />
 
 <Router {routes}/>
 
