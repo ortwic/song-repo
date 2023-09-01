@@ -13,6 +13,7 @@
     import type { UserSong } from "../../model/song.model";
     import type { ArtistResult, SongResult } from "../../model/songbpm.model";
     import genres from '../../data/genres.json';
+    import { logAction } from '../../store/notification.store';
     
     const required = true;
     const songService = new SongService();
@@ -54,6 +55,8 @@
     }
 
     function setArtist(artist?: ArtistResult) {
+        logAction({ type: 'search', artist });
+        
         newSong.artist = artist?.name;
         newSong.artistImg = artist?.img;
         if (artist?.genres?.length) {
@@ -71,6 +74,8 @@
     }
 
     function setSong(song?: SongResult) {
+        logAction({ type: 'search', song });
+
         newSong.title = song?.title;
         newSong.bpm = song?.tempo;
         newSong.key = song?.key_of;

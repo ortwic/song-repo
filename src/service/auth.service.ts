@@ -7,16 +7,20 @@ import {
     signOut,
     deleteUser,
 } from 'firebase/auth';
+import { getAnalytics, setUserId } from 'firebase/analytics';
 import { authState } from 'rxfire/auth';
 import { auth } from './firebase.setup';
 import { showInfo } from '../store/notification.store';
+import { app } from '../service/firebase.setup';
 
 export const currentUser = authState(auth);
 const googleProvider = new GoogleAuthProvider();
 // googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+export const analytics = getAnalytics(app);
 
 onAuthStateChanged(auth, (user) => {
     if (user) {
+        setUserId(analytics, user.uid);
         showInfo(`${user.displayName || user.email} has signed in.`);
     }
 });

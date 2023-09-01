@@ -14,6 +14,7 @@
 
     export let title: string;
     export let footer: string;
+    let isTableView = location.href.includes('/songs') || location.href.includes('/samples');
     let counter = 0;
 
     function handleMenuNav(ev: SubmitEvent) {
@@ -44,7 +45,7 @@
         {:else}
         <Login />
         {/if}
-        {#if location.href.includes('/songs')}
+        {#if isTableView}
         <ExportTable />
         {/if}
         <svelte:fragment slot="lower">

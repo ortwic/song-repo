@@ -1,7 +1,7 @@
 <script lang="ts">
     import ConfirmDialog from '../ui/ConfirmDialog.svelte';
 	import AuthService from '../../service/auth.service';
-    import { showError } from '../../store/notification.store';
+    import { logPageView, showError } from '../../store/notification.store';
 	
 	interface RequiredPageChecks {
 		termsofuse: boolean;
@@ -43,6 +43,11 @@
 		}
 	}
 
+	function load(target: keyof RequiredPageChecks) {
+		page = target;
+        logPageView({ page: 'signup', target });
+	}
+
 	$: valid = password1 === password2 && Object.values(checks).every(v => v);
 </script>
 
@@ -57,7 +62,7 @@
 		<br/>
 	</div>
     <div class="row">
-		<button title="Read privacy policy" on:click={() => page = 'privacypolicy'}>
+		<button title="Read privacy policy" on:click={() => load('privacypolicy')}>
 			<span class="caption">
 				<i class={checks.privacypolicy ? checkedIcon : uncheckedIcon}></i>
 				<span>Read privacy policy</span>
@@ -65,7 +70,7 @@
 		</button>
     </div>
     <div class="row">
-		<button title="Read terms of use" on:click={() => page = 'termsofuse'}>
+		<button title="Read terms of use" on:click={() => load('termsofuse')}>
 			<span class="caption">
 				<i class={checks.termsofuse ? checkedIcon : uncheckedIcon}></i>
 				<span>Read terms of use</span>

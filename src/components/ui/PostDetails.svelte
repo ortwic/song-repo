@@ -1,5 +1,6 @@
 <script lang="ts">
     import { slide } from 'svelte/transition';
+    import { logPageView } from '../../store/notification.store';
     
     export let title: string;
     export let html: string;
@@ -7,6 +8,9 @@
 
     function toggle() {
         collapsed = !collapsed;
+        if (!collapsed) {            
+            logPageView({ page: 'blog', title });
+        }
     }
 
     function generateSnippet(html: string, minWords = 3, maxWords = 12): string {

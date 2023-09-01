@@ -5,6 +5,7 @@
     import PostDetails from "../components/ui/PostDetails.svelte";
     import BlogService, { createBlogService } from "../service/blog.service";
     import { t } from "../service/i18n";
+    import { logPageView } from "../store/notification.store";
   
     export let params: { label?: string } = {};
 
@@ -14,6 +15,9 @@
     onMount(async () => {
         service = await createBlogService(true);
         store = await service.loadBlogPosts(params.label);
+        if (params.label) {
+            logPageView({ page: 'blog', filter: params.label });
+        }
     });
 
     function scrollHandler({ target }): void {
