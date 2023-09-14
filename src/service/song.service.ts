@@ -81,10 +81,10 @@ export default class SongService {
             localStore[newSong.id] = newSong;
         }
 
-        return this.setSong(newSong);
+        return this.setSong(newSong, true);
     }
 
-    async setSong(song: UserSong): Promise<string> {
+    async setSong(song: UserSong, forceLocalUpdate = false): Promise<string> {
         if (this.uid) {
             song.changedAt = Timestamp.now();
             if (song.progressLogs.at(-1) !== song.progress) {
@@ -94,7 +94,7 @@ export default class SongService {
                 await store.setDocument(song, { merge: true });
                 return song.id;
             }
-        } else {
+        } else if (!showSamples() || forceLocalUpdate) {
             localSubject.next(Object.values(localStore));
         }
     }

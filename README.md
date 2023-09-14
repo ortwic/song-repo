@@ -5,7 +5,7 @@
 
 ## About the project
 
-[![Product Name Screen Shot][product-screenshot]](https://song-repo.web.app)
+[![Product Name Screen Shot][public/images/tableview.png]](https://song-repo.web.app)
 
 An [app](https://song-repo.web.app) for musicians to keep an overview of their personal song repertoire.
 
@@ -91,7 +91,6 @@ Project Link: [https://github.com/ortwic/song-repo](https://github.com/ortwic/so
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-[product-screenshot]: public/images/screenshot.png
 [Svelte.dev]: https://img.shields.io/badge/Svelte-4A4A55?style=for-the-badge&logo=svelte&logoColor=FF3E00
 [Svelte-url]: https://svelte.dev/
 [Typescript.dev]: https://img.shields.io/badge/Typescript-3178c6?style=for-the-badge&logo=typescript&logoColor=FFFFFF
