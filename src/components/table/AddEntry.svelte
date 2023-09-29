@@ -131,7 +131,7 @@
                     <label for="title">{ $t('songs.columns.title') }</label>
                     <Autocomplete inputClassName="lg" labelFieldName="title" {required} placeholder="title"
                         delay={newSong.artist ? 500 : 990} minCharactersToSearch={newSong.artist ? 0 : 3} hideArrow={true}
-                        searchFunction={(value) => searchService.findSongs(value, newSong.artist)} 
+                        searchFunction={(value) => searchService.findSongs(value, newSong.artist)} bind:text={newSong.title}
                         onChange={(item) => setSong(item)} clearSelection={() => setSong()} showClear={true}
                         showLoadingIndicator={true}>
                         <div class="card" slot="item" let:item>
@@ -244,7 +244,7 @@ form {
         min-width: 38em;
 
         // not working as autocomplete-list not overlapping anymore
-        // overflow-y: auto; 
+        overflow-y: auto; 
 
         div.flex {
             display: flex;
