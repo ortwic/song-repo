@@ -1,5 +1,4 @@
 <script lang="ts">
-    import '../../styles/search.scss';
     import { onMount } from "svelte";
     import Autocomplete from 'simple-svelte-autocomplete/src/SimpleAutocomplete.svelte';
     import AddButton from "../ui/AddButton.svelte";
@@ -103,7 +102,7 @@
         </div>
         <section>
             <div class="section flex">
-                <div>
+                <div class="group">
                     <label for="artist">{ $t('songs.columns.artist') }</label>
                     <Autocomplete inputClassName="lg" labelFieldName="name" {required} placeholder="artist"
                         delay={500} minCharactersToSearch={2} hideArrow={true} bind:text={newSong.artist}
@@ -127,7 +126,7 @@
                         </div>
                     </Autocomplete>
                 </div>
-                <div>
+                <div class="group">
                     <label for="title">{ $t('songs.columns.title') }</label>
                     <Autocomplete inputClassName="lg" labelFieldName="title" {required} placeholder="title"
                         delay={newSong.artist ? 500 : 990} minCharactersToSearch={newSong.artist ? 0 : 3} hideArrow={true}
@@ -160,7 +159,7 @@
                         </div>
                     </Autocomplete>
                 </div>
-                <div>
+                <div class="group">
                     <label for="genre">{ $t('songs.columns.genre') }</label>
                     <Autocomplete inputClassName="lg" labelFieldName="name" placeholder="genre"
                         minCharactersToSearch={0} items={genres} showClear={true}
@@ -172,7 +171,7 @@
                         </svelte:fragment>
                     </Autocomplete>
                 </div>
-                <div>
+                <div class="group">
                     <label for="style">{ $t('songs.columns.style') }</label>
                     <Autocomplete inputClassName="lg" placeholder="style" hideArrow={true}
                         minCharactersToSearch={0} searchFunction="{() => styles(newSong.genre[0])}" showClear={true}>
@@ -181,11 +180,11 @@
                         </svelte:fragment>
                     </Autocomplete>
                 </div>
-                <div>
+                <div class="group">
                     <label for="source" title="markdown supported e.g. [link](http://example.com)">{ $t('songs.columns.source') } <i class='bx bx-help-circle'></i></label>
                     <input id="source" class="lg" type="text" bind:value={newSong.source}>
                 </div>
-                <div>
+                <div class="group">
                     <label for="tags" title="comma separated e.g. Foo, Bar">{ $t('songs.columns.tags') } <i class='bx bx-help-circle'></i></label>
                     <input id="tags" class="lg" type="text" bind:value={label} on:keydown={addLabel}>
                     <div class="flex labels">
@@ -194,15 +193,15 @@
                         {/each}
                     </div>
                 </div>
-                <div>
+                <div class="group">
                     <label for="key">{ $t('songs.columns.key') }</label>
                     <SelectKey bind:value={newSong.key} />
                 </div>
-                <div>
+                <div class="group">
                     <label for="bpm">{ $t('songs.columns.bpm') }</label>
                     <input id="bpm" class="sm" type="text" bind:value={newSong.bpm} on:keydown={addLabel}>
                 </div>
-                <div>
+                <div class="group">
                     <label for="time">{ $t('songs.columns.time') }</label>
                     <input id="time" class="sm" type="text" bind:value={newSong.time} on:keydown={addLabel}>
                 </div>
@@ -216,7 +215,6 @@
 {/if}
 
 <style lang="scss">
-@use "../../styles/search.scss";
 form {
     text-align: left;
 
@@ -241,7 +239,7 @@ form {
 
     section {
         margin: 1em;
-        min-width: 38em;
+        min-width: 80vw;
 
         // not working as autocomplete-list not overlapping anymore
         overflow-y: auto; 
@@ -250,16 +248,10 @@ form {
             display: flex;
             flex-flow: row wrap;
             max-height: 100%;
+            gap: .4em 1.6em;
             
-            & > div {
-                padding: 0;
-                margin-right: 2em;
-            }
-
-            div.labels {
-                text-align: left;
-                padding: .4em 1em;
-                min-height: 2.6em;
+            div.group {
+                display: grid;
             }
 
             i.bx {
