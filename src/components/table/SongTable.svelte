@@ -82,7 +82,7 @@
       idField='id'
       placeholder='No songs added.'
       exportTitle='My Song List'
-      persistenceID='fppsdtagssktbftlci'
+      persistenceID='songs'
       groupHeader={format.groupBy}
       on:error={({ detail }) => showError(detail)}
     />

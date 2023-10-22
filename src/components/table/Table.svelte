@@ -1,6 +1,27 @@
 <script lang="ts">
   import 'tabulator-tables/dist/css/tabulator_bulma.min.css';
-  import { Tabulator, EditModule, FilterModule, FormatModule, GroupRowsModule, MenuModule, ResizeColumnsModule, SortModule } from 'tabulator-tables';
+  import { 
+    Tabulator, 
+    ClipboardModule,
+    DownloadModule,
+    EditModule, 
+    ExportModule,
+    FilterModule, 
+    FormatModule, 
+    GroupRowsModule, 
+    HistoryModule,
+    HtmlTableImportModule,
+    KeybindingsModule,
+    MenuModule, 
+    MoveColumnsModule,
+    PersistenceModule,
+    PrintModule,
+    ResizeColumnsModule, 
+    ResizeRowsModule,
+    ResizeTableModule,
+    SortModule, 
+    ValidateModule
+  } from 'tabulator-tables';
   import { default as ResponsiveLayoutModule } from './tabulator/modules/ResponsiveLayout';
   import type { ColumnDefinition, GroupComponent, ColumnComponent, Options, RowComponent } from 'tabulator-tables';
   import { onMount, createEventDispatcher, onDestroy } from 'svelte';
@@ -13,14 +34,26 @@
   import responsiveCollapse from './tabulator/modules/formatters/responsiveCollapse';
 
   Tabulator.registerModule([
+    ClipboardModule,
+    DownloadModule,
     EditModule,
+    ExportModule,
     FilterModule,
     FormatModule,
     GroupRowsModule,
+    HistoryModule,
+    HtmlTableImportModule,
+    KeybindingsModule,
     MenuModule,
+    MoveColumnsModule,
+    PersistenceModule,
+    PrintModule,
     ResizeColumnsModule,
+    ResizeRowsModule,
+    ResizeTableModule,
     ResponsiveLayoutModule,
-    SortModule 
+    SortModule,
+    ValidateModule
   ]);
 
   Tabulator.extendModule('format', 'formatters', {
@@ -61,20 +94,22 @@
     }
   ];
   
-  const usePersistance = !import.meta.env.DEV || !!persistenceID;
+  const usePersistance = !!persistenceID;
   const options: Options = {
     columns,
     layout: 'fitData',
     placeholder,
     clipboard: true,
     movableColumns: true,
-    pagination: false,
     groupBy,
     groupHeader,
     groupToggleElement: 'header',
     groupUpdateOnCellEdit: true,
     footerElement: '#footer',
+    history: true,
+    pagination: false,
     persistenceID,
+    persistenceMode: 'local',
     persistence: {
       sort: usePersistance,
       filter: usePersistance,
