@@ -18,33 +18,50 @@ class ProgressBar extends HTMLElement {
         shadow.appendChild(this.progressBar);
         shadow.appendChild(this.percentValue);
         
-        this.addEventListener('mousedown', (event) => {
-            this.isMouseDown = true;
-            this.oldValue = this.value;
-            this.updateProgress(event);
-        });
-
-        this.addEventListener('mousemove', (event) => {
-            if (this.isMouseDown) {
-                this.updateProgress(event);
-            }
-        });
-
-        document.addEventListener('mouseup', () => {
-            // check to ensure to fire event for own instance only
-            if (this.isMouseDown) {
-                this.dispatchEvent(
-                    new CustomEvent<number[]>('change', {
-                        detail: [this.value, this.oldValue],
-                    })
-                );
-            }
-            this.isMouseDown = false;
-        });
+        this.addEventListener('mousedown', this.start);
+        this.addEventListener('touchstart', this.start);
+        this.addEventListener('mousemove', this.move);
+        this.addEventListener('touchmove', this.move);
+        this.addEventListener('mouseup', this.end);
+        this.addEventListener('touchend', this.end);
     }
 
     static get observedAttributes() {
         return ['value'];
+    }
+
+    private start(event: MouseEvent | TouchEvent) {
+        this.isMouseDown = true;
+        this.oldValue = this.value;
+        this.updateProgress(this.clientX(event));
+    }
+
+    private move(event: MouseEvent | TouchEvent) {
+        if (this.isMouseDown) {
+            this.updateProgress(this.clientX(event));
+        }
+    }
+
+    private clientX(event: MouseEvent | TouchEvent): number {        
+        if (event instanceof MouseEvent) {
+            return event.clientX;
+        } 
+
+        if (event instanceof TouchEvent && event.touches.length > 0) {
+            return event.touches[0].clientX;
+        } 
+    }
+
+    private end() {
+        // check to ensure to fire event for own instance only
+        if (this.isMouseDown) {
+            this.dispatchEvent(
+                new CustomEvent<number[]>('change', {
+                    detail: [this.value, this.oldValue],
+                })
+            );
+        }
+        this.isMouseDown = false;
     }
 
     attributeChangedCallback(name: string, oldValue: string, newValue: string) {
@@ -64,9 +81,9 @@ class ProgressBar extends HTMLElement {
         this.style.boxShadow = `0 0 12px ${color}80`;
     }
 
-    updateProgress(event: MouseEvent): void {
+    updateProgress(clientX: number): void {
         const rect = this.getBoundingClientRect();
-        const clickX = event.clientX - rect.left;
+        const clickX = clientX - rect.left;
         const percentage = Math.round((clickX / rect.width) * 100);
         this.setProgress(percentage);
     }
