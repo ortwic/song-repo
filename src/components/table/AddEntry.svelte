@@ -101,7 +101,7 @@
             <i class="bx bx-search-alt-2"></i>&nbsp; { $t('songs.addTitle') } <a href="https://getsongbpm.com/api" target="_blank">GetSongbpm</a>
         </div>
         <section>
-            <div class="section flex">
+            <div class="section">
                 <div class="group">
                     <label for="artist">{ $t('songs.columns.artist') }</label>
                     <Autocomplete inputClassName="lg" labelFieldName="name" {required} placeholder="artist"
@@ -244,11 +244,15 @@ form {
         // not working as autocomplete-list not overlapping anymore
         overflow-y: auto; 
 
-        div.flex {
-            display: flex;
-            flex-flow: row wrap;
+        & > div {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
             max-height: 100%;
             gap: .4em 1.6em;
+
+            @media only screen and (max-width: 50rem) {
+                grid-template-columns: 1fr;
+            }
             
             div.group {
                 display: grid;
