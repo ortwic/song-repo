@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import Router, { push } from "svelte-spa-router";
   import { map } from 'rxjs';
   import type { User } from 'firebase/auth';
@@ -27,6 +28,15 @@
     '/feedback': Feedback,
     '*': NotFound
   };
+  
+  onMount(() => {
+    if(window.innerWidth <= 600) {
+      const metaTag = document.createElement('meta');
+      metaTag.name = "viewport";
+      metaTag.content = "width=device-width, initial-scale=0.75, maximum-scale=1";
+      document.head.appendChild(metaTag);
+    }
+  });
 
   function setPageInfo(user: User): string {
     if (user) {
