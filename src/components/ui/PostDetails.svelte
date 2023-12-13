@@ -55,13 +55,13 @@
 {#if collapsed}
     <summary in:slide={{ duration: 200 }} out:slide={{ duration: 200 }}>
         <span>{@html generateSnippet(html)}</span>
-        [<button class="more" on:click|preventDefault={toggle}>read more</button>]
+        <button class="more" on:click|preventDefault={toggle}>read more</button>
     </summary>
 {:else}
 <div in:slide={{ duration: 200 }} out:slide={{ duration: 200 }} >
     {@html html}
     <div>
-        [<button class="more" on:click|preventDefault={toggle}>show less</button>]
+        <button class="more" on:click|preventDefault={toggle}>show less</button>
     </div> 
 </div>
 {/if}
@@ -80,5 +80,15 @@
         background-color: transparent;
         box-shadow: unset;
         text-align: left;
+
+        &::before {
+            content: '[';
+            padding-right: 2px;
+        }
+
+        &::after {
+            content: ']';
+            padding-left: 2px;
+        }
     }
 </style>
