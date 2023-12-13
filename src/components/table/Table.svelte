@@ -30,7 +30,7 @@
   import { toggleVisibilityItem } from './templates/menu.helper';
   import { downloadQueue, type DowloadItem } from '../../store/download.store';
   import { orientation, type Orientation } from '../../store/media.store';
-  import { showError } from '../../store/notification.store';
+  import { showError, showInfo } from '../../store/notification.store';
   import responsiveCollapse from './tabulator/modules/formatters/responsiveCollapse';
 
   Tabulator.registerModule([
@@ -94,7 +94,7 @@
     }
   ];
   
-  const usePersistance = !!persistenceID;
+  const usePersistance = !persistenceID;
   const options: Options = {
     columns,
     layout: 'fitData',
@@ -102,6 +102,9 @@
     clipboard: true,
     movableColumns: true,
     groupBy,
+    rowClick() {
+      showInfo('hello')
+    },
     groupHeader,
     groupToggleElement: 'header',
     groupUpdateOnCellEdit: true,
@@ -129,6 +132,9 @@
 
     const tableInstance = new Tabulator(tableContainer, useResponsiveLayout(options, orientation === 'portrait'));
     tableInstance.on('tableDestroyed', () => endDownloadQueue());
+    tableInstance.on('rowClick', (data, rows) => {
+      console.log(data)
+    });
     table = fromEvent(tableInstance, 'tableBuilt').pipe(take(1), map(() => handleTableBuilt(tableInstance)));
   }
 

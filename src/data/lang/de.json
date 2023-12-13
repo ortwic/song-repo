@@ -1,4 +1,27 @@
 {
+  "menu": {
+    "songs": "Deine Songs",
+    "howto": "Musizieren",
+    "howto-blog": "Wie geht Musik Blog",
+    "events": "Veranstaltungen",
+    "event-calendar": "Veranstaltungeskalender",
+    "donate": "Spenden",
+    "masterdata": "Stammdaten",
+    "login": {
+      "login": "Login",
+      "email": "E-Mail",
+      "password": "Kennwort",
+      "repeat": "Kennwort wiederholen",
+      "signup": "Sign up",
+      "signup-title": "Login um Daten zu speichern",
+      "with-google": "Login mit Google",
+      "with-microsoft": "Login mit Microsoft",
+      "read-privacy-policy": "Datenschutz gelesen",
+      "read-terms-of-use": "Nutzungsbedingungen",
+      "read-carefully": "Bitte lesen Sie das Dokument sorgfältig durch"
+    },
+    "or": "oder"
+  },
   "start": {
     "hello": "Hallo Musiker!",
     "intro": "Diese App wurde speziell für Musiker wie Sie entwickelt, um einen Überblick über Ihr Repertoire und Ihre Fortschritte zu behalten. Einige Funktionen dieser App:",

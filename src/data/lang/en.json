@@ -1,4 +1,27 @@
 {
+  "menu": {
+    "songs": "Your songs",
+    "howto": "Making music",
+    "howto-blog": "How to make music blog",
+    "events": "Public events",
+    "event-calendar": "Public event calendar",
+    "donate": "Donate",
+    "masterdata": "Master data",
+    "login": {
+      "login": "Login",
+      "email": "Email",
+      "password": "Password",
+      "repeat": "Repeat password",
+      "signup": "Sign up",
+      "signup-title": "Sign up to store data",
+      "with-google": "Login with Google",
+      "with-microsoft": "Login with Microsoft",
+      "read-privacy-policy": "Read privacy policy",
+      "read-terms-of-use": "Read terms of use",
+      "read-carefully": "Please read the document carefully"
+    },
+    "or": "or"
+  },
   "start": {
     "hello": "Hello musician!",
     "intro": "This app was specifically designed for musicians like you to keep track of your repertoire and your progress. Some features of this app:",

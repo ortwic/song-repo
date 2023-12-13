@@ -9,6 +9,7 @@
     import MenuButton from '../ui/elements/MenuButton.svelte';
     import Sidebar from '../ui/Sidebar.svelte'
     import type { MenuPages } from '../../model/types';
+    import { t } from '../../service/i18n';
     import { currentUser } from '../../service/auth.service';
     import { currentMenu } from '../../store/app.store';
 
@@ -50,20 +51,20 @@
         {/if}
         <svelte:fragment slot="lower">
             {#if counter >= 5e5 || import.meta.env.DEV}
-            <AdvanceTable>Master data</AdvanceTable>
+            <AdvanceTable>{ $t('menu.masterdata') }</AdvanceTable>
             {/if}
-            <NavButton href="/songs" title="Your songs">
-                <span><i class='bx bxs-playlist'></i> Your songs</span>
+            <NavButton href="/songs" title="{ $t('menu.songs') }">
+                <span><i class='bx bxs-playlist'></i> { $t('menu.songs') }</span>
             </NavButton>
-            <NavButton href="/events" title="Public event calendar">
-                <span><i class='bx bx-calendar'></i> Public events</span>
+            <NavButton href="/events" title="{ $t('menu.event-calendar') }">
+                <span><i class='bx bx-calendar'></i> { $t('menu.events') }</span>
             </NavButton>
-            <NavButton href="/blog" title="Making music blog">
-                <span><i class='bx bx-bulb'></i> Making music</span>
+            <NavButton href="/blog" title="{ $t('menu.howto-blog') }">
+                <span><i class='bx bx-bulb'></i> { $t('menu.howto') }</span>
             </NavButton>
             <div class="row">
-                <a class="coffee" role="button" target="_blank" href="http://buymeacoffee.com/ortwic">
-                    <span><i class='bx bxs-coffee'></i> Buy me a coffee</span>
+                <a class="coffee" role="button" target="_blank" href="https://liberapay.com/OCSoft42/donate">
+                    <span><i class='bx bxs-coffee'></i> { $t('menu.donate') }</span>
                 </a>
             </div>
         </svelte:fragment>
@@ -73,7 +74,7 @@
         </svelte:fragment>
       </Sidebar>
       {:else if $currentMenu == 'signup'}
-      <Sidebar title="Sign up to use app">
+      <Sidebar title="{ $t('menu.login.signup-title') }">
         <Signup />
         <svelte:fragment slot="footer">
             {footer}
