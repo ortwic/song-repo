@@ -94,7 +94,7 @@
     }
   ];
   
-  const usePersistance = !persistenceID;
+  const usePersistance = !!persistenceID;
   const options: Options = {
     columns,
     layout: 'fitData',

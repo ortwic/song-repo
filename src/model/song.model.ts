@@ -20,6 +20,7 @@ export interface UserSong extends Song {
     status: Status;
     progress?: number;
     progressLogs?: number[];
+    uri?: string;
     difficulty?: number;
     complete?: Complete;
     createdAt?: Timestamp;

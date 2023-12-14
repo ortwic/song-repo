@@ -22,9 +22,10 @@ export const favColumn: Partial<ColumnDefinition> = {
         if (value) {
             element.title = 'favorite';
             element.classList.add('active');
-            return '✮';
+        } else {
+            element.classList.remove('active');
         }
-        return '✩';
+        return `<span style='display:none'>${value}</span>`;
     },
     formatterParams: { hideTitle: true }
 };
@@ -45,6 +46,21 @@ export const bgImgFormatter: Partial<ColumnDefinition> = {
             element.style.backgroundSize = 'cover';
         }
         return '';
+    },
+    formatterParams: { hideTitle: true }
+};
+
+export const urlFormatter: Partial<ColumnDefinition> = {
+    formatter(cell: CellComponent) {
+        const url = cell.getValue();
+        if (url) {
+            const a = document.createElement('a');
+            a.setAttribute('href', url);
+            a.setAttribute('target', '_blank');
+            const matches = /https?:\/\/([^/]+)\/.*\/?([^/]+)/.exec(url);
+            a.text = matches ? `${matches[1]}/...${matches[2]}` : url;
+            return a;
+        }
     },
     formatterParams: { hideTitle: true }
 };
@@ -168,6 +184,7 @@ export default {
     genre: genreFormatter,
     marked: markedFormatter,
     label: labelFormatter,
+    url: urlFormatter,
     timestamp: timestampFormatter,
     groupBy: groupByFormatter,
 };

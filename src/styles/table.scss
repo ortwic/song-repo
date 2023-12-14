@@ -166,12 +166,22 @@ div.tabulator-popup-container {
 /* favorite column */
 div.tabulator-cell.fav {
     font-size: larger;
-    color: silver;
+    color: transparent;
+    background: none;
+    text-shadow: 1px 1px 1px #A0A0A0;
+
+    &::before {
+        content: '✩';
+    }
 }
 
 div.tabulator-cell.fav.active {
     color: gold;
-    text-shadow: 1px 1px 1px gray;
+    // background: radial-gradient(white, wheat 40%, gold 50%, gray, transparent 55%);
+    
+    &::before {
+        content: '✮';
+    }
 }
 
 /* status column */
