@@ -81,6 +81,11 @@
       "learnedOn": "Gelernt",
       "changedAt": "Geändert"
     },
+    "resource": {
+      "title": "Geben Sie den Ressourcenpfad ein",
+      "caption": "Geben Sie einen URI-Pfad zu einer beliebigen Ressource ein:",
+      "info": "Verwenden Sie einen Cloud-Speicher wie Google Drive, um Ihre Dateien hochzuladen. \nDann kopieren Sie die URL hier."
+    },
     "nosongs": "Nichts hinzugefügt.",
     "exportTitle": "Meine Songliste",
     "import": "Import starten...",

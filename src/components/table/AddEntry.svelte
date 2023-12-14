@@ -271,6 +271,12 @@ form {
         background-color: goldenrod;
         text-align: center;
         white-space: nowrap;
+
+        &::before {
+            font-family: 'boxicons';
+            padding-right: .2em;
+            content: '\ea27';
+        }
     }
 }
 </style>

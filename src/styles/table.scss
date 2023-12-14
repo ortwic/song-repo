@@ -189,6 +189,11 @@ div.tabulator-cell.status {
     text-shadow: 1px 1px 1px gray;
 }
 
+.status.resource {
+    text-decoration: underline dotted gray;
+    text-underline-offset: .3rem;
+}
+
 .status.unkown::before {
     content: '?';
     color: lightgray;
@@ -221,7 +226,7 @@ div.tabulator-cell.status {
     color: purple;
 }
 
-.status.delete::before {
-    content: '✗';
-    color: purple;
+i.status {
+    display: inline-block;
+    width: 1.6em;
 }

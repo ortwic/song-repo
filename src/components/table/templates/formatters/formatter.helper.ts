@@ -50,15 +50,32 @@ export const bgImgFormatter: Partial<ColumnDefinition> = {
     formatterParams: { hideTitle: true }
 };
 
+export const statusFormatter: Partial<ColumnDefinition> = {
+    formatter(cell: CellComponent): HTMLElement | string {
+        const value = cell.getValue().toString();
+        const element = cell.getElement();
+        element.title = value;
+        element.classList.add('status', value);
+        if (cell.getData()['uri']) {
+            element.classList.add('resource', value);
+        }
+        return `<span style='display:none'>${value}</span>`;
+    },
+};
+
 export const urlFormatter: Partial<ColumnDefinition> = {
     formatter(cell: CellComponent) {
-        const url = cell.getValue();
-        if (url) {
+        const resource = cell.getValue();
+        if (resource) {
             const a = document.createElement('a');
-            a.setAttribute('href', url);
+            a.setAttribute('href', resource);
             a.setAttribute('target', '_blank');
-            const matches = /https?:\/\/([^/]+)\/.*\/?([^/]+)/.exec(url);
-            a.text = matches ? `${matches[1]}/...${matches[2]}` : url;
+            try {
+                const url = new URL(resource);
+                a.text = `${url.hostname}${url.pathname}${url.search ?? url.hash}`;
+            } catch (error) {
+                a.text = resource;
+            }
             return a;
         }
     },
@@ -184,6 +201,7 @@ export default {
     genre: genreFormatter,
     marked: markedFormatter,
     label: labelFormatter,
+    status: statusFormatter,
     url: urlFormatter,
     timestamp: timestampFormatter,
     groupBy: groupByFormatter,

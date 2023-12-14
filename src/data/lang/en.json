@@ -81,6 +81,11 @@
       "learnedOn": "Learned",
       "changedAt": "Changed"
     },
+    "resource": {
+      "title": "Enter resource path",
+      "caption": "Enter a uri path to any resource:",
+      "info": "Use a cloud storage like google drive to upload your files. Then copy the url here."
+    },
     "nosongs": "No songs added.",
     "exportTitle": "My Song List",
     "import": "Start importing...",
