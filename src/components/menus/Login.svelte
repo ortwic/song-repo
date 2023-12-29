@@ -24,6 +24,14 @@
             showError(error.message);
 		}
 	}
+    
+	async function useMicrosoft(ev: Event) {
+		try {
+			await authService.loginWithMicrosoft();
+		} catch (error) {
+            showError(error.message);
+		}
+	}
 </script>
 
 <section class="menu">
@@ -45,6 +53,11 @@
     <div class="row">
         <button data-close title="{ $t('menu.login.with-google') }" on:click={useGoogle}>
             <i class='bx bxl-google'></i> { $t('menu.login.with-google') }
+        </button>
+    </div>
+    <div class="row">
+        <button data-close title="{ $t('menu.login.with-microsoft') }" on:click={useMicrosoft}>
+            <i class='bx bxl-microsoft'></i> { $t('menu.login.with-microsoft') }
         </button>
     </div>
 </section>

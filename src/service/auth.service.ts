@@ -1,6 +1,7 @@
 import {
     signInWithPopup,
     GoogleAuthProvider,
+    OAuthProvider,
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     onAuthStateChanged,
@@ -18,6 +19,12 @@ const googleProvider = new GoogleAuthProvider();
 // googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
 export const analytics = getAnalytics(app);
 
+const msProvider = new OAuthProvider('microsoft.com');
+msProvider.setCustomParameters({
+    prompt: 'consent',
+    tenant: '5df890bf-37a1-40ae-956c-71a7f65c2f81',
+});
+
 onAuthStateChanged(auth, (user) => {
     if (user) {
         setUserId(analytics, user.uid);
@@ -28,6 +35,10 @@ onAuthStateChanged(auth, (user) => {
 export default class AuthService {
     async loginWithGoogle(): Promise<void> {
         await signInWithPopup(auth, googleProvider);
+    }
+
+    async loginWithMicrosoft(): Promise<void> {
+        await signInWithPopup(auth, msProvider);
     }
 
     async signUp(email: string, password: string): Promise<void> {

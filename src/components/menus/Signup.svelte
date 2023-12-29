@@ -44,6 +44,14 @@
 		}
 	}
 
+	async function useMicrosoft(ev: Event) {
+		try {
+			await authService.loginWithMicrosoft();
+		} catch (error) {
+            showError(error.message);
+		}
+	}
+
 	function load(target: keyof RequiredPageChecks) {
 		page = target;
         logPageView({ page: 'signup', target });
@@ -98,6 +106,12 @@
         <button id='google' title="{ $t('menu.login.with-google') }" on:click={useGoogle}
 			disabled={!valid}>
             <i class='bx bxl-google'></i> { $t('menu.login.with-google') }
+        </button>
+    </div>
+    <div class="row">
+        <button id='microsoft' title="{ $t('menu.login.with-microsoft') }" on:click={useMicrosoft}
+			disabled={!valid}>
+            <i class='bx bxl-microsoft'></i> { $t('menu.login.with-microsoft') }
         </button>
     </div>
 </section>
