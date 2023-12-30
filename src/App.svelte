@@ -13,7 +13,7 @@
   import NotFound from "./routes/NotFound.svelte";
   import { currentUser } from './service/auth.service';
     
-  const title = `${import.meta.env.DEV ? 'DEV' : 'My'} song repertory`;
+  const title = `${import.meta.env.DEV ? 'DEV' : 'Start'}`;
   const usertitle = currentUser.pipe(map(setPageInfo));
   const version = import.meta.env.PACKAGE_VERSION;
   

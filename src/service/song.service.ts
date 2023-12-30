@@ -47,13 +47,13 @@ export default class SongService {
         }
 
         if (user) {
-            return store.getDocuments(byUser(user.uid), orderBy('changedAt', 'desc'));
+            return store.getDocuments(byUser(user.uid), orderBy('id'));
         }
 
         if (showSamples()) {
             const samplesFromFile = from(import('../data/samples.json'))
                 .pipe(map<{ default }, UserSong[]>(({ default: data }) => data));
-            const samples = store.getDocuments<UserSong>(byUser(sampleId), orderBy('changedAt', 'desc'))
+            const samples = store.getDocuments<UserSong>(byUser(sampleId), orderBy('id'))
                 .pipe(switchMap(docs => docs.length ? of(docs) : samplesFromFile));
             return merge(samples, localSubject);
         }
