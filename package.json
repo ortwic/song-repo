@@ -1,7 +1,7 @@
 {
   "name": "vite-project",
   "description": "An app for musicians to keep an overview of their personal song repertoire.",
-  "version": "0.2.1 beta",
+  "version": "0.3.0 beta",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,7 +10,9 @@
     "fix": "pnpm exec eslint --fix \"{,!(node_modules|public)/**/}*.{ts,svelte}\"",
     "format": "pnpm exec prettier --write \"{,!(node_modules|public)/**/}*.{ts,svelte}\"",
     "build": "vite build",
+    "deploy": "vite build && firebase deploy -f",
     "preview": "vite preview",
+    "mobile": "ngrok http 5173",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "test:unit": "vitest"
   },

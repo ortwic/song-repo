@@ -5,9 +5,22 @@
 
 ## About the project
 
-[![Product Name Screen Shot][public/images/tableview.png]](https://song-repo.web.app)
+[![Product Name Screen Shot][public/images/songlist.png]](https://song-repo.web.app)
 
 An [app](https://song-repo.web.app) for musicians to keep an overview of their personal song repertoire.
+
+Do you occasionally forget which song you could play? Would you like to share your repertoire with friends? 
+Or do you just want to keep track of your progress and know which song you could refresh? 
+Then this app is right for you to keep an overview.
+
+### Features
+- Create personal song list
+- Manage your learning progress
+- Custom tags to note your features
+- Search song data: genre, key, tempo, lyrics, tutorials
+- Share or export list to CSV, XLSX, PDF, JSON
+- Integrated blog with useful articels on how-to make music
+- Public event calendar for Open Piano or Play Me I'm Yours
 
 ### Built With
 
