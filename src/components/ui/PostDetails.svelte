@@ -66,7 +66,7 @@
 </div>
 {/if}
 
-<style>
+<style lang="scss">
     h2 {
         display: inline-block;
         margin: .3em 0;

@@ -6,8 +6,10 @@ const baseUrl = 'https://api.getsongbpm.com/';
 
 export async function create() {
     const store = new FirestoreService('settings');
-    const result = await store.getDocument('search') as Record<string, string>;
-    return new SearchService(result['song-repo']);
+    const result = await store.getDocument('search')
+        .then(resp => resp as Record<string, string>)
+        .catch(error => showError(error));
+    return new SearchService(result && result['song-repo']);
 }
 
 export default class SearchService {

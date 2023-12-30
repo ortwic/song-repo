@@ -50,7 +50,7 @@
 
 <svelte:head>
   <meta name="author" content="OCSoft, ocsoft42@gmail.com">
-  <title>{$usertitle}</title>
+  <title>{$usertitle || 'Loading...'}</title>
   <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
 </svelte:head>
 

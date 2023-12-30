@@ -84,7 +84,7 @@
     <circle r={smCircleRadius} cx={center} cy={center} fill="white" stroke="Gainsboro" stroke-width=".4" />
     {#each majorKeys as _, idx (idx)}  
       <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <g class="key" class:selectedKey={minorKeys[idx].includes(selectedKey)} 
+      <g class="key" role="button" tabindex="0" class:selectedKey={minorKeys[idx].includes(selectedKey)} 
         on:click={() => changeKey(minorKeys[idx][0])}>
         <circle class="minor"
             cx={calcX(idx, innerRadius)}
@@ -102,7 +102,7 @@
       </g>
   
       <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <g class="key" class:selectedKey={majorKeys[idx].includes(selectedKey)} 
+      <g class="key" role="button" tabindex="0" class:selectedKey={majorKeys[idx].includes(selectedKey)} 
         on:click={() => changeKey(majorKeys[idx][0])}>
         <circle class="major"
           cx={calcX(idx, outerRadius)}

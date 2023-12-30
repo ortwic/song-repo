@@ -69,23 +69,4 @@ section {
         }
     }
 }
-
-button.menu-item {
-    border: 0;
-    border-radius: 0;
-    color: var(--text);
-    padding: 6px 20px 6px 12px;
-    text-align: left;
-    font-weight: normal;
-    transition: all .2s ease-in-out;
-
-    &:hover {
-        background-color: white;
-    }
-
-    &>i {
-        display: inline-block;
-        width: 1.6em;
-    }
-}
 </style>
