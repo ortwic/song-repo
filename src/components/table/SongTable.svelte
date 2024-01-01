@@ -99,6 +99,7 @@
       data={songs}
       idField='id'
       placeholder='No songs added.'
+      placeholderSearch={ $t('table.search') }
       exportTitle='My Song List'
       persistenceID='songs'
       groupHeader={format.groupBy}

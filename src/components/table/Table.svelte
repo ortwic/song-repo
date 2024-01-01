@@ -23,7 +23,7 @@
     ValidateModule
   } from 'tabulator-tables';
   import { default as ResponsiveLayoutModule, type CollapsedCellData } from './tabulator/modules/ResponsiveLayout';
-  import type { ColumnDefinition, GroupComponent, ColumnComponent, Options, RowComponent } from 'tabulator-tables';
+  import type { ColumnDefinition, GroupComponent, ColumnComponent, Options, RowComponent, FilterType } from 'tabulator-tables';
   import { onMount, createEventDispatcher, onDestroy } from 'svelte';
   import { Observable, fromEvent, map, take } from 'rxjs';
   import { toggleVisibilityItem } from './templates/menu.helper';
@@ -68,11 +68,14 @@
   export let data: Observable<T[]>;
   export let groupBy: string[] = undefined;
   export let placeholder = '';
+  export let placeholderSearch = '';
   export let exportTitle = 'export';
   export let groupHeader: GroupFormatter = undefined;
   export let detailFormatter: (data: CollapsedCellData[]) => HTMLElement = undefined;
   export const isGroupedBy = (field: string) => field in rowGroups;
   export let persistenceID = '';
+  let useResponsiveLayout = false;
+  let searchTerm = '';
   let table: Observable<Tabulator>;
   let tableContainer: HTMLElement;
   let endOrientation = () => {};
@@ -129,7 +132,7 @@
   function createTable(orientation: Orientation) {
     $table?.destroy();
 
-    const useResponsiveLayout = orientation === 'portrait';
+    useResponsiveLayout = orientation === 'portrait';
     const tableInstance = new Tabulator(tableContainer, {
       ...options,
       headerVisible: !useResponsiveLayout,
@@ -206,21 +209,15 @@
     }
   }
 
-  export async function addRow<T>(data: T): Promise<RowComponent> {
-    try {
-      return $table.addRow(data);
-    } catch (error) {
-      showError(`Tabulator is unable to add a new row!\n${error.message}`);
-    }
-  }
-
-  export async function focusField(row: RowComponent, field: string): Promise<void> {
-    await row.scrollTo();
-    if (field) {
-      const cell = row.getCell(field);
-      if (cell.getColumn().isVisible()) {
-        cell.edit();
-      }
+  function search() {
+    if (searchTerm) {
+      // 2nd level array enforces OR comparison
+      $table.setFilter([columns
+        .filter(c => c.sorter === 'string')
+        .map(c => ({ field: c.field, type: 'like', value: searchTerm }))
+      ]);
+    } else {
+      $table.clearFilter(true);
     }
   }
 
@@ -244,23 +241,47 @@
   }
 </script>
 
+<span class="menu {useResponsiveLayout ? 'responsive' : 'static'}">
+  <div class="section">
+    <input type="search" placeholder={placeholderSearch} autocomplete="off" bind:value={searchTerm} on:input={search}/>
+  </div>
+</span>
+
 <div id="table" bind:this={tableContainer}>
 </div>
 <span id="footer">
   <slot name="footer"></slot>
 </span>
 
-<style>
-    #table {
-      overflow: auto;
-      width: 100%;
-      height: 100%;
-      max-height: 100%;
-      overflow: hidden;
+<style lang="scss">
+  .menu {
+    &.static {
+      display: none;
     }
 
-    #footer {
-      width: 100%;
+    &.responsive {
+      display: inline;
     }
+
+    .section {
+      display: flex;
+
+      input[type=search] {
+        width: 100%;
+      }
+    }
+  }
+
+  #table {
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    overflow: hidden;
+  }
+
+  #footer {
+    width: 100%;
+  }
 </style>
   

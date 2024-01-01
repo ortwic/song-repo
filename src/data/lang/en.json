@@ -95,7 +95,8 @@
   },
   "table": {
     "selectColumns": "Choose columns",
-    "groupBy": "Group by {title}"
+    "groupBy": "Group by {title}",
+    "search": "Search for anything..."
   },
   "blog": {
     "title": "Everthing about making music"

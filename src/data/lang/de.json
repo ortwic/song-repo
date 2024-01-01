@@ -95,7 +95,8 @@
   },
   "table": {
     "selectColumns": "Spalten auswählen",
-    "groupBy": "Gruppieren nach {title}"
+    "groupBy": "Gruppieren nach {title}",
+    "search": "Suchen nach etwas..."
   },
   "blog": {
     "title": "Alles über das Musizieren"
