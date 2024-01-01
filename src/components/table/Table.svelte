@@ -22,15 +22,14 @@
     SortModule, 
     ValidateModule
   } from 'tabulator-tables';
-  import { default as ResponsiveLayoutModule } from './tabulator/modules/ResponsiveLayout';
+  import { default as ResponsiveLayoutModule, type CollapsedCellData } from './tabulator/modules/ResponsiveLayout';
   import type { ColumnDefinition, GroupComponent, ColumnComponent, Options, RowComponent } from 'tabulator-tables';
   import { onMount, createEventDispatcher, onDestroy } from 'svelte';
   import { Observable, fromEvent, map, take } from 'rxjs';
-  import { useResponsiveLayout } from './templates/responsive.helper';
   import { toggleVisibilityItem } from './templates/menu.helper';
   import { downloadQueue, type DowloadItem } from '../../store/download.store';
   import { orientation, type Orientation } from '../../store/media.store';
-  import { showError, showInfo } from '../../store/notification.store';
+  import { showError } from '../../store/notification.store';
   import responsiveCollapse from './tabulator/modules/formatters/responsiveCollapse';
 
   Tabulator.registerModule([
@@ -71,6 +70,7 @@
   export let placeholder = '';
   export let exportTitle = 'export';
   export let groupHeader: GroupFormatter = undefined;
+  export let detailFormatter: (data: CollapsedCellData[]) => HTMLElement = undefined;
   export const isGroupedBy = (field: string) => field in rowGroups;
   export let persistenceID = '';
   let table: Observable<Tabulator>;
@@ -102,14 +102,13 @@
     clipboard: true,
     movableColumns: true,
     groupBy,
-    rowClick() {
-      showInfo('hello')
-    },
     groupHeader,
     groupToggleElement: 'header',
     groupUpdateOnCellEdit: true,
     footerElement: '#footer',
     history: true,
+    responsiveLayoutCollapseStartOpen: false,
+    responsiveLayoutCollapseFormatter: detailFormatter,
     pagination: false,
     persistenceID,
     persistenceMode: 'local',
@@ -130,11 +129,13 @@
   function createTable(orientation: Orientation) {
     $table?.destroy();
 
-    const tableInstance = new Tabulator(tableContainer, useResponsiveLayout(options, orientation === 'portrait'));
-    tableInstance.on('tableDestroyed', () => endDownloadQueue());
-    tableInstance.on('rowClick', (data, rows) => {
-      console.log(data)
+    const useResponsiveLayout = orientation === 'portrait';
+    const tableInstance = new Tabulator(tableContainer, {
+      ...options,
+      headerVisible: !useResponsiveLayout,
+      responsiveLayout: useResponsiveLayout ? 'collapse' : undefined
     });
+    tableInstance.on('tableDestroyed', () => endDownloadQueue());
     table = fromEvent(tableInstance, 'tableBuilt').pipe(take(1), map(() => handleTableBuilt(tableInstance)));
   }
 

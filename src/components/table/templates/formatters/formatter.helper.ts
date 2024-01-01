@@ -3,10 +3,8 @@ import { marked } from 'marked';
 import { Timestamp } from 'firebase/firestore';
 import type { ColumnDefinition, CellComponent } from 'tabulator-tables';
 import '../ProgressBar.class';
-import genres from '../../../../data/genres.json';
-import colornames from '../../../../data/colornames.json';
 import type { UserSong } from '../../../../model/song.model';
-import { redToGreenGradient, redToGreenRange } from '../../../../styles/style.helper';
+import { genreColor, redToGreenGradient, redToGreenRange } from '../../../../styles/style.helper';
 
 export const favColumn: Partial<ColumnDefinition> = {
     hozAlign: 'center',
@@ -130,10 +128,9 @@ export const difficultyFormatter: Partial<ColumnDefinition> = {
 
 export const genreFormatter: Partial<ColumnDefinition> = {
     formatter(cell: CellComponent): string {
-        const value = cell.getValue()?.toLowerCase();
+        const value = cell.getValue();
         try {
-            const color = genres.find((v) => v.name.toLowerCase() == value)?.color;
-            const bgColor = color && colornames[color.toLowerCase()];
+            const bgColor = genreColor(value);
             if (bgColor) {
                 const element = cell.getElement();
                 element.style.color = Color(bgColor).isDark() ? 'white' : 'black';

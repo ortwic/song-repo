@@ -1,10 +1,17 @@
 import Color from 'color';
+import genres from '../data/genres.json';
+import colornames from '../data/colornames.json';
 
 const root = document.querySelector(':root');
 
 export function getCssVariable(name: string): string {
     return getComputedStyle(root).getPropertyValue(name);
 }
+
+export const genreColor = (name: string) => {
+    const genre = genres.find((v) => v.name.toLowerCase() == name?.toLowerCase());
+    return genre && colornames[genre.color.toLowerCase()];
+};
 
 export const redToGreenRange = (value: number, maxLight = 50, minLight = 36, margin = 25) => {
     const greenMax = 1.2;

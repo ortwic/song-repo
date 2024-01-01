@@ -3,7 +3,7 @@ import Module from 'tabulator-tables/src/js/core/Module';
 
 type Formatter = (data: CollapsedCellData[]) => HTMLElement;
 
-interface CollapsedCellData { 
+export interface CollapsedCellData { 
     field: string;
     title: string; 
     value: string | HTMLElement;
@@ -304,12 +304,12 @@ export default class ResponsiveLayout extends Module{
                 });
             }
 
-            const p = document.createElement('p');
-            row.appendChild(p);
             if(value instanceof Node){
                 row.appendChild(value);
             }else if(value !== undefined){
+                const p = document.createElement('p');
                 p.innerHTML = value;
+                row.appendChild(p);
             }
 
             list.appendChild(row);

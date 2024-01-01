@@ -1,7 +1,7 @@
 <script lang="ts">
   import 'tabulator-tables/dist/css/tabulator_bulma.min.css';
   import '../../styles/table.scss';
-  import type { ColumnDefinition, CellComponent, CellEditEventCallback } from 'tabulator-tables';
+  import type { ColumnDefinition, CellComponent, CellEditEventCallback, Tabulator } from 'tabulator-tables';
   import { column, comboBoxEditor } from './templates/column.helper';
   import { autoFilter, rangeFilter } from './templates/filter.helper';
   import format from './templates/formatters/formatter.helper';
@@ -10,10 +10,12 @@
   import AddEntry from './AddEntry.svelte';
   import FileDrop from './FileDrop.svelte';
   import SongResource, { type Dialog } from './SongResource.class';
+  import { detailLayoutFormatter, summaryFormatter } from './templates/responsive.helper';
   import SongService from '../../service/song.service';
   import { t } from '../../service/i18n';
   import type { UserSong } from '../../model/song.model';
   import { showError, showInfo } from '../../store/notification.store';
+  import { orientation, type Orientation } from '../../store/media.store';
   import genres from '../../data/genres.json';
 
   export let params: { id?: string } = {};
@@ -30,13 +32,15 @@
 
   // https://tabulator.info/docs/5.4/edit#editor-list
   const columns: ColumnDefinition[] = [
-    column("Favorite", "fav", "50", undefined, format.favColumn, interaction, { responsive: 3 }),
+    { title: "", field: "__responsive", formatter: 'responsiveCollapse', headerSort: false, responsive: 0, visible: false },
+    column("Overview", "__summary", undefined, "string", summaryFormatter, { clickMenu: resource.getMenu(() => prompt), responsive: 0, visible: false }),
+    column("✮", "fav", "50", undefined, format.favColumn, interaction, { responsive: 3 }),
     column("Σ", "progressLogs", "50", "array", format.length, { hozAlign: 'right', headerFilter: 'number', responsive: 9, visible: false }),
-    column("Status", "status", "50", "string", autoFilter(), format.status, interaction, { clickMenu: resource.getMenu(() => prompt), hozAlign: 'center', responsive: 1 }),
+    column("Status", "status", "50", "string", autoFilter(), format.status, interaction, { clickMenu: resource.getMenu(() => prompt), hozAlign: 'center', responsive: 2 }),
     column("Progress", "progress", "136", "number", rangeFilter(), format.progress, interaction, { responsive: 2 }),
     column("📷", "artistImg", "30", undefined, format.bgImg, { responsive: 9 }),
-    column("Artist", "artist", "200", "string", autoFilter(), comboBoxEditor(), interaction, { validator: 'required', responsive: 0 }),
-    column("Title", "title", "200", "string", autoFilter(), interaction, { editor: 'input', validator: 'required', responsive: 0 }),
+    column("Artist", "artist", "200", "string", autoFilter(), comboBoxEditor(), interaction, { validator: 'required', responsive: 1 }),
+    column("Title", "title", "200", "string", autoFilter(), interaction, { editor: 'input', validator: 'required', responsive: 1 }),
     column("Genre", "genre", "136", "string", autoFilter(), format.genre, genreSelector, interaction, { responsive: 2 }),
     column("Style", "style", "136", "string", autoFilter(), comboBoxEditor(), interaction, { responsive: 2 }),
     column("Source", "source", "200", "string", autoFilter(), format.marked, interaction, { editor: 'input', responsive: 9 }),
@@ -70,6 +74,18 @@
       showError(error.message);
     }
   }
+
+  function init(table: Tabulator, orientation: Orientation): void {
+    const responsiveCol = table.getColumn('__responsive');
+    const summaryCol = table.getColumn('__summary');
+    if (orientation === 'portrait') {
+      responsiveCol.show();
+      summaryCol.show();
+    } else {
+      responsiveCol.hide();
+      summaryCol.hide();
+    }
+  }
 </script>
 
 <main>
@@ -86,6 +102,8 @@
       exportTitle='My Song List'
       persistenceID='songs'
       groupHeader={format.groupBy}
+      detailFormatter={detailLayoutFormatter}
+      on:init={({ detail }) => init(detail, $orientation)}
       on:error={({ detail }) => showError(detail)}
     />
   </FileDrop>

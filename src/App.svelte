@@ -33,7 +33,7 @@
     if(window.innerWidth <= 600) {
       const metaTag = document.createElement('meta');
       metaTag.name = "viewport";
-      metaTag.content = "width=device-width, initial-scale=0.75, maximum-scale=1";
+      metaTag.content = "width=device-width, initial-scale=0.9, maximum-scale=1";
       document.head.appendChild(metaTag);
     }
   });

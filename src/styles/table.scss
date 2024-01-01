@@ -80,6 +80,36 @@ div#table.tabulator {
                     margin: 0;
                 }
 
+                &.responsive {
+                    span {
+                        display: inline-block;
+    
+                        &.status {
+                            min-width: 1.2em;
+                        }
+    
+                        &.label {
+                            min-width: 2em;
+                        }
+    
+                        &.title {
+                            &::before {
+                                padding-right: .2rem;
+                            }
+                            &.active {
+                                font-weight: 500;
+                                background: linear-gradient(0deg, wheat, transparent 50%);
+                            }
+                        }
+                    }
+                    i {
+                        font-size: x-small;
+                        &.bx-unlink {
+                            color: silver;
+                        }
+                    }
+                }
+
                 div.tabulator-responsive-collapse-toggle {
                     background-color: transparent;
 
@@ -110,11 +140,14 @@ div#table.tabulator {
                     align-content: center;
                     flex-wrap: wrap;
 
+                    label {
+                        display: inline-block;
+                        padding: .2rem .4rem;
+                        min-width: 20%;
+                        font-weight: 500;
+                    }
+                    
                     div {
-                        label {
-                            font-weight: 500;
-                        }
-
                         padding: .2em 1em;
                     }
                 }
@@ -164,22 +197,23 @@ div.tabulator-popup-container {
 }
 
 /* favorite column */
-div.tabulator-cell.fav {
-    font-size: larger;
-    color: transparent;
-    background: none;
-    text-shadow: 1px 1px 1px #A0A0A0;
-
+div.tabulator-cell.fav, 
+span.fav {
     &::before {
+        font-size: larger;
+        color: transparent;
+        background: none;
+        text-shadow: 1px 1px 1px #A0A0A0;
         content: '✩';
     }
 }
 
-div.tabulator-cell.fav.active {
-    color: gold;
+div.tabulator-cell.fav.active, 
+span.fav.active {
     // background: radial-gradient(white, wheat 40%, gold 50%, gray, transparent 55%);
     
     &::before {
+        color: gold;
         content: '✮';
     }
 }
