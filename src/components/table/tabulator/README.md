@@ -1,0 +1,1 @@
+This folder contains modified Tabulator files from the [github repo](https://github.com/olifolkerd/tabulator/blob/master/src/js).

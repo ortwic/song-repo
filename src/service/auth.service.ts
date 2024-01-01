@@ -1,45 +1,61 @@
 import {
-    signInWithPopup,
+    signInWithRedirect,
     GoogleAuthProvider,
+    OAuthProvider,
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     onAuthStateChanged,
     signOut,
+    deleteUser,
 } from 'firebase/auth';
+import { getAnalytics, setUserId } from 'firebase/analytics';
 import { authState } from 'rxfire/auth';
 import { auth } from './firebase.setup';
-import { usersongs } from '../store/song.store';
-import { currentMenu } from '../store/app.store';
 import { showInfo } from '../store/notification.store';
+import { app } from '../service/firebase.setup';
 
 export const currentUser = authState(auth);
 const googleProvider = new GoogleAuthProvider();
 // googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+export const analytics = getAnalytics(app);
+
+const msProvider = new OAuthProvider('microsoft.com');
+msProvider.setCustomParameters({
+    prompt: 'consent',
+    tenant: '5df890bf-37a1-40ae-956c-71a7f65c2f81',
+});
 
 onAuthStateChanged(auth, (user) => {
-    currentMenu.set(user ? 'none' : 'login');
     if (user) {
+        setUserId(analytics, user.uid);
         showInfo(`${user.displayName || user.email} has signed in.`);
-    } else {
-        showInfo(`You've signed out!`);
     }
 });
 
 export default class AuthService {
-    async loginWithGoogle() {
-        return signInWithPopup(auth, googleProvider);
+    async loginWithGoogle(): Promise<void> {
+        // signInWithPopup can cause CORS problems in MS Edge (prod only)
+        await signInWithRedirect(auth, googleProvider);
     }
 
-    async signUp(email: string, password: string) {
-        return createUserWithEmailAndPassword(auth, email, password);
+    async loginWithMicrosoft(): Promise<void> {
+        // signInWithPopup can cause CORS problems in MS Edge (prod only)
+        await signInWithRedirect(auth, msProvider);
     }
 
-    async signIn(email: string, password: string) {
-        return signInWithEmailAndPassword(auth, email, password);
+    async signUp(email: string, password: string): Promise<void> {
+        await createUserWithEmailAndPassword(auth, email, password);
     }
 
-    async signOut() {
-        signOut(auth);
-        usersongs.set([]);
+    async signIn(email: string, password: string): Promise<void> {
+        await signInWithEmailAndPassword(auth, email, password);
+    }
+
+    async signOut(): Promise<void> {
+        await signOut(auth);
+    }
+
+    async deleteUser(): Promise<void> {
+        return deleteUser(auth.currentUser);
     }
 }

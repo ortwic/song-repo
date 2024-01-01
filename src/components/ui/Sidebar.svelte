@@ -1,55 +1,37 @@
 <script lang='ts'>
     import '../../styles/menu.scss';
     import { slide } from 'svelte/transition';
-    import Titlebar from './Titlebar.svelte';
-	import { currentUser } from '../../service/auth.service';
-    import { usersongs } from "../../store/song.store";
-    import type { UserSong } from "../../model/song.model";
+    import Titlebar from './elements/Titlebar.svelte';
 
     export let title = '';
-    export let footer = '';
-    
-    async function loadSamples(): Promise<void> {
-        const { default: samples } = await import('../../data/samples.json');
-        usersongs.set(samples as unknown as UserSong[]);
-    }
 </script>
 
 <aside in:slide={{ duration: 200, axis: 'x' }} out:slide={{ duration: 200, axis: 'x' }} >
-    <Titlebar>{title}</Titlebar>
+    <Titlebar target="root">
+        <slot name="title">
+            {title}
+        </slot>    
+    </Titlebar>
     <section>
         <slot></slot>
     </section>
     <footer class="menu">
-        {#if !$currentUser}
-        <div>
-            <button title="Load demo sample data" on:click={loadSamples}>
-                <i class='bx bx-test-tube'></i> Load samples
-            </button>
-        </div>
-        {/if}
-        <div>
-            <a role="button" target="_blank" href="http://buymeacoffee.com/ortwic">
-                <span><i class='bx bxs-coffee'></i> Buy me a coffee</span>
-            </a>
-        </div>
-        <div>
-            <a role="button" target="_blank" href="https://github.com/users/ortwic/projects/2/views/1">
-                <span><i class="bx bxl-github"></i> Feature overview</span>
-            </a>
-        </div>
+        <slot name="lower"></slot>
         <div class="info">
-            {footer}
+            <slot name="footer"></slot>
         </div>
     </footer>
 </aside>
 
 <style lang="scss">
+@use "../../styles/vars.scss";
+
 aside {
     display: flex;
     flex-direction: column;
-    position: absolute;
+    position: fixed;
     right: 0;
+    width: vars.$sidebar-width;
     height: 100%;
     z-index: 100;
     background-color: var(--primback);
@@ -69,6 +51,7 @@ aside {
         text-align: center;
         text-shadow: 1px 1px 0 gray;
         min-height: 2.2em;
+        user-select: none;
     }
 }
 </style>

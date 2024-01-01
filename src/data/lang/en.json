@@ -1,0 +1,126 @@
+{
+  "menu": {
+    "songs": "Your songs",
+    "howto": "Making music",
+    "howto-blog": "How to make music blog",
+    "events": "Public events",
+    "event-calendar": "Public event calendar",
+    "donate": "Donate",
+    "masterdata": "Master data",
+    "login": {
+      "login": "Login",
+      "email": "Email",
+      "password": "Password",
+      "repeat": "Repeat password",
+      "signup": "Sign up",
+      "signup-title": "Sign up to store data",
+      "with-google": "Login with Google",
+      "with-microsoft": "Login with Microsoft",
+      "read-privacy-policy": "Read privacy policy",
+      "read-terms-of-use": "Read terms of use",
+      "read-carefully": "Please read the document carefully"
+    },
+    "or": "or"
+  },
+  "start": {
+    "hello": "Hello musician!",
+    "intro": "This app was specifically designed for musicians like you to keep track of your repertoire and your progress. Some features of this app:",
+    "features": {
+      "list": "Create own list of songs you've mastered or want to learn (Login to persist data)",
+      "create": "Create list",
+      "track": "Keep an overview of your progress",
+      "share": "Share or export list of your repertoire",
+      "search": "Search with autocomplete for genres, artists, and titles",
+      "events": "Public events like",
+      "blog": "How-tos and further articles about making",
+      "github": "Planned feature overview and known bugs",
+      "feedback": "We hope you find our app useful and look forward to your"
+    },
+    "samples": "Load list with sample data"
+  },
+  "feedback": {
+    "submit": "Submit feedback",
+    "note": "Dote the following questions on a scale from 1 to 10 ascending, where 10 is the most important to you.",
+    "qBackup": "How important is it to you to be able to backup your data?",
+    "qSearch": "How important is it to you that data is suggested to you when creating new pieces?",
+    "genre": "Genre / Style",
+    "title": "Artist / Title",
+    "refLyrics": "Reference lyrics",
+    "refChords": "Reference chords",
+    "searchNotes": "Search for sheet music",
+    "other": "Other",
+    "qShare": "How important is it for you to be able to share your content with other users?",
+    "pubLink": "Public link",
+    "otherUsers": "Other users of the platform",
+    "emailSend": "E-Mail delivery",
+    "qBlog": "How useful is it for you to browse a blog about how-tos and recommendations?",
+    "blogHowto": "How-to",
+    "blogRefs": "Recommendations",
+    "blogTheory": "Music theory",
+    "qOther": "Do you have any other ideas and suggestions for the app or have you noticed serious bugs?",
+    "ty": "Thank you for participating in this feedback survey."
+  },
+  "songs": {
+    "columns": {
+      "fav": "Favorite",
+      "progressLogs": "Count",
+      "progress": "Progress",
+      "status": "Status",
+      "artistImg": "▩",
+      "artist": "Artist",
+      "title": "Title",
+      "genre": "Genre",
+      "style": "Style",
+      "source": "Source",
+      "key": "Key",
+      "time": "Time",
+      "bpm": "BPM",
+      "difficulty": "Level",
+      "features": "Features",
+      "tags": "Labels",
+      "learnedOn": "Learned",
+      "changedAt": "Changed"
+    },
+    "resource": {
+      "title": "Enter resource path",
+      "caption": "Enter a uri path to any resource:",
+      "info": "Use a cloud storage like google drive to upload your files. Then copy the url here."
+    },
+    "nosongs": "No songs added.",
+    "exportTitle": "My Song List",
+    "import": "Start importing...",
+    "importDone": "Found {found} songs. Total songs: {total}",
+    "addTitle": "Search - powered by",
+    "noPersist": "You are not signed in, so data won't be persisted after leaving the app!"
+  },
+  "table": {
+    "selectColumns": "Choose columns",
+    "groupBy": "Group by {title}",
+    "search": "Search for anything..."
+  },
+  "blog": {
+    "title": "Everthing about making music"
+  },
+  "notfound": {
+    "title": "Not found",
+    "messages": [
+      "Oops, something went wrong.",
+      "We're sorry, but we can't find the page you're looking for.",
+      "Looks like this page is missing. Maybe it's been moved or deleted.",
+      "This page isn't available right now. Please check back later.",
+      "We're experiencing some technical difficulties. Please try again later.",
+      "We're sorry, but something seems to be wrong on our end.",
+      "We're working hard to fix this issue. Please bear with us.",
+      "This page is currently under maintenance. We apologize for any inconvenience.",
+      "We're sorry, but we're having trouble loading this page.",
+      "An unexpected error has occurred. We're on it."
+    ]
+  },
+  "dialog": {
+    "confirm": "Confirm",
+    "decline": "Decline"
+  },
+  "calendar": {
+    "title": "Event calendar"
+  }
+}

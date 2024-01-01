@@ -45,6 +45,12 @@ export class ArrayStore<T> {
         this._store.set(items);
     }
 
+    public exists(key: keyof T, value: unknown): boolean {
+        let result: unknown;
+        this._store.subscribe((items) => (result = items.map((v) => v[key]).find((v) => v === value)))();
+        return !!result;
+    }
+
     public get length(): number {
         let length = 0;
         this._store.subscribe((items) => (length = items.length))();

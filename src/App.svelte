@@ -1,68 +1,61 @@
 <script lang="ts">
-  import Login from './components/login/Login.svelte';
-  import Signup from './components/login/Signup.svelte';
+  import { onMount } from "svelte";
+  import Router, { push } from "svelte-spa-router";
+  import { map } from 'rxjs';
+  import type { User } from 'firebase/auth';
+  import Menu from './components/menus/Index.svelte';
   import SongTable from './components/table/SongTable.svelte';
-  import ToggleButton from './components/ui/ToggleButton.svelte';
-  import Sidebar from './components/ui/Sidebar.svelte'
   import Snackbar from './components/ui/Snackbar.svelte';
-  import { currentMenu } from './store/app.store';
-
-  const title = `${import.meta.env.DEV ? 'DEV' : 'My'} song repertory`;
-  const footer = 'Version 0.1.1 pre-alpha';
-
-  function submit(ev: SubmitEvent) {
-    if (ev.submitter.id == 'toggle') {
-      currentMenu.set($currentMenu == 'none' ? 'login' : 'none');
-    } else if (ev.submitter.id == 'signup') {
-      currentMenu.set('signup');
-    } else {
-      currentMenu.set('none');
+  import Start from "./routes/Start.svelte";
+  import Calendar from "./routes/Calendar.svelte";
+  import Blog from "./routes/Blog.svelte";
+  import Feedback from "./routes/Feedback.svelte";
+  import NotFound from "./routes/NotFound.svelte";
+  import { currentUser } from './service/auth.service';
+    
+  const title = `${import.meta.env.DEV ? 'DEV' : 'Start'}`;
+  const usertitle = currentUser.pipe(map(setPageInfo));
+  const version = import.meta.env.PACKAGE_VERSION;
+  
+  const routes = {
+    '/': Start,
+    '/songs': SongTable,
+    '/songs/:id': SongTable,
+    '/samples': SongTable,
+    '/events': Calendar,
+    '/blog': Blog,
+    '/blog/:label': Blog,
+    '/feedback': Feedback,
+    '*': NotFound
+  };
+  
+  onMount(() => {
+    if(window.innerWidth <= 600) {
+      const metaTag = document.createElement('meta');
+      metaTag.name = "viewport";
+      metaTag.content = "width=device-width, initial-scale=0.9, maximum-scale=1";
+      document.head.appendChild(metaTag);
     }
+  });
+
+  function setPageInfo(user: User): string {
+    if (user) {
+      push(`/songs`);
+      const name = user.displayName || user.email.split('@')[0]?.replace('.', ' ');
+      return `${name}'s known songs`;
+    }
+    return `${title} | Login`;
   }
 </script>
 
 <svelte:head>
-  <title>{title}</title>
+  <meta name="author" content="OCSoft, ocsoft42@gmail.com">
+  <title>{$usertitle || 'Loading...'}</title>
   <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
 </svelte:head>
 
+<Menu {title} footer="Version {version}" />
 
-<form on:submit|preventDefault={submit}>
-  <header>
-    <ToggleButton />
-  </header>
-  <nav>
-    {#if $currentMenu == 'login'}
-    <Sidebar {title} {footer}>
-      <Login />
-    </Sidebar>
-    {:else if $currentMenu == 'signup'}
-    <Sidebar title="Sign up" {footer}>
-      <Signup />
-    </Sidebar>
-    {/if}
-  </nav>
-</form>
-
-<main> 
-  <SongTable />
-</main>
+<Router {routes}/>
 
 <Snackbar />
-
-<style>
-  header {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    z-index: 10;
-    height: 0;
-    text-align: right;
-  }
-
-  main {
-    height: 100vh;
-    overflow: hidden;
-  }
- 
-</style>

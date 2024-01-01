@@ -1,0 +1,123 @@
+{
+  "menu": {
+    "songs": "Deine Songs",
+    "howto": "Musizieren",
+    "howto-blog": "Wie geht Musik Blog",
+    "events": "Veranstaltungen",
+    "event-calendar": "Veranstaltungeskalender",
+    "donate": "Spenden",
+    "masterdata": "Stammdaten",
+    "login": {
+      "login": "Login",
+      "email": "E-Mail",
+      "password": "Kennwort",
+      "repeat": "Kennwort wiederholen",
+      "signup": "Sign up",
+      "signup-title": "Login um Daten zu speichern",
+      "with-google": "Login mit Google",
+      "with-microsoft": "Login mit Microsoft",
+      "read-privacy-policy": "Datenschutz gelesen",
+      "read-terms-of-use": "Nutzungsbedingungen",
+      "read-carefully": "Bitte lesen Sie das Dokument sorgfältig durch"
+    },
+    "or": "oder"
+  },
+  "start": {
+    "hello": "Hallo Musiker!",
+    "intro": "Diese App wurde speziell für Musiker wie Sie entwickelt, um einen Überblick über Ihr Repertoire und Ihre Fortschritte zu behalten. Einige Funktionen dieser App:",
+    "features": {
+      "list": "Eigene Liste mit Musikstücken erstellen, die Sie beherrschen oder noch lernen möchten. (Login um Daten zu speichern)",
+      "create": "Liste erstellen",
+      "track": "Übersicht über Ihre Fortschritte behalten",
+      "share": "Liste des Repertoires öffentlich teilen oder exportieren",
+      "search": "Suche mit Vervollständigung der Genres, Künstler und Titel",
+      "events": "Öffentliche events wie",
+      "blog": "HowTo's und weitere Artikel über das musizieren",
+      "github": "Überblick geplanter Features und bekannte Bugs",
+      "feedback": "Wir hoffen, dass Sie unsere App nützlich finden."
+    },
+    "samples": "Liste mit Beispieldaten laden"
+  },
+  "feedback": {
+    "submit": "Feedback senden",
+    "note": "Bitte bewerte die Folgenden Fragen auf einer Skala von 1 bis 10 aufsteigend, wobei 10 dir am aller wichtigsten ist.",
+    "qBackup": "Wie wichtig ist es dir, Daten zu sichern?",
+    "qSearch": "Wie wichtig ist es dir, dass dir bei der Erstellung neuer Stücke Daten vorgeschlagen werden?",
+    "genre": "Genre / Style",
+    "title": "Künstler / Titel",
+    "refLyrics": "Verweis Lyrics",
+    "refChords": "Verweis Akkorde",
+    "searchNotes": "Suche nach Noten",
+    "other": "Sonstiges",
+    "qShare": "Wie wichtig ist es für dich, deine Inhalte mit anderen Benutzern teilen zu können?",
+    "pubLink": "Öffentlicher Link",
+    "otherUsers": "Andere Benutzer der Plattform",
+    "emailSend": "E-Mail Versand",
+    "qBlog": "Wie sinnvoll ist es für dich, in einem Blog nach Anleitungen und Empfehlungen zu stöbern?",
+    "blogHowto": "Wie man",
+    "blogRefs": "Empfehlungen",
+    "blogTheory": "Musiktheorie",
+    "qOther": "Hast du noch sonstige Ideen und Vorschläge für die App oder sind dir schwerwiegende Bugs aufgefallen?",
+    "ty": "Danke, dass du an dieser Feedback Befragung teil genommen hast."
+  },
+  "songs": {
+    "columns": {
+      "fav": "Favorite",
+      "progressLogs": "Anzahl",
+      "progress": "Fortschritt",
+      "status": "Status",
+      "artistImg": "▩",
+      "artist": "Künstler",
+      "title": "Titel",
+      "genre": "Genre",
+      "style": "Style",
+      "source": "Quelle",
+      "key": "Tonart",
+      "time": "Taktart",
+      "bpm": "BPM",
+      "difficulty": "Level",
+      "features": "Merkmale",
+      "tags": "Labels",
+      "learnedOn": "Gelernt",
+      "changedAt": "Geändert"
+    },
+    "resource": {
+      "title": "Geben Sie den Ressourcenpfad ein",
+      "caption": "Geben Sie einen URI-Pfad zu einer beliebigen Ressource ein:",
+      "info": "Verwenden Sie einen Cloud-Speicher wie Google Drive, um Ihre Dateien hochzuladen. \nDann kopieren Sie die URL hier."
+    },
+    "nosongs": "Nichts hinzugefügt.",
+    "exportTitle": "Meine Songliste",
+    "import": "Import starten...",
+    "importDone": "{found} Songs gefunden. Gesamtzahl der Songs: {total}",
+    "addTitle": "Suche – unterstützt von",
+    "noPersist": "Sie sind nicht angemeldet, daher bleiben die Daten nach dem Verlassen der App nicht erhalten!"
+  },
+  "table": {
+    "selectColumns": "Spalten auswählen",
+    "groupBy": "Gruppieren nach {title}",
+    "search": "Suchen nach etwas..."
+  },
+  "blog": {
+    "title": "Alles über das Musizieren"
+  },
+  "notfound": {
+    "title": "Nicht gefunden",
+    "messages": [
+      "Hoppla, etwas ist schief gelaufen.",
+      "Es tut uns leid, aber wir können die Seite, die Sie suchen, nicht finden.",
+      "Es sieht so aus, als ob diese Seite fehlt. Vielleicht wurde sie verschoben oder gelöscht.",
+      "Diese Seite ist gerade nicht verfügbar. Bitte schauen Sie später noch einmal vorbei.",
+      "Wir haben einige technische Schwierigkeiten. Bitte versuchen Sie es später noch einmal.",
+      "Es tut uns leid, aber etwas scheint bei uns schief zu laufen.",
+      "Wir arbeiten hart daran, dieses Problem zu beheben. Bitte haben Sie Geduld mit uns.",
+      "Diese Seite wird gerade gewartet. Wir entschuldigen uns für etwaige Unannehmlichkeiten.",
+      "Es tut uns leid, aber wir haben Probleme beim Laden dieser Seite.",
+      "Ein unerwarteter Fehler ist aufgetreten. Wir sind dran."
+    ]
+  },
+  "dialog": {
+    "confirm": "Bestätigen",
+    "decline": "Ablehnen"
+  }
+}

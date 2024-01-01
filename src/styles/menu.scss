@@ -1,94 +1,118 @@
-.menu {
+.menu, .dialog {
 
-    div {
-        border-top: 1px solid silver;
-        white-space: nowrap;
-        width: 100%;
-    }
-    
-    label, 
-    input[type=text], 
-    input[type=password] {
+    @mixin row {
         display: block;
-        margin: 0 1rem;
         padding: .4rem;
         text-align: left;
     }
 
-    p {
-        margin: .6rem 1rem;
-        text-align: left;
-    }
-    
-    input[type=text], 
-    input[type=password] {
-        border: 1px solid gray;
-        transition: all .2s ease-in-out;
-    }
-
-    input[type=text]:focus, 
-    input[type=password]:focus {
-        outline: 1px solid var(--primary);
-    }
-
-    p {
-        padding: 0;
-    }
-    
-    button, 
-    a[role="button"] {
+    div.row {
+        display: flex;
+        flex-flow: nowrap;
+        justify-items: center;
+        align-content: center;
+        align-items: center;
+        border-top: 1px solid silver;
         width: 100%;
-        border: 0;
-        border-radius: 0;
-        box-shadow: unset;
-        min-height: 3em;
-        text-align: center;
-        transition: all .2s ease-in-out;
+        white-space: nowrap;
+        
+        button, 
+        a[role="button"] {
+            flex: 1 1 0;
+            width: 100%;
+            min-width: 0; /* https://stackoverflow.com/a/44782536/2598771 */
+            min-height: 3em;
+            border: 0;
+            border-radius: 0;
+            box-shadow: unset;
+            text-align: center;
+            transition: all .2s ease-in-out;
 
-        span {
-            display: inline-block;
-            padding: 6px;
+            span {
+                display: inline-block;
+                padding: 6px;
+            }
+
+            i:not(.bx-sm) {
+                border: 1px solid silver;
+                border-radius: 1em;
+                background-color: white;
+                padding: 4px;
+            }
+
+            &:hover {
+                background-color: white;
+            }
+
+            &:disabled {
+                background-color: transparent;
+            }
+            
+            &:not(:last-child) {
+                border-right: 1px solid silver;
+            }
+
+            &.highlight {
+                border: 1px dashed var(--primary);
+                background-color: var(--primghost);
+            }
+        }
+
+        a[role="button"] {
+            display: block;
+
+            span {
+                color: var(--primary);
+                padding-top: .6em;
+                vertical-align: middle;
+            }
+        }
+        
+        p {
+            margin: .6rem 1rem;
+            width: 100%;
         }
     }
 
-    button.w50 {
-        width: 50%;
-        border-left: 1px solid silver;
-    }
-
-    button.highlight {
-        border: 1px solid var(--primary);
-    }
-
-    button:hover, 
-    a[role="button"]:hover {
-        background-color: white;
-    }
-
-    button:disabled, 
-    a[role="button"]:disabled {
-        background-color: transparent;
-    }
-
-    button i, 
-    a[role="button"] i {
-        border: 1px solid silver;
-        border-radius: 1em;
-        background-color: white;
-        padding: 4px;
-    }
-
-    a[role="button"] {
-        display: block;
-
-        span {
-            color: var(--primary);
-            padding-top: .6em;
-            vertical-align: middle;
-        }
-    }
-
-    div:last-child {        
+    div.row:last-child {
         border-bottom: 1px solid silver;
+    }
+    
+    div.section {
+        &.indent {
+            margin: 0 1rem;
+        }
+
+        label {
+            @include row;
+        }
+    
+        p {
+            margin: .6rem 1rem;
+            text-align: left;
+        }
+        
+        input[type=text], 
+        input[type=email],
+        input[type=number],
+        input[type=url],
+        input[type=search],
+        input[type=password] {
+            @include row;
+            border: 1px solid gray;
+            transition: all .2s ease-in-out;
+    
+            &:focus {
+                outline: 1px solid var(--primary);
+            }
+        }
+    }    
+
+    .success-text {
+        color: DodgerBlue;
+    }
+
+    .danger-text {
+        color: Red;
     }
 }

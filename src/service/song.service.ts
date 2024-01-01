@@ -1,87 +1,121 @@
-import { switchMap } from 'rxjs';
+import { Observable, of, switchMap, from, map, auditTime, merge, BehaviorSubject } from 'rxjs';
 import { currentUser } from './auth.service';
-import FirestoreService from './firestore.service';
+import FirestoreService, { uniqueKey } from './firestore.service';
 import type { UserSong } from '../model/song.model';
-import { usersongs } from '../store/song.store';
-import { Timestamp } from 'firebase/firestore';
+import { Timestamp, orderBy, where } from 'firebase/firestore';
 
-const uniqueKey = (...array: string[]) =>
-    array.join('').trim().replaceAll(/\W/g, '');
+// const sharedFields: (keyof UserSong)[] = ['id', 'artist', 'title', 'genre', 'style', 'key', 'time', 'bpm'];
+const sampleId = 'R3VSxFand4d3helVN7aTxWNmzDi1';
+const showSamples = () => location.href.endsWith('samples');
+const localStore = {};
+const localSubject = new BehaviorSubject<UserSong[]>([]);
+const store = new FirestoreService('usersongs');
 
 export default class SongService {
-    public readonly store = new FirestoreService('usersongs');
     private uid = '';
+    hasUser = () => !!this.uid;
+    isShared = () => !!this.sharedUid;
 
-    private appendId = (song: UserSong, ...more: object[]): UserSong =>
-        !song.id && song.title
+    readonly usersongs: Observable<UserSong[]>;
+
+    private appendId = (song: UserSong, ...more: object[]): UserSong => {
+        return !song.id && song.title
             ? Object.assign(
-                  song,
-                  {
-                      id: uniqueKey(
-                          this.uid?.slice(0, 6) ?? '',
-                          song.artist ?? 'n/a',
-                          song.title
-                      ),
-                      uid: this.uid,
-                      createdAt: new Date(),
-                  },
-                  ...more
-              )
-            : song;
-
-    constructor() {
-        currentUser.subscribe((user) => (this.uid = user?.uid));
-        currentUser
-            .pipe(
-                switchMap((user) =>
-                    user ? this.store.getDocuments(user.uid) : []
-                )
+                song,
+                {
+                    id: uniqueKey(this.uid?.slice(0, 6) ?? '', song.artist ?? 'n/a', song.title),
+                    uid: this.uid,
+                    createdAt: Timestamp.now(),
+                },
+                ...more
             )
-            .subscribe((value) => usersongs.set(value as UserSong[]));
+            : song;
+    };
+
+    constructor(private sharedUid?: string) {
+        currentUser.subscribe((user) => (this.uid = user?.uid));
+        this.usersongs = currentUser.pipe(
+            switchMap(user => this.loadSongs(user)),
+            auditTime(990)
+        );
     }
 
-    newSong(): UserSong {
-        return {
-            id: '',
-            uid: this.uid,
+    private loadSongs(user: { uid: string }): Observable<UserSong[]> {
+        const byUser = (uid: string) => where('uid', '==', uid);
+        if (this.sharedUid) {
+            return store.getDocuments(byUser(this.sharedUid), orderBy('id'), where('status', '==', 'done'));
+        }
+
+        if (user) {
+            return store.getDocuments(byUser(user.uid), orderBy('id'));
+        }
+
+        if (showSamples()) {
+            const samplesFromFile = from(import('../data/samples.json'))
+                .pipe(map<{ default }, UserSong[]>(({ default: data }) => data));
+            const samples = store.getDocuments<UserSong>(byUser(sampleId), orderBy('id'))
+                .pipe(switchMap(docs => docs.length ? of(docs) : samplesFromFile));
+            return merge(samples, localSubject);
+        }
+
+        return localSubject;
+    }
+
+    async addSong(song: Partial<UserSong>): Promise<string> {
+        const newSong = this.appendId({
             fav: false,
             status: 'todo',
             progress: 0,
+            progressLogs: [],
             genre: '',
             style: '',
-            artist: '',
-            title: '',
-            source: '',
-            tags: [],
-            createdAt: Timestamp.now(),
-        };
+            key: '',
+            time: '',
+            bpm: '',
+            features: [],
+            learnedOn: '',
+            ...song
+        } as UserSong);
+
+        if (!newSong.uid) {
+            localStore[newSong.id] = newSong;
+        }
+
+        return this.setSong(newSong, true);
     }
 
-    async setSong(song: UserSong): Promise<string> {
+    async setSong(song: UserSong, forceLocalUpdate = false): Promise<string> {
         if (this.uid) {
-            song = this.appendId(song);
+            song.changedAt = Timestamp.now();
+            if (song.progressLogs.at(-1) !== song.progress) {
+                song.progressLogs.push(song.progress);
+            }
             if (song.id) {
-                await this.store.setDocument(song, { merge: true });
+                await store.setDocument(song, { merge: true });
                 return song.id;
             }
+        } else if (!showSamples() || forceLocalUpdate) {
+            localSubject.next(Object.values(localStore));
         }
     }
 
     async deleteSong(song: UserSong): Promise<void> {
         if (this.uid) {
-            return this.store.removeDocument(song.id);
+            return store.removeDocument(song.id);
+        } else {
+            delete localStore[song.id];
+            localSubject.next(Object.values(localStore));
         }
     }
 
     async importSongs(data: UserSong[]): Promise<UserSong[]> {
         if (data) {
-            const songs = data.map((s) =>
-                this.appendId(s, { importedAt: new Date() })
-            );
+            const songs = data.map((s) => this.appendId(s, { importedAt: new Date() }));
             if (this.uid) {
-                await this.store.setDocuments(songs, { merge: true });
-            } else {
-                usersongs.set(songs);
+                await store.setDocuments(songs, { merge: true });
+            } else { 
+                // if user is not logged in
+                localSubject.next(songs);
             }
             return data;
         }
