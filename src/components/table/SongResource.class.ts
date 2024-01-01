@@ -67,7 +67,7 @@ export default class SongResource {
                         label: '<i class=\'bx bx-music\'></i> Search sheet music (musescore)',
                         action(e, cell: CellComponent) {
                             const song = cell.getData() as UserSong;
-                            window.open(`https://musescore.com/sheetmusic?text="${song.artist}"+"${song.title}"`, '_blank');
+                            window.open(`https://musescore.com/sheetmusic?text=${song.artist}+${song.title}`, '_blank');
                         }
                     },
                     {

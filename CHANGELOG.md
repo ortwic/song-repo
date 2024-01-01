@@ -1,7 +1,12 @@
+v0.3.1 (2024-01-01)
+-------------------
+- global table search
+
 v0.3.0 (2023-12-30)
 -------------------
 - prepared first shipment
 - bugfixes and layout fixes
+- changed firestore path for usersongs
 
 v0.2.1 (2023-10-22)
 -------------------

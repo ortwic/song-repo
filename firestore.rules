@@ -7,8 +7,8 @@ service cloud.firestore {
       allow read: if true;
     }
     
-    match /songs/{docId} {
-      allow write: if request.auth.uid == request.resource.data.uid;
+    match /user/{uid}/songs/{docId} {
+      allow write, delete: if request.auth.uid == request.resource.data.uid;
       allow read: if true;
     }
     
