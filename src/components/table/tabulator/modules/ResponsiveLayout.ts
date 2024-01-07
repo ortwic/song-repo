@@ -3,7 +3,8 @@ import Module from 'tabulator-tables/src/js/core/Module';
 
 type Formatter = (data: CollapsedCellData[]) => HTMLElement;
 
-export interface CollapsedCellData { 
+export interface CollapsedCellData {
+    index: number;
     field: string;
     title: string; 
     value: string | HTMLElement;
@@ -258,26 +259,36 @@ export default class ResponsiveLayout extends Module{
         const data = row.getData();
         const output = [];
 
+        // console.log(this.hiddenColumns.map(c => ({ t: c.field, r: c.modules.responsive.order })));
+
         this.hiddenColumns.forEach((column) => {
             const field = column.field;
             const value = column.getFieldValue(data);
-            if(column.definition.title && field){
+            const index = column.definition.responsive;
+            if(column.definition.title && index >= 0){
                 const format = column.modules.format;
-                const title = !column.modules.format.params?.hideTitle ? column.definition.title : '';
+                let title = !column.modules.format.params?.hideTitle ? column.definition.title : '';
                 if(format && this.table.options.responsiveLayoutCollapseUseFormatters){
                     const cell = <CellComponent>row.getCell(field);
                     const element = cell.getElement();
                     // TODO cloneNode() to fix show/hide column https://github.com/ortwic/song-repo/issues/31
                     // element = element.cloneNode(true);
+                    
+                    if (title) {
+                        super.langBind('columns|' + field, (text) => title = text || title);
+                    }
+
                     element.title = column.definition.title;
                     element.style.display = 'block';
                     output.push({
+                        index,
                         field,
                         title,
                         value: element
                     });
                 }else{
                     output.push({
+                        index,
                         field,
                         title,
                         value: value
@@ -286,25 +297,25 @@ export default class ResponsiveLayout extends Module{
             }
         });
 
-        return output;
+        return output.sort((a, b) => a.index - b.index);
     };
 
     defaultFormatter(data: CollapsedCellData[]): HTMLElement{
         const list = document.createElement('div');
         list.classList.add('flex');
+        let lastIndex = -1;
 
-        data.forEach(({ field, title, value }) => {
+        data.forEach(({ index, title, value }) => {
             const row = document.createElement('div');
+
             if (title) {
                 const label = document.createElement('label');
+                label.innerHTML = title;
                 row.appendChild(label);
-                        
-                super.langBind('columns|' + field, (text) => {
-                    label.innerHTML = text || title;
-                });
             }
 
-            if(value instanceof Node){
+            if(value instanceof HTMLElement){
+                value.style.height = 'auto';
                 row.appendChild(value);
             }else if(value !== undefined){
                 const p = document.createElement('p');
@@ -312,6 +323,13 @@ export default class ResponsiveLayout extends Module{
                 row.appendChild(p);
             }
 
+            if (lastIndex !== index) {
+                const div = document.createElement('div');
+                div.classList.add('break');
+                list.appendChild(div);
+            }
+            
+            lastIndex = index;
             list.appendChild(row);
         }, this);
 

@@ -1,5 +1,4 @@
 import type { ColumnDefinition } from 'tabulator-tables';
-import type { CollapsedCellData } from '../tabulator/modules/ResponsiveLayout';
 import { genreColor, redToGreenRange } from '../../../styles/style.helper';
 
 export const summaryFormatter: Partial<ColumnDefinition> = {
@@ -30,32 +29,4 @@ export const summaryFormatter: Partial<ColumnDefinition> = {
             </span>
             <sup><i class="bx bx-${resource}"></i></sup>`;
     }
-};
-
-export const detailLayoutFormatter = (data: CollapsedCellData[]) => {
-    const list = document.createElement('div');
-    list.classList.add('flex');
-    
-    const createCell = ({ title, value }) => {
-        const div = document.createElement('div');
-        if (title) {
-            const label = document.createElement('label');
-            label.innerHTML = title;
-            div.appendChild(label);
-        }
-
-        if(value instanceof Node){
-            div.appendChild(value);
-        }else if(value !== undefined){
-            const p = document.createElement('p');
-            p.innerHTML = value;
-            div.appendChild(p);
-        }
-
-        list.appendChild(div);
-    };
-        
-    data.forEach(createCell);
-
-    return Object.keys(data).length ? list : undefined;
 };

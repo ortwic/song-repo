@@ -36,16 +36,13 @@ export const lengthFormatter: Partial<ColumnDefinition> = {
 export const bgImgFormatter: Partial<ColumnDefinition> = {
     formatter(cell: CellComponent) {
         const url = cell.getValue();
-        if (url) {
-            const element = cell.getElement();
-            element.style.backgroundImage = `url(${url})`;
-            element.style.backgroundRepeat = 'no-repeat';
-            element.style.backgroundPosition = 'center';
-            element.style.backgroundSize = 'cover';
-        }
-        return '';
-    },
-    formatterParams: { hideTitle: true }
+        const element = cell.getElement();
+        element.style.backgroundImage = `url(${url ?? './logo-512.png'})`;
+        element.style.backgroundRepeat = 'no-repeat';
+        element.style.backgroundPosition = 'center';
+        element.style.backgroundSize = url ? 'cover' : '80%';
+        return '&nbsp;';
+    }
 };
 
 export const statusFormatter: Partial<ColumnDefinition> = {
@@ -121,6 +118,7 @@ export const difficultyFormatter: Partial<ColumnDefinition> = {
             const element = cell.getElement();
             const [ gradient ] = redToGreenGradient((10 - value) * 10, 'to left', .2);
             element.style.background = gradient;
+            element.style.border = '1px solid silver';
         }
         return value;
     },

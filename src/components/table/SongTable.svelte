@@ -10,7 +10,7 @@
   import AddEntry from './AddEntry.svelte';
   import FileDrop from './FileDrop.svelte';
   import SongResource, { type Dialog } from './SongResource.class';
-  import { detailLayoutFormatter, summaryFormatter } from './templates/responsive.helper';
+  import { summaryFormatter } from './templates/responsive.helper';
   import SongService from '../../service/song.service';
   import { t } from '../../service/i18n';
   import type { UserSong } from '../../model/song.model';
@@ -35,25 +35,25 @@
   const columns: ColumnDefinition[] = [
     { title: "", field: "__responsive", formatter: 'responsiveCollapse', headerSort: false, responsive: 0, visible: false },
     column("Overview", "__summary", undefined, "string", summaryFormatter, { clickMenu, responsive: 0, visible: false }),
-    column("✮", "fav", "50", undefined, format.favColumn, interaction, { responsive: 9 }),
-    column("Σ", "progressLogs", "50", "array", format.length, { hozAlign: 'right', headerFilter: 'number', responsive: 9, visible: false }),
-    column("Status", "status", "50", "string", autoFilter(), format.status, interaction, { clickMenu, hozAlign: 'center', responsive: 9 }),
+    column("✮", "fav", "50", undefined, format.favColumn, interaction, { responsive: -1 }),
+    column("Σ", "progressLogs", "50", "array", format.length, { hozAlign: 'right', headerFilter: 'number', responsive: -1, visible: false }),
+    column("Status", "status", "50", "string", autoFilter(), format.status, interaction, { clickMenu, hozAlign: 'center', responsive: -1 }),
     column("Progress", "progress", "136", "number", rangeFilter(), format.progress, interaction, { responsive: 2 }),
-    column("📷", "artistImg", "30", undefined, format.bgImg, { responsive: 9 }),
-    column("Artist", "artist", "200", "string", autoFilter(), comboBoxEditor(), interaction, { validator: 'required', responsive: 2 }),
-    column("Title", "title", "200", "string", autoFilter(), interaction, { editor: 'input', validator: 'required', responsive: 2 }),
-    column("Genre", "genre", "136", "string", autoFilter(), format.genre, genreSelector, interaction, { responsive: 1 }),
-    column("Style", "style", "136", "string", autoFilter(), comboBoxEditor(), interaction, { responsive: 1 }),
-    column("Source", "source", "200", "string", autoFilter(), format.marked, interaction, { editor: 'input', responsive: 9 }),
-    column("Resource", "uri", "200", "string", autoFilter(), format.url, interaction, { editor: 'input', responsive: 9, visible: false }),
-    column("Key", "key", "80", "string", autoFilter(), interaction, { editor: 'input', responsive: 6 }),
-    column("Time", "time", "80", "string", autoFilter(), interaction, { editor: 'input', responsive: 6 }),
-    column("BPM", "bpm", "80", "string", autoFilter(), interaction, { editor: 'input', responsive: 6 }),
-    column("Level", "difficulty", "50", "number", format.difficulty, interaction, { responsive: 5 }),
-    column("Features", "features", "200", "string", autoFilter(), format.label, interaction, { editor: 'input', responsive: 7 }),
-    column("Labels", "tags", "200", "string", autoFilter(), format.label, interaction, { editor: 'input', responsive: 7 }),
-    column("Learned", "learnedOn", "136", "date", autoFilter(), format.timestamp, interaction, { editor: 'date', responsive: 9 }),
-    column("Last", "changedAt", "136", "date", autoFilter(), format.timestamp, { responsive: 9 }),
+    column("📷", "artistImg", "30", undefined, format.bgImg, { responsive: 1 }),
+    column("Artist", "artist", "200", "string", autoFilter(), comboBoxEditor(), interaction, { validator: 'required', responsive: 1 }),
+    column("Title", "title", "200", "string", autoFilter(), interaction, { editor: 'input', validator: 'required', responsive: 1 }),
+    column("Genre", "genre", "136", "string", autoFilter(), format.genre, genreSelector, interaction, { responsive: 2 }),
+    column("Style", "style", "136", "string", autoFilter(), comboBoxEditor(), interaction, { responsive: 2 }),
+    column("Source", "source", "200", "string", autoFilter(), format.marked, interaction, { editor: 'input', responsive: 3 }),
+    column("Resource", "uri", "200", "string", autoFilter(), format.url, interaction, { editor: 'input', responsive: 3, visible: false }),
+    column("Key", "key", "80", "string", autoFilter(), interaction, { editor: 'input', responsive: 4 }),
+    column("Time", "time", "80", "string", autoFilter(), interaction, { editor: 'input', responsive: 4 }),
+    column("BPM", "bpm", "80", "string", autoFilter(), interaction, { editor: 'input', responsive: 4 }),
+    column("Level", "difficulty", "50", "number", format.difficulty, interaction, { responsive: 4 }),
+    column("Features", "features", "200", "string", autoFilter(), format.label, interaction, { editor: 'input', responsive: 5 }),
+    column("Labels", "tags", "200", "string", autoFilter(), format.label, interaction, { editor: 'input', responsive: 6 }),
+    column("Learned", "learnedOn", "136", "date", autoFilter(), format.timestamp, interaction, { editor: 'date', responsive: 7 }),
+    column("Last", "changedAt", "136", "date", autoFilter(), format.timestamp, { responsive: 7 }),
     { title: "id", field: "id", visible: false },
   ];
 
@@ -85,6 +85,8 @@
 
       const remainingWidth = window.innerWidth - responsiveColumn.getWidth();
       summaryColumn.setWidth(remainingWidth);
+      table.getColumn('fav').hide();
+      table.getColumn('status').hide();
     } else {
       responsiveColumn.hide();
       summaryColumn.hide();
@@ -106,7 +108,6 @@
       placeholderSearch={ $t('table.search') }
       persistenceID='songs'
       groupHeader={format.groupBy}
-      detailFormatter={detailLayoutFormatter}
       on:init={({ detail }) => init(detail, $orientation)}
       on:error={({ detail }) => showError(detail)}
     />
