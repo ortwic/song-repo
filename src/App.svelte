@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import { t } from "svelte-i18n";
   import Router, { push } from "svelte-spa-router";
   import { map } from 'rxjs';
   import type { User } from 'firebase/auth';
@@ -12,6 +13,7 @@
   import Feedback from "./routes/Feedback.svelte";
   import NotFound from "./routes/NotFound.svelte";
   import { currentUser } from './service/auth.service';
+  import { setupI18n } from "./service/i18n";
     
   const title = `${import.meta.env.DEV ? 'DEV' : 'Start'}`;
   const usertitle = currentUser.pipe(map(setPageInfo));
@@ -54,8 +56,17 @@
   <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
 </svelte:head>
 
-<Menu {title} footer="Version {version}" />
+{#await setupI18n()}
+  { $t('start.loading') }
+{:then} 
+  <Menu {title} footer="Version {version}" />
 
-<Router {routes}/>
+  <Router {routes}/>
 
-<Snackbar />
+  <Snackbar />
+{:catch error}
+  <p>
+    Error while loading translations: <br />
+    { error }
+  </p>
+{/await}

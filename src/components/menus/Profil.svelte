@@ -1,4 +1,5 @@
 <script lang='ts'>
+    import { t } from 'svelte-i18n';
     import ConfirmDialog from '../ui/ConfirmDialog.svelte';
     import AuthService, { currentUser } from "../../service/auth.service";
     import { getCssVariable } from "../../styles/style.helper";
@@ -17,7 +18,7 @@
 		try {
 			const link = `${location.origin}/#/songs/@${$currentUser.uid}`;
 			await navigator.clipboard.writeText(link);
-			showInfo('Copied link for sharing into clipboard.');
+			showInfo($t('profile.share-link-copied'));
 		} catch (error) {
 			showError(error);
 		}
@@ -33,7 +34,7 @@
         if (accepted) {
             try {                
                 await authService.deleteUser();
-                showInfo('Your account was deleted successfully!');
+                showInfo($t('profile.delete-done'));
             } catch (error) {
                 showError(error.message);
             }
@@ -66,27 +67,29 @@
 	</span> 
 
 	<div class="row">
-		<button data-close title="Sign out '{email}'" on:click={signOut}>
-			<span><i class='bx bx-log-out-circle'></i> Logout</span>
+		<button data-close title="{ $t('profile.sign-out') } '{email}'" on:click={signOut}>
+			<span><i class='bx bx-log-out-circle'></i> { $t('profile.sign-out') }</span>
 		</button>
 	</div>
 	<div class="row">
-		<button title="Delete account '{email}'" 
+		<button title="{ $t('profile.delete') } '{email}'" 
 			on:click={() => showConfirmDelete = true}>
-			<span><i class='bx bx-error danger-text'></i> Delete profil</span>
+			<span><i class='bx bx-error danger-text'></i> { $t('profile.delete') }</span>
 		</button>
 	</div>
 	<div class="row">
-		<button title="Copy link to share" on:click={copyLink}>
-			<i class='bx bx-link'></i> Copy link to share
+		<button title="{ $t('profile.share-link') }" on:click={copyLink}>
+			<i class='bx bx-link'></i> { $t('profile.share-link') }
 		</button>
 	</div>
 
 	{#if showConfirmDelete}
-	<ConfirmDialog title='Confirm deletion' size='auto' target='login' on:closed={deleteProfile}>
-		<p>Do you really like to delete account? All data will be lost.</p>
-		<p>You should export your data before deletion.</p>
-	</ConfirmDialog>
+	<span class="dialog">	
+		<ConfirmDialog title='{ $t('profile.delete-confirm') }' size='auto' target='login' on:closed={deleteProfile}>
+			<p>{ $t('profile.delete-question') }</p>
+			<p>{ $t('profile.delete-advice') }</p>
+		</ConfirmDialog>
+	</span>
 	{/if}
 </section>
 
@@ -120,4 +123,8 @@
 			font-size: smaller;
 		}
     }
+
+	span.dialog p {
+		padding: 0 1rem;
+	}
 </style>

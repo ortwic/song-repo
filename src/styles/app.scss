@@ -168,19 +168,6 @@ input.lg {
     width: 15rem;
 }
 
-.fa-square::before {
-  content: '☐ ';
-}
-
-.fa-check-square::before {
-  content: '☑ ';
-}
-
-.fa-trash::before {
-  content: '✗ ';
-  color: red;
-}
-
 .primary {
   color: var(--primary);
 }

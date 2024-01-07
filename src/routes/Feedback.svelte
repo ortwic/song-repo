@@ -1,8 +1,8 @@
 <script lang='ts'>
+    import { t } from 'svelte-i18n';
     import { format } from 'fecha';
     import Titlebar from "../components/ui/elements/Titlebar.svelte";
     import FirestoreService from "../service/firestore.service";
-    import { t } from '../service/i18n';
     import { showError } from '../store/notification.store';
 
     const store = new FirestoreService('feedback');

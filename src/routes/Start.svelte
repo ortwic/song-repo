@@ -1,6 +1,6 @@
 <script>
+    import { t } from 'svelte-i18n';
     import Titlebar from '../components/ui/elements/Titlebar.svelte';
-    import { t } from '../service/i18n';
     
     const options = { mangle: false, headerIds: false };
 </script>

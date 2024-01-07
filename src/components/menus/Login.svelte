@@ -1,6 +1,6 @@
 <script lang='ts'>
     import { createEventDispatcher } from 'svelte';
-    import { t } from '../../service/i18n';
+    import { t } from 'svelte-i18n';
 	import AuthService from '../../service/auth.service';
     import { showError } from '../../store/notification.store';
     

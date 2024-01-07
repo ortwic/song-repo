@@ -30,6 +30,7 @@
     }
   },
   "start": {
+    "loading": "Wird geladen...",
     "hello": "Hallo Musiker!",
     "intro": "Diese App wurde speziell für Musiker wie Sie entwickelt, um einen Überblick über Ihr Repertoire und Ihre Fortschritte zu behalten. Einige Funktionen dieser App:",
     "features": {
@@ -69,24 +70,27 @@
   },
   "songs": {
     "columns": {
-      "fav": "Favorite",
+      "fav": "Favorit",
       "progressLogs": "Anzahl",
       "progress": "Fortschritt",
       "status": "Status",
-      "artistImg": "▩",
+      "artistImg": "Bild",
       "artist": "Künstler",
       "title": "Titel",
       "genre": "Genre",
       "style": "Style",
       "source": "Quelle",
+      "uri": "Resource",
       "key": "Tonart",
       "time": "Taktart",
-      "bpm": "BPM",
+      "bpm": "Tempo",
       "difficulty": "Level",
       "features": "Merkmale",
       "tags": "Labels",
       "learnedOn": "Gelernt",
-      "changedAt": "Geändert"
+      "changedAt": "Geändert",
+      "country": "Land",
+      "year": "Jahr"
     },
     "resource": {
       "title": "Geben Sie den Ressourcenpfad ein",
@@ -98,15 +102,18 @@
     "import": "Import starten...",
     "importDone": "{found} Songs gefunden. Gesamtzahl der Songs: {total}",
     "addTitle": "Suche – unterstützt von",
-    "noPersist": "Sie sind nicht angemeldet, daher bleiben die Daten nach dem Verlassen der App nicht erhalten!"
+    "noPersist": "Sie sind nicht angemeldet, daher bleiben die Daten nach dem Verlassen der App nicht erhalten!",
+    "hint-label": "Komma getrennt, z.B. \nFoo, Bar",
+    "hint-markdown": "Markdown unterstützt z.B."
   },
   "table": {
-    "selectColumns": "Spalten auswählen",
     "groupBy": "Gruppieren nach {title}",
     "search": "Suchen nach etwas..."
   },
   "blog": {
-    "title": "Alles über das Musizieren"
+    "title": "Alles über das Musizieren",
+    "less": "...weniger",
+    "more": "mehr..."
   },
   "notfound": {
     "title": "Nicht gefunden",
@@ -126,5 +133,15 @@
   "dialog": {
     "confirm": "Bestätigen",
     "decline": "Ablehnen"
+  },
+  "profile": {
+    "sign-out": "Abmelden",
+    "delete": "Profil löschen",
+    "share-link": "Share-Link kopieren",
+    "share-link-copied": "Share-Link in die Zwischenablage kopiert.",
+    "delete-confirm": "Löschung bestätigen",
+    "delete-question": "Möchtest du das Konto wirklich löschen? Alle Daten gehen verloren.",
+    "delete-advice": "Sie sollten Ihre Daten vor dem Löschen exportieren.",
+    "delete-done": "Ihr Konto wurde erfolgreich gelöscht!"
   }
 }

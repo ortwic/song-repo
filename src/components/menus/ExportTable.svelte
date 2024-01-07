@@ -1,7 +1,7 @@
 <script lang="ts">
+    import { t } from "svelte-i18n";
     import type { DownloadOptions, DownloadType } from "tabulator-tables";
     import FileIcon from "../ui/elements/FileIcon.svelte";
-    import { t } from "../../service/i18n";
     import { tableView } from "../../store/app.store";
     import { showError } from "../../store/notification.store";
     export let exportTitle = 'export';

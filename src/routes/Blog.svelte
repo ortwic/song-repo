@@ -1,10 +1,10 @@
 <script lang="ts">
     import { onMount } from "svelte";
+    import { t } from "svelte-i18n";
     import Titlebar from "../components/ui/elements/Titlebar.svelte";
     import Image from "../components/ui/elements/Image.svelte";
     import PostDetails from "../components/ui/PostDetails.svelte";
     import BlogService, { createBlogService } from "../service/blog.service";
-    import { t } from "../service/i18n";
     import { logPageView } from "../store/notification.store";
   
     export let params: { label?: string } = {};

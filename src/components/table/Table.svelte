@@ -26,6 +26,7 @@
     SortModule, 
     ValidateModule
   } from 'tabulator-tables';
+  import { t } from 'svelte-i18n';
   import { default as ResponsiveLayoutModule, type CollapsedCellData } from './tabulator/modules/ResponsiveLayout';
   import { onMount, createEventDispatcher, onDestroy } from 'svelte';
   import { Observable, fromEvent, map, take } from 'rxjs';
@@ -117,7 +118,7 @@
     persistence: {
       sort: usePersistance,
       filter: usePersistance,
-      columns: usePersistance,
+      columns: usePersistance ? [ 'width', 'visible' ] : false,
       group: usePersistance
     }
   };
@@ -141,12 +142,6 @@
     table = fromEvent(tableInstance, 'tableBuilt').pipe(take(1), map(() => handleTableBuilt(tableInstance)));
   }
 
-  function isRequired(def: ColumnDefinition): boolean {
-    if (Array.isArray(def.validator)) {
-      return 'required' in def.validator;
-    }
-    return def.validator === 'required';
-  }
 
   function handleTableBuilt(table: Tabulator) {
     initHeaderMenu(table);
@@ -167,7 +162,7 @@
         c.headerMenu.length = 0;
       }
       c.headerMenu.push({
-        label: `Group by ${c.title.toLowerCase()}`,
+        label: `${$t('menu.table.group-by')} ${c.title}`,
         action: (ev: Event, column: ColumnComponent) => toggleGroup(c.field, column.getElement())
       });
     });
@@ -228,7 +223,6 @@
 
 <span class="menu {useResponsiveLayout ? 'responsive' : 'static'}">
   <div class="section">
-    <slot name="header"></slot>
     <input type="search" placeholder={placeholderSearch} autocomplete="off" bind:value={searchTerm} on:input={search}/>
   </div>
 </span>

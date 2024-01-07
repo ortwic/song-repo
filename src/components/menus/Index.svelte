@@ -1,5 +1,6 @@
 <script lang='ts'>
     import '../../styles/menu.scss';
+    import { t } from 'svelte-i18n';
     import NavButton from '../ui/elements/NavButton.svelte';
     import Login from './Login.svelte';
     import Signup from './Signup.svelte';
@@ -10,7 +11,6 @@
     import MenuButton from '../ui/elements/MenuButton.svelte';
     import Sidebar from '../ui/Sidebar.svelte'
     import type { MenuPages } from '../../model/types';
-    import { t } from '../../service/i18n';
     import { currentUser } from '../../service/auth.service';
     import { currentMenu } from '../../store/app.store';
 

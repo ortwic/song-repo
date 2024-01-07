@@ -1,6 +1,7 @@
 import type { ColumnComponent, ColumnDefinition, EditorParams, RowComponent, SortDirection } from 'tabulator-tables';
 import { autoFilter } from './filter.helper';
 import { labelFormatter } from './formatters/formatter.helper';
+import type { MessageFormatter } from '../../../service/i18n';
 
 type Sorter =
     | undefined
@@ -24,12 +25,13 @@ type Sorter =
     ) => number);
 
 export const column = (
-    title: string,
+    t: string | MessageFormatter,
     field: string,
     width: string,
     sorter: Sorter,
     ...more: Partial<ColumnDefinition>[]
 ): ColumnDefinition => {
+    const title = typeof t === 'string' ? t : t(`songs.columns.${field}`);
     return Object.assign(
         {
             title,

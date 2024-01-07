@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { t } from 'svelte-i18n';
     import { slide } from 'svelte/transition';
     import { logPageView } from '../../store/notification.store';
     
@@ -55,13 +56,13 @@
 {#if collapsed}
     <summary in:slide={{ duration: 200 }} out:slide={{ duration: 200 }}>
         <span>{@html generateSnippet(html)}</span>
-        <button class="more" on:click|preventDefault={toggle}>read more</button>
+        <button class="more" on:click|preventDefault={toggle}>{ $t('blog.more') }</button>
     </summary>
 {:else}
 <div in:slide={{ duration: 200 }} out:slide={{ duration: 200 }} >
     {@html html}
     <div>
-        <button class="more" on:click|preventDefault={toggle}>show less</button>
+        <button class="more" on:click|preventDefault={toggle}>{ $t('blog.less') }</button>
     </div> 
 </div>
 {/if}

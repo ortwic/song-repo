@@ -1,5 +1,5 @@
 <script>
-    import { t } from '../service/i18n';
+    import { t } from 'svelte-i18n';
 
     const no = Math.floor(Math.random() * $t('notfound.messages').length );
 </script>

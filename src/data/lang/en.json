@@ -30,6 +30,7 @@
     }
   },
   "start": {
+    "loading": "Loading...",
     "hello": "Hello musician!",
     "intro": "This app was specifically designed for musicians like you to keep track of your repertoire and your progress. Some features of this app:",
     "features": {
@@ -73,12 +74,13 @@
       "progressLogs": "Count",
       "progress": "Progress",
       "status": "Status",
-      "artistImg": "▩",
+      "artistImg": "Image",
       "artist": "Artist",
       "title": "Title",
       "genre": "Genre",
       "style": "Style",
       "source": "Source",
+      "uri": "Resource",
       "key": "Key",
       "time": "Time",
       "bpm": "BPM",
@@ -86,7 +88,9 @@
       "features": "Features",
       "tags": "Labels",
       "learnedOn": "Learned",
-      "changedAt": "Changed"
+      "changedAt": "Last changed",
+      "country": "Country",
+      "year": "Year"
     },
     "resource": {
       "title": "Enter resource path",
@@ -98,15 +102,18 @@
     "import": "Start importing...",
     "importDone": "Found {found} songs. Total songs: {total}",
     "addTitle": "Search - powered by",
-    "noPersist": "You are not signed in, so data won't be persisted after leaving the app!"
+    "noPersist": "You are not signed in, so data won't be persisted after leaving the app!",
+    "hint-markdown": "markdown supported e.g.",
+    "hint-label": "comma separated e.g. Foo, Bar"
   },
   "table": {
-    "selectColumns": "Choose columns",
     "groupBy": "Group by {title}",
     "search": "Search for anything..."
   },
   "blog": {
-    "title": "Everthing about making music"
+    "title": "Everthing about making music",
+    "more": "more...",
+    "less": "...lesser"
   },
   "notfound": {
     "title": "Not found",
@@ -129,5 +136,15 @@
   },
   "calendar": {
     "title": "Event calendar"
+  },
+  "profile": {
+    "sign-out": "Sign out",
+    "delete": "Delete profil",
+    "share-link": "Copy link to share",
+    "share-link-copied": "Copied link for sharing into clipboard.",
+    "delete-confirm": "Confirm deletion",
+    "delete-question": "Do you really like to delete account? All data will be lost.",
+    "delete-advice": "You should export your data before deletion.",
+    "delete-done": "Your account was deleted successfully!"
   }
 }

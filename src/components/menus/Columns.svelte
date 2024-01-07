@@ -1,8 +1,8 @@
 <script lang="ts">
+    import { t } from "svelte-i18n";
     import type { SortDirection, Sorter } from "tabulator-tables";
     import Switch from "../ui/elements/Switch.svelte";
     import { tableView as view } from "../../store/app.store";
-    import { t } from "../../service/i18n";
 
     const columns = $view?.table.getColumnDefinitions()
         .filter(c => !c.field.startsWith('__'));
