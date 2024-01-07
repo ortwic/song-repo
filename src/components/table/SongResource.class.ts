@@ -14,6 +14,14 @@ export default class SongResource {
     }
 
     getMenu(getDialog: () => Dialog<string>): Array<MenuObject<CellComponent> | MenuSeparator> {
+        const toggleFavoriteHandler = async (cell: CellComponent) => {
+            const song = cell.getData() as UserSong;
+            song.fav = !song.fav;
+            await this.service.setSong(song);
+            
+            cell.getTable().redraw(true);
+        };
+
         const changeStatusHandler = (cell: CellComponent, status: Status) => {
             const element = cell.getElement();
             element.classList.replace(cell.getValue(), status);
@@ -106,6 +114,10 @@ export default class SongResource {
             },
             {
                 separator: true
+            },
+            {
+                label: '<i class=\'bx bx-star\'></i> Toggle favorite',
+                action: (e, cell) => toggleFavoriteHandler(cell)
             },
             {
                 label: '<i class=\'bx bx-pie-chart\'></i> Change status',

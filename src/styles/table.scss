@@ -81,8 +81,11 @@ div#table.tabulator {
                 }
 
                 &.responsive {
+                    text-overflow: clip;
+
                     span {
                         display: inline-block;
+                        text-overflow: ellipsis;
     
                         &.status {
                             min-width: 1.2em;
@@ -92,14 +95,22 @@ div#table.tabulator {
                             min-width: 2em;
                         }
     
+                        &.artist::before {
+                            padding-right: .2rem;
+                        }
+    
                         &.title {
+                            overflow: visible;
                             &::before {
-                                padding-right: .2rem;
+                                content: '-';
+                                padding-left: .2rem;
                             }
-                            &.active {
-                                font-weight: 500;
-                                background: linear-gradient(0deg, wheat, transparent 50%);
-                            }
+                        }
+
+                        &.artist.active,
+                        &.title.active {
+                            font-weight: 500;
+                            background: linear-gradient(0deg, wheat, transparent 50%);
                         }
                     }
                     i {

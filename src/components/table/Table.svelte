@@ -108,6 +108,7 @@
     groupUpdateOnCellEdit: true,
     footerElement: '#footer',
     history: true,
+    reactiveData: true,
     responsiveLayoutCollapseStartOpen: false,
     responsiveLayoutCollapseFormatter: detailFormatter,
     pagination: false,

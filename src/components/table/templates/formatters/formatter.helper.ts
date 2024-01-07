@@ -82,6 +82,7 @@ export const urlFormatter: Partial<ColumnDefinition> = {
 
 export const progressFormatter: Partial<ColumnDefinition> = {
     formatter(cell: CellComponent): HTMLElement | string {
+        const table = cell.getTable();
         const song = cell.getData() as UserSong;
         const bar = document.createElement('progress-bar');
         bar.setAttribute('value', cell.getValue());
@@ -91,12 +92,16 @@ export const progressFormatter: Partial<ColumnDefinition> = {
 
             if (newValue > 90) {
                 song.status = 'done';
+                table.redraw(true);
             } else if (newValue < 10) {
                 song.status = 'archived';
+                table.redraw(true);
             } else if (newValue < oldValue) {
                 song.status = 'repeat';
+                table.redraw(true);
             } else if (oldValue < newValue) {
                 song.status = 'wip';
+                table.redraw(true);
             }
         });
         return bar;

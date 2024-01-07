@@ -24,7 +24,10 @@ export const summaryFormatter: Partial<ColumnDefinition> = {
         return `
             <span class='label' style='${pgStyle}'>${progress}%</span>
             <span class='status ${status}'></span>
-            <span class='title fav ${favActive}'>${data['artist']} - ${data['title']}</span>
+            <span class='artist fav ${favActive}'>
+                ${data['artist']}</span><span class='title ${favActive}'>
+                ${data['title']}
+            </span>
             <sup><i class="bx bx-${resource}"></i></sup>`;
     }
 };

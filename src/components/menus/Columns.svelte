@@ -15,9 +15,8 @@
         .reduce(sortEntry, {} as Record<string, SortDirection>);
 
     function sortBy(column: string, dir?: SortDirection) {
-        if (dir) {
-            sortedFields[column] = dir;
-        } else {
+        sortedFields[column] = dir;
+        if (!dir) {
             delete sortedFields[column];
         }
 
@@ -43,13 +42,13 @@
                 <Switch title="{ $t('menu.table.group-by') } {col.title}"
                     state={$view?.groups.includes(col.field)}
                     on:click={() => $view?.toggleGroup(col.field)}>
-                    <i class="bx bx-collection"></i> 
+                    <i class="bx bx-collection bx-flip-vertical"></i> 
                 </Switch>
                 <Switch title="{ $t('menu.table.sort-by') } {col.title}"
                     state={sortedFields[col.field] ?? null}
                     options={[null, 'asc', 'desc']}
                     on:click={({ detail }) => sortBy(col.field, detail)}>
-                    <i class="bx {sortedFields[col.field] || 'asc'}"></i>
+                    <i class="bx {sortedFields[col.field] ?? 'asc'}"></i>
                 </Switch>
                 <span>{col.title}</span>
             </p>
@@ -65,10 +64,6 @@
 
         p {
             width: calc(100% - 1em);
-        }
-
-        i.bx.bx-collection {
-            transform: scaleY(-1);
         }
 
         i.bx.asc::before {

@@ -54,7 +54,7 @@
     column("Labels", "tags", "200", "string", autoFilter(), format.label, interaction, { editor: 'input', responsive: 7 }),
     column("Learned", "learnedOn", "136", "date", autoFilter(), format.timestamp, interaction, { editor: 'date', responsive: 9 }),
     column("Last", "changedAt", "136", "date", autoFilter(), format.timestamp, { responsive: 9 }),
-    { title: "", field: "id", visible: false },
+    { title: "id", field: "id", visible: false },
   ];
 
   function updateHandler(): CellEditEventCallback {
@@ -77,14 +77,17 @@
   }
 
   function init(table: Tabulator, orientation: Orientation): void {
-    const responsiveCol = table.getColumn('__responsive');
-    const summaryCol = table.getColumn('__summary');
+    const responsiveColumn = table.getColumn('__responsive');
+    const summaryColumn = table.getColumn('__summary');
     if (orientation === 'portrait') {
-      responsiveCol.show();
-      summaryCol.show();
+      responsiveColumn.show();
+      summaryColumn.show();
+
+      const remainingWidth = window.innerWidth - responsiveColumn.getWidth();
+      summaryColumn.setWidth(remainingWidth);
     } else {
-      responsiveCol.hide();
-      summaryCol.hide();
+      responsiveColumn.hide();
+      summaryColumn.hide();
     }
   }
 </script>
