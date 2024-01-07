@@ -1,6 +1,10 @@
 <script lang="ts">
   import 'tabulator-tables/dist/css/tabulator_bulma.min.css';
   import { 
+    type ColumnDefinition, 
+    type GroupComponent, 
+    type ColumnComponent, 
+    type Options, 
     Tabulator, 
     ClipboardModule,
     DownloadModule,
@@ -23,13 +27,11 @@
     ValidateModule
   } from 'tabulator-tables';
   import { default as ResponsiveLayoutModule, type CollapsedCellData } from './tabulator/modules/ResponsiveLayout';
-  import type { ColumnDefinition, GroupComponent, ColumnComponent, Options, RowComponent, FilterType } from 'tabulator-tables';
   import { onMount, createEventDispatcher, onDestroy } from 'svelte';
   import { Observable, fromEvent, map, take } from 'rxjs';
   import { toggleVisibilityItem } from './templates/menu.helper';
-  import { downloadQueue, type DowloadItem } from '../../store/download.store';
+  import { tableView } from '../../store/app.store';
   import { orientation, type Orientation } from '../../store/media.store';
-  import { showError } from '../../store/notification.store';
   import responsiveCollapse from './tabulator/modules/formatters/responsiveCollapse';
 
   Tabulator.registerModule([
@@ -69,7 +71,6 @@
   export let groupBy: string[] = undefined;
   export let placeholder = '';
   export let placeholderSearch = '';
-  export let exportTitle = 'export';
   export let groupHeader: GroupFormatter = undefined;
   export let detailFormatter: (data: CollapsedCellData[]) => HTMLElement = undefined;
   export const isGroupedBy = (field: string) => field in rowGroups;
@@ -79,7 +80,6 @@
   let table: Observable<Tabulator>;
   let tableContainer: HTMLElement;
   let endOrientation = () => {};
-  let endDownloadQueue = () => {};
 
   const dispatch = createEventDispatcher();
   const groupContextMenu = [
@@ -100,7 +100,6 @@
   const usePersistance = !!persistenceID;
   const options: Options = {
     columns,
-    layout: 'fitData',
     placeholder,
     clipboard: true,
     movableColumns: true,
@@ -135,10 +134,10 @@
     useResponsiveLayout = orientation === 'portrait';
     const tableInstance = new Tabulator(tableContainer, {
       ...options,
+      layout: useResponsiveLayout ? 'fitDataStretch' : 'fitData',
       headerVisible: !useResponsiveLayout,
       responsiveLayout: useResponsiveLayout ? 'collapse' : undefined
     });
-    tableInstance.on('tableDestroyed', () => endDownloadQueue());
     table = fromEvent(tableInstance, 'tableBuilt').pipe(take(1), map(() => handleTableBuilt(tableInstance)));
   }
 
@@ -153,7 +152,11 @@
     initHeaderMenu(table);
     initGroupBy(table);
 
-    endDownloadQueue = downloadQueue.subscribe((items) => download(table, items));
+    tableView.set({ 
+      table,
+      groups: Object.keys(rowGroups),
+      toggleGroup
+    });
     dispatch('init', table);
     return table;
   }
@@ -198,17 +201,6 @@
     $table.setGroupBy(groups.length ? groups : undefined);
   }
 
-  function download(table: Tabulator, items: DowloadItem[]): void {
-    if (items?.length) {
-      try {
-        const { type, params } = items.pop();
-        table.download(type, `${exportTitle}.${type}`, params);
-      } catch (error) {
-        showError(error.message);
-      }
-    }
-  }
-
   function search() {
     if (searchTerm) {
       // 2nd level array enforces OR comparison
@@ -243,6 +235,7 @@
 
 <span class="menu {useResponsiveLayout ? 'responsive' : 'static'}">
   <div class="section">
+    <slot name="header"></slot>
     <input type="search" placeholder={placeholderSearch} autocomplete="off" bind:value={searchTerm} on:input={search}/>
   </div>
 </span>

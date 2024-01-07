@@ -20,7 +20,14 @@
       "read-terms-of-use": "Read terms of use",
       "read-carefully": "Please read the document carefully"
     },
-    "or": "or"
+    "or": "or",
+    "table": {
+      "exportTitle": "My Song List",
+      "set-view": "Edit column view",
+      "show-hide": "Show/Hide",
+      "group-by": "Group by",
+      "sort-by": "Sort by"
+    }
   },
   "start": {
     "hello": "Hello musician!",

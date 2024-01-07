@@ -4,7 +4,8 @@
     import Login from './Login.svelte';
     import Signup from './Signup.svelte';
     import Profil from './Profil.svelte';
-    import ExportTable from '../table/ExportTable.svelte';
+    import Columns from './Columns.svelte';
+    import ExportTable from './ExportTable.svelte';
     import AdvanceTable from '../table/AdvanceTable.svelte';
     import MenuButton from '../ui/elements/MenuButton.svelte';
     import Sidebar from '../ui/Sidebar.svelte'
@@ -47,7 +48,7 @@
         <Login />
         {/if}
         {#if isTableView}
-        <ExportTable />
+        <ExportTable exportTitle="{ $t('menu.table.exportTitle') }" />
         {/if}
         <svelte:fragment slot="lower">
             {#if counter >= 5e5 || import.meta.env.DEV}
@@ -74,8 +75,15 @@
         </svelte:fragment>
       </Sidebar>
       {:else if $currentMenu == 'signup'}
-      <Sidebar title="{ $t('menu.login.signup-title') }">
+      <Sidebar title="{ $t('menu.login.signup-title') }" back="login">
         <Signup />
+        <svelte:fragment slot="footer">
+            {footer}
+        </svelte:fragment>
+      </Sidebar>
+      {:else if $currentMenu == 'columns'}
+      <Sidebar title="{ $t('menu.table.set-view') }" back="login">
+        <Columns />
         <svelte:fragment slot="footer">
             {footer}
         </svelte:fragment>

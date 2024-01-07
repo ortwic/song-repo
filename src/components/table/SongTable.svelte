@@ -25,6 +25,7 @@
   const songs = service.usersongs;
   let prompt: Dialog<string>;
 
+  const clickMenu = resource.getMenu(() => prompt);
   const genreSelector = comboBoxEditor(genres.map(v => v.name));
   const interaction = {
     cellEdited: updateHandler()
@@ -33,27 +34,27 @@
   // https://tabulator.info/docs/5.4/edit#editor-list
   const columns: ColumnDefinition[] = [
     { title: "", field: "__responsive", formatter: 'responsiveCollapse', headerSort: false, responsive: 0, visible: false },
-    column("Overview", "__summary", undefined, "string", summaryFormatter, { clickMenu: resource.getMenu(() => prompt), responsive: 0, visible: false }),
-    column("✮", "fav", "50", undefined, format.favColumn, interaction, { responsive: 3 }),
+    column("Overview", "__summary", undefined, "string", summaryFormatter, { clickMenu, responsive: 0, visible: false }),
+    column("✮", "fav", "50", undefined, format.favColumn, interaction, { responsive: 9 }),
     column("Σ", "progressLogs", "50", "array", format.length, { hozAlign: 'right', headerFilter: 'number', responsive: 9, visible: false }),
-    column("Status", "status", "50", "string", autoFilter(), format.status, interaction, { clickMenu: resource.getMenu(() => prompt), hozAlign: 'center', responsive: 2 }),
+    column("Status", "status", "50", "string", autoFilter(), format.status, interaction, { clickMenu, hozAlign: 'center', responsive: 9 }),
     column("Progress", "progress", "136", "number", rangeFilter(), format.progress, interaction, { responsive: 2 }),
     column("📷", "artistImg", "30", undefined, format.bgImg, { responsive: 9 }),
-    column("Artist", "artist", "200", "string", autoFilter(), comboBoxEditor(), interaction, { validator: 'required', responsive: 1 }),
-    column("Title", "title", "200", "string", autoFilter(), interaction, { editor: 'input', validator: 'required', responsive: 1 }),
-    column("Genre", "genre", "136", "string", autoFilter(), format.genre, genreSelector, interaction, { responsive: 2 }),
-    column("Style", "style", "136", "string", autoFilter(), comboBoxEditor(), interaction, { responsive: 2 }),
+    column("Artist", "artist", "200", "string", autoFilter(), comboBoxEditor(), interaction, { validator: 'required', responsive: 2 }),
+    column("Title", "title", "200", "string", autoFilter(), interaction, { editor: 'input', validator: 'required', responsive: 2 }),
+    column("Genre", "genre", "136", "string", autoFilter(), format.genre, genreSelector, interaction, { responsive: 1 }),
+    column("Style", "style", "136", "string", autoFilter(), comboBoxEditor(), interaction, { responsive: 1 }),
     column("Source", "source", "200", "string", autoFilter(), format.marked, interaction, { editor: 'input', responsive: 9 }),
     column("Resource", "uri", "200", "string", autoFilter(), format.url, interaction, { editor: 'input', responsive: 9, visible: false }),
-    column("Key", "key", "80", "string", autoFilter(), interaction, { editor: 'input', responsive: 9 }),
-    column("Time", "time", "80", "string", autoFilter(), interaction, { editor: 'input', responsive: 9 }),
-    column("BPM", "bpm", "80", "string", autoFilter(), interaction, { editor: 'input', responsive: 9 }),
+    column("Key", "key", "80", "string", autoFilter(), interaction, { editor: 'input', responsive: 6 }),
+    column("Time", "time", "80", "string", autoFilter(), interaction, { editor: 'input', responsive: 6 }),
+    column("BPM", "bpm", "80", "string", autoFilter(), interaction, { editor: 'input', responsive: 6 }),
     column("Level", "difficulty", "50", "number", format.difficulty, interaction, { responsive: 5 }),
-    column("Features", "features", "200", "string", autoFilter(), format.label, interaction, { editor: 'input', responsive: 9 }),
-    column("Labels", "tags", "200", "string", autoFilter(), format.label, interaction, { editor: 'input', responsive: 9 }),
+    column("Features", "features", "200", "string", autoFilter(), format.label, interaction, { editor: 'input', responsive: 7 }),
+    column("Labels", "tags", "200", "string", autoFilter(), format.label, interaction, { editor: 'input', responsive: 7 }),
     column("Learned", "learnedOn", "136", "date", autoFilter(), format.timestamp, interaction, { editor: 'date', responsive: 9 }),
     column("Last", "changedAt", "136", "date", autoFilter(), format.timestamp, { responsive: 9 }),
-    { title: "id", field: "id", visible: false },
+    { title: "", field: "id", visible: false },
   ];
 
   function updateHandler(): CellEditEventCallback {
@@ -100,7 +101,6 @@
       idField='id'
       placeholder='No songs added.'
       placeholderSearch={ $t('table.search') }
-      exportTitle='My Song List'
       persistenceID='songs'
       groupHeader={format.groupBy}
       detailFormatter={detailLayoutFormatter}

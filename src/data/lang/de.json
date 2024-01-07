@@ -20,7 +20,14 @@
       "read-terms-of-use": "Nutzungsbedingungen",
       "read-carefully": "Bitte lesen Sie das Dokument sorgfältig durch"
     },
-    "or": "oder"
+    "or": "oder",
+    "table": {
+      "exportTitle": "Meine Songliste",
+      "set-view": "Ansicht bearbeiten",
+      "show-hide": "Zeige/Verstecke ",
+      "group-by": "Gruppiere nach",
+      "sort-by": "Sortiere nach"
+    }
   },
   "start": {
     "hello": "Hallo Musiker!",
