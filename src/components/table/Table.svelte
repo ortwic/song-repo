@@ -29,7 +29,6 @@
   import { default as ResponsiveLayoutModule, type CollapsedCellData } from './tabulator/modules/ResponsiveLayout';
   import { onMount, createEventDispatcher, onDestroy } from 'svelte';
   import { Observable, fromEvent, map, take } from 'rxjs';
-  import { toggleVisibilityItem } from './templates/menu.helper';
   import { tableView } from '../../store/app.store';
   import { orientation, type Orientation } from '../../store/media.store';
   import responsiveCollapse from './tabulator/modules/formatters/responsiveCollapse';
@@ -162,10 +161,6 @@
   }
 
   function initHeaderMenu(table: Tabulator) {
-    const columnSelectors = table.getColumns()
-      .filter(c => !isRequired(c.getDefinition()))
-      .map(column => toggleVisibilityItem(column));
-
     columns?.filter(c => c.headerMenu).forEach(c => {
       if (c.headerMenu.length) {
         c.headerMenu.length = 0;
@@ -173,9 +168,6 @@
       c.headerMenu.push({
         label: `Group by ${c.title.toLowerCase()}`,
         action: (ev: Event, column: ColumnComponent) => toggleGroup(c.field, column.getElement())
-      }, { separator: true }, {
-        label: 'Choose columns',
-        menu: [ ...columnSelectors ]
       });
     });
   }
