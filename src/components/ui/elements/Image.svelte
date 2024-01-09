@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { afterUpdate } from 'svelte';
   let canvas: HTMLCanvasElement;
   export let src: string;
   export let width = 50;
   export let height = 50;
   
-  onMount(async () => {
+  afterUpdate(async () => {
     if (canvas) {
       const img = new Image();
       img.src = src;

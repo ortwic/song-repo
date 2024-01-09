@@ -3,6 +3,7 @@ v0.3.2 (2024-01-07)
 - edit column view from menu
 - summary column in responsive mode
 - fixed reponsive layout details
+- fixed blog layouts for mobile
 
 v0.3.1 (2024-01-01)
 -------------------

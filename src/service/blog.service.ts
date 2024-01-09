@@ -72,8 +72,12 @@ export default class BlogService {
 
             try {
                 const data = await fetchFromBlogger<B.Schema$PostList>(this.settings, path);
-                this.posts.update(posts => [...posts, ...data.items]);
-                this.nextPageToken = data.nextPageToken;
+                if (data.items) {
+                    this.posts.update(posts => [...posts, ...data.items]);
+                    this.nextPageToken = data.nextPageToken;
+                } else if (data['error']) {
+                    throw data['error'];
+                }
                 this.loadingComplete = !data.nextPageToken;
             } finally {
                 this.loading = false;

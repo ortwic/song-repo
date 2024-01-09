@@ -227,6 +227,19 @@ form {
         }
     }
 
+    div.card {
+        display: flex;
+        padding: 4px;
+
+        a, span {
+            white-space: nowrap;
+        }
+
+        div.col {
+            padding: 0 1em;
+        }
+    }
+
     div.square {
         display: inline-block;
         width: 1.2em;

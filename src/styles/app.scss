@@ -192,19 +192,6 @@ input.lg {
     color: red;
 }
 
-div.card {
-  padding: 4px;
-  display: flex;
-
-  a, span {
-      white-space: nowrap;
-  }
-
-  div.col {
-      padding: 0 1em;
-  }
-}
-
 a.label,
 span.label {
   border: 1px solid silver;
