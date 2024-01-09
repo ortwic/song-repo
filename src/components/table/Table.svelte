@@ -114,13 +114,7 @@
     responsiveLayoutCollapseFormatter: detailFormatter,
     pagination: false,
     persistenceID,
-    persistenceMode: 'local',
-    persistence: {
-      sort: usePersistance,
-      filter: usePersistance,
-      columns: usePersistance ? [ 'width', 'visible' ] : false,
-      group: usePersistance
-    }
+    persistenceMode: 'local'
   };
 
   onMount(() => endOrientation = orientation.subscribe(createTable));
@@ -137,7 +131,13 @@
       ...options,
       layout: useResponsiveLayout ? 'fitDataStretch' : 'fitData',
       headerVisible: !useResponsiveLayout,
-      responsiveLayout: useResponsiveLayout ? 'collapse' : undefined
+      responsiveLayout: useResponsiveLayout ? 'collapse' : undefined,
+      persistence: {
+        columns: usePersistance && !useResponsiveLayout ? [ 'width', 'visible' ] : false,
+        sort: usePersistance,
+        filter: usePersistance,
+        group: usePersistance
+      }
     });
     table = fromEvent(tableInstance, 'tableBuilt').pipe(take(1), map(() => handleTableBuilt(tableInstance)));
   }
