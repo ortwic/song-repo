@@ -2,5 +2,8 @@
     "i18n-ally.localesPaths": [
         "src/data/lang"
     ],
-    "i18n-ally.keystyle": "nested"
+    "i18n-ally.keystyle": "nested",
+    "terminal.integrated.env.linux": {
+        "LD_PRELOAD": null,
+    }, 
 }

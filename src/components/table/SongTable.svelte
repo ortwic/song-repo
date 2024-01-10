@@ -100,6 +100,10 @@
   }
 </script>
 
+<svelte:head>
+<title>{ $t('menu.songs') } | Song Repertory</title>
+</svelte:head>
+
 <main>
   <Prompt bind:this={prompt} type='url' placeholder='https://example.com/files/sheet-music.pdf'
     title='{ $t('songs.resource.title') }' caption='{ $t('songs.resource.caption') }'>

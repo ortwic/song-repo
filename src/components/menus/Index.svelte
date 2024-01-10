@@ -1,6 +1,8 @@
 <script lang='ts'>
     import '../../styles/menu.scss';
     import { t } from 'svelte-i18n';
+    import { derived, writable } from 'svelte/store';
+    import { location } from 'svelte-spa-router'
     import NavButton from '../ui/elements/NavButton.svelte';
     import Login from './Login.svelte';
     import Signup from './Signup.svelte';
@@ -12,11 +14,11 @@
     import Sidebar from '../ui/Sidebar.svelte'
     import type { MenuPages } from '../../model/types';
     import { currentUser } from '../../service/auth.service';
-    import { currentMenu } from '../../store/app.store';
 
     export let title: string;
     export let footer: string;
-    let isTableView = location.href.includes('/songs') || location.href.includes('/samples');
+    const isTableView = derived(location, (path) => path.startsWith('/songs') || path.startsWith('/samples'));
+    const currentMenu = writable($isTableView ? 'root' : 'login');
     let counter = 0;
 
     function handleMenuNav(ev: SubmitEvent) {
@@ -47,7 +49,7 @@
         {:else}
         <Login />
         {/if}
-        {#if isTableView}
+        {#if $isTableView}
         <ExportTable exportTitle="{ $t('menu.table.exportTitle') }" />
         {/if}
         <svelte:fragment slot="lower">
