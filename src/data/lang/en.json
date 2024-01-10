@@ -93,9 +93,24 @@
       "country": "Country",
       "year": "Year"
     },
+    "menu": {
+      "open": "Open resource",
+      "search": "Search for resources",
+      "search-sheet-music": "Search sheet music",
+      "search-tutorial": "Search tutorial",
+      "search-lyrics": "Search lyrics",
+      "search-midi-file": "Search midi file",
+      "change-resource": "Change resource",
+      "toggle-favorite": "Toggle favorite",
+      "change-status": "Change status",
+      "delete": "Delete?",
+      "yes": "Yes",
+      "no": "No"
+    },
     "resource": {
       "title": "Enter resource path",
       "caption": "Enter a uri path to any resource:",
+      "invalid-uri": "Not a valid URI:",
       "info": "Use a cloud storage like google drive to upload your files. Then copy the url here."
     },
     "nosongs": "No songs added.",
@@ -105,7 +120,14 @@
     "addTitle": "Search - powered by",
     "noPersist": "You are not signed in, so data won't be persisted after leaving the app!",
     "hint-markdown": "markdown supported e.g.",
-    "hint-label": "comma separated e.g. Foo, Bar"
+    "hint-label": "comma separated e.g. Foo, Bar",
+    "status": {
+      "todo": "Todo",
+      "wip": "Wip",
+      "done": "Done",
+      "repeat": "Repeat",
+      "archived": "Archived"
+    }
   },
   "table": {
     "groupBy": "Group by {title}",

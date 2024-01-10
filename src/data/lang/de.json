@@ -93,9 +93,24 @@
       "country": "Land",
       "year": "Jahr"
     },
+    "menu": {
+      "open": "Öffne Ressource",
+      "search": "Nach Ressourcen suchen",
+      "search-sheet-music": "Noten suchen",
+      "search-tutorial": "Tutorial suchen",
+      "search-lyrics": "Songtexte suchen",
+      "search-midi-file": "Midi-Dateien suchen",
+      "change-resource": "Ressource ändern",
+      "toggle-favorite": "Favorit umschalten",
+      "change-status": "Status ändern",
+      "delete": "Löschen?",
+      "yes": "Ja",
+      "no": "Nein"
+    },
     "resource": {
       "title": "Geben Sie den Ressourcenpfad ein",
       "caption": "Geben Sie einen URI-Pfad zu einer beliebigen Ressource ein:",
+      "invalid-uri": "Kein gültiger URI:",
       "info": "Verwenden Sie einen Cloud-Speicher wie Google Drive, um Ihre Dateien hochzuladen. \nDann kopieren Sie die URL hier."
     },
     "nosongs": "Nichts hinzugefügt.",
@@ -105,7 +120,14 @@
     "addTitle": "Suche – unterstützt von",
     "noPersist": "Sie sind nicht angemeldet, daher bleiben die Daten nach dem Verlassen der App nicht erhalten!",
     "hint-label": "Komma getrennt, z.B. \nFoo, Bar",
-    "hint-markdown": "Markdown unterstützt z.B."
+    "hint-markdown": "Markdown unterstützt z.B.",
+    "status": {
+      "todo": "Offen",
+      "wip": "In Arbeit",
+      "done": "Erledigt",
+      "repeat": "Wiederholen",
+      "archived": "Archiviert"
+    }
   },
   "table": {
     "groupBy": "Gruppieren nach {title}",
