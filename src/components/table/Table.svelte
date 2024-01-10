@@ -1,9 +1,10 @@
 <script lang="ts">
   import 'tabulator-tables/dist/css/tabulator_bulma.min.css';
   import { 
-    type ColumnDefinition, 
-    type GroupComponent, 
     type ColumnComponent, 
+    type ColumnDefinition,
+    type Filter, 
+    type GroupComponent, 
     type Options, 
     Tabulator, 
     ClipboardModule,
@@ -139,13 +140,14 @@
         group: usePersistance
       }
     });
-    table = fromEvent(tableInstance, 'tableBuilt').pipe(take(1), map(() => handleTableBuilt(tableInstance)));
+    table = fromEvent(tableInstance, 'tableBuilt').pipe(take(1), map(() => handleTableBuilt(tableInstance, useResponsiveLayout)));
   }
 
 
-  function handleTableBuilt(table: Tabulator) {
+  function handleTableBuilt(table: Tabulator, useResponsiveLayout: boolean) {
     initHeaderMenu(table);
     initGroupBy(table);
+    initSearch(table, useResponsiveLayout);
 
     tableView.set({ 
       table,
@@ -174,6 +176,15 @@
         rowGroups[field] = true;
         table.getColumn(field).getElement()?.classList.add('primary');
       });
+    }
+  }
+
+  function initSearch(table: Tabulator, useResponsiveLayout: boolean) {
+    if (useResponsiveLayout) {
+      const array = table.getFilters(false)[0] as unknown as Filter[] ?? [];
+      searchTerm = array.filter(f => f.value)[0]?.value ?? '';
+    } else {
+      table.clearFilter(false);
     }
   }
 

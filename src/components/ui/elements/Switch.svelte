@@ -15,9 +15,11 @@
         state = options[index];
         dispatcher('click', state);
     }
+    
+    $: selected = state ? 'selected' : '';
 </script>
 
-<button {title} class={state ? 'selected' : ''}
+<button {title} class={selected}
     on:click={toggle}>
     <slot>{state}</slot>
 </button>

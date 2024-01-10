@@ -28,6 +28,10 @@
         $view?.table.setSort(sorter);
     }
 
+    function filterBy(column: string, value: string) {
+        $view?.table.setHeaderFilterValue(column, value);
+    }
+
 </script>
 
 <section class="menu">
@@ -50,6 +54,14 @@
                     on:click={({ detail }) => sortBy(col.field, detail)}>
                     <i class="bx {sortedFields[col.field] ?? 'asc'}"></i>
                 </Switch>
+                {#if col.headerFilter === 'tickCross'}
+                    <Switch title="{ $t('menu.table.filter-by') } {col.title}"
+                        state={sortedFields[col.field] ?? null}
+                        options={[undefined, true, false]}
+                        on:click={({ detail }) => filterBy(col.field, detail)}>
+                        <i class="bx bx-filter-alt"></i>
+                    </Switch>
+                {/if}
                 <span>{col.title}</span>
             </p>
         {/each}
@@ -64,6 +76,11 @@
 
         p {
             width: calc(100% - 1em);
+            white-space: nowrap;
+
+            span {
+                padding-left: .2em;
+            }
         }
 
         i.bx.asc::before {

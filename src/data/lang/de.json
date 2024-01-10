@@ -26,7 +26,8 @@
       "set-view": "Ansicht bearbeiten",
       "show-hide": "Zeige/Verstecke ",
       "group-by": "Gruppiere nach",
-      "sort-by": "Sortiere nach"
+      "sort-by": "Sortiere nach",
+      "filter-by": "Filtern nach"
     }
   },
   "start": {
