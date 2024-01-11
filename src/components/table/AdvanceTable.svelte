@@ -4,7 +4,7 @@
     import FileDrop from './FileDrop.svelte';
     import Table from './Table.svelte';
     import { autoColumns } from './templates/column.helper';
-    import ConfirmDialog from '../ui/ConfirmDialog.svelte';
+    import ConfirmDialog from '../dialogs/ConfirmDialog.svelte';
     import TabbedTitle from '../ui/TabbedTitle.svelte';
     import stores, { type WithId } from '../../service/master-data.service';
     import { uniqueKey } from '../../service/firestore.service';

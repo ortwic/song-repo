@@ -6,7 +6,7 @@
   import { column, comboBoxEditor } from './templates/column.helper';
   import { autoFilter, rangeFilter } from './templates/filter.helper';
   import format from './templates/formatters/formatter.helper';
-  import Prompt from '../ui/PromptDialog.svelte';
+  import Prompt from '../dialogs/PromptDialog.svelte';
   import Table from './Table.svelte'
   import AddEntry from './AddEntry.svelte';
   import FileDrop from './FileDrop.svelte';

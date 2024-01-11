@@ -162,11 +162,10 @@
   },
   "profile": {
     "sign-out": "Abmelden",
-    "delete": "Profil löschen",
+    "settings": "Einstellungen",
     "share-link": "Share-Link kopieren",
     "share-link-copied": "Share-Link in die Zwischenablage kopiert.",
-    "delete-confirm": "Löschung bestätigen",
-    "delete-question": "Möchtest du das Konto wirklich löschen? Alle Daten gehen verloren.",
+    "delete-profile": "Profil löschen (Alle Daten gehen verloren)",
     "delete-advice": "Sie sollten Ihre Daten vor dem Löschen exportieren.",
     "delete-done": "Ihr Konto wurde erfolgreich gelöscht!"
   }

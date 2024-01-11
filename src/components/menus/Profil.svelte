@@ -1,17 +1,16 @@
 <script lang='ts'>
     import { t } from 'svelte-i18n';
-    import ConfirmDialog from '../ui/ConfirmDialog.svelte';
     import PopupMenu from '../ui/PopupMenu.svelte';
+    import SettingsDialog from '../dialogs/SettingsDialog.svelte';
     import AuthService from "../../service/auth.service";
     import { getCssVariable } from "../../styles/style.helper";
-    import { showError, showInfo } from '../../store/notification.store';
 
     export let displayName: string;
     export let photoURL: string;
     export let email: string;
 	export let color = getCssVariable('--primary');
-	let profileSettings: PopupMenu;
-    let showConfirmDelete = false;
+	let profileMenu: PopupMenu;
+	let settings: SettingsDialog;
 
     const emailParts = email.split('@');
 	const authService = new AuthService();
@@ -20,23 +19,11 @@
 		await authService.signOut();
     	history.pushState(null, '', location.origin);
 	}
-    
-	async function deleteProfile({ detail: accepted }) {
-        showConfirmDelete = false;
-        if (accepted) {
-            try {                
-                await authService.deleteUser();
-                showInfo($t('profile.delete-done'));
-            } catch (error) {
-                showError(error.message);
-            }
-        }
-	}
 </script>
 
 <section class="menu">
 	<div class="row">
-		<button class="profil" on:click={(event) => profileSettings.showPopupMenu(event)}>
+		<button class="profil" on:click={(event) => profileMenu.showPopupMenu(event)}>
 			{#if photoURL}
 			<img src={photoURL} width="50" alt={email} title={email}>	
 			{:else}
@@ -59,28 +46,21 @@
 			{/if}
 		</button> 
 
-		<PopupMenu bind:this={profileSettings} width="200px">
+		<PopupMenu bind:this={profileMenu} width="200px">
 			<div class="row">
 				<button class="left" data-close title="{ $t('profile.sign-out') } '{email}'" on:click={signOut}>
 					<span><i class='bx bx-log-out-circle'></i> { $t('profile.sign-out') }</span>
 				</button>
 			</div>
 			<div class="row">
-				<button class="left" title="{ $t('profile.delete') } '{email}'" on:click={() => showConfirmDelete = true}>
-					<span><i class='bx bx-error danger-text'></i> { $t('profile.delete') }</span>
+				<button class="left" title="{ $t('profile.settings') } '{email}'" on:click={settings.showDialog}>
+					<span><i class='bx bx-cog'></i> { $t('profile.settings') }</span>
 				</button>
 			</div>
 		</PopupMenu>
-	</div>
 
-	{#if showConfirmDelete}
-	<span class="dialog">	
-		<ConfirmDialog title='{ $t('profile.delete-confirm') }' size='auto' target='login' on:closed={deleteProfile}>
-			<p>{ $t('profile.delete-question') }</p>
-			<p>{ $t('profile.delete-advice') }</p>
-		</ConfirmDialog>
-	</span>
-	{/if}
+		<SettingsDialog bind:this={settings} />
+	</div>
 </section>
 
 <style lang="scss">
@@ -113,8 +93,4 @@
 			font-size: smaller;
 		}
     }
-
-	span.dialog p {
-		padding: 0 1rem;
-	}
 </style>

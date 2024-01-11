@@ -3,7 +3,7 @@
     import { fade } from "svelte/transition";
     import { cubicOut } from 'svelte/easing';
     import { t } from "svelte-i18n";
-    import Titlebar from "./elements/Titlebar.svelte";
+    import Titlebar from "../ui/elements/Titlebar.svelte";
     import type { MenuPages } from "../../model/types";
     
     const dispatch = createEventDispatcher();

@@ -165,11 +165,10 @@
   },
   "profile": {
     "sign-out": "Sign out",
-    "delete": "Delete profil",
+    "settings": "Settings",
     "share-link": "Copy link to share",
     "share-link-copied": "Copied link for sharing into clipboard.",
-    "delete-confirm": "Confirm deletion",
-    "delete-question": "Do you really like to delete account? All data will be lost.",
+    "delete-profile": "Delete profil (All data will be lost)",
     "delete-advice": "You should export your data before deletion.",
     "delete-done": "Your account was deleted successfully!"
   }

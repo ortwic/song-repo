@@ -3,7 +3,7 @@
     import { t } from 'svelte-i18n';
     import Autocomplete from 'simple-svelte-autocomplete/src/SimpleAutocomplete.svelte';
     import AddButton from "../ui/AddButton.svelte";
-    import ConfirmDialog from "../ui/ConfirmDialog.svelte";
+    import ConfirmDialog from "../dialogs/ConfirmDialog.svelte";
     import Image from "../ui/elements/Image.svelte";
     import SelectKey from '../ui/SelectKey.svelte';
     import LoadingBar from '../ui/elements/LoadingBar.svelte';

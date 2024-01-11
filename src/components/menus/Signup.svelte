@@ -1,6 +1,6 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
-    import ConfirmDialog from '../ui/ConfirmDialog.svelte';
+    import ConfirmDialog from '../dialogs/ConfirmDialog.svelte';
 	import AuthService from '../../service/auth.service';
     import { logPageView, showError } from '../../store/notification.store';
 	
