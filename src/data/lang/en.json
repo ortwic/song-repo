@@ -165,11 +165,17 @@
   },
   "profile": {
     "sign-out": "Sign out",
-    "settings": "Settings",
     "share-link": "Copy link to share",
-    "share-link-copied": "Copied link for sharing into clipboard.",
-    "delete-profile": "Delete profil (All data will be lost)",
+    "share-link-copied": "Copied link for sharing into clipboard."
+  },
+  "settings": {
+    "settings": "Settings",
+    "view": "View",
+    "reset-views": "Reset views",
+    "reset-text": "Reset stored column settings, filters and grouping.",
+    "delete-profile": "Delete profile (All data will be lost)",
     "delete-advice": "You should export your data before deletion.",
-    "delete-done": "Your account was deleted successfully!"
+    "delete-done": "Your account was deleted successfully!",
+    "profile": "Profile"
   }
 }

@@ -4,6 +4,8 @@
     import ConfirmDialog from './ConfirmDialog.svelte';
     import { slideFade } from '../ui/transition.helper';
     import AuthService from '../../service/auth.service';
+    import { viewStoreId } from '../../service/song.service';
+    import { tableView } from "../../store/app.store";
     import { showError, showInfo } from '../../store/notification.store';
 
 	const authService = new AuthService();
@@ -14,12 +16,20 @@
         visible = true;
     }
 
+    function resetViews() {
+        Object.keys($tableView.table.options.persistence).forEach((key) => {
+            localStorage.removeItem(`tabulator-${viewStoreId}-${key}`);
+        });
+
+        showInfo('All saved view reseted!');
+    }
+
 	async function deleteProfile({ detail: accepted }) {
         visible = false;
         if (accepted && confirmDelete) {
             try {                
-                // await authService.deleteUser();
-                showInfo($t('profile.delete-done'));
+                await authService.deleteUser();
+                showInfo($t('settings.delete-done'));
             } catch (error) {
                 showError(error.message);
             }
@@ -28,33 +38,55 @@
 </script>
 
 {#if visible}
-<ConfirmDialog title='{ $t('profile.settings') }' size='auto' target='main' on:closed={deleteProfile}>
-    <div class="dialog section">
-        <div class="row">
+<ConfirmDialog title='{ $t('settings.settings') }' size='auto' target='main' on:closed={deleteProfile}>
+    <section>
+        <fieldset>
+            <legend>{ $t('settings.view') }</legend>
+            <p>
+                { $t('settings.reset-text') }
+            </p>
+            <div class="right">
+                <button class="default" on:click={resetViews}>{ $t('settings.reset-views') }</button>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>{ $t('settings.profile') }</legend>
             <input id="delete" type="checkbox" bind:checked={confirmDelete} /> 
-            <label class="danger" for="delete">{ $t('profile.delete-profile') }</label>
-        </div>
-    </div>
+            <label class="danger" for="delete">{ $t('settings.delete-profile') }</label>
+        </fieldset>
+    </section>
     {#if confirmDelete}
     <div class="warn" in:slideFade={{ duration: 200 }} out:slideFade={{ duration: 200 }}>
-        { $t('profile.delete-advice') }
+        { $t('settings.delete-advice') }
     </div>
     {/if}
 </ConfirmDialog>
 {/if}
 
 <style lang="scss">
-	.dialog {
-		padding: 0 2rem;
+	section {
+		padding: 0 1rem;
+        min-width: 25rem;
         
-        .row {
-		    padding: 1rem 2rem;
+        fieldset {
+		    margin: 1rem;
+            text-align: left;
+            border-color: var(--primghost);
+
+            legend, p {
+                padding: 0 .4rem;
+            }
+
+            label {
+                display: inline;
+            }
         }
 	}
 
     .danger {
         color: red;
         font-weight: 500;
+        text-shadow: 1px 1px 1px gray;
     }
 
     .warn {

@@ -59,6 +59,7 @@ h1 {
 }
 
 button, 
+button.default,
 a[role=button],
 input[type=reset], 
 input[type=submit],
@@ -77,6 +78,7 @@ select {
 }
 
 button:hover, 
+button.default:hover,
 a[role=button]:hover,
 input[type=reset]:hover, 
 input[type=submit]:hover {
@@ -85,11 +87,14 @@ input[type=submit]:hover {
 }
 
 button:focus,
-button:focus-visible {
+button:focus-visible,
+button.default:focus,
+button.default:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
 button:disabled, 
+button.default:disabled, 
 input[type=reset]:disabled, 
 input[type=submit]:disabled {
   cursor: default;
@@ -194,6 +199,10 @@ input.lg {
 
 .left {
   text-align: left !important;
+}
+
+.right {
+  text-align: right !important;
 }
 
 a.label,

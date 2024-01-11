@@ -11,6 +11,8 @@ const localStore = {};
 const localSubject = new BehaviorSubject<UserSong[]>([]);
 const store = new FirestoreService('user');
 
+export const viewStoreId = 'songs.v1';
+
 export default class SongService {
     private uid = '';
     hasUser = () => !!this.uid;

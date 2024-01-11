@@ -12,7 +12,7 @@
   import FileDrop from './FileDrop.svelte';
   import SongResource, { type Dialog } from './SongResource.class';
   import { summaryFormatter } from './templates/responsive.helper';
-  import SongService from '../../service/song.service';
+  import SongService, { viewStoreId } from '../../service/song.service';
   import type { MessageFormatter } from '../../service/i18n';
   import type { UserSong } from '../../model/song.model';
   import { showError, showInfo } from '../../store/notification.store';
@@ -115,7 +115,7 @@
       idField='id'
       placeholder={ $t('songs.nosongs') }
       placeholderSearch={ $t('table.search') }
-      persistenceID='songs.v1'
+      persistenceID={viewStoreId}
       groupHeader={format.groupBy}
       on:init={({ detail }) => init(detail, $orientation)}
       on:error={({ detail }) => showError(detail)}

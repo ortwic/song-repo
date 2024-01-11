@@ -162,11 +162,17 @@
   },
   "profile": {
     "sign-out": "Abmelden",
-    "settings": "Einstellungen",
     "share-link": "Share-Link kopieren",
-    "share-link-copied": "Share-Link in die Zwischenablage kopiert.",
+    "share-link-copied": "Share-Link in die Zwischenablage kopiert."
+  },
+  "settings": {
+    "settings": "Einstellungen",
+    "view": "Ansicht",
+    "reset-views": "Ansichten zurücksetzen",
+    "reset-text": "Gespeicherter Spalteneinstellungen, Filter und Gruppierung zurücksetzen.",
     "delete-profile": "Profil löschen (Alle Daten gehen verloren)",
     "delete-advice": "Sie sollten Ihre Daten vor dem Löschen exportieren.",
-    "delete-done": "Ihr Konto wurde erfolgreich gelöscht!"
+    "delete-done": "Ihr Konto wurde erfolgreich gelöscht!",
+    "profile": "Profil"
   }
 }

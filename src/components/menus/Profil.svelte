@@ -69,8 +69,6 @@
 				</button>
 			</div>
 		</PopupMenu>
-
-		<SettingsDialog bind:this={settings} />
 	</div>
 	<div class="row">
 		<button title="{ $t('profile.share-link') }" on:click={copyLink}>
@@ -78,6 +76,8 @@
 		</button>
 	</div>
 </section>
+
+<SettingsDialog bind:this={settings} />
 
 <style lang="scss">
     .profil {
