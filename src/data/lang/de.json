@@ -131,7 +131,10 @@
   },
   "table": {
     "groupBy": "Gruppieren nach {title}",
-    "search": "Suchen nach etwas wie todo, wip, done, genre"
+    "search": "Suchen nach etwas wie todo, wip, done, genre",
+    "filter": {
+      "empty": "Alle"
+    }
   },
   "blog": {
     "title": "Alles über das Musizieren",

@@ -4,6 +4,7 @@ import { Timestamp } from 'firebase/firestore';
 import type { ColumnDefinition, CellComponent } from 'tabulator-tables';
 import '../ProgressBar.class';
 import type { UserSong } from '../../../../model/song.model';
+import { status } from '../../../../model/types';
 import { genreColor, redToGreenGradient, redToGreenRange } from '../../../../styles/style.helper';
 
 export const favColumn: Partial<ColumnDefinition> = {
@@ -56,6 +57,9 @@ export const statusFormatter: Partial<ColumnDefinition> = {
         }
         return `<span style='display:none'>${value}</span>`;
     },
+    headerFilterFuncParams: {
+        values: Object.keys(status)
+    }
 };
 
 export const urlFormatter: Partial<ColumnDefinition> = {

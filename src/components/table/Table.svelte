@@ -128,17 +128,20 @@
     $table?.destroy();
 
     useResponsiveLayout = orientation === 'portrait';
+    const persistence = {
+        columns: usePersistance && !useResponsiveLayout ? [ 'width', 'visible' ] : false,
+        sort: usePersistance,
+        headerFilter: usePersistance,
+        filter: usePersistance,
+        group: usePersistance
+    };
+
     const tableInstance = new Tabulator(tableContainer, {
       ...options,
       layout: useResponsiveLayout ? 'fitDataStretch' : 'fitData',
       headerVisible: !useResponsiveLayout,
       responsiveLayout: useResponsiveLayout ? 'collapse' : undefined,
-      persistence: {
-        columns: usePersistance && !useResponsiveLayout ? [ 'width', 'visible' ] : false,
-        sort: usePersistance,
-        filter: usePersistance,
-        group: usePersistance
-      }
+      persistence
     });
     table = fromEvent(tableInstance, 'tableBuilt').pipe(take(1), map(() => handleTableBuilt(tableInstance, useResponsiveLayout)));
   }
