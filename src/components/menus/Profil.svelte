@@ -64,8 +64,8 @@
 				</button>
 			</div>
 			<div class="row">
-				<button class="left" title="{ $t('profile.settings') } '{email}'" on:click={settings.showDialog}>
-					<span><i class='bx bx-cog'></i> { $t('profile.settings') }</span>
+				<button class="left" title="{ $t('settings.title') } '{email}'" on:click={settings.showDialog}>
+					<span><i class='bx bx-cog'></i> { $t('settings.title') }</span>
 				</button>
 			</div>
 		</PopupMenu>

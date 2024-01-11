@@ -38,7 +38,7 @@
 </script>
 
 {#if visible}
-<ConfirmDialog title='{ $t('settings.settings') }' size='auto' target='main' on:closed={deleteProfile}>
+<ConfirmDialog title='{ $t('settings.title') }' size='auto' target='main' on:closed={deleteProfile}>
     <section>
         <fieldset>
             <legend>{ $t('settings.view') }</legend>

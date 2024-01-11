@@ -169,7 +169,7 @@
     "share-link-copied": "Copied link for sharing into clipboard."
   },
   "settings": {
-    "settings": "Settings",
+    "title": "Settings",
     "view": "View",
     "reset-views": "Reset views",
     "reset-text": "Reset stored column settings, filters and grouping.",
