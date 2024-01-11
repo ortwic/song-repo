@@ -48,6 +48,11 @@
         $view?.table.setHeaderFilterValue(column, value);
     }
 
+    function showPopupMenu(event: CustomEvent<MouseEvent>, field: string) {
+        event.preventDefault();
+        menus[field].showPopupMenu(event.detail);
+    }
+
 </script>
 
 <section class="menu">
@@ -56,31 +61,31 @@
             <p>
                 <Switch title="{ $t('menu.table.show-hide') } {col.title}"
                     state={col.visible !== false}
-                    on:click={() => $view?.table.getColumn(col.field).toggle()}>
+                    on:toggle={() => $view?.table.getColumn(col.field).toggle()}>
                     <i class="bx bx-show"></i> 
                 </Switch>
                 <Switch title="{ $t('menu.table.group-by') } {col.title}"
                     state={$view?.groups.includes(col.field)}
-                    on:click={() => $view?.toggleGroup(col.field)}>
+                    on:toggle={() => $view?.toggleGroup(col.field)}>
                     <i class="bx bx-collection bx-flip-vertical"></i> 
                 </Switch>
                 <Switch title="{ $t('menu.table.sort-by') } {col.title}"
                     state={sortedFields[col.field] ?? null}
                     options={[null, 'asc', 'desc']}
-                    on:click={({ detail }) => sortBy(col.field, detail.state)}>
+                    on:toggle={({ detail }) => sortBy(col.field, detail)}>
                     <i class="bx {sortedFields[col.field] ?? 'asc'}"></i>
                 </Switch>
                 {#if col.headerFilter === 'tickCross'}
                     <Switch title="{ $t('menu.table.filter-by') } {col.title}"
                         state={headerFilter[col.field] ?? undefined}
                         options={[undefined, true, false]}
-                        on:click={({ detail }) => filterBy(col.field, detail.state)}>
+                        on:toggle={({ detail }) => filterBy(col.field, detail)}>
                         <i class="bx bx-filter-alt"></i>
                     </Switch>
                 {:else if filterListValues(col)}
                     <Switch title="{ $t('menu.table.filter-by') } {col.title}"
                         state={!!headerFilter[col.field]}
-                        on:click={({ detail }) => menus[col.field].showPopupMenu(detail.event)}>
+                        on:click={(event) => showPopupMenu(event, col.field)}>
                         <i class="bx bx-filter-alt"></i>
                     </Switch>
                     <PopupMenu bind:this={menus[col.field]}>
@@ -96,7 +101,9 @@
                         </div>
                     </PopupMenu>
                 {/if}
-                <span>{col.title}</span>
+                <span class="{!!headerFilter[col.field] ? 'active' : ''}">
+                    {col.title}
+                </span>
             </p>
         {/each}
     </div>
@@ -114,6 +121,11 @@
 
             span {
                 padding-left: .2em;
+            }
+
+            span.active {
+                color: var(--primary);
+                font-weight: 500;
             }
         }
 

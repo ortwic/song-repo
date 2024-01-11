@@ -11,9 +11,11 @@
     onMount(() => index = options.indexOf(state));
 
     function toggle(event: MouseEvent) {
-        index = (index + 1) % options.length;
-        state = options[index];
-        dispatcher('click', { event, state });
+        if (dispatcher('click', event, { cancelable: true })) {
+            index = (index + 1) % options.length;
+            state = options[index];
+            dispatcher('toggle', state);
+        }
     }
     
     $: selected = state ? 'selected' : 'disabled';
