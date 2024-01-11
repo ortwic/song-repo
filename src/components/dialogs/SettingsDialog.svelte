@@ -65,8 +65,7 @@
 
 <style lang="scss">
 	section {
-		padding: 0 1rem;
-        min-width: 25rem;
+		padding: 0 .4em;
         
         fieldset {
 		    margin: 1rem;
@@ -92,7 +91,7 @@
     .warn {
         padding: .4em 1em;
         border: 1px solid gray;
-        background-color: goldenrod;
+        background-color: var(--secondary);
         text-align: center;
         white-space: nowrap;
 

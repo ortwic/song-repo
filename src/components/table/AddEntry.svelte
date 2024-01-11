@@ -281,7 +281,7 @@ form {
     .warn {
         padding: .4em 1em;
         border: 1px solid gray;
-        background-color: goldenrod;
+        background-color: var(--secondary);
         text-align: center;
         white-space: nowrap;
 

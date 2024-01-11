@@ -38,7 +38,7 @@ section {
   }
 
   .warn {
-    background-color: goldenrod;
+    background-color: var(--secondary);
   }
 
   .error {

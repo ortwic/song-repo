@@ -50,6 +50,7 @@
 }
 
 div.dialog {
+    min-width: 22.5em;
     max-width: 100vw;
     max-height: 100vh;
 }
