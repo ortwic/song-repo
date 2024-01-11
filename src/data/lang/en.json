@@ -131,7 +131,7 @@
   },
   "table": {
     "groupBy": "Group by {title}",
-    "search": "Search for anything..."
+    "search": "Search for anything e. g. todo, wip, done, genre"
   },
   "blog": {
     "title": "Everthing about making music",

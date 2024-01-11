@@ -1,7 +1,8 @@
 <script lang='ts'>
     import { t } from 'svelte-i18n';
     import ConfirmDialog from '../ui/ConfirmDialog.svelte';
-    import AuthService, { currentUser } from "../../service/auth.service";
+    import PopupMenu from '../ui/PopupMenu.svelte';
+    import AuthService from "../../service/auth.service";
     import { getCssVariable } from "../../styles/style.helper";
     import { showError, showInfo } from '../../store/notification.store';
 
@@ -9,20 +10,11 @@
     export let photoURL: string;
     export let email: string;
 	export let color = getCssVariable('--primary');
+	let profileSettings: PopupMenu;
     let showConfirmDelete = false;
 
     const emailParts = email.split('@');
 	const authService = new AuthService();
-
-	async function copyLink(): Promise<void> {
-		try {
-			const link = `${location.origin}/#/songs/@${$currentUser.uid}`;
-			await navigator.clipboard.writeText(link);
-			showInfo($t('profile.share-link-copied'));
-		} catch (error) {
-			showError(error);
-		}
-	}
 
 	async function signOut(): Promise<void> {
 		await authService.signOut();
@@ -43,44 +35,42 @@
 </script>
 
 <section class="menu">
-	<span class="profil">
-		{#if photoURL}
-		<img src={photoURL} width="50" alt={email} title={email}>	
-		{:else}
-		<span class="generic">
-			<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-				<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-				<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-				<g id="SVGRepo_iconCarrier"> 
-					<circle cx="12" cy="12" r="10" stroke={color} fill="white" stroke-width="1.5"></circle> 
-					<circle opacity="0.5" cx="12" cy="9" r="3" stroke={color} stroke-width="1.5"></circle> 
-					<path opacity="0.5" d="M17.9691 20C17.81 17.1085 16.9247 15 11.9999 15C7.07521 15 6.18991 17.1085 6.03076 20" stroke={color} stroke-width="1.5" stroke-linecap="round"></path> 
-				</g>
-			</svg>
-		</span>
-		{/if}
-		{#if displayName}
-		<span class="name">{displayName}</span>
-		{:else}
-		<span class="name smaller">{emailParts[0]}<br/>@{emailParts[1]}</span>
-		{/if}
-	</span> 
+	<div class="row">
+		<button class="profil" on:click={(event) => profileSettings.showPopupMenu(event)}>
+			{#if photoURL}
+			<img src={photoURL} width="50" alt={email} title={email}>	
+			{:else}
+			<span class="generic">
+				<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+					<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+					<g id="SVGRepo_iconCarrier"> 
+						<circle cx="12" cy="12" r="10" stroke={color} fill="white" stroke-width="1.5"></circle> 
+						<circle opacity="0.5" cx="12" cy="9" r="3" stroke={color} stroke-width="1.5"></circle> 
+						<path opacity="0.5" d="M17.9691 20C17.81 17.1085 16.9247 15 11.9999 15C7.07521 15 6.18991 17.1085 6.03076 20" stroke={color} stroke-width="1.5" stroke-linecap="round"></path> 
+					</g>
+				</svg>
+			</span>
+			{/if}
+			{#if displayName}
+			<span class="name">{displayName}</span>
+			{:else}
+			<span class="name smaller">{emailParts[0]}<br/>@{emailParts[1]}</span>
+			{/if}
+		</button> 
 
-	<div class="row">
-		<button data-close title="{ $t('profile.sign-out') } '{email}'" on:click={signOut}>
-			<span><i class='bx bx-log-out-circle'></i> { $t('profile.sign-out') }</span>
-		</button>
-	</div>
-	<div class="row">
-		<button title="{ $t('profile.delete') } '{email}'" 
-			on:click={() => showConfirmDelete = true}>
-			<span><i class='bx bx-error danger-text'></i> { $t('profile.delete') }</span>
-		</button>
-	</div>
-	<div class="row">
-		<button title="{ $t('profile.share-link') }" on:click={copyLink}>
-			<i class='bx bx-link'></i> { $t('profile.share-link') }
-		</button>
+		<PopupMenu bind:this={profileSettings} width="200px">
+			<div class="row">
+				<button class="left" data-close title="{ $t('profile.sign-out') } '{email}'" on:click={signOut}>
+					<span><i class='bx bx-log-out-circle'></i> { $t('profile.sign-out') }</span>
+				</button>
+			</div>
+			<div class="row">
+				<button class="left" title="{ $t('profile.delete') } '{email}'" on:click={() => showConfirmDelete = true}>
+					<span><i class='bx bx-error danger-text'></i> { $t('profile.delete') }</span>
+				</button>
+			</div>
+		</PopupMenu>
 	</div>
 
 	{#if showConfirmDelete}
@@ -94,7 +84,7 @@
 </section>
 
 <style lang="scss">
-    span.profil {
+    .profil {
         display: flex;
 		justify-content: center;
 		align-content: center;

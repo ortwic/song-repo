@@ -2,9 +2,20 @@
     import { t } from "svelte-i18n";
     import type { DownloadOptions, DownloadType } from "tabulator-tables";
     import FileIcon from "../ui/elements/FileIcon.svelte";
+    import { currentUser } from "../../service/auth.service";
     import { tableView } from "../../store/app.store";
-    import { showError } from "../../store/notification.store";
+    import { showError, showInfo } from "../../store/notification.store";
     export let exportTitle = 'export';
+
+	async function copyLink(): Promise<void> {
+		try {
+			const link = `${location.origin}/#/songs/@${$currentUser.uid}`;
+			await navigator.clipboard.writeText(link);
+			showInfo($t('profile.share-link-copied'));
+		} catch (error) {
+			showError(error);
+		}
+	}
 
     async function downloadPdf() {
         if (!window['jspdf']) {
@@ -33,6 +44,11 @@
 </svelte:head>
 
 <section class="menu">
+	<div class="row">
+		<button title="{ $t('profile.share-link') }" on:click={copyLink}>
+			<i class='bx bx-share-alt'></i> { $t('profile.share-link') }
+		</button>
+	</div>
     <div class="row">
         <button data-target='columns' title="{ $t('menu.table.set-view') }">
             <i class="bx bx-columns"></i> { $t('menu.table.set-view') }
