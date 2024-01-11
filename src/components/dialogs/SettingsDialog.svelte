@@ -28,7 +28,7 @@
 </script>
 
 {#if visible}
-<ConfirmDialog title='{ $t('profile.settings') }' size='auto' target='login' on:closed={deleteProfile}>
+<ConfirmDialog title='{ $t('profile.settings') }' size='auto' target='main' on:closed={deleteProfile}>
     <div class="dialog section">
         <div class="row">
             <input id="delete" type="checkbox" bind:checked={confirmDelete} /> 

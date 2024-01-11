@@ -2,7 +2,8 @@
     import { t } from 'svelte-i18n';
     import PopupMenu from '../ui/PopupMenu.svelte';
     import SettingsDialog from '../dialogs/SettingsDialog.svelte';
-    import AuthService from "../../service/auth.service";
+    import AuthService, { currentUser } from "../../service/auth.service";
+    import { showError, showInfo } from "../../store/notification.store";
     import { getCssVariable } from "../../styles/style.helper";
 
     export let displayName: string;
@@ -18,6 +19,16 @@
 	async function signOut(): Promise<void> {
 		await authService.signOut();
     	history.pushState(null, '', location.origin);
+	}
+
+	async function copyLink(): Promise<void> {
+		try {
+			const link = `${location.origin}/#/songs/@${$currentUser.uid}`;
+			await navigator.clipboard.writeText(link);
+			showInfo($t('profile.share-link-copied'));
+		} catch (error) {
+			showError(error);
+		}
 	}
 </script>
 
@@ -60,6 +71,11 @@
 		</PopupMenu>
 
 		<SettingsDialog bind:this={settings} />
+	</div>
+	<div class="row">
+		<button title="{ $t('profile.share-link') }" on:click={copyLink}>
+			<i class='bx bx-share-alt'></i> { $t('profile.share-link') }
+		</button>
 	</div>
 </section>
 

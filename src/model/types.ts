@@ -19,4 +19,4 @@ type ObjectValues<T> = T[keyof T];
 
 export type Status = ObjectValues<typeof status>;
 
-export type MenuPages = 'self' | 'root' | 'login' | 'signup' | 'columns';
+export type MenuPages = 'self' | 'root' | 'main' | 'signup';

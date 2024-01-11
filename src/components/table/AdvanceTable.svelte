@@ -62,7 +62,7 @@
 </div>
 
 {#if active}
-<ConfirmDialog target='login' size='max' on:closed={done}>
+<ConfirmDialog target='main' size='max' on:closed={done}>
     <span slot="title">
         <TabbedTitle tabs={Object.keys(stores)} {active} on:tabChange={({ detail }) => changePage(detail)} />
     </span>

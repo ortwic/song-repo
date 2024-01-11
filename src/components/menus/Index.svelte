@@ -18,7 +18,7 @@
     export let title: string;
     export let footer: string;
     const isTableView = derived(location, (path) => path.startsWith('/songs') || path.startsWith('/samples'));
-    const currentMenu = writable($isTableView ? 'root' : 'login');
+    const currentMenu = writable<MenuPages>($isTableView ? 'root' : 'main');
     let counter = 0;
 
     function handleMenuNav(ev: SubmitEvent) {
@@ -33,10 +33,10 @@
 
 <form on:submit|preventDefault={handleMenuNav}>
     <header>
-      <MenuButton target='login' />
+      <MenuButton target='main' />
     </header>
     <nav>
-      {#if $currentMenu == 'login'}
+      {#if $currentMenu === 'main'}
       <Sidebar>
         <svelte:fragment slot="title">
           <a href="#/">{title}</a>
@@ -51,6 +51,7 @@
         {/if}
         {#if $isTableView}
         <ExportTable exportTitle="{ $t('menu.table.exportTitle') }" />
+        <Columns />
         {/if}
         <svelte:fragment slot="lower">
             {#if counter >= 5e5 || import.meta.env.DEV}
@@ -77,15 +78,8 @@
         </svelte:fragment>
       </Sidebar>
       {:else if $currentMenu == 'signup'}
-      <Sidebar title="{ $t('menu.login.signup-title') }" back="login">
+      <Sidebar title="{ $t('menu.login.signup-title') }" back="main">
         <Signup />
-        <svelte:fragment slot="footer">
-            {footer}
-        </svelte:fragment>
-      </Sidebar>
-      {:else if $currentMenu == 'columns'}
-      <Sidebar title="{ $t('menu.table.set-view') }" back="login">
-        <Columns />
         <svelte:fragment slot="footer">
             {footer}
         </svelte:fragment>
