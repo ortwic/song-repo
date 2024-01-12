@@ -1,3 +1,8 @@
+v0.3.3 (2024-01-12)
+-------------------
+- profile settings
+- readonly mode for shared lists
+
 v0.3.2 (2024-01-07)
 -------------------
 - edit column view from menu
@@ -7,6 +12,7 @@ v0.3.2 (2024-01-07)
 
 v0.3.1 (2024-01-01)
 -------------------
+- auth with microsoft account
 - global table search
 
 v0.3.0 (2023-12-30)

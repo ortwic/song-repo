@@ -125,7 +125,6 @@ export const difficultyFormatter: Partial<ColumnDefinition> = {
         }
         return value;
     },
-    editor: 'number',
     editorParams: { 
         min: 1, 
         max: 10 

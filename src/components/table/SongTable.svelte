@@ -3,7 +3,7 @@
   import '../../styles/table.scss';
   import { t } from 'svelte-i18n';
   import { location } from 'svelte-spa-router';
-  import type { ColumnDefinition, CellComponent, CellEditEventCallback, Tabulator } from 'tabulator-tables';
+  import type { ColumnDefinition, CellComponent, CellEditEventCallback, Editor } from 'tabulator-tables';
   import { column, comboBoxEditor } from './templates/column.helper';
   import { autoFilter, rangeFilter } from './templates/filter.helper';
   import format from './templates/formatters/formatter.helper';
@@ -22,12 +22,18 @@
 
   export let params: { id?: string } = {};
 
+  const readonly = !!params.id;
   const service = new SongService(params.id?.slice(1), $location === '/samples');
-  const resource = new SongResource(service);
+  const resource = !readonly ? new SongResource(service) : undefined;
   const songs = service.usersongs;
   let prompt: Dialog<string>;
 
-  const genreSelector = comboBoxEditor(genres.map(v => v.name));
+  const genreList = genres.map(v => v.name);
+  const editor = (editor: Editor, values?: string[]) => {
+    if (!readonly) {
+      return editor === 'list' ? comboBoxEditor(values) : { editor };
+    }
+  };
   const interaction = {
     cellEdited: updateHandler()
   };
@@ -35,25 +41,25 @@
   // https://tabulator.info/docs/5.4/edit#editor-list
   const columns = (t: MessageFormatter): ColumnDefinition[] => ([
     { title: "", field: "__responsive", formatter: 'responsiveCollapse', headerSort: false, responsive: 0, visible: false },
-    column("Σ", "__summary", undefined, "string", summaryFormatter, { clickMenu: resource.getMenu(t, () => prompt), responsive: 0, visible: false }),
+    column("Σ", "__summary", undefined, "string", summaryFormatter, { clickMenu: resource?.getMenu(t, () => prompt), responsive: 0, visible: false }),
     column("✮", "fav", "50", undefined, format.favColumn, interaction, { responsive: -1 }),
-    column(t, "status", "50", "string", autoFilter(), format.status, interaction, { clickMenu: resource.getMenu(t, () => prompt), hozAlign: 'center', responsive: -1 }),
+    column(t, "status", "50", "string", autoFilter(), format.status, interaction, { clickMenu: resource?.getMenu(t, () => prompt), hozAlign: 'center', responsive: -1 }),
     column("#", "progressLogs", "50", "array", format.length, { hozAlign: 'right', headerFilter: 'number', responsive: -1, visible: false }),
     column(t, "progress", "136", "number", rangeFilter(), format.progress, interaction, { responsive: 2 }),
     column(t, "artistImg", "30", undefined, format.bgImg, { responsive: 1 }),
-    column(t, "artist", "200", "string", autoFilter(), comboBoxEditor(), interaction, { validator: 'required', responsive: 1 }),
-    column(t, "title", "200", "string", autoFilter(), interaction, { editor: 'input', validator: 'required', responsive: 1 }),
-    column(t, "genre", "136", "string", autoFilter(), format.genre, genreSelector, interaction, { responsive: 2 }),
-    column(t, "style", "136", "string", autoFilter(), comboBoxEditor(), interaction, { responsive: 2 }),
-    column(t, "key", "80", "string", autoFilter(), interaction, { editor: 'input', responsive: 3 }),
-    column(t, "time", "80", "string", autoFilter(), interaction, { editor: 'input', responsive: 3 }),
-    column(t, "bpm", "80", "string", autoFilter(), interaction, { editor: 'input', responsive: 3 }),
-    column(t, "difficulty", "50", "number", format.difficulty, interaction, { responsive: 3 }),
-    column(t, "source", "200", "string", autoFilter(), format.marked, interaction, { editor: 'input', responsive: 4 }),
-    column(t, "uri", "200", "string", autoFilter(), format.url, interaction, { editor: 'input', responsive: 4 }),
-    column(t, "features", "200", "string", autoFilter(), format.label, interaction, { editor: 'input', responsive: 5 }),
-    column(t, "tags", "200", "string", autoFilter(), format.label, interaction, { editor: 'input', responsive: 6 }),
-    column(t, "learnedOn", "136", "date", autoFilter(), format.timestamp, interaction, { editor: 'date', responsive: 7 }),
+    column(t, "artist", "200", "string", autoFilter(), editor('list'), interaction, { validator: 'required', responsive: 1 }),
+    column(t, "title", "200", "string", autoFilter(), interaction, editor('input'), { validator: 'required', responsive: 1 }),
+    column(t, "genre", "136", "string", autoFilter(), format.genre, editor('list', genreList), interaction, { responsive: 2 }),
+    column(t, "style", "136", "string", autoFilter(), editor('list'), interaction, { responsive: 2 }),
+    column(t, "key", "80", "string", autoFilter(), interaction, editor('input'), { responsive: 3 }),
+    column(t, "time", "80", "string", autoFilter(), interaction, editor('input'), { responsive: 3 }),
+    column(t, "bpm", "80", "string", autoFilter(), interaction, editor('input'), { responsive: 3 }),
+    column(t, "difficulty", "50", "number", format.difficulty, interaction, editor('number'), { responsive: 3 }),
+    column(t, "source", "200", "string", autoFilter(), format.marked, interaction, editor('input'), { responsive: 4 }),
+    column(t, "uri", "200", "string", autoFilter(), format.url, interaction, editor('input'), { responsive: 4 }),
+    column(t, "features", "200", "string", autoFilter(), format.label, interaction, editor('input'), { responsive: 5 }),
+    column(t, "tags", "200", "string", autoFilter(), format.label, interaction, editor('input'), { responsive: 6 }),
+    column(t, "learnedOn", "136", "date", autoFilter(), format.timestamp, interaction, editor('date'), { responsive: 7 }),
     column(t, "changedAt", "136", "date", autoFilter(), format.timestamp, { responsive: 7 }),
     { title: "id", field: "id", visible: false },
   ]);
@@ -97,6 +103,13 @@
       responsiveColumn.hide();
       summaryColumn.hide();
     }
+
+    // not working due to persistance interference
+    // if (readonly) {
+    //   view.table.getColumn('progress').hide();
+    //   view.table.getColumn('status').hide();
+    //   view.table.getColumn('tags').hide();
+    // }
   }
 </script>
 
