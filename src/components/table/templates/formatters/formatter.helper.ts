@@ -77,8 +77,7 @@ export const urlFormatter: Partial<ColumnDefinition> = {
             }
             return a;
         }
-    },
-    formatterParams: { hideTitle: true }
+    }
 };
 
 export const progressFormatter: Partial<ColumnDefinition> = {

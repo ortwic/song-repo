@@ -1,14 +1,11 @@
 <script lang="ts">
     import { t } from "svelte-i18n";
+    import { derived } from "svelte/store";
     import type { ColumnDefinition, SortDirection, Sorter } from "tabulator-tables";
     import Switch from "../ui/elements/Switch.svelte";
     import PopupMenu from "../ui/PopupMenu.svelte";
     import { tableView as view } from "../../store/app.store";
 
-    const menus: Record<string, PopupMenu> = {};
-    const columns = $view?.table.getColumnDefinitions()
-        .filter(c => !c.field.startsWith('__'));
-    
     const sortEntry = <T>(acc: { [x: string]: T; }, { field, dir }) => {
         acc[field] = dir;
         return acc;
@@ -17,10 +14,11 @@
         acc[field] = value;
         return acc;
     };
-    const sortedFields = $view?.table.getSorters()
-        .reduce(sortEntry, {} as Record<string, SortDirection>);
-    const headerFilter = $view?.table.getHeaderFilters()
-        .reduce(filterEntry, {} as Record<string, string>);
+    const sortedFields = $view?.table.getSorters().reduce(sortEntry, {} as Record<string, SortDirection>);
+    const headerFilter = $view?.table.getHeaderFilters().reduce(filterEntry, {} as Record<string, string>);
+    const menus: Record<string, PopupMenu> = {};
+    const columns = derived(view, (v) => v?.table.getColumnDefinitions()
+        .filter(c => !c.field.startsWith('__') && (!v.useResponsiveLayout || c.visible !== false)));
 
     const filterListValues = (col: ColumnDefinition) => 
         col.headerFilter === 'list' && col.headerFilterFuncParams?.values as string[];
@@ -57,23 +55,25 @@
 
 <section class="menu">
     <div class="options">
-        {#each columns ?? [] as col}
+        {#each $columns as col}
             <p>
+                {#if !$view.useResponsiveLayout}
                 <Switch title="{ $t('menu.table.show-hide') } {col.title}"
                     state={col.visible !== false}
                     on:toggle={() => $view?.table.getColumn(col.field).toggle()}>
                     <i class="bx bx-show"></i> 
                 </Switch>
-                <Switch title="{ $t('menu.table.group-by') } {col.title}"
-                    state={$view?.groups.includes(col.field)}
-                    on:toggle={() => $view?.toggleGroup(col.field)}>
-                    <i class="bx bx-collection bx-flip-vertical"></i> 
-                </Switch>
+                {/if}
                 <Switch title="{ $t('menu.table.sort-by') } {col.title}"
                     state={sortedFields[col.field] ?? null}
                     options={[null, 'asc', 'desc']}
                     on:toggle={({ detail }) => sortBy(col.field, detail)}>
                     <i class="bx {sortedFields[col.field] ?? 'asc'}"></i>
+                </Switch>
+                <Switch title="{ $t('menu.table.group-by') } {col.title}"
+                    state={$view?.groups.includes(col.field)}
+                    on:toggle={() => $view?.toggleGroup(col.field)}>
+                    <i class="bx bx-collection bx-flip-vertical"></i> 
                 </Switch>
                 {#if col.headerFilter === 'tickCross'}
                     <Switch title="{ $t('menu.table.filter-by') } {col.title}"

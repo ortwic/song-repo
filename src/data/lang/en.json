@@ -81,7 +81,7 @@
       "genre": "Genre",
       "style": "Style",
       "source": "Source",
-      "uri": "Resource",
+      "uri": "Resource-Pfad",
       "key": "Key",
       "time": "Time",
       "bpm": "BPM",
@@ -131,7 +131,7 @@
   },
   "table": {
     "groupBy": "Group by {title}",
-    "search": "Search for anything e. g. todo, wip, done, genre",
+    "search": "Search for anything e. g. genre, artist, todo",
     "filter": {
       "empty": "all"
     }

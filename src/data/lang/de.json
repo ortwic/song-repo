@@ -81,7 +81,7 @@
       "genre": "Genre",
       "style": "Style",
       "source": "Quelle",
-      "uri": "Resource",
+      "uri": "Resource path",
       "key": "Tonart",
       "time": "Taktart",
       "bpm": "Tempo",
@@ -131,7 +131,7 @@
   },
   "table": {
     "groupBy": "Gruppieren nach {title}",
-    "search": "Suchen nach etwas wie todo, wip, done, genre",
+    "search": "Suchen nach etwas wie Genre, Künstler, todo...",
     "filter": {
       "empty": "Alle"
     }

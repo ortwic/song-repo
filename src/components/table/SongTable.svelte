@@ -2,6 +2,7 @@
   import 'tabulator-tables/dist/css/tabulator_bulma.min.css';
   import '../../styles/table.scss';
   import { t } from 'svelte-i18n';
+  import { location } from 'svelte-spa-router';
   import type { ColumnDefinition, CellComponent, CellEditEventCallback, Tabulator } from 'tabulator-tables';
   import { column, comboBoxEditor } from './templates/column.helper';
   import { autoFilter, rangeFilter } from './templates/filter.helper';
@@ -15,13 +16,13 @@
   import SongService, { viewStoreId } from '../../service/song.service';
   import type { MessageFormatter } from '../../service/i18n';
   import type { UserSong } from '../../model/song.model';
+  import type { TableView } from '../../model/table-view.model';
   import { showError, showInfo } from '../../store/notification.store';
-  import { orientation, type Orientation } from '../../store/media.store';
   import genres from '../../data/genres.json';
 
   export let params: { id?: string } = {};
 
-  const service = new SongService(params.id?.slice(1));
+  const service = new SongService(params.id?.slice(1), $location === '/samples');
   const resource = new SongResource(service);
   const songs = service.usersongs;
   let prompt: Dialog<string>;
@@ -44,12 +45,12 @@
     column(t, "title", "200", "string", autoFilter(), interaction, { editor: 'input', validator: 'required', responsive: 1 }),
     column(t, "genre", "136", "string", autoFilter(), format.genre, genreSelector, interaction, { responsive: 2 }),
     column(t, "style", "136", "string", autoFilter(), comboBoxEditor(), interaction, { responsive: 2 }),
-    column(t, "source", "200", "string", autoFilter(), format.marked, interaction, { editor: 'input', responsive: 3 }),
-    column(t, "uri", "200", "string", autoFilter(), format.url, interaction, { editor: 'input', responsive: 3, visible: false }),
-    column(t, "key", "80", "string", autoFilter(), interaction, { editor: 'input', responsive: 4 }),
-    column(t, "time", "80", "string", autoFilter(), interaction, { editor: 'input', responsive: 4 }),
-    column(t, "bpm", "80", "string", autoFilter(), interaction, { editor: 'input', responsive: 4 }),
-    column(t, "difficulty", "50", "number", format.difficulty, interaction, { responsive: 4 }),
+    column(t, "key", "80", "string", autoFilter(), interaction, { editor: 'input', responsive: 3 }),
+    column(t, "time", "80", "string", autoFilter(), interaction, { editor: 'input', responsive: 3 }),
+    column(t, "bpm", "80", "string", autoFilter(), interaction, { editor: 'input', responsive: 3 }),
+    column(t, "difficulty", "50", "number", format.difficulty, interaction, { responsive: 3 }),
+    column(t, "source", "200", "string", autoFilter(), format.marked, interaction, { editor: 'input', responsive: 4 }),
+    column(t, "uri", "200", "string", autoFilter(), format.url, interaction, { editor: 'input', responsive: 4 }),
     column(t, "features", "200", "string", autoFilter(), format.label, interaction, { editor: 'input', responsive: 5 }),
     column(t, "tags", "200", "string", autoFilter(), format.label, interaction, { editor: 'input', responsive: 6 }),
     column(t, "learnedOn", "136", "date", autoFilter(), format.timestamp, interaction, { editor: 'date', responsive: 7 }),
@@ -81,17 +82,17 @@
     }
   }
 
-  function init(table: Tabulator, orientation: Orientation): void {
-    const responsiveColumn = table.getColumn('__responsive');
-    const summaryColumn = table.getColumn('__summary');
-    if (orientation === 'portrait') {
+  function init(view: TableView): void {
+    const responsiveColumn = view.table.getColumn('__responsive');
+    const summaryColumn = view.table.getColumn('__summary');
+    if (view.useResponsiveLayout) {
       responsiveColumn.show();
       summaryColumn.show();
 
       const remainingWidth = window.innerWidth - responsiveColumn.getWidth();
       summaryColumn.setWidth(remainingWidth);
-      table.getColumn('fav').hide();
-      table.getColumn('status').hide();
+      view.table.getColumn('fav').hide();
+      view.table.getColumn('status').hide();
     } else {
       responsiveColumn.hide();
       summaryColumn.hide();
@@ -117,7 +118,7 @@
       placeholderSearch={ $t('table.search') }
       persistenceID={viewStoreId}
       groupHeader={format.groupBy}
-      on:init={({ detail }) => init(detail, $orientation)}
+      on:init={({ detail }) => init(detail)}
       on:error={({ detail }) => showError(detail)}
     />
   </FileDrop>

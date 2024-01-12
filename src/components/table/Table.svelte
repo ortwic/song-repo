@@ -1,4 +1,6 @@
 <script lang="ts">
+    import type { TableView } from '../../model/table-view.model';
+
   import 'tabulator-tables/dist/css/tabulator_bulma.min.css';
   import { 
     type ColumnComponent, 
@@ -152,12 +154,14 @@
     initGroupBy(table);
     initSearch(table, useResponsiveLayout);
 
-    tableView.set({ 
+    const view: TableView = { 
       table,
+      useResponsiveLayout,
       groups: Object.keys(rowGroups),
       toggleGroup
-    });
-    dispatch('init', table);
+    };
+    tableView.set(view);
+    dispatch('init', view);
     return table;
   }
 
@@ -184,8 +188,9 @@
 
   function initSearch(table: Tabulator, useResponsiveLayout: boolean) {
     if (useResponsiveLayout) {
-      const array = table.getFilters(false)[0] as unknown as Filter[] ?? [];
-      searchTerm = array.filter(f => f.value)[0]?.value ?? '';
+      const filters = table.getFilters(false)[0] || table.getFilters(true);
+      const array = filters as unknown as Filter[];
+      searchTerm = array?.filter(f => f.value)[0]?.value ?? '';
     } else {
       table.clearFilter(false);
     }

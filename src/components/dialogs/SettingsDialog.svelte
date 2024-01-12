@@ -17,7 +17,7 @@
     }
 
     function resetViews() {
-        Object.keys($tableView.table.options.persistence).forEach((key) => {
+        Object.keys($tableView.table?.options.persistence).forEach((key) => {
             localStorage.removeItem(`tabulator-${viewStoreId}-${key}`);
         });
 
