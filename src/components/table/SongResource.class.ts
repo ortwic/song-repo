@@ -20,7 +20,7 @@ export default class SongResource {
             song.fav = !song.fav;
             await this.service.setSong(song);
             
-            cell.getTable().redraw(true);
+            // cell.getTable().redraw(true); // required for update but causes scroll to top!
         };
 
         const changeStatusHandler = (cell: CellComponent, status: Status) => {

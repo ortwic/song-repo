@@ -26,6 +26,7 @@ type Sorter =
 
 export const column = (
     t: string | MessageFormatter,
+    responsive: number,
     field: string,
     width: string,
     sorter: Sorter,
@@ -38,6 +39,7 @@ export const column = (
             field,
             width,
             sorter,
+            responsive,
             resizable: true,
             headerMenu: [],
         },

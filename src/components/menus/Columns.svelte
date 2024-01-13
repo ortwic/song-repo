@@ -101,7 +101,7 @@
                         </div>
                     </PopupMenu>
                 {/if}
-                <span class="{!!headerFilter[col.field] ? 'active' : ''}">
+                <span class="{headerFilter && headerFilter[col.field] ? 'active' : ''}">
                     {col.title}
                 </span>
             </p>

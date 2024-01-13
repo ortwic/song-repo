@@ -4,8 +4,7 @@ import FirestoreService, { uniqueKey } from './firestore.service';
 import type { UserSong } from '../model/song.model';
 import { Timestamp, orderBy, where } from 'firebase/firestore';
 
-// const sharedFields: (keyof UserSong)[] = ['id', 'artist', 'title', 'genre', 'style', 'key', 'time', 'bpm'];
-const sampleId = 'R3VSxFand4d3helVN7aTxWNmzDi1';
+const sampleId = '3qAbhlbXxNaLY7CMiz6uOMJlBbb2';
 const localStore = {};
 const localSubject = new BehaviorSubject<UserSong[]>([]);
 const store = new FirestoreService('user');
