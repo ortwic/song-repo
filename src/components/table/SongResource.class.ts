@@ -2,9 +2,10 @@ import type { Readable } from 'svelte/store';
 import type { CellComponent, MenuObject, MenuSeparator } from 'tabulator-tables';
 import type { UserSong } from '../../model/song.model';
 import type { Status } from '../../model/types';
-import { showError } from '../../store/notification.store';
 import type { MessageFormatter } from '../../service/i18n';
 import type SongService from '../../service/song.service';
+import { showError } from '../../store/notification.store';
+import { logAction } from '../../store/notification.store';
 
 export interface Dialog<T> {
     showDialog(param: T): Readable<string>;
@@ -76,6 +77,7 @@ export default class SongResource {
                         label: `<i class='bx bx-music'></i> ${t('songs.menu.search-sheet-music')} (musescore)`,
                         action(e, cell: CellComponent) {
                             const song = cell.getData() as UserSong;
+                            logAction({ type: 'search', resource: 'musecore', song });
                             window.open(`https://musescore.com/sheetmusic?text=${song.artist}+${song.title}`, '_blank');
                         }
                     },
@@ -83,6 +85,7 @@ export default class SongResource {
                         label: `<i class='bx bxs-file-pdf'></i> ${t('songs.menu.search-sheet-music')} (PDF)`,
                         action(e, cell: CellComponent) {
                             const song = cell.getData() as UserSong;
+                            logAction({ type: 'search', resource: 'sheet music', song });
                             window.open(`https://google.com/search?q="${song.artist}"+"${song.title}"+sheet+music+filetype:pdf`, '_blank');
                         }
                     },
@@ -90,6 +93,7 @@ export default class SongResource {
                         label: `<i class='bx bx-play-circle'></i> ${t('songs.menu.search-tutorial')} (Synthesia)`,
                         action(e, cell: CellComponent) {
                             const song = cell.getData() as UserSong;
+                            logAction({ type: 'search', resource: 'tutorial', song });
                             window.open(`https://google.com/search?q="${song.artist}"+"${song.title}"+synthesia+tutorial`, '_blank');
                         }
                     },
@@ -97,6 +101,7 @@ export default class SongResource {
                         label: `<i class='bx bx-text'></i> ${t('songs.menu.search-lyrics')}`,
                         action(e, cell: CellComponent) {
                             const song = cell.getData() as UserSong;
+                            logAction({ type: 'search', resource: 'lyrics', song });
                             window.open(`https://google.com/search?q="${song.artist}"+"${song.title}"+lyrics`, '_blank');
                         }
                     },
@@ -104,6 +109,7 @@ export default class SongResource {
                         label: `<i class='bx bxs-piano'></i> ${t('songs.menu.search-midi-file')}`,
                         action(e, cell: CellComponent) {
                             const song = cell.getData() as UserSong;
+                            logAction({ type: 'search', resource: 'midi file', song });
                             window.open(`https://google.com/search?q="${song.artist}"+"${song.title}"+filetype:midi`, '_blank');
                         }
                     },

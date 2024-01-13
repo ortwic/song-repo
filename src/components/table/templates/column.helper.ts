@@ -1,6 +1,6 @@
-import type { ColumnComponent, ColumnDefinition, EditorParams, RowComponent, SortDirection } from 'tabulator-tables';
+import type { CellEditEventCallback, ColumnComponent, ColumnDefinition, Editor, ListEditorParams, RowComponent, SortDirection } from 'tabulator-tables';
 import { autoFilter } from './filter.helper';
-import { labelFormatter } from './formatters/formatter.helper';
+import Format from './Formatter.class';
 import type { MessageFormatter } from '../../../service/i18n';
 
 type Sorter =
@@ -30,6 +30,7 @@ export const column = (
     field: string,
     width: string,
     sorter: Sorter,
+    format: keyof Format,
     ...more: Partial<ColumnDefinition>[]
 ): ColumnDefinition => {
     const title = typeof t === 'string' ? t : t(`songs.columns.${field}`);
@@ -43,6 +44,7 @@ export const column = (
             resizable: true,
             headerMenu: [],
         },
+        Format.get(format),
         ...more
     );
 };
@@ -60,7 +62,7 @@ export const autoColumns = <T>(data: T[]): ColumnDefinition[] => {
                 ...autoFilter(),
             };
             if (Array.isArray(data[0][key])) {
-                def.formatter = labelFormatter.formatter;
+                def.formatter = Format.get('label').formatter;
             }
             return def as ColumnDefinition;
         };
@@ -70,17 +72,32 @@ export const autoColumns = <T>(data: T[]): ColumnDefinition[] => {
     }
 };
 
-export const comboBoxEditor = (values?: string[]): Partial<ColumnDefinition> => {
-    const editorParams: EditorParams = {
-        values,
-        autocomplete: true,
-        clearable: true,
-        allowEmpty: true,
-        listOnEmpty: true,
-        freetext: true,
+export function createEditor(cellEdited: CellEditEventCallback, readonly = false) {  
+    const listParams = (values?: string[]) => {
+        const editorParams: ListEditorParams = {
+            values,
+            autocomplete: true,
+            clearable: true,
+            allowEmpty: true,
+            listOnEmpty: true,
+            freetext: true,
+        };
+        if (!values) {
+            editorParams.valuesLookup = 'active';
+        }
+        return editorParams;
     };
-    if (!values) {
-        editorParams.valuesLookup = 'active';
-    }
-    return { editor: 'list', editorParams };
-};
+
+    return (editor?: Editor, values?: string[]): Partial<ColumnDefinition> => {
+        if (!readonly) {
+            const definition: Partial<ColumnDefinition> = {
+                editor,
+                cellEdited
+            };
+            if (editor === 'list') {
+                definition.editorParams = listParams(values);
+            }
+            return definition;
+        }
+    };
+}
