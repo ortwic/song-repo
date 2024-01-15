@@ -1,6 +1,5 @@
 <script lang="ts">
-    import type { TableView } from '../../model/table-view.model';
-
+  import type { TableView } from '../../model/table-view.model';
   import 'tabulator-tables/dist/css/tabulator_bulma.min.css';
   import { 
     type ColumnComponent, 
@@ -29,8 +28,8 @@
     SortModule, 
     ValidateModule
   } from 'tabulator-tables';
-  import { t } from 'svelte-i18n';
   import { default as ResponsiveLayoutModule, type CollapsedCellData } from './tabulator/modules/ResponsiveLayout';
+  import { t } from 'svelte-i18n';
   import { onMount, createEventDispatcher, onDestroy } from 'svelte';
   import { Observable, fromEvent, map, take } from 'rxjs';
   import { tableView } from '../../store/app.store';
@@ -133,8 +132,8 @@
     const persistence = {
         columns: usePersistance && !useResponsiveLayout ? [ 'width', 'visible' ] : false,
         sort: usePersistance,
-        headerFilter: usePersistance,
-        filter: usePersistance,
+        headerFilter: usePersistance && !useResponsiveLayout,
+        filter: usePersistance && useResponsiveLayout,
         group: usePersistance
     };
 
@@ -152,7 +151,9 @@
   function handleTableBuilt(table: Tabulator, useResponsiveLayout: boolean) {
     initHeaderMenu(table);
     initGroupBy(table);
-    initSearch(table, useResponsiveLayout);
+    if (useResponsiveLayout) {
+      initSearch(table);
+    }
 
     const view: TableView = { 
       table,
@@ -186,14 +187,9 @@
     }
   }
 
-  function initSearch(table: Tabulator, useResponsiveLayout: boolean) {
-    if (useResponsiveLayout) {
-      const filters = table.getFilters(false)[0] || table.getFilters(true);
-      const array = filters as unknown as Filter[];
-      searchTerm = array?.filter(f => f.value)[0]?.value ?? '';
-    } else {
-      table.clearFilter(false);
-    }
+  function initSearch(table: Tabulator) {
+    const array = table.getFilters(false)[0] as unknown as Filter[];
+    searchTerm = array?.filter(f => f.value)[0]?.value;
   }
 
   function toggleGroup(field: string, element?: HTMLElement) {
@@ -210,13 +206,15 @@
 
   function search() {
     if (searchTerm) {
+      $table.clearHeaderFilter();
+
       // 2nd level array enforces OR comparison
       $table.setFilter([columns
         .filter(c => c.sorter === 'string')
         .map(c => ({ field: c.field, type: 'like', value: searchTerm }))
       ]);
     } else {
-      $table.clearFilter(true);
+      $table.clearFilter(false);
     }
   }
 
