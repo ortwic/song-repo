@@ -23,9 +23,12 @@ export const rangeFilter = (min = 0, max = 100, step = 5): Partial<ColumnDefinit
     };
 };
 
+const getMinMax = (value: string) => (value?.split('-') ?? []);
+
 // copied from example // https://tabulator.info/examples/5.5#filter-header
 const minMaxFilterEditorElement = (cell, _onRendered, success, cancel, editorParams) => {
     const container = document.createElement('span');
+    const [min, max] = getMinMax(cell.getValue());
 
     //create and style inputs
     const start = document.createElement('input');
@@ -34,16 +37,14 @@ const minMaxFilterEditorElement = (cell, _onRendered, success, cancel, editorPar
     start.setAttribute('min', editorParams.min);
     start.setAttribute('max', editorParams.max);
     start.setAttribute('step', editorParams.step);
-    start.setAttribute('value', editorParams.min);
+    start.setAttribute('value', min);
     start.style.padding = '4px';
     start.style.width = '50%';
     start.style.boxSizing = 'border-box';
-
-    start.value = cell.getValue();
-
+    
     const end = start.cloneNode() as HTMLInputElement;
     end.setAttribute('placeholder', 'Max');
-    end.setAttribute('value', editorParams.max);
+    end.setAttribute('value', max);
 
     start.addEventListener('change', buildValues);
     start.addEventListener('blur', buildValues);
@@ -54,7 +55,7 @@ const minMaxFilterEditorElement = (cell, _onRendered, success, cancel, editorPar
     end.addEventListener('keydown', keypress);
 
     function buildValues() {
-        success({ start: start.value, end: end.value });
+        success(start.value || end.value ? `${start.value}-${end.value}` : undefined);
     }
 
     function keypress(ev: KeyboardEvent) {
@@ -73,11 +74,6 @@ const minMaxFilterEditorElement = (cell, _onRendered, success, cancel, editorPar
     return container;
 };
 
-interface HeaderMinMaxValue {
-    start?: number;
-    end?: number;
-}
-
 /**
  * custom max min filter function
  * @param headerValue - the value of the header filter element
@@ -86,18 +82,19 @@ interface HeaderMinMaxValue {
  * @param filterParams - params object passed to the headerFilterFuncParams property
  * @returns must return a boolean, true if it passes the filter.
  */
-function minMaxFilterFunction(headerValue: HeaderMinMaxValue, rowValue: number) {
+function minMaxFilterFunction(headerValue: string, rowValue: number) {
     const hasValue = <T>(value: T) => value === 0 || value;
     
     if (hasValue(rowValue)) {
-        if (hasValue(headerValue.start)) {
-            if (hasValue(headerValue.end)) {
-                return +rowValue >= headerValue.start && +rowValue <= headerValue.end;
+        const [start, end] = getMinMax(headerValue);
+        if (hasValue(start)) {
+            if (hasValue(end)) {
+                return +rowValue >= +start && +rowValue <= +end;
             } else {
-                return +rowValue >= headerValue.start;
+                return +rowValue >= +start;
             }
-        } else if (hasValue(headerValue.end)) {
-            return +rowValue <= headerValue.end;
+        } else if (hasValue(+end)) {
+            return +rowValue <= +end;
         }
     }
 

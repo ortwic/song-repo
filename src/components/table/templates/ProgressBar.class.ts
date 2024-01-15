@@ -5,6 +5,8 @@ class ProgressBar extends HTMLElement {
     isMouseDown = false;
     oldValue = 0;
     value = 0;
+    min = 0;
+    max = 100;
     readonly progressBar = document.createElement('div');
     readonly percentValue = document.createElement('span');
 
@@ -27,7 +29,7 @@ class ProgressBar extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['value'];
+        return ['value', 'min', 'max'];
     }
 
     private start(event: MouseEvent | TouchEvent) {
@@ -65,18 +67,26 @@ class ProgressBar extends HTMLElement {
     }
 
     attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-        if (name === 'value') {
+        switch (name) {
+        case 'min':
+            this.min = +newValue;
+            break;
+        case 'max':
+            this.max = +newValue;
+            break;
+        case 'value':
             this.setProgress(+newValue);
+            break;
         }
     }
 
     setProgress(value: number) {
-        this.value = value;
-        this.progressBar.style.width = 100 - value + '%';
-        this.progressBar.style.marginLeft = value + '%';
-        this.percentValue.textContent = value + '%';
+        this.value = value < this.min ? this.min : value > this.max ? this.max : value;
+        this.progressBar.style.width = this.max - this.value + '%';
+        this.progressBar.style.marginLeft = this.value + '%';
+        this.percentValue.textContent = this.value + '%';
 
-        const [ gradient, color ] = redToGreenGradient(value);
+        const [ gradient, color ] = redToGreenGradient(this.value);
         this.style.background = gradient;
         this.style.boxShadow = `0 0 12px ${color}80`;
     }
@@ -84,7 +94,7 @@ class ProgressBar extends HTMLElement {
     updateProgress(clientX: number): void {
         const rect = this.getBoundingClientRect();
         const clickX = clientX - rect.left;
-        const percentage = Math.round((clickX / rect.width) * 100);
+        const percentage = Math.round((clickX / rect.width) * this.max);
         this.setProgress(percentage);
     }
 }

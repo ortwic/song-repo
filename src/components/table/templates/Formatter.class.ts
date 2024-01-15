@@ -56,11 +56,13 @@ export default class Formatter {
 
     get progress(): Partial<ColumnDefinition> { 
         return {
-            formatter(cell: CellComponent): HTMLElement | string {
+            formatter(cell: CellComponent, formatterParams: { min: number, max: number }): HTMLElement | string {
                 // const table = cell.getTable();
                 const song = cell.getData() as UserSong;
                 const bar = document.createElement('progress-bar');
                 bar.setAttribute('value', cell.getValue());
+                bar.setAttribute('min', `${formatterParams.min}`);
+                bar.setAttribute('max', `${formatterParams.max}`);
                 bar.addEventListener('change', (ev: CustomEvent<number[]>) => {
                     const [newValue, oldValue] = ev.detail;
                     cell.setValue(newValue);
@@ -81,6 +83,10 @@ export default class Formatter {
                 });
                 return bar;
             },
+            formatterParams: {
+                min: 0,
+                max: 100
+            }
         }; 
     }
 
