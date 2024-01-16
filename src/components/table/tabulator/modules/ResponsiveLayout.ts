@@ -1,13 +1,16 @@
 import type { CellComponent, Tabulator } from 'tabulator-tables';
 import Module from 'tabulator-tables/src/js/core/Module';
+import Edit from 'tabulator-tables/src/js/modules/Edit/Edit';
 
 type Formatter = (data: CollapsedCellData[]) => HTMLElement;
 
 export interface CollapsedCellData {
+    cell?: CellComponent;
     index: number;
     field: string;
     title: string; 
-    value: string | HTMLElement;
+    value: string;
+    element?: HTMLElement;
 }
 
 export default class ResponsiveLayout extends Module{
@@ -268,11 +271,19 @@ export default class ResponsiveLayout extends Module{
             if(column.definition.title && index >= 0){
                 const format = column.modules.format;
                 let title = !column.modules.format.params?.hideTitle ? column.definition.title : '';
+                const cell = <CellComponent>row.getCell(field);
                 if(format && this.table.options.responsiveLayoutCollapseUseFormatters){
-                    const cell = <CellComponent>row.getCell(field);
-                    const element = cell.getElement();
+                    const editCell = () => {
+                        this.table.modules.edit.clearEditor.call(this.table.modules.edit, true);
+                        this.table.modules.edit.editCell.call(this.table.modules.edit, cell);
+                    };
+
+                    // const element = cell.getElement();
                     // TODO cloneNode() to fix show/hide column https://github.com/ortwic/song-repo/issues/31
-                    // element = element.cloneNode(true);
+                    const element = cell.getElement().cloneNode(true) as HTMLElement;
+                    element.addEventListener('click', editCell);
+                    element.addEventListener('focus', editCell);
+                    element.addEventListener('mousedown', editCell);
                     
                     if (title) {
                         super.langBind('columns|' + field, (text) => title = text || title);
@@ -281,17 +292,20 @@ export default class ResponsiveLayout extends Module{
                     element.title = column.definition.title;
                     element.style.display = 'block';
                     output.push({
+                        cell,
                         index,
                         field,
                         title,
-                        value: element
+                        value,
+                        element
                     });
                 }else{
                     output.push({
+                        cell,
                         index,
                         field,
                         title,
-                        value: value
+                        value
                     });
                 }
             }
@@ -305,7 +319,7 @@ export default class ResponsiveLayout extends Module{
         list.classList.add('flex');
         let lastIndex = -1;
 
-        data.forEach(({ index, title, value }) => {
+        data.forEach(({ cell, index, field, title, value, element }) => {
             const row = document.createElement('div');
 
             if (title) {
@@ -314,9 +328,9 @@ export default class ResponsiveLayout extends Module{
                 row.appendChild(label);
             }
 
-            if(value instanceof HTMLElement){
-                value.style.height = 'auto';
-                row.appendChild(value);
+            if(element){
+                element.style.height = 'auto';
+                row.appendChild(element);
             }else if(value !== undefined){
                 const p = document.createElement('p');
                 p.innerHTML = value;
