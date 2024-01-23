@@ -1,4 +1,5 @@
-import type { CellEditEventCallback, ColumnComponent, ColumnDefinition, Editor, ListEditorParams, RowComponent, SortDirection } from 'tabulator-tables';
+import type { CellEditEventCallback, ColumnComponent, Editor, ListEditorParams, RowComponent, SortDirection } from 'tabulator-tables';
+import type { ColumnDefinition } from '../tabulator/types';
 import { autoFilter } from './filter.helper';
 import Format from './Formatter.class';
 import type { MessageFormatter } from '../../../service/i18n';

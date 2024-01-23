@@ -1,7 +1,8 @@
 import Color from 'color';
 import { marked } from 'marked';
 import { Timestamp } from 'firebase/firestore';
-import type { ColumnDefinition, CellComponent } from 'tabulator-tables';
+import type { CellComponent } from 'tabulator-tables';
+import type { ColumnDefinition } from '../tabulator/types';
 import './ProgressBar.class';
 import type { UserSong } from '../../../model/song.model';
 import { status } from '../../../model/types';
@@ -55,6 +56,14 @@ export default class Formatter {
     }
 
     get progress(): Partial<ColumnDefinition> { 
+        const progress = (data: UserSong) => {
+            if (data.progress > 0) {
+                const value = Math.floor((data.progress - 1) / 10) * 10 + 1;
+                return`${value} - ${value + 9}%`;
+            }
+            return '0%';
+        };
+        
         return {
             formatter(cell: CellComponent, formatterParams: { min: number, max: number }): HTMLElement | string {
                 // const table = cell.getTable();
@@ -86,7 +95,8 @@ export default class Formatter {
             formatterParams: {
                 min: 0,
                 max: 100
-            }
+            },
+            groupByFunc: progress
         }; 
     }
 

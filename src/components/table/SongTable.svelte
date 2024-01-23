@@ -3,7 +3,8 @@
   import '../../styles/table.scss';
   import { t } from 'svelte-i18n';
   import { location } from 'svelte-spa-router';
-  import type { ColumnDefinition, CellComponent, CellEditEventCallback } from 'tabulator-tables';
+  import type { CellComponent, CellEditEventCallback } from 'tabulator-tables';
+  import type { ColumnDefinition } from './tabulator/types';
   import { column, createEditor } from './templates/column.helper';
   import { autoFilter, rangeFilter } from './templates/filter.helper';
   import { groupByFormatter } from './templates/Formatter.class';

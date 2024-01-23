@@ -3,8 +3,8 @@
   import 'tabulator-tables/dist/css/tabulator_bulma.min.css';
   import { 
     type ColumnComponent, 
-    type ColumnDefinition,
     type Filter, 
+    type GroupArg,
     type GroupComponent, 
     type Options, 
     Tabulator, 
@@ -28,6 +28,7 @@
     SortModule, 
     ValidateModule
   } from 'tabulator-tables';
+  import type { ColumnDefinition } from './tabulator/types';
   import { default as ResponsiveLayoutModule, type CollapsedCellData } from './tabulator/modules/ResponsiveLayout';
   import { t } from 'svelte-i18n';
   import { onMount, createEventDispatcher, onDestroy } from 'svelte';
@@ -66,7 +67,7 @@
   type T = $$Generic;
   type GroupFormatter = (value: unknown, count: number, data: T[], group?: GroupComponent) => string;
 
-  const rowGroups = {};
+  const rowGroups: Record<string, GroupArg> = {};
   export let idField: keyof T;
   export let columns: ColumnDefinition[] = undefined;
   export let data: Observable<T[]>;
@@ -88,7 +89,10 @@
     {
       label: 'Open all', // TODO not working
       action() {
-        $table.getGroups().forEach(g => g.show());
+        $table.getGroups().forEach(g => {
+          console.log(g.getKey(), g.getField())
+          g.show()
+        });
       }
     },
     {
@@ -106,7 +110,9 @@
     clipboard: true,
     movableColumns: true,
     groupBy,
+    groupContextMenu,
     groupHeader,
+    groupStartOpen: [true, (v, n) => (n < 3)] as unknown as boolean, 
     groupToggleElement: 'header',
     groupUpdateOnCellEdit: true,
     footerElement: '#footer',
@@ -116,7 +122,12 @@
     responsiveLayoutCollapseFormatter: detailFormatter,
     pagination: false,
     persistenceID,
-    persistenceMode: 'local'
+    persistenceMode: 'local',
+    persistenceWriterFunc(id, type, data) {
+		  localStorage.setItem(id + "-" + type, JSON.stringify(data, (key, value) => {
+        return type === 'group' && key !== 'groupHeader' && typeof value === 'function' ? value.name : value;
+      }));
+    },
   };
 
   onMount(() => endOrientation = orientation.subscribe(createTable));
@@ -181,9 +192,10 @@
   function initGroupBy(table: Tabulator) {
     if (Array.isArray(table.options.groupBy)) {
       table.options.groupBy.forEach(field => {
-        rowGroups[field] = true;
+        rowGroups[field] = columns.find(c => c.field === field)?.groupByFunc;
         table.getColumn(field).getElement()?.classList.add('primary');
       });
+      setGroupBy(table);
     }
   }
 
@@ -194,14 +206,18 @@
 
   function toggleGroup(field: string, element?: HTMLElement) {
     if (!isGroupedBy(field)) {
-      rowGroups[field] = true;
+      rowGroups[field] = columns.find(c => c.field === field)?.groupByFunc;
       element?.classList.add('primary');
     } else {
       delete rowGroups[field];
       element?.classList.remove('primary');
     }
-    const groups = Object.keys(rowGroups);
-    $table.setGroupBy(groups.length ? groups : undefined);
+    setGroupBy($table);
+  }
+
+  function setGroupBy(table: Tabulator) {
+    const groups: unknown[] = Object.keys(rowGroups).map(k => rowGroups[k] ?? k);
+    table.setGroupBy(groups.length ? groups as string[] : undefined);
   }
 
   function search() {

@@ -84,7 +84,7 @@ export default defineConfig({
                     },
                 ],
                 display_override: ['window-controls-overlay'],
-                orientation: 'natural',
+                orientation: 'any',
             },
             workbox: {
                 globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
