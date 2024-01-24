@@ -1,6 +1,6 @@
 {
   "packageId": "app.web.song_repo.twa",
-  "host": "song-repo.web.app/",
+  "host": "song-repo.web.app",
   "name": "My Song Repertory",
   "launcherName": "Song Repo",
   "display": "fullscreen",
@@ -21,8 +21,8 @@
     "path": "/home/ortwin/Dev/Deployment/android.keystore",
     "alias": "android"
   },
-  "appVersionName": "1",
-  "appVersionCode": 1,
+  "appVersionName": "3",
+  "appVersionCode": 3,
   "shortcuts": [],
   "generatorApp": "bubblewrap-cli",
   "webManifestUrl": "https://song-repo.web.app/manifest.webmanifest",
@@ -36,9 +36,9 @@
   "isMetaQuest": false,
   "fullScopeUrl": "https://song-repo.web.app/",
   "minSdkVersion": 19,
-  "orientation": "natural",
+  "orientation": "any",
   "fingerprints": [],
   "additionalTrustedOrigins": [],
   "retainedBundles": [],
-  "appVersion": "1"
+  "appVersion": "3"
 }

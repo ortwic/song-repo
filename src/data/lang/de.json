@@ -166,7 +166,7 @@
     "share-link-copied": "Share-Link in die Zwischenablage kopiert."
   },
   "settings": {
-    "settings": "Einstellungen",
+    "title": "Einstellungen",
     "view": "Ansicht",
     "reset-views": "Ansichten zurücksetzen",
     "reset-text": "Gespeicherter Spalteneinstellungen, Filter und Gruppierung zurücksetzen.",
