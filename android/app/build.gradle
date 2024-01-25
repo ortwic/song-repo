@@ -22,7 +22,7 @@ plugins {
 
 def twaManifest = [
     applicationId: 'app.web.song_repo.twa',
-    hostName: 'song-repo.web.app/', // The domain being opened in the TWA.
+    hostName: 'song-repo.web.app', // The domain being opened in the TWA.
     launchUrl: '/', // The start path for the TWA. Must be relative to the domain.
     name: 'My Song Repertory', // The application name.
     launcherName: 'Song Repo', // The name shown on the Android Launcher.
@@ -47,7 +47,7 @@ def twaManifest = [
     // 'customtabs' and 'webview'.
     fallbackType: 'customtabs',
     enableSiteSettingsShortcut: 'true',
-    orientation: 'natural',
+    orientation: 'any',
 ]
 
 android {
@@ -56,8 +56,8 @@ android {
         applicationId "app.web.song_repo.twa"
         minSdkVersion 19
         targetSdkVersion 33
-        versionCode 1
-        versionName "1"
+        versionCode 3
+        versionName "3"
 
         // The name for the application
         resValue "string", "appName", twaManifest.name
