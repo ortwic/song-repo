@@ -14,11 +14,11 @@
         acc[field] = value;
         return acc;
     };
-    const sortedFields = $view?.table.getSorters().reduce(sortEntry, {} as Record<string, SortDirection>);
-    const headerFilter = $view?.table.getHeaderFilters().reduce(filterEntry, {} as Record<string, string>);
+    const sortedFields = $view?.table.getSorters().reduce(sortEntry, {} as Record<string, SortDirection>) ?? {};
+    const headerFilter = $view?.table.getHeaderFilters().reduce(filterEntry, {} as Record<string, string>) ?? {};
     const menus: Record<string, PopupMenu> = {};
     const columns = derived(view, (v) => v?.table.getColumnDefinitions()
-        .filter(c => !c.field.startsWith('__') && (!v.useResponsiveLayout || c.visible !== false)));
+        .filter(c => !c.field.startsWith('__') && (!v.useResponsiveLayout || c.visible !== false)) ?? []);
 
     const filterListValues = (col: ColumnDefinition) => 
         col.headerFilter === 'list' && col.headerFilterFuncParams?.values as string[];
