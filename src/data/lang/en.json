@@ -173,7 +173,9 @@
     "view": "View",
     "reset-views": "Reset views",
     "reset-text": "Reset stored column settings, filters and grouping.",
-    "delete-profile": "Delete profile (All data will be lost)",
+    "reset-done": "All saved view reseted!",
+    "data-lost": "All data will be lost",
+    "delete-profile": "Delete profile",
     "delete-advice": "You should export your data before deletion.",
     "delete-done": "Your account was deleted successfully!",
     "profile": "Profile"

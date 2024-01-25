@@ -10,6 +10,7 @@
   import Start from "./routes/Start.svelte";
   import Calendar from "./routes/Calendar.svelte";
   import Blog from "./routes/Blog.svelte";
+  import Settings from "./routes/Settings.svelte";
   import Feedback from "./routes/Feedback.svelte";
   import NotFound from "./routes/NotFound.svelte";
   import { currentUser } from './service/auth.service';
@@ -27,6 +28,7 @@
     '/events': Calendar,
     '/blog': Blog,
     '/blog/:label': Blog,
+    '/settings': Settings,
     '/feedback': Feedback,
     '*': NotFound
   };

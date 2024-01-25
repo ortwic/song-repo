@@ -1,7 +1,7 @@
 <script lang='ts'>
     import { t } from 'svelte-i18n';
     import PopupMenu from '../ui/PopupMenu.svelte';
-    import SettingsDialog from '../dialogs/SettingsDialog.svelte';
+    import NavButton from '../ui/elements/NavButton.svelte';
     import AuthService, { currentUser } from "../../service/auth.service";
     import { showError, showInfo } from "../../store/notification.store";
     import { getCssVariable } from "../../styles/style.helper";
@@ -11,7 +11,6 @@
     export let email: string;
 	export let color = getCssVariable('--primary');
 	let profileMenu: PopupMenu;
-	let settings: SettingsDialog;
 
     const emailParts = email.split('@');
 	const authService = new AuthService();
@@ -63,11 +62,9 @@
 					<span><i class='bx bx-log-out-circle'></i> { $t('profile.sign-out') }</span>
 				</button>
 			</div>
-			<div class="row">
-				<button class="left" title="{ $t('settings.title') } '{email}'" on:click={settings.showDialog}>
-					<span><i class='bx bx-cog'></i> { $t('settings.title') }</span>
-				</button>
-			</div>
+			<NavButton className="left" href="/settings" title="{ $t('settings.title') } '{email}'">
+				<span><i class='bx bx-cog'></i> { $t('settings.title') }</span>
+			</NavButton>
 		</PopupMenu>
 	</div>
 	<div class="row">
@@ -76,8 +73,6 @@
 		</button>
 	</div>
 </section>
-
-<SettingsDialog bind:this={settings} />
 
 <style lang="scss">
     .profil {

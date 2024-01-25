@@ -170,7 +170,9 @@
     "view": "Ansicht",
     "reset-views": "Ansichten zurücksetzen",
     "reset-text": "Gespeicherter Spalteneinstellungen, Filter und Gruppierung zurücksetzen.",
-    "delete-profile": "Profil löschen (Alle Daten gehen verloren)",
+    "reset-done": "Alle gespeicherten Ansichten wurden zurückgesetzt!",
+    "data-lost": "Alle Daten gehen verloren",
+    "delete-profile": "Profil löschen",
     "delete-advice": "Sie sollten Ihre Daten vor dem Löschen exportieren.",
     "delete-done": "Ihr Konto wurde erfolgreich gelöscht!",
     "profile": "Profil"

@@ -3,6 +3,7 @@
 
     export let href: string;
     export let title = '';
+    export let className = '';
 
     const self = location.href.endsWith(href);
     
@@ -13,7 +14,7 @@
 
 {#if !self}
 <div class="row">
-    <button data-close {title} on:click={clicked}>
+    <button data-close class={className} {title} on:click={clicked}>
         <slot></slot>
     </button>
 </div>
