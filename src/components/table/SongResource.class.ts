@@ -20,14 +20,15 @@ export default class SongResource {
             const song = cell.getData() as UserSong;
             song.fav = !song.fav;
             await this.service.setSong(song);
-            
-            // cell.getTable().redraw(true); // required for update but causes scroll to top!
+
+            cell.getRow().reformat();
         };
 
-        const changeStatusHandler = (cell: CellComponent, status: Status) => {
-            const element = cell.getElement();
-            element.classList.replace(cell.getValue(), status);
-            cell.setValue(status);
+        const changeStatusHandler = async (cell: CellComponent, status: Status) => {
+            const song = cell.getData() as UserSong;
+            song.status = status;
+            await this.service.setSong(song);
+            cell.getRow().reformat();
         };
 
         const promptResource = async (song: UserSong) => {
