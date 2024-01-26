@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "app.web.song_repo.twa",
+      "sha256_cert_fingerprints": [
+        "C0:CF:4B:FF:B8:8B:B9:53:41:BD:DE:6E:04:32:27:C0:71:2D:CA:C4:C8:97:E6:6E:9A:5E:6F:C3:17:F8:8F:F4"
+      ]
+    }
+  }
+]
