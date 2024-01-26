@@ -1,7 +1,7 @@
 import Color from 'color';
 import { marked } from 'marked';
 import { Timestamp } from 'firebase/firestore';
-import type { CellComponent } from 'tabulator-tables';
+import type { CellComponent, GroupComponent } from 'tabulator-tables';
 import type { ColumnDefinition } from '../tabulator/types';
 import './ProgressBar.class';
 import type { UserSong } from '../../../model/song.model';
@@ -121,10 +121,12 @@ export default class Formatter {
             formatter(cell: CellComponent) {
                 const url = cell.getValue();
                 const element = cell.getElement();
-                element.style.backgroundImage = `url(${url ?? './logo-512.png'})`;
-                element.style.backgroundRepeat = 'no-repeat';
-                element.style.backgroundPosition = 'center';
-                element.style.backgroundSize = url ? 'cover' : '80%';
+                element.classList.add('image');
+                if (url) {
+                    element.style.backgroundImage = `url(${url})`;
+                } else {
+                    element.classList.add('default');
+                }
                 return '&nbsp;';
             }
         }; 
@@ -226,7 +228,23 @@ export default class Formatter {
     }
 }
 
-export const groupByFormatter = (value: unknown, count: number, data: UserSong[]) => {
+const formatterFuncs: Partial<Record<keyof UserSong, (value: unknown) => string>> = {
+    fav(value) {
+        return `<span class='fav ${value ? 'active': ''}'></span>`;
+    },
+    status(value) {
+        return `<span class='status ${value}' title='${value}'></span>`;
+    },
+    progressLogs(value) {
+        return (value as Array<unknown>).length + '';
+    },
+    artistImg(value) {
+        return !value ? '<span class=\'image group default\'>&nbsp;</span>'
+            : `<span class='image group' style='background-image: url(${value})'>&nbsp;</span>`;
+    }
+};
+
+export const groupByFormatter = (value: unknown, count: number, data: UserSong[], group: GroupComponent) => {
     const sumUp = (accumulator: number, current: number) => accumulator + current;
     let info = `<span class='label' style='min-width: 2em'>Σ ${count}</span>`;
     if (data.length) {
@@ -238,5 +256,7 @@ export const groupByFormatter = (value: unknown, count: number, data: UserSong[]
         info += `<span class='label m10' style='${style}'>Ø ${avg.toFixed()}%</span>
             ${tags.map((t) => `<span class='label'>${t}</span>`).join('')}`;
     }
-    return `<span class='title'>${value || 'n/a'}</span>${info}`;
+    const field = group.getField();
+    return formatterFuncs[field] ? formatterFuncs[field](value) + info
+        : `<span class='title'>${value || 'n/a'}</span>${info}`;
 };

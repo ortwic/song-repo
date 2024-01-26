@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { TableView } from '../../model/table-view.model';
   import 'tabulator-tables/dist/css/tabulator_bulma.min.css';
   import { 
     type ColumnComponent, 
@@ -33,6 +32,7 @@
   import { t } from 'svelte-i18n';
   import { onMount, createEventDispatcher, onDestroy } from 'svelte';
   import { Observable, fromEvent, map, take } from 'rxjs';
+  import type { TableView } from '../../model/table-view.model';
   import { tableView } from '../../store/app.store';
   import { orientation, type Orientation } from '../../store/media.store';
   import responsiveCollapse from './tabulator/modules/formatters/responsiveCollapse';
@@ -112,7 +112,7 @@
     groupBy,
     groupContextMenu,
     groupHeader,
-    groupStartOpen: [true, (v, n) => (n < 3)] as unknown as boolean, 
+    groupStartOpen: [true, (v, n) => (n < 3)], 
     groupToggleElement: 'header',
     groupUpdateOnCellEdit: true,
     footerElement: '#footer',
@@ -124,9 +124,13 @@
     persistenceID,
     persistenceMode: 'local',
     persistenceWriterFunc(id, type, data) {
-		  localStorage.setItem(id + "-" + type, JSON.stringify(data, (key, value) => {
-        return type === 'group' && key !== 'groupHeader' && typeof value === 'function' ? value.name : value;
-      }));
+      if (type === 'group') {
+        data = { 
+          // Issue #41: workaround for inability to persist custom groupBy functions
+          groupBy: Object.keys(rowGroups) 
+        };
+      } 
+      localStorage.setItem(id + "-" + type, JSON.stringify(data));
     },
   };
 
@@ -192,8 +196,10 @@
   function initGroupBy(table: Tabulator) {
     if (Array.isArray(table.options.groupBy)) {
       table.options.groupBy.forEach(field => {
-        rowGroups[field] = columns.find(c => c.field === field)?.groupByFunc;
-        table.getColumn(field).getElement()?.classList.add('primary');
+        if (field) {
+          rowGroups[field] = columns.find(c => c.field === field)?.groupByFunc;
+          table.getColumn(field)?.getElement()?.classList.add('primary');
+        }
       });
       setGroupBy(table);
     }
@@ -216,7 +222,7 @@
   }
 
   function setGroupBy(table: Tabulator) {
-    const groups: unknown[] = Object.keys(rowGroups).map(k => rowGroups[k] ?? k);
+    const groups = Object.keys(rowGroups).map(k => rowGroups[k] ?? k);
     table.setGroupBy(groups.length ? groups as string[] : undefined);
   }
 

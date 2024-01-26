@@ -183,6 +183,24 @@ div#table.tabulator {
                 border-color: red;
                 background-color: var(--primback);
             }
+
+            .image {
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: cover;
+        
+                &.default {
+                    background-image: url('./logo-512.png');
+                    background-size: 80%;
+                }
+        
+                &.group {
+                    margin-top: 0;
+                    margin-bottom: 0;
+                    width: 2.5em;
+                    height: 2.5em;
+                }
+            }
         }
     
 

@@ -7,7 +7,8 @@ export interface CollapsedCellData {
     index: number;
     field: string;
     title: string; 
-    value: string | HTMLElement;
+    value: string;
+    element?: HTMLElement;
 }
 
 export default class ResponsiveLayout extends Module{
@@ -284,14 +285,15 @@ export default class ResponsiveLayout extends Module{
                         index,
                         field,
                         title,
-                        value: element
+                        value,
+                        element
                     });
                 }else{
                     output.push({
                         index,
                         field,
                         title,
-                        value: value
+                        value
                     });
                 }
             }
@@ -305,7 +307,7 @@ export default class ResponsiveLayout extends Module{
         list.classList.add('flex');
         let lastIndex = -1;
 
-        data.forEach(({ index, title, value }) => {
+        data.forEach(({ index, title, value, element }) => {
             const row = document.createElement('div');
 
             if (title) {
@@ -314,9 +316,9 @@ export default class ResponsiveLayout extends Module{
                 row.appendChild(label);
             }
 
-            if(value instanceof HTMLElement){
-                value.style.height = 'auto';
-                row.appendChild(value);
+            if(element){
+                element.style.height = 'auto';
+                row.appendChild(element);
             }else if(value !== undefined){
                 const p = document.createElement('p');
                 p.innerHTML = value;
