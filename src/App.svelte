@@ -10,6 +10,7 @@
   import Start from "./routes/Start.svelte";
   import Calendar from "./routes/Calendar.svelte";
   import Blog from "./routes/Blog.svelte";
+  import Signup from "./routes/Signup.svelte";
   import Settings from "./routes/Settings.svelte";
   import Feedback from "./routes/Feedback.svelte";
   import NotFound from "./routes/NotFound.svelte";
@@ -28,6 +29,7 @@
     '/events': Calendar,
     '/blog': Blog,
     '/blog/:label': Blog,
+    '/signup': Signup,
     '/settings': Settings,
     '/feedback': Feedback,
     '*': NotFound

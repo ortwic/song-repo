@@ -78,7 +78,7 @@
         </svelte:fragment>
       </Sidebar>
       {:else if $currentMenu == 'signup'}
-      <Sidebar title="{ $t('menu.login.signup-title') }" back="main">
+      <Sidebar title="{ $t('menu.login.signup') }">
         <Signup />
         <svelte:fragment slot="footer">
             {footer}

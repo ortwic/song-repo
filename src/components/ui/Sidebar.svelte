@@ -2,14 +2,12 @@
     import '../../styles/menu.scss';
     import { slide } from 'svelte/transition';
     import Titlebar from './elements/Titlebar.svelte';
-    import type { MenuPages } from '../../model/types';
 
     export let title = '';
-    export let back: MenuPages = 'root';
 </script>
 
 <aside in:slide={{ duration: 200, axis: 'x' }} out:slide={{ duration: 200, axis: 'x' }} >
-    <Titlebar target={back}>
+    <Titlebar target='root'>
         <slot name="title">
             {title}
         </slot>    

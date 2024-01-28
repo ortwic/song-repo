@@ -13,7 +13,6 @@
       "password": "Password",
       "repeat": "Repeat password",
       "signup": "Sign up",
-      "signup-title": "Sign up to store data",
       "with-google": "Login with Google",
       "with-microsoft": "Login with Microsoft",
       "read-privacy-policy": "Read privacy policy",
@@ -35,8 +34,8 @@
     "hello": "Hello musician!",
     "intro": "This app was specifically designed for musicians like you to keep track of your repertoire and your progress. Some features of this app:",
     "features": {
-      "list": "Create own list of songs you've mastered or want to learn (Login to persist data)",
-      "create": "Create list",
+      "signup": "Sign up to store your own song list",
+      "list": "Create own list of songs you've mastered or want to learn",
       "track": "Keep an overview of your progress",
       "share": "Share or export list of your repertoire",
       "search": "Search with autocomplete for genres, artists, and titles",
@@ -45,7 +44,7 @@
       "github": "Planned feature overview and known bugs",
       "feedback": "We hope you find our app useful and look forward to your"
     },
-    "samples": "Load list with sample data"
+    "samples": "Or test list with sample data first"
   },
   "feedback": {
     "submit": "Submit feedback",

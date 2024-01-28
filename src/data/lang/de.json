@@ -12,8 +12,7 @@
       "email": "E-Mail",
       "password": "Kennwort",
       "repeat": "Kennwort wiederholen",
-      "signup": "Sign up",
-      "signup-title": "Login um Daten zu speichern",
+      "signup": "Registrieren",
       "with-google": "Login mit Google",
       "with-microsoft": "Login mit Microsoft",
       "read-privacy-policy": "Datenschutz gelesen",
@@ -35,8 +34,8 @@
     "hello": "Hallo Musiker!",
     "intro": "Diese App wurde speziell für Musiker wie Sie entwickelt, um einen Überblick über Ihr Repertoire und Ihre Fortschritte zu behalten. Einige Funktionen dieser App:",
     "features": {
-      "list": "Eigene Liste mit Musikstücken erstellen, die Sie beherrschen oder noch lernen möchten. (Login um Daten zu speichern)",
-      "create": "Liste erstellen",
+      "signup": "Melden Sie sich an, um Ihre eigene Songliste zu speichern",
+      "list": "Eigene Liste mit Musikstücken erstellen, die Sie beherrschen oder noch lernen möchten",
       "track": "Übersicht über Ihre Fortschritte behalten",
       "share": "Liste des Repertoires öffentlich teilen oder exportieren",
       "search": "Suche mit Vervollständigung der Genres, Künstler und Titel",
@@ -45,7 +44,7 @@
       "github": "Überblick geplanter Features und bekannte Bugs",
       "feedback": "Wir hoffen, dass Sie unsere App nützlich finden."
     },
-    "samples": "Liste mit Beispieldaten laden"
+    "samples": "Oder Liste mit Beispieldaten ansehen"
   },
   "feedback": {
     "submit": "Feedback senden",

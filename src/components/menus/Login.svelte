@@ -1,10 +1,8 @@
 <script lang='ts'>
-    import { createEventDispatcher } from 'svelte';
     import { t } from 'svelte-i18n';
 	import AuthService from '../../service/auth.service';
     import { showError } from '../../store/notification.store';
     
-    const dispatch = createEventDispatcher();
 	const authService = new AuthService();
 	let email = import.meta.env.DEV ? 'john.doe@example.com' : '';
 	let password = import.meta.env.DEV ? 'john.doe@example.com' : '';
@@ -43,11 +41,8 @@
         <br/>
     </div>
     <div class="row">
-        <button data-close class="highlight" title="{ $t('menu.login.login') }" on:click={signIn}>
+        <button data-close title="{ $t('menu.login.login') }" on:click={signIn}>
             <i class='bx bx-log-in-circle'></i> { $t('menu.login.login') }
-        </button>
-        <button data-target='signup' title="{ $t('menu.login.signup') }" on:click={() => dispatch('signup')}>
-            <i class='bx bxs-edit'></i> { $t('menu.login.signup') }
         </button>
     </div>
     <div class="row">
