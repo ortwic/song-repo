@@ -1,7 +1,8 @@
 <script lang='ts'>
     import '../../styles/menu.scss';
     import { t } from 'svelte-i18n';
-    import { derived, writable } from 'svelte/store';
+    import { onMount } from 'svelte';
+    import { derived } from 'svelte/store';
     import { location } from 'svelte-spa-router'
     import NavButton from '../ui/elements/NavButton.svelte';
     import Login from './Login.svelte';
@@ -14,12 +15,14 @@
     import Sidebar from '../ui/Sidebar.svelte'
     import type { MenuPages } from '../../model/types';
     import { currentUser } from '../../service/auth.service';
+    import { currentMenu } from '../../store/app.store';
 
     export let title: string;
     export let footer: string;
     const isTableView = derived(location, (path) => path.startsWith('/songs') || path.startsWith('/samples'));
-    const currentMenu = writable<MenuPages>($isTableView ? 'root' : 'main');
     let counter = 0;
+
+    onMount(() => currentMenu.set($isTableView ? 'root' : 'main'));
 
     function handleMenuNav(ev: SubmitEvent) {
         const target = ev.submitter.getAttribute('data-target') as MenuPages;
@@ -39,7 +42,7 @@
       {#if $currentMenu === 'main'}
       <Sidebar>
         <svelte:fragment slot="title">
-          <a href="#/">{title}</a>
+          <a href="#/" on:click={() => currentMenu.set('root')}>{title}</a>
         </svelte:fragment>
         {#if $currentUser}
         <Profil email={$currentUser.email}
@@ -86,15 +89,15 @@
       </Sidebar>
       {/if}
     </nav>
-  </form>
+</form>
   
 
 <style lang="scss">
     header {
       position: fixed;
-      top: 1rem;
-      right: 1rem;
-      z-index: 10;
+      top: 50%;
+      right: 0;
+      z-index: 200;
       height: 0;
       text-align: right;
     } 

@@ -75,15 +75,19 @@ select {
   cursor: pointer;
   transition: border-color 0.25s;
   text-shadow: 0px 0px 2px rgba(0, 0, 0, 20%);
-}
 
-button:hover, 
-button.default:hover,
-a[role=button]:hover,
-input[type=reset]:hover, 
-input[type=submit]:hover {
-  border-color: gray;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+  &:hover {
+    border-color: gray;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+  }
+
+  &:disabled {
+    cursor: default;
+    color: var(--textghost);
+    border-color: var(--primghost);
+    background-color: var(--primback);
+    text-shadow: unset;
+  }
 }
 
 button:focus,
@@ -93,28 +97,27 @@ button.default:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-button:disabled, 
-button.default:disabled, 
-input[type=reset]:disabled, 
-input[type=submit]:disabled {
-  cursor: default;
-  color: var(--textghost);
-  border-color: var(--primghost);
-  background-color: var(--primback);
-  text-shadow: unset;
-}
-
 button.icon {
-  padding: 2px 0 0 0;
-  width: 3rem;
-  height: 3rem;
-  border-radius: 1.5rem;
-  outline: 0;
+  color: var(--primselect);
+  padding: 0 .5em;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 70%);
+  transition: opacity 0.25s;
   opacity: .7;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  i.bx {
+    font-size: 3em;
+  }
 }
 
-button.icon:hover {
-  opacity: 1;
+button.clear {
+  border: 0;
+  outline: 0;
+  box-shadow: unset;
+  background-color: transparent;
 }
 
 button.primary, 

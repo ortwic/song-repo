@@ -174,7 +174,7 @@
                 <div class="group">
                     <label for="style">{ $t('songs.columns.style') }</label>
                     <Autocomplete inputClassName="lg" placeholder="style" hideArrow={true}
-                        minCharactersToSearch={0} searchFunction="{() => styles(newSong.genre[0])}" showClear={true}>
+                        minCharactersToSearch={0} searchFunction="{() => styles(newSong.genre && newSong.genre[0])}" showClear={true}>
                         <svelte:fragment slot="item" let:item let:label>
                             <span class="option">{@html label}</span>
                         </svelte:fragment>

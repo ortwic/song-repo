@@ -1,52 +1,48 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
+    import { derived } from "svelte/store";
     import type { MenuPages } from "../../../model/types";
+    import { currentMenu } from "../../../store/app.store";
 
     const dispatch = createEventDispatcher();
+    const opened = derived(currentMenu, (p) => p !== 'root');
 
     export let target: MenuPages;
+
+    function open() {
+        if ($currentMenu === 'root') {
+            currentMenu.set(target);
+            dispatch('opened');
+        } else {
+            currentMenu.set('root');
+            dispatch('closed');
+        }
+    }
 </script>
 
-<button data-target={target} class="icon" on:click={() => dispatch('click')}>
-    <svg width=32 height=24>
-        <line id="top" x1=0 y1=2 x2=32 y2=2/>
-        <line id="middle" x1=0 y1=12 x2=32 y2=12/>
-        <line id="bottom" x1=0 y1=22 x2=32 y2=22/>
-    </svg>
+<button class="clear icon {$opened ? 'opened' : ''}" on:click={open}>
+    <i class="bx bxs-chevrons-left"></i>    
 </button>
 
 <style lang="scss">
-svg {
-    transform: scale(0.7);
-    min-height: 24px;
-    transition: transform 0.3s ease-in-out;
-}
+@use "../../../styles/vars.scss";
 
-svg line {
-    /* `currentColor` means inherit color from the text color */
-    stroke: currentColor;
-    stroke-width: 3;
-    transition: transform 0.3s ease-in-out;
-}
-
-/* adjust the Z-index, so that the icon is on top of the sidebar */
 button {
-    z-index: 20;
+    transform: scale(.4, 1);
+    transition: margin-right 0.2s;
+
+    &.opened {
+        margin-right: vars.$sidebar-width;
+
+        i {
+            transform: rotate(180deg);
+            text-shadow: -1px -1px 2px rgba(0, 0, 0, 70%);
+        }
+    }
+
+    i {
+        transition: all 0.2s;
+    }
 }
-
-// /* rotate the top line */
-// .open #top {
-//     transform: translate(6px, 0px) rotate(45deg)
-// }
-
-// /* hide the middle */
-// .open #middle {
-//     opacity: 0;
-// }
-
-// /* rotate the bottom line */
-// .open #bottom {
-//     transform: translate(-12px, 9px) rotate(-45deg)
-// }
 
 </style>

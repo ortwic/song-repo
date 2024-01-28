@@ -132,7 +132,6 @@
   footer {
     position: sticky;
     bottom: calc(48px + 1rem);
-    margin-left: 1rem;
     z-index: 20;
     height: 0;
     text-align: left;

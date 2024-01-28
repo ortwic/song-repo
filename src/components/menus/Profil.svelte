@@ -1,8 +1,7 @@
 <script lang='ts'>
     import { t } from 'svelte-i18n';
-    import PopupMenu from '../ui/PopupMenu.svelte';
-    import NavButton from '../ui/elements/NavButton.svelte';
-    import AuthService, { currentUser } from "../../service/auth.service";
+    import { push } from 'svelte-spa-router';
+    import { currentUser } from "../../service/auth.service";
     import { showError, showInfo } from "../../store/notification.store";
     import { getCssVariable } from "../../styles/style.helper";
 
@@ -10,15 +9,8 @@
     export let photoURL: string;
     export let email: string;
 	export let color = getCssVariable('--primary');
-	let profileMenu: PopupMenu;
 
     const emailParts = email.split('@');
-	const authService = new AuthService();
-
-	async function signOut(): Promise<void> {
-		await authService.signOut();
-    	history.pushState(null, '', location.origin);
-	}
 
 	async function copyLink(): Promise<void> {
 		try {
@@ -33,7 +25,7 @@
 
 <section class="menu">
 	<div class="row">
-		<button class="profil" on:click={(event) => profileMenu.showPopupMenu(event)}>
+		<button class="profil" data-close title="{ $t('settings.title') }" on:click={() => push('/settings')}>
 			{#if photoURL}
 			<img src={photoURL} width="50" alt={email} title={email}>	
 			{:else}
@@ -54,18 +46,7 @@
 			{:else}
 			<span class="name smaller">{emailParts[0]}<br/>@{emailParts[1]}</span>
 			{/if}
-		</button> 
-
-		<PopupMenu bind:this={profileMenu} width="200px">
-			<div class="row">
-				<button class="left" data-close title="{ $t('profile.sign-out') } '{email}'" on:click={signOut}>
-					<span><i class='bx bx-log-out-circle'></i> { $t('profile.sign-out') }</span>
-				</button>
-			</div>
-			<NavButton className="left" href="/settings" title="{ $t('settings.title') } '{email}'">
-				<span><i class='bx bx-cog'></i> { $t('settings.title') }</span>
-			</NavButton>
-		</PopupMenu>
+		</button>
 	</div>
 	<div class="row">
 		<button title="{ $t('profile.share-link') }" on:click={copyLink}>

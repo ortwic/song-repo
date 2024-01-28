@@ -1,14 +1,21 @@
 
 <script lang='ts'>
     import { t } from 'svelte-i18n';
+    import { push } from 'svelte-spa-router';
     import { slideFade } from '../components/ui/transition.helper';
     import AuthService from '../service/auth.service';
     import { viewStoreId } from '../service/song.service';
-    import { tableView } from "../store/app.store";
+    import { currentMenu, tableView } from "../store/app.store";
     import { showError, showInfo } from '../store/notification.store';
 
 	const authService = new AuthService();
     let confirmDelete = false;
+    
+    async function signOut(): Promise<void> {
+		await authService.signOut();
+        currentMenu.set('main');
+        push('/');
+	}
     
     function resetViews() {
         Object.keys($tableView.table?.options.persistence).forEach((key) => {
@@ -29,6 +36,12 @@
 </script>
 
 <section>
+    <div>
+        <button class="primary" title="{ $t('profile.sign-out') }" on:click={signOut}>
+            <i class='bx bx-log-out-circle'></i>
+            { $t('profile.sign-out') }
+        </button>
+    </div>
     <fieldset>
         <legend>{ $t('settings.view') }</legend>
         <p>
@@ -61,7 +74,7 @@
 	section {
 		padding: 0 .4em;
         
-        fieldset {
+        fieldset, div {
 		    margin: 1rem;
             text-align: left;
             border-color: var(--primghost);
