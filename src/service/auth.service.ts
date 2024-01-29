@@ -57,8 +57,8 @@ export default class AuthService {
         await signOut(auth);
     }
 
-    async sendPasswordResetEmail(): Promise<void> {
-        await sendPasswordResetEmail(auth, auth.currentUser.email);
+    async sendPasswordResetEmail(email: string): Promise<void> {
+        await sendPasswordResetEmail(auth, email);
     }
 
     async updatePassword(newPassword: string): Promise<void> {

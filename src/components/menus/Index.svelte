@@ -70,7 +70,7 @@
                 <span><i class='bx bx-bulb'></i> { $t('menu.howto') }</span>
             </NavButton>
             <div class="row">
-                <a class="coffee" role="button" target="_blank" href="https://liberapay.com/OCSoft42/donate">
+                <a class="warn" role="button" target="_blank" href="https://liberapay.com/OCSoft42/donate">
                     <span><i class='bx bxs-coffee'></i> { $t('menu.donate') }</span>
                 </a>
             </div>
@@ -105,10 +105,6 @@
     nav {
         div.row > a.coffee {
             background-color: var(--secondary);
-
-            &:hover {
-                background-color: white;
-            }
 
             & > span {
                 color: black;

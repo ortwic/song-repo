@@ -56,6 +56,19 @@
                 border: 1px dashed var(--primary);
                 background-color: var(--primghost);
             }
+    
+            &.warn {
+                color: black;
+                background-color: var(--secondary);
+
+                &:hover {
+                    background-color: white;
+                }
+
+                span {
+                    color: inherit;
+                }
+            }
         }
 
         a[role="button"] {
