@@ -15,9 +15,13 @@
       "signup": "Registrieren",
       "with-google": "Login mit Google",
       "with-microsoft": "Login mit Microsoft",
+      "privacy-policy": "Datenschutz",
+      "terms-of-use": "Nutzungsbedingungen",
       "read-privacy-policy": "Datenschutz gelesen",
       "read-terms-of-use": "Nutzungsbedingungen",
-      "read-carefully": "Bitte lesen Sie das Dokument sorgfältig durch"
+      "read-carefully": "Bitte lesen Sie das Dokument sorgfältig durch",
+      "wrong-password": "Falsches Passwort. Haben Sie Ihr Passwort vergessen?",
+      "reset-password": "Reset-Code senden"
     },
     "or": "oder",
     "table": {

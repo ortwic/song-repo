@@ -15,9 +15,13 @@
       "signup": "Sign up",
       "with-google": "Login with Google",
       "with-microsoft": "Login with Microsoft",
+      "privacy-policy": "Privacy policy",
+      "terms-of-use": "Terms of use",
       "read-privacy-policy": "Read privacy policy",
       "read-terms-of-use": "Read terms of use",
-      "read-carefully": "Please read the document carefully"
+      "read-carefully": "Please read the document carefully",
+      "wrong-password": "Wrong password. Did you forgot your password?",
+      "reset-password": "Send reset code"
     },
     "or": "or",
     "table": {

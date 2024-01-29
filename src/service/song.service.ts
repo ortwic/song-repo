@@ -4,12 +4,13 @@ import FirestoreService, { uniqueKey } from './firestore.service';
 import type { UserSong } from '../model/song.model';
 import { Timestamp, orderBy, where } from 'firebase/firestore';
 
+export const viewStoreId = 'songs.v1';
+export const createUserStore = () => new FirestoreService('user');
+
+const store = createUserStore();
 const sampleId = '3qAbhlbXxNaLY7CMiz6uOMJlBbb2';
 const localStore = {};
 const localSubject = new BehaviorSubject<UserSong[]>([]);
-const store = new FirestoreService('user');
-
-export const viewStoreId = 'songs.v1';
 
 export default class SongService {
     private uid = '';
