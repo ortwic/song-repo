@@ -54,7 +54,7 @@
                 <span>
                     { $t('settings.reset-text') }
                 </span>
-                <button class="default" on:click={resetViews}>{ $t('settings.reset-views') }</button>
+                <button class="default" on:click={resetViews}>{ $t('settings.reset-cookies') }</button>
             </div>
         </fieldset>
         {#if $currentUser}
