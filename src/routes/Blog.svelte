@@ -2,7 +2,6 @@
     import { t } from "svelte-i18n";
     import { derived, type Readable } from "svelte/store";
     import type { blogger_v3 as B } from '@googleapis/blogger';
-    import Titlebar from "../components/ui/elements/Titlebar.svelte";
     import Image from "../components/ui/elements/Image.svelte";
     import PostDetails from "../components/ui/PostDetails.svelte";
     import BlogService, { createBlogService } from "../service/blog.service";
@@ -37,7 +36,9 @@
 </svelte:head>
 
 <main on:scroll={scrollHandler} class="content">
-    <Titlebar closable={false}><i class="bx bx-bulb"></i>&nbsp; { $t('blog.title') }</Titlebar>
+    <div class="titlebar">
+        <i class="bx bx-bulb"></i>&nbsp; { $t('blog.title') }
+    </div>
     {#await loadBlogPosts()}
         <div class="post">
             <p>{ $t('start.loading') }</p>

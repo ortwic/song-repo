@@ -5,25 +5,21 @@
     const dispatch = createEventDispatcher();
 
     export let target: MenuPages = 'root';
-    export let closable = true;
 </script>
 
-<div>
-    <span><slot></slot></span>
-    {#if closable}
+<div class="titlebar">
+    <span>
+        <slot></slot>
+    </span>
     <button data-target={target} class="close" on:click={() => dispatch('close')}>✕</button>
-    {/if}
 </div>
 
 <style lang="scss">
-    div {
+    div.titlebar {
         display: flex;
         justify-content: space-between;
-        color: var(--primback);
-        background: linear-gradient(to right, var(--primdark) 20%, var(--primary));
-        white-space: nowrap;
-        font-weight: 500;
         max-height: 2.2em;
+        padding: 0;
 
         span {
             display: inline-block;
@@ -31,7 +27,7 @@
             font-style: italic;
             padding: .4em .8em;
         }
-    
+
         button.close {
             color: inherit;
             background-color: transparent;

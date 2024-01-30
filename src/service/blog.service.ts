@@ -16,12 +16,12 @@ interface BlogSettings {
 }
 
 export const getBloggerSettings = async () => {
-    const [ blogId, apiKey ] = localStorage.getItem(cmsKey)?.split('/') ?? [];    
+    const [ blogId, apiKey ] = sessionStorage.getItem(cmsKey)?.split('/') ?? [];    
     if (!apiKey) {
         const result = await store.getDocument<BlogSettings>('blog');
         if (result) {
             const value = [result.blogId, result.apiKey].join('/');
-            localStorage.setItem(cmsKey, value);
+            sessionStorage.setItem(cmsKey, value);
             return result;
         }
     }

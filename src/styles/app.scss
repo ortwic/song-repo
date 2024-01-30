@@ -208,6 +208,17 @@ input.lg {
   text-align: right !important;
 }
 
+div.titlebar {
+  color: var(--primback);
+  background: linear-gradient(to right, var(--primdark) 20%, var(--primary));
+  white-space: nowrap;
+  font-weight: 500;
+  font-style: italic;
+  width: 100%;
+  max-height: 2.2em;
+  padding: .35em .8em;
+}
+
 a.label,
 span.label {
   border: 1px solid silver;

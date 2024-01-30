@@ -15,8 +15,6 @@
       "signup": "Sign up",
       "with-google": "Login with Google",
       "with-microsoft": "Login with Microsoft",
-      "privacy-policy": "Privacy policy",
-      "terms-of-use": "Terms of use",
       "read-privacy-policy": "Read privacy policy",
       "read-terms-of-use": "Read terms of use",
       "read-carefully": "Please read the document carefully",
@@ -48,6 +46,9 @@
       "github": "Planned feature overview and known bugs",
       "feedback": "We hope you find our app useful and look forward to your"
     },
+    "imprint": "Imprint",
+    "privacypolicy": "Privacy policy",
+    "termsofuse": "Terms of use",
     "samples": "Or test list with sample data first"
   },
   "feedback": {
@@ -177,6 +178,7 @@
     "reset-views": "Reset views",
     "reset-text": "Reset stored column settings, filters and grouping.",
     "reset-done": "All saved view reseted!",
+    "reset-cookies": "Reset cookies",
     "data-lost": "All data will be lost",
     "delete-profile": "Delete profile",
     "delete-advice": "You should export your data before deletion.",

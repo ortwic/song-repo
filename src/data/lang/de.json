@@ -15,8 +15,6 @@
       "signup": "Registrieren",
       "with-google": "Login mit Google",
       "with-microsoft": "Login mit Microsoft",
-      "privacy-policy": "Datenschutz",
-      "terms-of-use": "Nutzungsbedingungen",
       "read-privacy-policy": "Datenschutz gelesen",
       "read-terms-of-use": "Nutzungsbedingungen",
       "read-carefully": "Bitte lesen Sie das Dokument sorgfältig durch",
@@ -48,6 +46,9 @@
       "github": "Überblick geplanter Features und bekannte Bugs",
       "feedback": "Wir hoffen, dass Sie unsere App nützlich finden."
     },
+    "imprint": "Impressum",
+    "privacypolicy": "Datenschutz",
+    "termsofuse": "Nutzungsbedingungen",
     "samples": "Oder Liste mit Beispieldaten ansehen"
   },
   "feedback": {
@@ -174,6 +175,7 @@
     "reset-views": "Ansichten zurücksetzen",
     "reset-text": "Gespeicherter Spalteneinstellungen, Filter und Gruppierung zurücksetzen.",
     "reset-done": "Alle gespeicherten Ansichten wurden zurückgesetzt!",
+    "reset-cookies": "Cookies zurücksetzen",
     "data-lost": "Alle Daten gehen verloren",
     "delete-profile": "Profil löschen",
     "delete-advice": "Sie sollten Ihre Daten vor dem Löschen exportieren.",

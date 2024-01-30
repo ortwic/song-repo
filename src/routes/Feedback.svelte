@@ -1,7 +1,6 @@
 <script lang='ts'>
     import { t } from 'svelte-i18n';
     import { format } from 'fecha';
-    import Titlebar from "../components/ui/elements/Titlebar.svelte";
     import FirestoreService from "../service/firestore.service";
     import { showError } from '../store/notification.store';
 
@@ -59,7 +58,9 @@
 </style>
 
 <main class="content dialog">
-    <Titlebar closable={false}><i class="bx bx-mail-send"></i>&nbsp; { $t('feedback.submit')}</Titlebar>
+    <div class="titlebar">
+        <i class="bx bx-mail-send"></i>&nbsp; { $t('feedback.submit')}
+    </div>
     <form on:submit|preventDefault={handleForm}>
         <div class="section">
             {#if !sent}

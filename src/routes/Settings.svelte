@@ -2,7 +2,6 @@
 <script lang='ts'>
     import { t } from 'svelte-i18n';
     import { push } from 'svelte-spa-router';
-    import Titlebar from '../components/ui/elements/Titlebar.svelte';
     import { slideFade } from '../components/ui/transition.helper';
     import AuthService, { currentUser } from '../service/auth.service';
     import { createUserStore, viewStoreId } from '../service/song.service';
@@ -19,10 +18,7 @@
 	}
     
     function resetViews() {
-        Object.keys($tableView.table?.options.persistence).forEach((key) => {
-            localStorage.removeItem(`tabulator-${viewStoreId}-${key}`);
-        });
-
+        localStorage.clear();
         showInfo($t('settings.reset-done'));
     }
 
@@ -40,46 +36,53 @@
 </script>
 
 <main class="content">
-    <Titlebar closable={false}>
+    <div class="titlebar">
         <i class="bx bx-cog"></i>&nbsp; { $t('settings.title')}
-    </Titlebar>
-    <div>
+    </div>
+    <section>
         <div>
+            {#if $currentUser}
             <button class="primary" title="{ $t('profile.sign-out') }" on:click={signOut}>
                 <i class='bx bx-log-out-circle'></i>
                 { $t('profile.sign-out') }
             </button>
+            {/if}
         </div>
         <fieldset>
             <legend>{ $t('settings.view') }</legend>
-            <p>
-                { $t('settings.reset-text') }
-            </p>
-            <div class="right">
+            <div>
+                <span>
+                    { $t('settings.reset-text') }
+                </span>
                 <button class="default" on:click={resetViews}>{ $t('settings.reset-views') }</button>
             </div>
         </fieldset>
-        <fieldset>
+        {#if $currentUser}
+        <fieldset class="danger">
             <legend>{ $t('settings.profile') }</legend>
-            <input id="delete" type="checkbox" bind:checked={confirmDelete} /> 
-            <label class="danger" for="delete">{ $t('settings.delete-profile') }</label> ({ $t('settings.data-lost') })
-            <div class="right">
+            <div>
+                <span>
+                    <input id="delete" type="checkbox" bind:checked={confirmDelete} /> 
+                    <label for="delete">{ $t('settings.delete-profile') }</label> ({ $t('settings.data-lost') })
+                </span>
                 <button class="primary" disabled={!confirmDelete} on:click={deleteProfile}>
                     { $t('settings.delete-profile') }
                 </button>
             </div>
             {#if confirmDelete}
-            <br>
-            <div class="warn" in:slideFade={{ duration: 200 }} out:slideFade={{ duration: 200 }}>
-                { $t('settings.delete-advice') }
-            </div>
+            <span>
+                <div class="warn" in:slideFade={{ duration: 200 }} out:slideFade={{ duration: 200 }}>
+                    { $t('settings.delete-advice') }
+                </div>
+            </span>
             {/if}
         </fieldset>
-    </div>
+        {/if}
+    </section>
 </main>
 
 <style lang="scss">
-	main > div {
+	main > section {
         padding: 1em 5%;
         max-width: 40em;
         
@@ -95,12 +98,16 @@
             label {
                 display: inline;
             }
+
+            & > div {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
         }
 
         .danger {
-            color: red;
-            font-weight: 500;
-            text-shadow: 1px 1px 1px gray;
+            border-color: red;
         }
 
         .warn {
