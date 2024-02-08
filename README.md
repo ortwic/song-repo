@@ -28,6 +28,18 @@ Then this app is right for you to keep an overview.
 * [![Typescript][Typescript.dev]][Typescript-url]
 * [![Tabulator][Tabulator.dev]][Tabulator-url]
 
+### Hosting
+[Firebase: deploy to another site](https://stackoverflow.com/questions/65461482/firebase-deploy-to-another-site)
+```
+firebase init
+
+firebase target:apply hosting beta song-repo-beta
+firebase target:apply hosting prod song-repo
+
+firebase deploy --only hosting:beta
+firebase deploy --only hosting:prod
+```
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Getting Started

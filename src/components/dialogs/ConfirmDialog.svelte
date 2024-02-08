@@ -2,8 +2,8 @@
     import { createEventDispatcher } from "svelte";
     import { fade } from "svelte/transition";
     import { cubicOut } from 'svelte/easing';
-    import Titlebar from "./elements/Titlebar.svelte";
-    import { t } from "../../service/i18n";
+    import { t } from "svelte-i18n";
+    import Titlebar from "../ui/elements/Titlebar.svelte";
     import type { MenuPages } from "../../model/types";
     
     const dispatch = createEventDispatcher();
@@ -50,6 +50,7 @@
 }
 
 div.dialog {
+    min-width: 22.5em;
     max-width: 100vw;
     max-height: 100vh;
 }

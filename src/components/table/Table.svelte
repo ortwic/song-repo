@@ -1,6 +1,11 @@
 <script lang="ts">
   import 'tabulator-tables/dist/css/tabulator_bulma.min.css';
   import { 
+    type ColumnComponent, 
+    type Filter, 
+    type GroupArg,
+    type GroupComponent, 
+    type Options, 
     Tabulator, 
     ClipboardModule,
     DownloadModule,
@@ -22,15 +27,18 @@
     SortModule, 
     ValidateModule
   } from 'tabulator-tables';
+  import * as luxon from 'luxon';
+  import type { ColumnDefinition } from './tabulator/types';
   import { default as ResponsiveLayoutModule, type CollapsedCellData } from './tabulator/modules/ResponsiveLayout';
-  import type { ColumnDefinition, GroupComponent, ColumnComponent, Options, RowComponent, FilterType } from 'tabulator-tables';
+  import { t } from 'svelte-i18n';
   import { onMount, createEventDispatcher, onDestroy } from 'svelte';
   import { Observable, fromEvent, map, take } from 'rxjs';
-  import { toggleVisibilityItem } from './templates/menu.helper';
-  import { downloadQueue, type DowloadItem } from '../../store/download.store';
+  import type { TableView } from '../../model/table-view.model';
+  import { tableView } from '../../store/app.store';
   import { orientation, type Orientation } from '../../store/media.store';
-  import { showError } from '../../store/notification.store';
   import responsiveCollapse from './tabulator/modules/formatters/responsiveCollapse';
+
+  window['luxon'] = luxon;
 
   Tabulator.registerModule([
     ClipboardModule,
@@ -62,14 +70,13 @@
   type T = $$Generic;
   type GroupFormatter = (value: unknown, count: number, data: T[], group?: GroupComponent) => string;
 
-  const rowGroups = {};
+  const rowGroups: Record<string, GroupArg> = {};
   export let idField: keyof T;
   export let columns: ColumnDefinition[] = undefined;
   export let data: Observable<T[]>;
   export let groupBy: string[] = undefined;
   export let placeholder = '';
   export let placeholderSearch = '';
-  export let exportTitle = 'export';
   export let groupHeader: GroupFormatter = undefined;
   export let detailFormatter: (data: CollapsedCellData[]) => HTMLElement = undefined;
   export const isGroupedBy = (field: string) => field in rowGroups;
@@ -79,14 +86,16 @@
   let table: Observable<Tabulator>;
   let tableContainer: HTMLElement;
   let endOrientation = () => {};
-  let endDownloadQueue = () => {};
 
   const dispatch = createEventDispatcher();
   const groupContextMenu = [
     {
       label: 'Open all', // TODO not working
       action() {
-        $table.getGroups().forEach(g => g.show());
+        $table.getGroups().forEach(g => {
+          console.log(g.getKey(), g.getField())
+          g.show()
+        });
       }
     },
     {
@@ -100,27 +109,32 @@
   const usePersistance = !!persistenceID;
   const options: Options = {
     columns,
-    layout: 'fitData',
     placeholder,
     clipboard: true,
     movableColumns: true,
     groupBy,
+    groupContextMenu,
     groupHeader,
+    groupStartOpen: [true, (v, n) => (n < 3)], 
     groupToggleElement: 'header',
     groupUpdateOnCellEdit: true,
     footerElement: '#footer',
     history: true,
+    reactiveData: true,
     responsiveLayoutCollapseStartOpen: false,
     responsiveLayoutCollapseFormatter: detailFormatter,
     pagination: false,
     persistenceID,
     persistenceMode: 'local',
-    persistence: {
-      sort: usePersistance,
-      filter: usePersistance,
-      columns: usePersistance,
-      group: usePersistance
-    }
+    persistenceWriterFunc(id, type, data) {
+      if (type === 'group') {
+        data = { 
+          // Issue #41: workaround for inability to persist custom groupBy functions
+          groupBy: Object.keys(rowGroups) 
+        };
+      } 
+      localStorage.setItem(id + "-" + type, JSON.stringify(data));
+    },
   };
 
   onMount(() => endOrientation = orientation.subscribe(createTable));
@@ -133,46 +147,51 @@
     $table?.destroy();
 
     useResponsiveLayout = orientation === 'portrait';
+    const persistence = {
+        columns: usePersistance && !useResponsiveLayout ? [ 'width', 'visible' ] : false,
+        sort: usePersistance,
+        headerFilter: usePersistance && !useResponsiveLayout,
+        filter: usePersistance && useResponsiveLayout,
+        group: usePersistance
+    };
+
     const tableInstance = new Tabulator(tableContainer, {
       ...options,
+      layout: useResponsiveLayout ? 'fitDataStretch' : 'fitData',
       headerVisible: !useResponsiveLayout,
-      responsiveLayout: useResponsiveLayout ? 'collapse' : undefined
+      responsiveLayout: useResponsiveLayout ? 'collapse' : undefined,
+      persistence
     });
-    tableInstance.on('tableDestroyed', () => endDownloadQueue());
-    table = fromEvent(tableInstance, 'tableBuilt').pipe(take(1), map(() => handleTableBuilt(tableInstance)));
+    table = fromEvent(tableInstance, 'tableBuilt').pipe(take(1), map(() => handleTableBuilt(tableInstance, useResponsiveLayout)));
   }
 
-  function isRequired(def: ColumnDefinition): boolean {
-    if (Array.isArray(def.validator)) {
-      return 'required' in def.validator;
-    }
-    return def.validator === 'required';
-  }
 
-  function handleTableBuilt(table: Tabulator) {
+  function handleTableBuilt(table: Tabulator, useResponsiveLayout: boolean) {
     initHeaderMenu(table);
     initGroupBy(table);
+    if (useResponsiveLayout) {
+      initSearch(table);
+    }
 
-    endDownloadQueue = downloadQueue.subscribe((items) => download(table, items));
-    dispatch('init', table);
+    const view: TableView = { 
+      table,
+      useResponsiveLayout,
+      groups: Object.keys(rowGroups),
+      toggleGroup
+    };
+    tableView.set(view);
+    dispatch('init', view);
     return table;
   }
 
   function initHeaderMenu(table: Tabulator) {
-    const columnSelectors = table.getColumns()
-      .filter(c => !isRequired(c.getDefinition()))
-      .map(column => toggleVisibilityItem(column));
-
     columns?.filter(c => c.headerMenu).forEach(c => {
       if (c.headerMenu.length) {
         c.headerMenu.length = 0;
       }
       c.headerMenu.push({
-        label: `Group by ${c.title.toLowerCase()}`,
+        label: `${$t('menu.table.group-by')} ${c.title}`,
         action: (ev: Event, column: ColumnComponent) => toggleGroup(c.field, column.getElement())
-      }, { separator: true }, {
-        label: 'Choose columns',
-        menu: [ ...columnSelectors ]
       });
     });
   }
@@ -180,44 +199,47 @@
   function initGroupBy(table: Tabulator) {
     if (Array.isArray(table.options.groupBy)) {
       table.options.groupBy.forEach(field => {
-        rowGroups[field] = true;
-        table.getColumn(field).getElement()?.classList.add('primary');
+        if (field) {
+          rowGroups[field] = columns.find(c => c.field === field)?.groupByFunc;
+          table.getColumn(field)?.getElement()?.classList.add('primary');
+        }
       });
+      setGroupBy(table);
     }
+  }
+
+  function initSearch(table: Tabulator) {
+    const array = table.getFilters(false)[0] as unknown as Filter[];
+    searchTerm = array?.filter(f => f.value)[0]?.value;
   }
 
   function toggleGroup(field: string, element?: HTMLElement) {
     if (!isGroupedBy(field)) {
-      rowGroups[field] = true;
+      rowGroups[field] = columns.find(c => c.field === field)?.groupByFunc;
       element?.classList.add('primary');
     } else {
       delete rowGroups[field];
       element?.classList.remove('primary');
     }
-    const groups = Object.keys(rowGroups);
-    $table.setGroupBy(groups.length ? groups : undefined);
+    setGroupBy($table);
   }
 
-  function download(table: Tabulator, items: DowloadItem[]): void {
-    if (items?.length) {
-      try {
-        const { type, params } = items.pop();
-        table.download(type, `${exportTitle}.${type}`, params);
-      } catch (error) {
-        showError(error.message);
-      }
-    }
+  function setGroupBy(table: Tabulator) {
+    const groups = Object.keys(rowGroups).map(k => rowGroups[k] ?? k);
+    table.setGroupBy(groups.length ? groups as string[] : undefined);
   }
 
   function search() {
     if (searchTerm) {
+      $table.clearHeaderFilter();
+
       // 2nd level array enforces OR comparison
       $table.setFilter([columns
         .filter(c => c.sorter === 'string')
         .map(c => ({ field: c.field, type: 'like', value: searchTerm }))
       ]);
     } else {
-      $table.clearFilter(true);
+      $table.clearFilter(false);
     }
   }
 

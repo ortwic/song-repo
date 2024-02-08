@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import Router, { push } from "svelte-spa-router";
+  import { t } from "svelte-i18n";
+  import Router, { location, push } from "svelte-spa-router";
   import { map } from 'rxjs';
   import type { User } from 'firebase/auth';
   import Menu from './components/menus/Index.svelte';
@@ -9,12 +10,16 @@
   import Start from "./routes/Start.svelte";
   import Calendar from "./routes/Calendar.svelte";
   import Blog from "./routes/Blog.svelte";
+  import Signup from "./routes/Signup.svelte";
+  import Settings from "./routes/Settings.svelte";
+  import Document from "./routes/Document.svelte";
   import Feedback from "./routes/Feedback.svelte";
   import NotFound from "./routes/NotFound.svelte";
   import { currentUser } from './service/auth.service';
+  import { setupI18n } from "./service/i18n";
     
   const title = `${import.meta.env.DEV ? 'DEV' : 'Start'}`;
-  const usertitle = currentUser.pipe(map(setPageInfo));
+  const usertitle = currentUser.pipe(map(redirectToSongs));
   const version = import.meta.env.PACKAGE_VERSION;
   
   const routes = {
@@ -25,6 +30,9 @@
     '/events': Calendar,
     '/blog': Blog,
     '/blog/:label': Blog,
+    '/docs/:name': Document,
+    '/signup': Signup,
+    '/settings': Settings,
     '/feedback': Feedback,
     '*': NotFound
   };
@@ -38,8 +46,8 @@
     }
   });
 
-  function setPageInfo(user: User): string {
-    if (user) {
+  function redirectToSongs(user: User): string {
+    if (user && $location === '/') {
       push(`/songs`);
       const name = user.displayName || user.email.split('@')[0]?.replace('.', ' ');
       return `${name}'s known songs`;
@@ -54,8 +62,17 @@
   <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
 </svelte:head>
 
-<Menu {title} footer="Version {version}" />
+{#await setupI18n()}
+  { $t('start.loading') }
+{:then} 
+  <Menu {title} footer="Version {version}" />
 
-<Router {routes}/>
+  <Router {routes}/>
 
-<Snackbar />
+  <Snackbar />
+{:catch error}
+  <p>
+    Error while loading translations: <br />
+    { error }
+  </p>
+{/await}

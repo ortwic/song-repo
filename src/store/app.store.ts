@@ -1,12 +1,6 @@
 import { writable } from 'svelte/store';
+import type { TableView } from '../model/table-view.model';
 import type { MenuPages } from '../model/types';
 
-export const currentMenu = writable<MenuPages>('login');
-
-window.addEventListener('DOMContentLoaded', setMenuVisibility);
-window.addEventListener('popstate', setMenuVisibility);
-    
-function setMenuVisibility(): void {
-    const tableview = location.href.endsWith('samples') || /[#@]/.test(location.href);
-    currentMenu.set(tableview ? 'root' : 'login');
-}
+export const tableView = writable<TableView>();
+export const currentMenu = writable<MenuPages>('root');

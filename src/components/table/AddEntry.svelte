@@ -1,14 +1,14 @@
 <script lang="ts">
     import { onMount } from "svelte";
+    import { t } from 'svelte-i18n';
     import Autocomplete from 'simple-svelte-autocomplete/src/SimpleAutocomplete.svelte';
     import AddButton from "../ui/AddButton.svelte";
-    import ConfirmDialog from "../ui/ConfirmDialog.svelte";
+    import ConfirmDialog from "../dialogs/ConfirmDialog.svelte";
     import Image from "../ui/elements/Image.svelte";
     import SelectKey from '../ui/SelectKey.svelte';
     import LoadingBar from '../ui/elements/LoadingBar.svelte';
     import SongService from "../../service/song.service";
     import SearchService, { create } from "../../service/search.service";
-    import { t } from '../../service/i18n';
     import type { UserSong } from "../../model/song.model";
     import type { ArtistResult, SongResult } from "../../model/songbpm.model";
     import genres from '../../data/genres.json';
@@ -96,7 +96,7 @@
 
 {#if visible}
 <form bind:this={form} on:submit|preventDefault>
-    <ConfirmDialog size='auto' on:closed={done}>
+    <ConfirmDialog size='full' on:closed={done}>
         <div class="title" slot="title">
             <i class="bx bx-search-alt-2"></i>&nbsp; { $t('songs.addTitle') } <a href="https://getsongbpm.com/api" target="_blank">GetSongbpm</a>
         </div>
@@ -112,8 +112,8 @@
                         <div class="card" slot="item" let:item>
                             <Image src={item.img} />
                             <div class="col">
-                                <a title="Artist" href={item.uri} target="_blank">{item.name}</a>
-                                <span title="Country">{item.from ?? ''}</span>
+                                <a title="{ $t('songs.columns.artist') }" href={item.uri} target="_blank">{item.name}</a>
+                                <span title="{ $t('songs.columns.country') }">{item.from ?? ''}</span>
                                 <p>
                                     {#each item.genres ?? [] as genre}
                                     <span class='label'>{genre}</span>
@@ -138,17 +138,17 @@
                                 <Image src={item.album?.img ?? item.artist?.img} />
                             </a>
                             <div class="col">
-                                <a title="Title" href={item.uri} target="_blank">{item.title}</a>
+                                <a title="{ $t('songs.columns.title') }" href={item.uri} target="_blank">{item.title}</a>
                                 {#if newSong.artist}
-                                <span title="Year">({item.album?.year})</span>
+                                <span title="{ $t('songs.columns.year') }">({item.album?.year})</span>
                                 <p>
-                                    <span title="Tempo" class='label'>{item.tempo}</span>
-                                    <span title="Time" class='label'>{item.time_sig}</span>
-                                    <span title="Key" class='label'>{item.key_of}</span>
+                                    <span title="{ $t('songs.columns.bpm') }" class='label'>{item.tempo}</span>
+                                    <span title="{ $t('songs.columns.time') }" class='label'>{item.time_sig}</span>
+                                    <span title="{ $t('songs.columns.key') }" class='label'>{item.key_of}</span>
                                 </p>
                                 {:else}
                                 <br>
-                                <a title="Artist" href={item.artist?.uri} target="_blank">{item.artist?.name}</a>
+                                <a title="{ $t('songs.columns.artist') }" href={item.artist?.uri} target="_blank">{item.artist?.name}</a>
                                 <p>
                                     {#each item.artist?.genres ?? [] as genre}
                                     <span class='label'>{genre}</span>
@@ -174,18 +174,18 @@
                 <div class="group">
                     <label for="style">{ $t('songs.columns.style') }</label>
                     <Autocomplete inputClassName="lg" placeholder="style" hideArrow={true}
-                        minCharactersToSearch={0} searchFunction="{() => styles(newSong.genre[0])}" showClear={true}>
+                        minCharactersToSearch={0} searchFunction="{() => styles(newSong.genre && newSong.genre[0])}" showClear={true}>
                         <svelte:fragment slot="item" let:item let:label>
                             <span class="option">{@html label}</span>
                         </svelte:fragment>
                     </Autocomplete>
                 </div>
                 <div class="group">
-                    <label for="source" title="markdown supported e.g. [link](http://example.com)">{ $t('songs.columns.source') } <i class='bx bx-help-circle'></i></label>
+                    <label for="source" title="{ $t('songs.hint-markdown') } [link](http://example.com)">{ $t('songs.columns.source') } <i class='bx bx-help-circle'></i></label>
                     <input id="source" class="lg" type="text" bind:value={newSong.source}>
                 </div>
                 <div class="group">
-                    <label for="tags" title="comma separated e.g. Foo, Bar">{ $t('songs.columns.tags') } <i class='bx bx-help-circle'></i></label>
+                    <label for="tags" title="{ $t('songs.hint-label') }">{ $t('songs.columns.tags') } <i class='bx bx-help-circle'></i></label>
                     <input id="tags" class="lg" type="text" bind:value={label} on:keydown={addLabel}>
                     <div class="flex labels">
                         {#each newSong.tags as tag}
@@ -227,6 +227,19 @@ form {
         }
     }
 
+    div.card {
+        display: flex;
+        padding: 4px;
+
+        a, span {
+            white-space: nowrap;
+        }
+
+        div.col {
+            padding: 0 1em;
+        }
+    }
+
     div.square {
         display: inline-block;
         width: 1.2em;
@@ -240,6 +253,7 @@ form {
     section {
         margin: 1em;
         min-width: 80vw;
+        height: 100%;
 
         // not working as autocomplete-list not overlapping anymore
         overflow-y: auto; 
@@ -268,7 +282,7 @@ form {
     .warn {
         padding: .4em 1em;
         border: 1px solid gray;
-        background-color: goldenrod;
+        background-color: var(--secondary);
         text-align: center;
         white-space: nowrap;
 

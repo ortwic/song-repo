@@ -56,6 +56,19 @@
                 border: 1px dashed var(--primary);
                 background-color: var(--primghost);
             }
+    
+            &.warn {
+                color: black;
+                background-color: var(--secondary);
+
+                &:hover {
+                    background-color: white;
+                }
+
+                span {
+                    color: inherit;
+                }
+            }
         }
 
         a[role="button"] {
@@ -106,10 +119,40 @@
                 outline: 1px solid var(--primary);
             }
         }
-    }    
+    }
+    
+    button.sm {
+        padding: .2rem;
+        outline: 0;
+        border: 1px solid silver;
+        border-radius: 1em;
+        text-shadow: unset;
+        font-size: small;
+        width: 2em;
+        height: 2em;
+        transition: all .2s ease-in-out;
+
+        color: var(--primary);
+        background-color: white;
+
+        &.selected {
+            border-color: var(--primary);            
+        }
+
+        &.disabled {
+            color: var(--primselect);
+            border-color: var(--primselect);
+            background-color: transparent;
+        }
+
+        &:hover {
+            color: var(--text);
+            background-color: white;
+        }
+    }
 
     .success-text {
-        color: DodgerBlue;
+        color: Green;
     }
 
     .danger-text {

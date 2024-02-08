@@ -1,7 +1,8 @@
 <script lang="ts">
-    import ConfirmDialog from '../ui/ConfirmDialog.svelte';
-    import { t } from '../../service/i18n';
+    import { t } from 'svelte-i18n';
+    import ConfirmDialog from '../dialogs/ConfirmDialog.svelte';
 	import AuthService from '../../service/auth.service';
+    import { lang } from '../../service/i18n';
     import { logPageView, showError } from '../../store/notification.store';
 	
 	interface RequiredPageChecks {
@@ -13,9 +14,9 @@
 	const uncheckedIcon = 'bx bx-circle bx-sm';
 	const authService = new AuthService();
 
-	let email = import.meta.env.DEV ? 'john.dev@example.com' : '';
-	let password1 = import.meta.env.DEV ? 'john.dev@example.com' : '';
-	let password2 = import.meta.env.DEV ? 'john.dev@example.com' : '';
+	let email = import.meta.env.DEV ? 'john.doe@example.com' : '';
+	let password1 = import.meta.env.DEV ? 'john.doe@example.com' : '';
+	let password2 = import.meta.env.DEV ? 'john.doe@example.com' : '';
 	let page: keyof RequiredPageChecks;
 
 	const checks: RequiredPageChecks = {
@@ -88,7 +89,7 @@
 
 		{#if page}
 		<ConfirmDialog title='{ $t('menu.login.read-carefully') }' target='signup' size='full' on:closed={confirm}>
-			<object title="Embedded page '{page}'" data="/docs/{page}.html#{navigator.language}">
+			<object title="Embedded page '{page}'" data="/docs/{page}{lang.startsWith('de') ? '_de' : ''}.html">
 			</object>
 		</ConfirmDialog>
 		{/if}

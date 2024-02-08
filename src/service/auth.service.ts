@@ -4,6 +4,8 @@ import {
     OAuthProvider,
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
+    sendPasswordResetEmail,
+    updatePassword,
     onAuthStateChanged,
     signOut,
     deleteUser,
@@ -53,6 +55,14 @@ export default class AuthService {
 
     async signOut(): Promise<void> {
         await signOut(auth);
+    }
+
+    async sendPasswordResetEmail(email: string): Promise<void> {
+        await sendPasswordResetEmail(auth, email);
+    }
+
+    async updatePassword(newPassword: string): Promise<void> {
+        await updatePassword(auth.currentUser, newPassword);
     }
 
     async deleteUser(): Promise<void> {

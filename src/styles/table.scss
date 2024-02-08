@@ -81,8 +81,11 @@ div#table.tabulator {
                 }
 
                 &.responsive {
+                    text-overflow: clip;
+
                     span {
                         display: inline-block;
+                        text-overflow: ellipsis;
     
                         &.status {
                             min-width: 1.2em;
@@ -92,14 +95,22 @@ div#table.tabulator {
                             min-width: 2em;
                         }
     
+                        &.artist::before {
+                            padding-right: .2rem;
+                        }
+    
                         &.title {
+                            overflow: visible;
                             &::before {
-                                padding-right: .2rem;
+                                content: '-';
+                                padding-left: .2rem;
                             }
-                            &.active {
-                                font-weight: 500;
-                                background: linear-gradient(0deg, wheat, transparent 50%);
-                            }
+                        }
+
+                        &.artist.active,
+                        &.title.active {
+                            font-weight: 500;
+                            background: linear-gradient(0deg, wheat, transparent 50%);
                         }
                     }
                     i {
@@ -140,6 +151,11 @@ div#table.tabulator {
                     align-content: center;
                     flex-wrap: wrap;
 
+                    div.break {
+                        flex-basis: 100%;
+                        height: 0;
+                    }
+
                     label {
                         display: inline-block;
                         padding: .2rem .4rem;
@@ -147,8 +163,8 @@ div#table.tabulator {
                         font-weight: 500;
                     }
                     
-                    div {
-                        padding: .2em 1em;
+                    div.tabulator-cell {
+                        padding: .3em 1em;
                     }
                 }
             }
@@ -166,6 +182,24 @@ div#table.tabulator {
                 outline: 1px solid red;
                 border-color: red;
                 background-color: var(--primback);
+            }
+
+            .image {
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: cover;
+        
+                &.default {
+                    background-image: url('./logo-512.png');
+                    background-size: 80%;
+                }
+        
+                &.group {
+                    margin-top: 0;
+                    margin-bottom: 0;
+                    width: 2.5em;
+                    height: 2.5em;
+                }
             }
         }
     

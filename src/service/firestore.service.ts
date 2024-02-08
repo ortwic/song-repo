@@ -75,6 +75,11 @@ export default class FirestoreService {
         await updateDoc(docRef, data);
     }
 
+    public async setDeletedFlag(id: string): Promise<void> {
+        const docRef = doc(this.db, this.path, id);
+        await setDoc(docRef, { deleted: new Date() });
+    }
+
     public async removeDocument(id: string): Promise<void> {
         const docRef = doc(this.db, this.path, id);
         await deleteDoc(docRef);

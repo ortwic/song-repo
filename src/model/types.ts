@@ -7,6 +7,16 @@ export enum Complete {
     Finishing = 0b0000000000000000000000000100000,
 }
 
-export type Status = 'unknown' | 'todo' | 'wip' | 'done' | 'repeat' | 'archived';
+export const status = {
+    todo: 'todo',
+    wip: 'wip',
+    done: 'done',
+    repeat: 'repeat',
+    archived: 'archived'
+} as const;
 
-export type MenuPages = 'self' | 'root' | 'login' | 'signup';
+type ObjectValues<T> = T[keyof T];
+
+export type Status = ObjectValues<typeof status>;
+
+export type MenuPages = 'root' | 'main' | 'signup';

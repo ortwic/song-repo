@@ -5,8 +5,8 @@ const minMaxFilterFunction = rangeFilter().headerFilterFunc as (headerValue, row
 
 describe('test minMaxFilterFunction', () => {
 
-    it('should filter min number values', () => {
-        const headerValue = { start: 50, end: null };
+    it('should filter min number only', () => {
+        const headerValue = '50-';
         expect(minMaxFilterFunction(headerValue, 0)).toBe(false);
         expect(minMaxFilterFunction(headerValue, 50)).toBe(true);
         expect(minMaxFilterFunction(headerValue, '50')).toBe(true);
@@ -14,8 +14,8 @@ describe('test minMaxFilterFunction', () => {
         expect(minMaxFilterFunction(headerValue, '100')).toBe(true);
     });
 
-    it('should filter min number strings', () => {
-        const headerValue = { start: '50', end: '' };
+    it('should filter min numbers', () => {
+        const headerValue = '50-100';
         expect(minMaxFilterFunction(headerValue, 0)).toBe(false);
         expect(minMaxFilterFunction(headerValue, 50)).toBe(true);
         expect(minMaxFilterFunction(headerValue, '50')).toBe(true);
@@ -23,8 +23,8 @@ describe('test minMaxFilterFunction', () => {
         expect(minMaxFilterFunction(headerValue, '100')).toBe(true);
     });
 
-    it('should filter max number values', () => {
-        const headerValue = { end: 50 };
+    it('should filter max number only', () => {
+        const headerValue = '-50';
         expect(minMaxFilterFunction(headerValue, 0)).toBe(true);
         expect(minMaxFilterFunction(headerValue, 50)).toBe(true);
         expect(minMaxFilterFunction(headerValue, '50')).toBe(true);
@@ -32,8 +32,8 @@ describe('test minMaxFilterFunction', () => {
         expect(minMaxFilterFunction(headerValue, '100')).toBe(false);
     });
 
-    it('should filter max number strings', () => {
-        const headerValue = { end: '50' };
+    it('should filter max numbers', () => {
+        const headerValue = '0-50';
         expect(minMaxFilterFunction(headerValue, 0)).toBe(true);
         expect(minMaxFilterFunction(headerValue, 50)).toBe(true);
         expect(minMaxFilterFunction(headerValue, '50')).toBe(true);
@@ -41,23 +41,8 @@ describe('test minMaxFilterFunction', () => {
         expect(minMaxFilterFunction(headerValue, '100')).toBe(false);
     });
 
-    it('should filter min max number values', () => {
-        const headerValue = {
-            start: 50,
-            end: 100
-        };
-        expect(minMaxFilterFunction(headerValue, 0)).toBe(false);
-        expect(minMaxFilterFunction(headerValue, 50)).toBe(true);
-        expect(minMaxFilterFunction(headerValue, '50')).toBe(true);
-        expect(minMaxFilterFunction(headerValue, 100)).toBe(true);
-        expect(minMaxFilterFunction(headerValue, '100')).toBe(true);
-    });
-
-    it('should filter min max number strings', () => {
-        const headerValue = {
-            start: '50',
-            end: '100'
-        };
+    it('should filter min max numbers', () => {
+        const headerValue = '50-100';
         expect(minMaxFilterFunction(headerValue, 0)).toBe(false);
         expect(minMaxFilterFunction(headerValue, 50)).toBe(true);
         expect(minMaxFilterFunction(headerValue, '50')).toBe(true);

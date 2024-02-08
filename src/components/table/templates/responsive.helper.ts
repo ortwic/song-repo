@@ -1,8 +1,17 @@
 import type { ColumnDefinition } from 'tabulator-tables';
-import type { CollapsedCellData } from '../tabulator/modules/ResponsiveLayout';
 import { genreColor, redToGreenRange } from '../../../styles/style.helper';
 
-export const summaryFormatter: Partial<ColumnDefinition> = {
+function formatProgress(progress: number) {
+    const pgColor = redToGreenRange(progress);
+    const pgStyle = `background-color:${pgColor.hex()};color:${pgColor.isDark() ? 'white' : 'black'}`;
+    return `<span class='label' style='${pgStyle}'>${progress}%</span>`;
+}
+
+function formatStatus<T>(status: T) {
+    return `<span class='status ${status}'></span>`;
+}
+
+export const summaryFormatter = (readonly = false): Partial<ColumnDefinition> => ({
     formatter(cell) {
         const element = cell.getElement();
         element.classList.add('responsive');
@@ -15,44 +24,15 @@ export const summaryFormatter: Partial<ColumnDefinition> = {
             // + `, right / auto 100% no-repeat url("${data['artistImg']}")`;
         }
         
-        const status = data['status'];
-        const progress = data['progress'];
         const resource = data['uri'] ? 'link-external' : 'unlink';
         const favActive = data['fav'] ? 'active' : '';
-        const pgColor = redToGreenRange(progress);
-        const pgStyle = `background-color:${pgColor.hex()};color:${pgColor.isDark() ? 'white' : 'black'}`;
         return `
-            <span class='label' style='${pgStyle}'>${progress}%</span>
-            <span class='status ${status}'></span>
-            <span class='title fav ${favActive}'>${data['artist']} - ${data['title']}</span>
+            ${readonly ? '' : formatProgress(data['progress'])}
+            ${readonly ? '' : formatStatus(data['status'])}
+            <span class='artist fav ${favActive}'>
+                ${data['artist']}</span><span class='title ${favActive}'>
+                ${data['title']}
+            </span>
             <sup><i class="bx bx-${resource}"></i></sup>`;
     }
-};
-
-export const detailLayoutFormatter = (data: CollapsedCellData[]) => {
-    const list = document.createElement('div');
-    list.classList.add('flex');
-    
-    const createCell = ({ title, value }) => {
-        const div = document.createElement('div');
-        if (title) {
-            const label = document.createElement('label');
-            label.innerHTML = title;
-            div.appendChild(label);
-        }
-
-        if(value instanceof Node){
-            div.appendChild(value);
-        }else if(value !== undefined){
-            const p = document.createElement('p');
-            p.innerHTML = value;
-            div.appendChild(p);
-        }
-
-        list.appendChild(div);
-    };
-        
-    data.forEach(createCell);
-
-    return Object.keys(data).length ? list : undefined;
-};
+});

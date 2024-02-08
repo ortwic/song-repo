@@ -16,12 +16,12 @@ interface BlogSettings {
 }
 
 export const getBloggerSettings = async () => {
-    const [ blogId, apiKey ] = localStorage.getItem(cmsKey)?.split('/') ?? [];    
+    const [ blogId, apiKey ] = sessionStorage.getItem(cmsKey)?.split('/') ?? [];    
     if (!apiKey) {
         const result = await store.getDocument<BlogSettings>('blog');
         if (result) {
             const value = [result.blogId, result.apiKey].join('/');
-            localStorage.setItem(cmsKey, value);
+            sessionStorage.setItem(cmsKey, value);
             return result;
         }
     }
@@ -72,8 +72,12 @@ export default class BlogService {
 
             try {
                 const data = await fetchFromBlogger<B.Schema$PostList>(this.settings, path);
-                this.posts.update(posts => [...posts, ...data.items]);
-                this.nextPageToken = data.nextPageToken;
+                if (data.items) {
+                    this.posts.update(posts => [...posts, ...data.items]);
+                    this.nextPageToken = data.nextPageToken;
+                } else if (data['error']) {
+                    throw data['error'];
+                }
                 this.loadingComplete = !data.nextPageToken;
             } finally {
                 this.loading = false;

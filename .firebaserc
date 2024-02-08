@@ -1,5 +1,18 @@
 {
   "projects": {
     "default": "song-repo"
-  }
+  },
+  "targets": {
+    "song-repo": {
+      "hosting": {
+        "beta": [
+          "song-repo-beta"
+        ],
+        "prod": [
+          "song-repo"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }

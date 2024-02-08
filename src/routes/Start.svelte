@@ -1,71 +1,109 @@
 <script>
-    import Titlebar from '../components/ui/elements/Titlebar.svelte';
-    import { t } from '../service/i18n';
+    import { t } from 'svelte-i18n';
+    import { link } from 'svelte-spa-router';
+    import { currentUser } from '../service/auth.service';
     
     const options = { mangle: false, headerIds: false };
 </script>
 
 <main class="content">
-    <Titlebar closable={false}>
+    <div class="titlebar">
         <i class="bx bx-world"></i>&nbsp; { $t('start.hello')}
-    </Titlebar>
-    <div>
+    </div>
+    <section>
         { $t('start.intro') }
         <ul class="bx-ul">
-            <li class="bx-test-tube">
-                <span>{ $t('start.samples') }</span>
-                <span>
-                    <a role="button" href="#/samples">Demo</a>
-                </span>
+            {#if !$currentUser}
+            <li class="bxs-user-plus">
+                <div>{ $t('start.features.signup') }</div>
+                <div>
+                    <a role="button" class="primary" href="#/signup">
+                        <i class="bx bxs-edit"></i>
+                        { $t('menu.login.signup') }
+                    </a>
+                </div>
             </li>
+            {/if}
             <li class="bxs-playlist">
-                <span>{ $t('start.features.list') }</span>
-                <span>
-                    <a role="button" class="primary" href="#/songs">{ $t('start.features.create') }</a>
-                </span>
+                <div>{ $t('start.features.list') }</div>
+                <div>
+                    <a role="button" class={$currentUser ? 'primary' : ''} href="#/songs">
+                        <i class="bx bxs-playlist"></i>
+                        { $t('menu.songs') }
+                    </a>
+                </div>
+            </li>
+            <li class="bx-test-tube">
+                <div>{ $t('start.samples') }</div>
+                <div>
+                    <a role="button" href="#/samples">
+                        <i class="bx bx-test-tube"></i>
+                        Demo
+                    </a>
+                </div>
             </li>
             <li class="bx-bar-chart">{ $t('start.features.track') }</li>
             <li class="bx-share-alt">
                 { $t('start.features.share') } 
-                <span class="smaller">
+                <div class="smaller">
                     Link, CSV, JSON, XLSX, PDF
-                </span>
+                </div>
             </li>
             <li class="bx-search-alt-2">
-                <span>
+                <div>
                     { $t('start.features.search') } 
-                </span>
-                <a target="_blank" href="https://getsongbpm.com">getsongbpm.com</a>
+                </div>
+                <div>
+                    <a target="_blank" href="https://getsongbpm.com">getsongbpm.com</a>
+                </div>
             </li>
             <li class="bx-calendar">
-                <span>
+                <div>
                     { $t('start.features.events') } 
                     <a target="_blank" href="https://openpianoforrefugees.com/standorte/#termine">Open Piano</a>, 
                     <a target="_blank" href="http://www.streetpianos.com/">Play Me I'm Yours</a>
-                </span>
-                <a role="button" href="#/events">Events</a>
+                </div>
+                <div>
+                    <a role="button" href="#/events">
+                        <i class="bx bx-calendar"></i>
+                        { $t('menu.events') }
+                    </a>
+                </div>
             </li>
             <li class="bx-bulb">
-                <span>{ $t('start.features.blog') }</span>
-                <a role="button" href="#/blog">Blog</a>
+                <div>{ $t('start.features.blog') }</div>
+                <div>
+                    <a role="button" href="#/blog">
+                        <i class="bx bx-bulb"></i>
+                        { $t('menu.howto') }
+                    </a>
+                </div>
             </li>
             <li class="bxl-github">
-                <span>{ $t('start.features.github') }</span>
-                <a role="button" target="_blank" href="https://github.com/users/ortwic/projects/2/views/1">Roadmap</a>
+                <div>{ $t('start.features.github') }</div>
+                <div>
+                    <a role="button" target="_blank" href="https://github.com/users/ortwic/projects/2/views/1">Roadmap</a>
+                </div>
             </li>
-            <li class="bx-mail-send">
-                <span>{ $t('start.features.feedback') }</span>
-                <span>
+            <!-- <li class="bx-mail-send">
+                <div>{ $t('start.features.feedback') }</div>
+                <div>
                     <a role="button" class="primary" href="#/feedback">Feedback</a>
-                </span>
-            </li>
+                </div>
+            </li> -->
         </ul>
-    </div>
+    </section>
+    <footer>
+        <a use:link href="/docs/imprint">{ $t('start.imprint') }</a> |
+        <a use:link href="/docs/privacypolicy">{ $t('start.privacypolicy') }</a> |
+        <a use:link href="/docs/termsofuse">{ $t('start.termsofuse') }</a> |
+        <a use:link href="/settings">{ $t('settings.title') }</a>
+    </footer>
 </main>
 
 <style lang="scss">
 main {
-    & > div {
+    & > section {
         padding: 1em 5%;
         max-width: 40em;
 
@@ -78,9 +116,16 @@ main {
                 position: relative;
                 padding-left: 2em;
                 margin-bottom: 1.6em;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
+
+                @media screen and (orientation: landscape) {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+
+                &::marker {
+                    content: '';
+                }
                 
                 &:before {
                     position: absolute;
@@ -95,6 +140,17 @@ main {
                 i.bx {
                     position: inherit;
                 }
+
+                @media screen and (orientation: portrait) {
+                    & > div {
+                        width: 100%;
+
+                        &:last-child {
+                            padding-top: 1em;
+                            text-align: right;
+                        }
+                    }
+                }
             }
         }
 
@@ -106,6 +162,10 @@ main {
         .smaller {
             font-size: smaller;
         }
+    }
+
+    footer {
+        text-align: center;
     }
 }
 </style>

@@ -4,7 +4,7 @@
     import FileDrop from './FileDrop.svelte';
     import Table from './Table.svelte';
     import { autoColumns } from './templates/column.helper';
-    import ConfirmDialog from '../ui/ConfirmDialog.svelte';
+    import ConfirmDialog from '../dialogs/ConfirmDialog.svelte';
     import TabbedTitle from '../ui/TabbedTitle.svelte';
     import stores, { type WithId } from '../../service/master-data.service';
     import { uniqueKey } from '../../service/firestore.service';
@@ -62,7 +62,7 @@
 </div>
 
 {#if active}
-<ConfirmDialog target='login' size='max' on:closed={done}>
+<ConfirmDialog target='main' size='max' on:closed={done}>
     <span slot="title">
         <TabbedTitle tabs={Object.keys(stores)} {active} on:tabChange={({ detail }) => changePage(detail)} />
     </span>

@@ -3,15 +3,18 @@
     import { getCssVariable } from "../../styles/style.helper";
 
     export let title = '';
-    export let color = getCssVariable('--primback');
-    export let width = '32px';
-    export let height = '32px';
+    export let highlight = getCssVariable('--primary');
+    export let color = getCssVariable('--primghost');
+    const width = '48px';
+    const height = '48px';
 
     const dispatch = createEventDispatcher();
 </script>
 
-<button class="primary icon" {title} on:click={() => dispatch('click')}>
+<button class="clear icon" {title} on:click={() => dispatch('click')}>
+    <!-- <i class="bx bx-plus-circle"></i> -->
     <svg {width} {height} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path fill-rule="evenodd" clip-rule="evenodd" d="M12 4C12.5523 4 13 4.44772 13 5V11H19C19.5523 11 20 11.4477 20 12C20 12.5523 19.5523 13 19 13H13V19C13 19.5523 12.5523 20 12 20C11.4477 20 11 19.5523 11 19V13H5C4.44772 13 4 12.5523 4 12C4 11.4477 4.44772 11 5 11H11V5C11 4.44772 11.4477 4 12 4Z" fill={color}/>
+        <path fill={highlight} d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4z"></path>
+        <path fill={color} d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"></path>
     </svg>
 </button>

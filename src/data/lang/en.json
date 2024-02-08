@@ -13,21 +13,31 @@
       "password": "Password",
       "repeat": "Repeat password",
       "signup": "Sign up",
-      "signup-title": "Sign up to store data",
       "with-google": "Login with Google",
       "with-microsoft": "Login with Microsoft",
       "read-privacy-policy": "Read privacy policy",
       "read-terms-of-use": "Read terms of use",
-      "read-carefully": "Please read the document carefully"
+      "read-carefully": "Please read the document carefully",
+      "wrong-password": "Wrong password. Did you forgot your password?",
+      "reset-password": "Send reset code"
     },
-    "or": "or"
+    "or": "or",
+    "table": {
+      "exportTitle": "My Song List",
+      "set-view": "Edit column view",
+      "show-hide": "Show/Hide",
+      "group-by": "Group by",
+      "sort-by": "Sort by",
+      "filter-by": "Filter by"
+    }
   },
   "start": {
+    "loading": "Loading...",
     "hello": "Hello musician!",
     "intro": "This app was specifically designed for musicians like you to keep track of your repertoire and your progress. Some features of this app:",
     "features": {
-      "list": "Create own list of songs you've mastered or want to learn (Login to persist data)",
-      "create": "Create list",
+      "signup": "Sign up to store your own song list",
+      "list": "Create own list of songs you've mastered or want to learn",
       "track": "Keep an overview of your progress",
       "share": "Share or export list of your repertoire",
       "search": "Search with autocomplete for genres, artists, and titles",
@@ -36,7 +46,10 @@
       "github": "Planned feature overview and known bugs",
       "feedback": "We hope you find our app useful and look forward to your"
     },
-    "samples": "Load list with sample data"
+    "imprint": "Imprint",
+    "privacypolicy": "Privacy policy",
+    "termsofuse": "Terms of use",
+    "samples": "Or test list with sample data first"
   },
   "feedback": {
     "submit": "Submit feedback",
@@ -66,12 +79,13 @@
       "progressLogs": "Count",
       "progress": "Progress",
       "status": "Status",
-      "artistImg": "▩",
+      "artistImg": "Image",
       "artist": "Artist",
       "title": "Title",
       "genre": "Genre",
       "style": "Style",
       "source": "Source",
+      "uri": "Resource-Pfad",
       "key": "Key",
       "time": "Time",
       "bpm": "BPM",
@@ -79,11 +93,28 @@
       "features": "Features",
       "tags": "Labels",
       "learnedOn": "Learned",
-      "changedAt": "Changed"
+      "changedAt": "Last changed",
+      "country": "Country",
+      "year": "Year"
+    },
+    "menu": {
+      "open": "Open resource",
+      "search": "Search for resources",
+      "search-sheet-music": "Search sheet music",
+      "search-tutorial": "Search tutorial",
+      "search-lyrics": "Search lyrics",
+      "search-midi-file": "Search midi file",
+      "change-resource": "Change resource",
+      "toggle-favorite": "Toggle favorite",
+      "change-status": "Change status",
+      "delete": "Delete?",
+      "yes": "Yes",
+      "no": "No"
     },
     "resource": {
       "title": "Enter resource path",
       "caption": "Enter a uri path to any resource:",
+      "invalid-uri": "Not a valid URI:",
       "info": "Use a cloud storage like google drive to upload your files. Then copy the url here."
     },
     "nosongs": "No songs added.",
@@ -91,15 +122,28 @@
     "import": "Start importing...",
     "importDone": "Found {found} songs. Total songs: {total}",
     "addTitle": "Search - powered by",
-    "noPersist": "You are not signed in, so data won't be persisted after leaving the app!"
+    "noPersist": "You are not signed in, so data won't be persisted after leaving the app!",
+    "hint-markdown": "markdown supported e.g.",
+    "hint-label": "comma separated e.g. Foo, Bar",
+    "status": {
+      "todo": "Todo",
+      "wip": "Wip",
+      "done": "Done",
+      "repeat": "Repeat",
+      "archived": "Archived"
+    }
   },
   "table": {
-    "selectColumns": "Choose columns",
     "groupBy": "Group by {title}",
-    "search": "Search for anything..."
+    "search": "Search for anything e. g. genre, artist, todo",
+    "filter": {
+      "empty": "all"
+    }
   },
   "blog": {
-    "title": "Everthing about making music"
+    "title": "Everthing about making music",
+    "more": "more...",
+    "less": "...lesser"
   },
   "notfound": {
     "title": "Not found",
@@ -122,5 +166,23 @@
   },
   "calendar": {
     "title": "Event calendar"
+  },
+  "profile": {
+    "sign-out": "Sign out",
+    "share-link": "Copy link to share",
+    "share-link-copied": "Copied link for sharing into clipboard."
+  },
+  "settings": {
+    "title": "Settings",
+    "view": "View",
+    "reset-views": "Reset views",
+    "reset-text": "Reset stored column settings, filters and grouping.",
+    "reset-done": "All saved view reseted!",
+    "reset-cookies": "Reset cookies",
+    "data-lost": "All data will be lost",
+    "delete-profile": "Delete profile",
+    "delete-advice": "You should export your data before deletion.",
+    "delete-done": "Your account was deleted successfully!",
+    "profile": "Profile"
   }
 }
