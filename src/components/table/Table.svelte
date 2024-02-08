@@ -27,6 +27,7 @@
     SortModule, 
     ValidateModule
   } from 'tabulator-tables';
+  import * as luxon from 'luxon';
   import type { ColumnDefinition } from './tabulator/types';
   import { default as ResponsiveLayoutModule, type CollapsedCellData } from './tabulator/modules/ResponsiveLayout';
   import { t } from 'svelte-i18n';
@@ -36,6 +37,8 @@
   import { tableView } from '../../store/app.store';
   import { orientation, type Orientation } from '../../store/media.store';
   import responsiveCollapse from './tabulator/modules/formatters/responsiveCollapse';
+
+  window['luxon'] = luxon;
 
   Tabulator.registerModule([
     ClipboardModule,

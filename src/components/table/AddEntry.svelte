@@ -96,7 +96,7 @@
 
 {#if visible}
 <form bind:this={form} on:submit|preventDefault>
-    <ConfirmDialog size='auto' on:closed={done}>
+    <ConfirmDialog size='full' on:closed={done}>
         <div class="title" slot="title">
             <i class="bx bx-search-alt-2"></i>&nbsp; { $t('songs.addTitle') } <a href="https://getsongbpm.com/api" target="_blank">GetSongbpm</a>
         </div>
@@ -253,6 +253,7 @@ form {
     section {
         margin: 1em;
         min-width: 80vw;
+        height: 100%;
 
         // not working as autocomplete-list not overlapping anymore
         overflow-y: auto; 
