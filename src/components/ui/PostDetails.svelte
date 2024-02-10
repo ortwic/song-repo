@@ -2,11 +2,16 @@
     import { t } from 'svelte-i18n';
     import { slide } from 'svelte/transition';
     import { logPageView } from '../../store/notification.store';
+    import type { PostContent } from '../../model/post.model';
+    import { marked } from 'marked';
     
     export let title: string;
-    export let html: string;
+    export let excerpt: string;
+    export let content: PostContent[] = [];
     export let collapsed = true;
     export let showMore = true;
+
+    const options = { mangle: false, headerIds: false };
 
     function toggle() {
         collapsed = !collapsed;
@@ -14,57 +19,22 @@
             logPageView({ page: 'blog', title });
         }
     }
-
-    function generateSnippet(html: string, minWords = 3, maxWords = 12): string {
-        const getWords = (s) => s.split(/[\s\n]/).filter(v => v);
-
-        const text = html.replace(/<[^>]+>/g, ' ');
-        if (text) {
-            const sentences = text.match(/(.+[\.\?\!\n])\s/g)
-                ?.filter(s => s)
-                ?.map(s => `${s?.trim()}`)
-            if (sentences?.length) {
-                // console.log(sentences)
-                const words = getWords(sentences[0]);
-                if (words.length < minWords) {
-                    words.push(...getWords(sentences[1]));
-                }
-
-                if (words.length > maxWords) {
-                    return words.splice(0, maxWords).join(' ') + '...';
-                }
-
-                return words.join(' ') + '...';
-            }
-        }
-        return '';
-    }
-
-    function parseHtml(html: string) {
-        const doc = new DOMParser().parseFromString(html, 'text/html');
-        const content = [];
-        for(const element of doc.querySelectorAll('*')) {
-            const text = (element as HTMLElement).innerText;
-            if (text) {
-                content.push(text);
-            }
-        }
-        return content.filter(v => v);
-    }
 </script>
 
 <h2>{title}</h2>
 
 {#if collapsed}
 <summary in:slide={{ duration: 200 }} out:slide={{ duration: 200 }}>
-    <span class="content">{@html generateSnippet(html)}</span>
+    <span class="content">{excerpt}</span>
     {#if showMore}
         <button class="more" on:click|preventDefault={toggle}>{ $t('blog.more') }</button>
     {/if}
 </summary>
 {:else}
 <div in:slide={{ duration: 200 }} out:slide={{ duration: 200 }} >
-    <span class="content">{@html html}</span>
+    {#each content as entry}
+        <span class="content">{@html marked(entry.value, options)}</span>
+    {/each}
     <div>
         <button class="more" on:click|preventDefault={toggle}>{ $t('blog.less') }</button>
     </div> 
