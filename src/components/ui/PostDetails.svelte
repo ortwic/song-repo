@@ -1,80 +1,86 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
-    import { slide } from 'svelte/transition';
+    import ConfirmDialog from '../dialogs/ConfirmDialog.svelte';
     import { logPageView } from '../../store/notification.store';
+    import type { Content } from '../../model/post.model';
+    import { marked } from 'marked';
     
     export let title: string;
-    export let html: string;
-    export let collapsed = true;
+    export let excerpt: string;
+    export let content: Content[] = [];
+    export let visible = false;
     export let showMore = true;
 
-    function toggle() {
-        collapsed = !collapsed;
-        if (!collapsed) {            
-            logPageView({ page: 'blog', title });
-        }
+    const options = { mangle: false, headerIds: false };
+
+    function show() {
+        visible = true;
+        logPageView({ page: 'blog', title });
     }
 
-    function generateSnippet(html: string, minWords = 3, maxWords = 12): string {
-        const getWords = (s) => s.split(/[\s\n]/).filter(v => v);
-
-        const text = html.replace(/<[^>]+>/g, ' ');
-        if (text) {
-            const sentences = text.match(/(.+[\.\?\!\n])\s/g)
-                ?.filter(s => s)
-                ?.map(s => `${s?.trim()}`)
-            if (sentences?.length) {
-                // console.log(sentences)
-                const words = getWords(sentences[0]);
-                if (words.length < minWords) {
-                    words.push(...getWords(sentences[1]));
-                }
-
-                if (words.length > maxWords) {
-                    return words.splice(0, maxWords).join(' ') + '...';
-                }
-
-                return words.join(' ') + '...';
-            }
-        }
-        return '';
-    }
-
-    function parseHtml(html: string) {
-        const doc = new DOMParser().parseFromString(html, 'text/html');
-        const content = [];
-        for(const element of doc.querySelectorAll('*')) {
-            const text = (element as HTMLElement).innerText;
-            if (text) {
-                content.push(text);
-            }
-        }
-        return content.filter(v => v);
+    function hide() {
+        visible = false;
     }
 </script>
 
 <h2>{title}</h2>
 
-{#if collapsed}
-<summary in:slide={{ duration: 200 }} out:slide={{ duration: 200 }}>
-    <span class="content">{@html generateSnippet(html)}</span>
+<summary>
+    <span class="content">{excerpt}</span>
     {#if showMore}
-        <button class="more" on:click|preventDefault={toggle}>{ $t('blog.more') }</button>
+        <button class="more" on:click|preventDefault={show}>{ $t('blog.more') }</button>
     {/if}
 </summary>
-{:else}
-<div in:slide={{ duration: 200 }} out:slide={{ duration: 200 }} >
-    <span class="content">{@html html}</span>
-    <div>
-        <button class="more" on:click|preventDefault={toggle}>{ $t('blog.less') }</button>
-    </div> 
-</div>
+
+{#if visible}
+<ConfirmDialog size="full" on:closed={hide}>
+    <svelte:fragment slot="title">
+        <i class="bx bx-detail"></i> {title} 
+    </svelte:fragment>
+
+    <section>
+    {#each content as entry}
+        {#if entry.type === 'youtube'}
+        <iframe loading="lazy" src="https://www.youtube.com/embed/{entry.value.id}" title={entry.value.title ?? ''}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen width="560" height="315" frameborder="0"></iframe>
+            <br />
+        {:else if entry.type === 'quote'}
+        <blockquote>
+            {entry.value.text}
+            <cite>{entry.value.cite}</cite>
+        </blockquote>
+        {:else if entry.type === 'images'}
+            {#each entry.value as src}
+                <img {src} alt={src.split('/')?.at(-1)}/>
+            {/each}
+        {:else}
+        <p class="content">{@html marked(`${entry.value}`, options)}</p>
+        {/if}
+    {/each}
+    </section>
+
+    <svelte:fragment slot="footer">
+        <div class="row">
+            <button on:click|preventDefault={hide}>
+                { $t('blog.back') }
+            </button>
+        </div>
+    </svelte:fragment>
+</ConfirmDialog>
 {/if}
 
 <style lang="scss">
     h2 {
         margin: .3em 0;
         transition: all .2s ease-in-out;
+    }
+
+    section {
+        padding: 1em 5%;
+        height: 100%;
+        
+        overflow-y: auto; 
     }
 
     button.more {

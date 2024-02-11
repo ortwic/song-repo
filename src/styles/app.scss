@@ -234,6 +234,24 @@ a.label:hover {
     background-color: white;
 }
 
+blockquote {
+  background-color: var(--primback);
+  font-size: 14pt;
+  margin: 30px 0;
+  padding: 30px 30px 30px 40px;
+  position: relative;
+  font-style: normal;
+  border-left: 3px solid var(--primary);
+
+  cite {
+      color: gray;
+      text-transform: uppercase;
+      font-size: 10pt;
+      font-style: normal;
+      letter-spacing: 1px;
+  }
+}
+
 div.autocomplete {
   .input-container {
     width: 16em;
