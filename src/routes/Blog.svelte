@@ -1,72 +1,44 @@
 <script lang="ts">
     import { t } from "svelte-i18n";
-    import { derived, type Readable } from "svelte/store";
-    import type { blogger_v3 as B } from '@googleapis/blogger';
+    import { derived } from "svelte/store";
     import Image from "../components/ui/elements/Image.svelte";
     import PostDetails from "../components/ui/PostDetails.svelte";
-    import BlogService, { createBlogService } from "../service/blog.service";
+    import { getBlogPosts } from "../service/blog.service";
     import { logPageView } from "../store/notification.store";
     import { orientation } from "../store/media.store";
   
     export let params: { label?: string } = {};
 
     const width = derived(orientation, (o) => o === 'landscape' ? 120 : 80);
-    let service: BlogService;
-    let store: Readable<B.Schema$Post[]>;
-
-    async function loadBlogPosts() {
-        service = await createBlogService(true);
-        store = await service.loadBlogPosts(params.label);
-        if (params.label) {
-            logPageView({ page: 'blog', filter: params.label });
-        }
+    const posts = getBlogPosts(params.label);
+    if (params.label) {
+        logPageView({ page: 'blog', filter: params.label });
     }
-
-    function scrollHandler({ target }): void {
-        const threshold = target.offsetHeight * .25;
-        if (target.offsetHeight + target.scrollTop >= target.scrollHeight - threshold) {
-            service.loadBlogPosts();
-        }
-    }
-
 </script>
   
 <svelte:head>
 <title>{ $t('menu.howto') } blog | Song Repertory</title>
 </svelte:head>
 
-<main on:scroll={scrollHandler} class="content">
+<main class="content">
     <div class="titlebar">
         <i class="bx bx-bulb"></i>&nbsp; { $t('blog.title') }
     </div>
-    {#await loadBlogPosts()}
-        <div class="post">
-            <p>{ $t('start.loading') }</p>
+    {#each $posts as post}
+    <div class="post">
+        {#if post.images?.length}
+        <div class="thumbnail">
+            <Image src={post.images[0]?.value} width={$width} height={$width} />
         </div>
-    {:then}
-        {#each $store as post}
-        <div class="post">
-            {#if post.images?.length}
-            <div class="thumbnail">
-                <Image src={post.images[0].url} width={$width} height={$width} />
-            </div>
-            {/if}
-            <PostDetails title={post.title} html={post.content}/>
-            <div>   
-                {#each post.labels as label}
-                <a href="#/blog/{label}" class="label">{label}</a>
-                {/each}
-            </div>
+        {/if}
+        <PostDetails title={post.title} excerpt={post.excerpt} content={post.content}/>
+        <div>   
+            {#each post.tags as label}
+            <a href="#/blog/{label}" class="label">{label}</a>
+            {/each}
         </div>
-        {/each}
-    {:catch { code, message }}
-        <div class="post">
-            <div class="thumbnail">
-                <Image src="./error.jpg" width={$width} height={$width} />
-            </div>
-            <PostDetails title={code} html={message} showMore={false} />
-        </div>
-    {/await}
+    </div>
+    {/each}
 </main>
   
 <style lang="scss">

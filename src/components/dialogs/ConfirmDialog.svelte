@@ -20,16 +20,18 @@
         <slot name='title'></slot> {title}
     </Titlebar>
     <slot></slot>
-    <div class="row">
-        <button data-target={target} 
-            on:click|stopPropagation={() => dispatch('closed', true)}>
-            { $t('dialog.confirm') }
-        </button>
-        <button data-target={target} 
-            on:click|stopPropagation={() => dispatch('closed', false)}>
-            { $t('dialog.decline') }
-        </button>
-    </div>
+    <slot name='footer'>
+        <div class="row">
+            <button data-target={target} 
+                on:click|stopPropagation={() => dispatch('closed', true)}>
+                { $t('dialog.confirm') }
+            </button>
+            <button data-target={target} 
+                on:click|stopPropagation={() => dispatch('closed', false)}>
+                { $t('dialog.decline') }
+            </button>
+        </div>
+    </slot>
 </div>
 {#if size == 'auto'}
 <div class='backdrop'></div>
@@ -46,13 +48,13 @@
     width: auto;
     height: auto;
     z-index: 121;
-    background-color: var(--primback);
 }
 
 div.dialog {
     min-width: 22.5em;
     max-width: 100vw;
     max-height: 100vh;
+    background-color: white;
 }
 
 div.full {

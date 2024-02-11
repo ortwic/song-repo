@@ -143,7 +143,8 @@
   "blog": {
     "title": "Alles über das Musizieren",
     "less": "...weniger",
-    "more": "mehr..."
+    "more": "mehr...",
+    "back": "Zurück"
   },
   "notfound": {
     "title": "Nicht gefunden",
