@@ -3,6 +3,7 @@
     import { fade } from "svelte/transition";
     import { cubicOut } from 'svelte/easing';
     import { t } from "svelte-i18n";
+    import Portal from "svelte-portal";
     import Titlebar from "../ui/elements/Titlebar.svelte";
     import type { MenuPages } from "../../model/types";
     
@@ -13,7 +14,8 @@
     export let title = '';
 </script>
 
-<div class='dialog {size}'
+<Portal>
+    <div class='dialog {size}'
     in:fade={{ duration: 200, easing: cubicOut }} 
     out:fade={{ duration: 200, easing: cubicOut }}>
     <Titlebar {target} on:close={() => dispatch('closed', false)}>
@@ -32,7 +34,8 @@
             </button>
         </div>
     </slot>
-</div>
+    </div>
+</Portal>
 {#if size == 'auto'}
 <div class='backdrop'></div>
 {/if}
@@ -51,7 +54,7 @@
 }
 
 div.dialog {
-    @include vars.fancybg;
+    @include vars.fancy-w7-bg;
 
     min-width: 22.5em;
     max-width: 100vw;
