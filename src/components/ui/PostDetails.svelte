@@ -48,11 +48,13 @@
         {:else if entry.type === 'quote'}
         <blockquote>
             {entry.value.text}
+            <br />
             <cite>{entry.value.cite}</cite>
         </blockquote>
         {:else if entry.type === 'images'}
             {#each entry.value as src}
-                <img {src} alt={src.split('/')?.at(-1)}/>
+                <img {src} alt={src?.split('/')?.at(-1)} />
+                <br />
             {/each}
         {:else}
         <p class="content">{@html marked(`${entry.value}`, options)}</p>

@@ -1,3 +1,9 @@
+v0.3.4 (2024-02-11)
+-------------------
+- FireCMS for music blog
+- Show blog details in popup dialog
+- bugfixes and layout fixes
+
 v0.3.3 (2024-01-12)
 -------------------
 - profile settings

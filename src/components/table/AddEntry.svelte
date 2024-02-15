@@ -112,8 +112,9 @@
                         <div class="card" slot="item" let:item>
                             <Image src={item.img} />
                             <div class="col">
-                                <a title="{ $t('songs.columns.artist') }" href={item.uri} target="_blank">{item.name}</a>
+                                {item.name} | 
                                 <span title="{ $t('songs.columns.country') }">{item.from ?? ''}</span>
+                                <a title="{ $t('songs.columns.artist') }" href={item.uri} target="_blank"><i class="bx bx-info-circle"></i></a>
                                 <p>
                                     {#each item.genres ?? [] as genre}
                                     <span class='label'>{genre}</span>
@@ -138,7 +139,8 @@
                                 <Image src={item.album?.img ?? item.artist?.img} />
                             </a>
                             <div class="col">
-                                <a title="{ $t('songs.columns.title') }" href={item.uri} target="_blank">{item.title}</a>
+                                {item.title} | 
+                                <a title="{ $t('songs.columns.title') }" href={item.uri} target="_blank"><i class="bx bx-info-circle"></i></a>
                                 {#if newSong.artist}
                                 <span title="{ $t('songs.columns.year') }">({item.album?.year})</span>
                                 <p>

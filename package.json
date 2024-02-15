@@ -1,9 +1,15 @@
 {
-  "name": "vite-project",
+  "name": "song-repo",
   "description": "An app for musicians to keep an overview of their personal song repertoire.",
   "version": "0.3.4",
+  "author": "OCSoft42",
   "private": true,
   "type": "module",
+  "homepage": "https://song-repo.web.app",
+  "keywords": [ "music", "songbook", "repertoire", "musician", "blog", "performance", "setlist", "catalog", "sharing" ],
+  "bugs": {
+    "url": "https://github.com/ortwic/song-repo/issues"
+  },
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "dev": "vite",

@@ -97,26 +97,16 @@
       position: fixed;
       top: 50%;
       right: 0;
-      z-index: 200;
+      z-index: 100;
       height: 0;
       text-align: right;
     } 
 
-    nav {
-        div.row > a.coffee {
-            background-color: var(--secondary);
-
-            & > span {
-                color: black;
-            }
-        }
-
-        [aria-hidden] {
-            position: absolute;
-            right: 0;
-            width: 1.5em;
-            height: 1.5em;
-        }
+    nav [aria-hidden] {
+        position: absolute;
+        right: 0;
+        width: 1.5em;
+        height: 1.5em;
     }
 
     a {

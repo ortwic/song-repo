@@ -51,10 +51,16 @@
 }
 
 div.dialog {
+    @include vars.fancybg;
+
     min-width: 22.5em;
     max-width: 100vw;
     max-height: 100vh;
-    background-color: white;
+    background-color: #FFFFFF80;
+
+    div.row button {
+        background-color: var(--primback-opaque);
+    }
 }
 
 div.full {

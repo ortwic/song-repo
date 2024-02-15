@@ -1,1 +1,7 @@
 $sidebar-width: 234px;
+
+@mixin fancybg {
+    background-color: var(--primback-opaque);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
