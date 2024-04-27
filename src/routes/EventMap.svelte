@@ -29,12 +29,21 @@
             const map = new Map(mapContainer, dachViewport);
             const createMarker = (event: CalendarEvent) => {
                 // https://developers.google.com/maps/documentation/javascript/advanced-markers/accessible-markers
-                const pin = new PinElement({ glyph: '🎹' });
-                const position = event.place.geometry.location;
-                const title = event.place.formatted_address;
-                const marker = new AdvancedMarkerElement({ map, position, title, content: pin.element });
-                marker.addListener('click', () => showInfoWindow(map, event));
-                return marker;
+                if (event.place?.geometry) {
+                     // event.place.icon: [shopping-71, generic_business-71, geocode-71]
+                    const glyph = event.place.icon.includes('geocode') ? '🎹' : new URL(event.place.icon);
+                    const pin = new PinElement({ 
+                        glyph,
+                        glyphColor: 'whitesmoke',
+                        background: event.place.icon_background_color,
+                        borderColor: 'gray',
+                    });
+                    const position = event.place.geometry.location;
+                    const title = event.place.formatted_address;
+                    const marker = new AdvancedMarkerElement({ map, position, title, content: pin.element });
+                    marker.addListener('click', () => showInfoWindow(map, event));
+                    return marker;
+                }
             };
 
             events.map(e => createMarker(e));
@@ -100,11 +109,14 @@
         {#each $events as event}
             <div class="info" bind:this={infoContents[event.id]}>
                 <p>
-                    <i class='bx bx-envelope'></i> 
-                    <a href="mailto:{event.organizer.email}">{event.organizer.displayName}</a>
+                    <i class='bx bx-globe'></i> 
+                    <a href="{event.website}">{event.organizer.displayName}</a>
                 </p>
                 <p>
-                    <i class='bx bx-map-pin'></i> {event.place.formatted_address}
+                    <i class='bx bx-map-pin'></i> 
+                    <a href="https://www.google.de/maps/search/{event.place.formatted_address}">
+                        {event.place.formatted_address}
+                    </a>
                 </p>
                 <i class='bx bx-calendar'></i> {@html event.description.replace(/\n/g, '<br/>')}
             </div>

@@ -9,12 +9,12 @@
     {#each $events as event}
     <div class="row">
         <NavButton href="/events/{event.id}">
-            <strong>{formatRange(event)}</strong> –
-            {event.organizer.displayName}
-            <br/>
+            <strong>{formatRange(event)}</strong>
             <span>
-                🎹 {event.location.split('–')[0]}
+                {event.organizer.displayName}
             </span>
+            <br/>
+            <i class='bx bx-map-pin'></i> {event.location.split('–')[0]}
         </NavButton>
     </div>
     {/each}

@@ -9,7 +9,7 @@ export interface CalendarEvent {
     start: EventDate;
     end: EventDate;
     place?: EventPlace;
-    htmlLink?: string;
+    website?: string;
 }
 
 interface EventContact {
@@ -19,7 +19,7 @@ interface EventContact {
     self?: boolean;
 }
 
-interface EventDate {
+export interface EventDate {
     date?: string;
     dateTime?: string;
     timeZone?: string;
