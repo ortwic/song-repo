@@ -30,7 +30,8 @@
 button {
     transform: scale(.4, 1);
     transition: margin-right 0.2s;
-
+    color: var(--primary-opaque);
+    
     &.opened {
         margin-right: vars.$sidebar-width;
 
