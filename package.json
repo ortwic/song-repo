@@ -1,7 +1,7 @@
 {
   "name": "song-repo",
   "description": "An app for musicians to keep an overview of their personal song repertoire.",
-  "version": "0.3.4",
+  "version": "0.4.0",
   "author": "OCSoft42",
   "private": true,
   "type": "module",
@@ -34,12 +34,14 @@
     "test:unit": "vitest"
   },
   "devDependencies": {
+    "@googlemaps/js-api-loader": "^1.16.6",
     "@sveltejs/vite-plugin-svelte": "^2.4.5",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/svelte": "^3.2.2",
     "@testing-library/user-event": "^14.4.3",
     "@tsconfig/svelte": "^3.0.0",
     "@types/color": "^3.0.3",
+    "@types/google.maps": "^3.55.7",
     "@types/lodash": "^4.14.192",
     "@types/luxon": "^3.4.2",
     "@types/marked": "^5.0.0",

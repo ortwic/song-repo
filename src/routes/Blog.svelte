@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { params } from "svelte-spa-router";
+    import { params as params$ } from "svelte-spa-router";
     import { t } from "svelte-i18n";
     import { derived } from "svelte/store";
     import { of } from "rxjs";
@@ -12,7 +12,7 @@
     const width = derived(orientation, (o) => o === 'landscape' ? 120 : 80);
     let posts = of([]);
     
-    params.subscribe((p) => {
+    params$.subscribe((p) => {
         posts = getBlogPosts(p?.label);
         logPageView({ page: 'blog', filter: p?.label });
     });

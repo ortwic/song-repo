@@ -1,3 +1,8 @@
+v0.4.0 (2024-04-27)
+-------------------
+- fixed filter blog by labels
+- map view for events
+
 v0.3.4 (2024-02-11)
 -------------------
 - FireCMS for music blog

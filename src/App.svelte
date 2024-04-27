@@ -8,7 +8,8 @@
   import SongTable from './components/table/SongTable.svelte';
   import Snackbar from './components/ui/Snackbar.svelte';
   import Start from "./routes/Start.svelte";
-  import Calendar from "./routes/Calendar.svelte";
+  import EventCalendar from "./routes/EventCalendar.svelte";
+  import EventMap from "./routes/EventMap.svelte";
   import Blog from "./routes/Blog.svelte";
   import Signup from "./routes/Signup.svelte";
   import Settings from "./routes/Settings.svelte";
@@ -27,7 +28,9 @@
     '/songs': SongTable,
     '/songs/:id': SongTable,
     '/samples': SongTable,
-    '/events': Calendar,
+    '/calendar': EventCalendar,
+    '/events': EventMap,
+    '/events/:id': EventMap,
     '/blog': Blog,
     '/blog/:label': Blog,
     '/docs/:name': Document,

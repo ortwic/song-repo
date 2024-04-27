@@ -9,6 +9,7 @@
     import Signup from './Signup.svelte';
     import Profil from './Profil.svelte';
     import Columns from './Columns.svelte';
+    import Events from './Events.svelte';
     import ExportTable from './ExportTable.svelte';
     import AdvanceTable from '../table/AdvanceTable.svelte';
     import MenuButton from '../ui/elements/MenuButton.svelte';
@@ -20,6 +21,7 @@
     export let title: string;
     export let footer: string;
     const isTableView = derived(location, (path) => path.startsWith('/songs') || path.startsWith('/samples'));
+    const isEventView = derived(location, (path) => path.startsWith('/events'));
     let counter = 0;
 
     onMount(() => currentMenu.set($isTableView ? 'root' : 'main'));
@@ -55,6 +57,9 @@
         {#if $isTableView}
         <ExportTable exportTitle="{ $t('menu.table.exportTitle') }" />
         <Columns />
+        {/if}
+        {#if $isEventView}
+        <Events />
         {/if}
         <svelte:fragment slot="lower">
             {#if counter >= 5e5 || import.meta.env.DEV}
