@@ -1,4 +1,3 @@
-import { orderBy } from 'firebase/firestore';
 import type { Observable } from 'rxjs';
 import { DateTime } from 'luxon';
 import FirestoreService from './firestore.service';
@@ -8,7 +7,7 @@ const store = new FirestoreService('events');
 
 export function getEvents(): Observable<CalendarEvent[]> {
     
-    return store.getDocuments<CalendarEvent>(orderBy('created'));
+    return store.getDocuments<CalendarEvent>();
 }
 
 export function formatRange(event: CalendarEvent) {
