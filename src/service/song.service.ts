@@ -44,21 +44,21 @@ export default class SongService {
     private loadSongs(user: { uid: string }): Observable<UserSong[]> {
         if (this.sharedUid) {
             const sharedStore = new FirestoreService(`user/${this.sharedUid}/songs`);
-            return sharedStore.getDocuments(orderBy('id'), where('status', '==', 'done'));
+            return sharedStore.getDocumentStream(orderBy('id'), where('status', '==', 'done'));
         }
 
         if (this.showSamples) {
             const sampleStore = new FirestoreService(`user/${sampleId}/songs`);
             const samplesFromFile = from(import('../data/samples.json'))
                 .pipe(map<{ default }, UserSong[]>(({ default: data }) => data));
-            const samples = sampleStore.getDocuments<UserSong>(orderBy('id'))
+            const samples = sampleStore.getDocumentStream<UserSong>(orderBy('id'))
                 .pipe(switchMap(docs => docs.length ? of(docs) : samplesFromFile));
             return merge(samples, localSubject);
         }
 
         if (user) {
             store.path = `user/${user.uid}/songs`;
-            return store.getDocuments(orderBy('id'));
+            return store.getDocumentStream(orderBy('id'));
         }
 
         return localSubject;

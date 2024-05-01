@@ -5,13 +5,17 @@ import {
     query,
     doc,
     getDoc,
+    getDocs,
     setDoc,
     updateDoc,
     deleteDoc,
     writeBatch,
+    type DocumentData,
     type SetOptions,
+    type SnapshotOptions,
     CollectionReference,
     QueryConstraint,
+    Query,
 } from 'firebase/firestore';
 import { collectionData } from 'rxfire/firestore';
 import { startWith } from 'rxjs/operators';
@@ -28,6 +32,10 @@ const omitUndefinedFields = (data: object) => {
 };
 export const uniqueKey = (...array: string[]) => array.join('').trim().replaceAll(/\W/g, '');
 
+export const snapshotOptions: SnapshotOptions = {
+    serverTimestamps: 'none'
+};
+
 export default class FirestoreService {
     private db = getFirestore(app);
     private options: { idField: string; };
@@ -38,19 +46,33 @@ export default class FirestoreService {
         }
     }
 
-    public getDocuments<T>(...constraints: QueryConstraint[]): Observable<T[]> {
-        const items = collection(this.db, this.path) as CollectionReference<T>;
+    public getDocumentStream<T extends DocumentData>(...constraints: QueryConstraint[]): Observable<T[]> {
+        const query = this.createQuery<T>(...constraints);
+        return collectionData<T>(query, this.options).pipe(startWith([]));
+    }
+    
+    public async getDocuments<T extends DocumentData>(...constraints: QueryConstraint[]): Promise<T[]> {
+        const query = this.createQuery<T>(...constraints);
+        return getDocs<T>(query).then((snapshot) => {
+            const result: T[] = [];
+            snapshot.forEach((doc) => result.push({
+                id: doc.id,
+                ...doc.data(snapshotOptions)
+            }));
+            return result;
+        });
+    }
 
-        // Query requires an index, see screenshot below
-        const q = query<T>(items, ...constraints);
-        return collectionData<T>(q, this.options).pipe(startWith([]));
+    private createQuery<T extends DocumentData>(...constraints: QueryConstraint[]): Query<T> {
+        const items = collection(this.db, this.path) as CollectionReference<T>;
+        return query<T>(items, ...constraints);
     }
 
     public async getDocument<T>(id: string): Promise<T> {
         const docRef = doc(this.db, this.path, id);
         const snapshot = await getDoc(docRef);
         if (snapshot.exists()) {
-            return snapshot.data({ serverTimestamps: 'none' }) as T;
+            return snapshot.data(snapshotOptions) as T;
         }
         
         return Promise.resolve(undefined);

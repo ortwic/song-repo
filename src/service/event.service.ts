@@ -18,7 +18,7 @@ export async function getSettings(): Promise<Settings> {
 
 export function getEvents(): Observable<CalendarEvent[]> {
     const date = (date: EventDate) => DateTime.fromJSDate(new Date(date.dateTime ?? date.date));
-    return combineLatest([settings, store.getDocuments<CalendarEvent>()]).pipe(
+    return combineLatest([settings, store.getDocumentStream<CalendarEvent>()]).pipe(
         map(([settings, events]) => {
             const today = DateTime.local();
             const futureDate = today.plus({ months: settings.futureMonths });
