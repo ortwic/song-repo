@@ -15,6 +15,7 @@
     const events = getEvents();
 
     async function initMap(container: HTMLElement, events: CalendarEvent[]) {
+        let index = events.length;
         const dachViewport = { 
             mapId, 
             center: { lat: 51.5074, lng: 10.1481 }, 
@@ -29,13 +30,11 @@
             const createMarker = (event: CalendarEvent) => {
                 // https://developers.google.com/maps/documentation/javascript/advanced-markers/accessible-markers
                 if (event.place?.geometry) {
-                     // event.place.icon: [shopping-71, generic_business-71, geocode-71]
-                    const glyph = event.place.icon.includes('geocode') ? '🎹' : new URL(event.place.icon);
                     const pin = new PinElement({ 
-                        glyph,
-                        glyphColor: 'whitesmoke',
+                        glyph: `${--index}`,
+                        glyphColor: 'white',
                         background: event.place.icon_background_color,
-                        borderColor: 'gray',
+                        borderColor: '#606060',
                     });
                     const position = event.place.geometry.location;
                     const title = event.place.formatted_address;
@@ -45,7 +44,7 @@
                 }
             };
 
-            events.map(e => createMarker(e));
+            events.toReversed().map(e => createMarker(e));
             return map;
         } catch (error) {
             showError(error);
@@ -72,10 +71,14 @@
         currentInfo?.close();
         currentInfo = new google.maps.InfoWindow({
             position: event.place.geometry.location,
-            pixelOffset: new google.maps.Size(0, -30),
+            pixelOffset: new google.maps.Size(0, -40),
             content: infoContents[event.id]
         });
         currentInfo.open(map);     
+    }
+
+    function fileName(path: string) {
+        return path?.split('/').at(-1)?.split('.')[0];
     }
 
     onMount(async () => {
@@ -104,13 +107,14 @@
     <div class="template">
         {#each $events as event}
             <div class="info" bind:this={infoContents[event.id]}>
+                <img class="icon" src="{event.place.icon}" alt="{fileName(event.place.icon)}" />
                 <p>
                     <i class='bx bx-globe'></i> 
-                    <a href="{event.website}">{event.organizer.displayName}</a>
+                    <a href="{event.website}" target="_blank">{event.organizer.displayName}</a>
                 </p>
                 <p>
                     <i class='bx bx-map-pin'></i> 
-                    <a href="https://www.google.de/maps/search/{event.place.formatted_address}">
+                    <a href="https://www.google.de/maps/search/{event.place.formatted_address}" target="_blank">
                         {event.place.formatted_address}
                     </a>
                 </p>
@@ -133,6 +137,14 @@
 
     .info {
         line-height: 1.5;
+
+        .icon {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            z-index: -1;
+            opacity: .3;
+        }
 
         p {
             margin: .4rem 0;
