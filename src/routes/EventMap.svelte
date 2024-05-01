@@ -3,8 +3,7 @@
     import { params as params$ } from "svelte-spa-router";
     import { t } from "svelte-i18n";
     import { Loader } from '@googlemaps/js-api-loader';
-    import FirestoreService from "../service/firestore.service";
-    import { getEvents } from "../service/event.service";
+    import { getEvents, getSettings } from "../service/event.service";
     import { showError } from "../store/notification.store";
     import type { CalendarEvent } from "../model/event.model";
 
@@ -15,7 +14,7 @@
     const mapId = 'song-repo-map';
     const events = getEvents();
 
-    async function initMap(events: CalendarEvent[]) {
+    async function initMap(container: HTMLElement, events: CalendarEvent[]) {
         const dachViewport = { 
             mapId, 
             center: { lat: 51.5074, lng: 10.1481 }, 
@@ -26,7 +25,7 @@
             const loader = await createLoader();
             const { AdvancedMarkerElement, PinElement } = await loader.importLibrary('marker');
             const { Map } = await loader.importLibrary('maps');
-            const map = new Map(mapContainer, dachViewport);
+            const map = new Map(container, dachViewport);
             const createMarker = (event: CalendarEvent) => {
                 // https://developers.google.com/maps/documentation/javascript/advanced-markers/accessible-markers
                 if (event.place?.geometry) {
@@ -54,12 +53,7 @@
     }
 
     async function createLoader() {
-        const store = new FirestoreService('settings');
-        const result = await store.getDocument('google')
-            .then(resp => resp as Record<string, string>)
-            .catch(error => showError(error));
-        const apiKey = result && result['maps'];
-        const version = result && result['version'];
+        const { maps: apiKey, version } = await getSettings();
         return new Loader({ apiKey, version, libraries: ["places"] });
     }
 
@@ -86,14 +80,16 @@
 
     onMount(async () => {
         getEvents().subscribe(async (events) => {
-            const map = await initMap(events);
-            params$.subscribe((p) => {
-                const event = events.find(e => e.id === p?.id);
-                if (event) {
-                    centerViewport(map, event);
-                    showInfoWindow(map, event);
-                }
-            });
+            if (mapContainer) {
+                const map = await initMap(mapContainer, events);
+                params$.subscribe((p) => {
+                    const event = events.find(e => e.id === p?.id);
+                    if (event) {
+                        centerViewport(map, event);
+                        showInfoWindow(map, event);
+                    }
+                });                
+            }
         });
     });
 

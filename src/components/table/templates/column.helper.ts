@@ -1,4 +1,4 @@
-import type { CellEditEventCallback, ColumnComponent, Editor, ListEditorParams, RowComponent, SortDirection } from 'tabulator-tables';
+import type { CellComponent, CellEditEventCallback, ColumnComponent, Editor, ListEditorParams, RowComponent, SortDirection } from 'tabulator-tables';
 import type { ColumnDefinition } from '../tabulator/types';
 import { autoFilter } from './filter.helper';
 import Format from './Formatter.class';
@@ -64,6 +64,11 @@ export const autoColumns = <T>(data: T[]): ColumnDefinition[] => {
             };
             if (Array.isArray(data[0][key])) {
                 def.formatter = Format.get('label').formatter;
+            } else if (typeof data[0][key] === 'object') {
+                def.formatter = (cell: CellComponent) => {
+                    const value = cell.getValue();
+                    return JSON.stringify(value, null, 2);
+                };
             }
             return def as ColumnDefinition;
         };
