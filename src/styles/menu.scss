@@ -26,6 +26,7 @@
             border-radius: 0;
             box-shadow: unset;
             text-align: center;
+            background-color: inherit;
             transition: all .2s ease-in-out;
 
             span {
@@ -41,7 +42,7 @@
             }
 
             &:hover {
-                background-color: white;
+                background-color: #FFFFFFC0;
             }
 
             &:disabled {
@@ -51,15 +52,10 @@
             &:not(:last-child) {
                 border-right: 1px solid silver;
             }
-
-            &.highlight {
-                border: 1px dashed var(--primary);
-                background-color: var(--primghost);
-            }
     
             &.warn {
                 color: black;
-                background-color: var(--secondary);
+                background-color: var(--secondary-opaque);
 
                 &:hover {
                     background-color: white;

@@ -1,11 +1,11 @@
 <script lang="ts">
-    import { push } from "svelte-spa-router";
+    import { location, push } from "svelte-spa-router";
 
     export let href: string;
     export let title = '';
     export let className = '';
 
-    const self = location.href.endsWith(href);
+    const self = $location.startsWith(href);
     
     function clicked() {
         push(href);

@@ -1,1 +1,9 @@
 $sidebar-width: 234px;
+
+@mixin fancy-w7-bg {
+    background-color: var(--primback-opaque);
+
+    // backdrop-filter can break "position: absolute | fixed"
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}

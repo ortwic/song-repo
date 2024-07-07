@@ -140,7 +140,7 @@
   .info {
       padding: .4em 1em;
       border: 1px solid gray;
-      background-color: lightblue;
+      background-color: #8be2ff80;
       text-align: center;
       white-space: collapse balance;
 

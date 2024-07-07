@@ -1,19 +1,21 @@
 <script lang="ts">
+    import { params as params$ } from "svelte-spa-router";
     import { t } from "svelte-i18n";
     import { derived } from "svelte/store";
+    import { of } from "rxjs";
     import Image from "../components/ui/elements/Image.svelte";
     import PostDetails from "../components/ui/PostDetails.svelte";
     import { getBlogPosts } from "../service/blog.service";
     import { logPageView } from "../store/notification.store";
     import { orientation } from "../store/media.store";
-  
-    export let params: { label?: string } = {};
 
     const width = derived(orientation, (o) => o === 'landscape' ? 120 : 80);
-    const posts = getBlogPosts(params.label);
-    if (params.label) {
-        logPageView({ page: 'blog', filter: params.label });
-    }
+    let posts = of([]);
+    
+    params$.subscribe((p) => {
+        posts = getBlogPosts(p?.label);
+        logPageView({ page: 'blog', filter: p?.label });
+    });
 </script>
   
 <svelte:head>

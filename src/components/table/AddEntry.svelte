@@ -112,8 +112,9 @@
                         <div class="card" slot="item" let:item>
                             <Image src={item.img} />
                             <div class="col">
-                                <a title="{ $t('songs.columns.artist') }" href={item.uri} target="_blank">{item.name}</a>
+                                {item.name} | 
                                 <span title="{ $t('songs.columns.country') }">{item.from ?? ''}</span>
+                                <a title="{ $t('songs.columns.artist') }" href={item.uri} target="_blank"><i class="bx bx-info-circle"></i></a>
                                 <p>
                                     {#each item.genres ?? [] as genre}
                                     <span class='label'>{genre}</span>
@@ -138,7 +139,8 @@
                                 <Image src={item.album?.img ?? item.artist?.img} />
                             </a>
                             <div class="col">
-                                <a title="{ $t('songs.columns.title') }" href={item.uri} target="_blank">{item.title}</a>
+                                {item.title} | 
+                                <a title="{ $t('songs.columns.title') }" href={item.uri} target="_blank"><i class="bx bx-info-circle"></i></a>
                                 {#if newSong.artist}
                                 <span title="{ $t('songs.columns.year') }">({item.album?.year})</span>
                                 <p>
@@ -215,82 +217,82 @@
 {/if}
 
 <style lang="scss">
-form {
+:root {
     text-align: left;
+}
 
-    div.title a {
-        color: var(--primback);
-        text-decoration: underline;
+div.title a {
+    color: var(--primback);
+    text-decoration: underline;
 
-        &:hover {
-            color: white;
-        }
+    &:hover {
+        color: white;
     }
+}
 
-    div.card {
-        display: flex;
-        padding: 4px;
+div.card {
+    display: flex;
+    padding: 4px;
 
-        a, span {
-            white-space: nowrap;
-        }
-
-        div.col {
-            padding: 0 1em;
-        }
-    }
-
-    div.square {
-        display: inline-block;
-        width: 1.2em;
-        height: 1.2em;
-    }
-
-    span.option {
-        padding: .4em;
-    }
-
-    section {
-        margin: 1em;
-        min-width: 80vw;
-        height: 100%;
-
-        // not working as autocomplete-list not overlapping anymore
-        overflow-y: auto; 
-
-        & > div {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            max-height: 100%;
-            gap: .4em 1.6em;
-
-            @media only screen and (max-width: 50rem) {
-                grid-template-columns: 1fr;
-            }
-            
-            div.group {
-                display: grid;
-            }
-
-            i.bx {
-                color: gray;
-                font-size: smaller;
-            }
-        }
-    }
-
-    .warn {
-        padding: .4em 1em;
-        border: 1px solid gray;
-        background-color: var(--secondary);
-        text-align: center;
+    a, span {
         white-space: nowrap;
+    }
 
-        &::before {
-            font-family: 'boxicons';
-            padding-right: .2em;
-            content: '\ea27';
+    div.col {
+        padding: 0 1em;
+    }
+}
+
+div.square {
+    display: inline-block;
+    width: 1.2em;
+    height: 1.2em;
+}
+
+span.option {
+    padding: .4em;
+}
+
+section {
+    margin: 1em;
+    min-width: 80vw;
+    height: 100%;
+
+    // not working as autocomplete-list not overlapping anymore
+    overflow-y: auto; 
+
+    & > div {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        max-height: 100%;
+        gap: .4em 1.6em;
+
+        @media only screen and (max-width: 50rem) {
+            grid-template-columns: 1fr;
         }
+        
+        div.group {
+            display: grid;
+        }
+
+        i.bx {
+            color: gray;
+            font-size: smaller;
+        }
+    }
+}
+
+.warn {
+    padding: .4em 1em;
+    border: 1px solid gray;
+    background-color: var(--secondary-opaque);
+    text-align: center;
+    white-space: nowrap;
+
+    &::before {
+        font-family: 'boxicons';
+        padding-right: .2em;
+        content: '\ea27';
     }
 }
 </style>

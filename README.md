@@ -5,7 +5,7 @@
 
 ## About the project
 
-[![Product Name Screen Shot][public/images/songlist.png]](https://song-repo.web.app)
+[![Product Name Screen Shot](public/images/songlist.png)](https://song-repo.web.app)
 
 An [app](https://song-repo.web.app) for musicians to keep an overview of their personal song repertoire.
 
@@ -75,9 +75,10 @@ See the [open issues](https://github.com/users/ortwic/projects/2/views/1) for a 
 - [x] Firestore persistance
 - [x] Auth with email/pwd or Google account
 - [ ] CI/CD and unit tests
-- [ ] Song name suggestion API
-- [ ] Manage genres, artists, etc.
-- [ ] Share song list
+- [x] Song name suggestion API
+- [x] Manage genres, artists, etc.
+- [x] Share song list
+- [x] Integrated blog
 - [ ] Dark skin
 - [ ] Kanban board view
 

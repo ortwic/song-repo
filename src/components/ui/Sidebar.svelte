@@ -27,6 +27,7 @@
 @use "../../styles/vars.scss";
 
 aside {
+    @include vars.fancy-w7-bg;
     display: flex;
     flex-direction: column;
     position: fixed;
@@ -34,7 +35,6 @@ aside {
     width: vars.$sidebar-width;
     height: 100%;
     z-index: 100;
-    background-color: var(--primback);
     box-shadow: 0 0 2em #00000080;
 
     section {
@@ -45,7 +45,7 @@ aside {
 
     div.info {
         color: whitesmoke;
-        background-color: silver;
+        background-color: #80808060;
         padding-top: .4em;
         font-size: small;
         text-align: center;

@@ -49,7 +49,7 @@
 <style lang="scss">
   div.container {
     position: fixed;
-    z-index: 80;
+    z-index: 140;
     
     div.popup-menu {
       display: flex;

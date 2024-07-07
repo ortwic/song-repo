@@ -9,6 +9,7 @@
     import Signup from './Signup.svelte';
     import Profil from './Profil.svelte';
     import Columns from './Columns.svelte';
+    import EventList from './EventList.svelte';
     import ExportTable from './ExportTable.svelte';
     import AdvanceTable from '../table/AdvanceTable.svelte';
     import MenuButton from '../ui/elements/MenuButton.svelte';
@@ -16,10 +17,13 @@
     import type { MenuPages } from '../../model/types';
     import { currentUser } from '../../service/auth.service';
     import { currentMenu } from '../../store/app.store';
+    import TagCloud from './TagCloud.svelte';
 
     export let title: string;
     export let footer: string;
     const isTableView = derived(location, (path) => path.startsWith('/songs') || path.startsWith('/samples'));
+    const isBlogView = derived(location, (path) => path.startsWith('/blog'));
+    const isEventView = derived(location, (path) => path.startsWith('/events'));
     let counter = 0;
 
     onMount(() => currentMenu.set($isTableView ? 'root' : 'main'));
@@ -55,6 +59,10 @@
         {#if $isTableView}
         <ExportTable exportTitle="{ $t('menu.table.exportTitle') }" />
         <Columns />
+        {:else if $isBlogView}
+        <TagCloud />
+        {:else if $isEventView}
+        <EventList />
         {/if}
         <svelte:fragment slot="lower">
             {#if counter >= 5e5 || import.meta.env.DEV}
@@ -97,26 +105,16 @@
       position: fixed;
       top: 50%;
       right: 0;
-      z-index: 200;
+      z-index: 100;
       height: 0;
       text-align: right;
     } 
 
-    nav {
-        div.row > a.coffee {
-            background-color: var(--secondary);
-
-            & > span {
-                color: black;
-            }
-        }
-
-        [aria-hidden] {
-            position: absolute;
-            right: 0;
-            width: 1.5em;
-            height: 1.5em;
-        }
+    nav [aria-hidden] {
+        position: absolute;
+        right: 0;
+        width: 1.5em;
+        height: 1.5em;
     }
 
     a {
