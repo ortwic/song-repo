@@ -1,5 +1,5 @@
 import {
-    signInWithRedirect,
+    signInWithPopup,
     GoogleAuthProvider,
     OAuthProvider,
     createUserWithEmailAndPassword,
@@ -37,12 +37,12 @@ onAuthStateChanged(auth, (user) => {
 export default class AuthService {
     async loginWithGoogle(): Promise<void> {
         // signInWithPopup can cause CORS problems in MS Edge (prod only)
-        await signInWithRedirect(auth, googleProvider);
+        await signInWithPopup(auth, googleProvider);
     }
 
     async loginWithMicrosoft(): Promise<void> {
         // signInWithPopup can cause CORS problems in MS Edge (prod only)
-        await signInWithRedirect(auth, msProvider);
+        await signInWithPopup(auth, msProvider);
     }
 
     async signUp(email: string, password: string): Promise<void> {
