@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { t } from "svelte-i18n";
     import NavButton from "../ui/elements/NavButton.svelte";
     import { formatRange, getEvents } from "../../service/event.service";
     
@@ -6,6 +7,9 @@
 </script>
 
 <section class="menu">
+    {#if !$events.length}
+        <div><i>{ $t('menu.events-empty') }</i></div>
+    {/if}
     {#each $events as event}
     <div class="row">
         <NavButton href="/events/{event.id}">

@@ -70,7 +70,7 @@
     function showInfoWindow(map: google.maps.Map, event: CalendarEvent) {   
         currentInfo?.close();
         currentInfo = new google.maps.InfoWindow({
-            position: event.place.geometry.location,
+            position: event.place.geometry?.location,
             pixelOffset: new google.maps.Size(0, -40),
             content: infoContents[event.id]
         });
@@ -88,9 +88,13 @@
                 params$.subscribe((p) => {
                     const event = events.find(e => e.id === p?.id);
                     if (event) {
-                        centerViewport(map, event);
-                        showInfoWindow(map, event);
-                    }
+                        if (event.place?.geometry) {
+                            centerViewport(map, event);
+                            showInfoWindow(map, event);
+                        } else {
+                            showError(event.place.name);
+                        }
+                    } 
                 });                
             }
         });
