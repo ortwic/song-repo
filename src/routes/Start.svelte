@@ -54,7 +54,8 @@
                     { $t('start.features.search') } 
                 </div>
                 <div>
-                    <a target="_blank" href="https://getsongbpm.com">getsongbpm.com</a>
+                    <a target="_blank" href="https://getsongbpm.com/api">GetSongbpm</a>
+                    <a target="_blank" href="https://docs.audius.org/api">Audius</a>
                 </div>
             </li>
             <li class="bx-calendar">
