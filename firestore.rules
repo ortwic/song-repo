@@ -17,6 +17,10 @@ service cloud.firestore {
       allow read: if true;
     }
 
+    match /settings/{docId} {
+      allow read: if true;
+    }
+
     // Custom default security rules for FireCMS. Modifying this rule will the usage of the FireCMS.
     match /{document=**} {
         allow read, write: if request.auth.token.fireCMSUser;

@@ -3,6 +3,8 @@ import { showError } from '../store/notification.store';
 import type { ApiSettings } from '../model/types';
 import type { SearchService } from './search.service';
 
+const appNameQueryParam = 'app_name=ocsoft42_songrepo'; 
+
 export default class SearchAudiusService implements SearchService {
     baseUrl: string;
     apiKey: string;
@@ -15,7 +17,7 @@ export default class SearchAudiusService implements SearchService {
     }
 
     async findArtists(artist: string): Promise<ArtistResult[]> {
-        const url = `${this.baseUrl}/users/search?query=${artist}`;
+        const url = `${this.baseUrl}/users/search?query=${artist}&${appNameQueryParam}`;
         const result = await fetch(url)
             .then(resp => resp.json())
             .catch(error => showError(error));
@@ -68,14 +70,14 @@ export default class SearchAudiusService implements SearchService {
 
         if (this.artistIdMap.has(artist)) {
             const id = this.artistIdMap.get(artist);
-            const url = `${this.baseUrl}/users/${id}/tracks?query=${title}`;
+            const url = `${this.baseUrl}/users/${id}/tracks?query=${title}&${appNameQueryParam}`;
             const result = await fetch(url)
                 .then(resp => resp.json())
                 .catch(error => showError(error));
             return Array.isArray(result?.data) ? result.data.map(toSong) : [];
         }
         
-        const url = `${this.baseUrl}/tracks/search?query=${title}`;
+        const url = `${this.baseUrl}/tracks/search?query=${title}&${appNameQueryParam}`;
         const result = await fetch(url)
             .then(resp => resp.json())
             .catch(error => showError(error));
