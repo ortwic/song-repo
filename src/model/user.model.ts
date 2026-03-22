@@ -4,6 +4,7 @@ export interface UserProfile {
     id: string;
     name?: string;
     alias?: string;
+    about?: string;
     deleted?: Date;
 }
 

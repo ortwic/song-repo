@@ -1,3 +1,4 @@
+import 'boxicons/css/boxicons.min.css';
 import './styles/app.scss';
 import App from './App.svelte';
 

@@ -187,7 +187,18 @@
     "delete-done": "Ihr Konto wurde erfolgreich gelöscht!",
     "profile": "Profil",
     "update-profile": "Speichern",
-    "danger-zone": "Gefahrenzone"
+    "danger-zone": "Gefahrenzone",
+    "linktree": {
+      "empty": "Noch keine Links vorhanden.",
+      "title": "Titel"
+    },
+    "cancel": "Abbrechen",
+    "add": "Hinzufügen",
+    "edit": "Bearbeiten",
+    "delete": "Löschen",
+    "about": "Bio",
+    "move-down": "Nach unten",
+    "move-up": "Nach oben"
   },
   "user": {
     "song-list": "Songliste",

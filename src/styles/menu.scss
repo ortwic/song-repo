@@ -1,11 +1,24 @@
-.menu, .dialog {
+@mixin row {
+    display: block;
+    padding: .4rem;
+    text-align: left;
+}
 
-    @mixin row {
-        display: block;
-        padding: .4rem;
-        text-align: left;
+@mixin input {
+    border: 1px solid gray;
+    padding: .4rem;
+    transition: all .2s ease-in-out;
+
+    &:focus {
+        outline: 1px solid var(--primary);
     }
+}
 
+.input {
+    @include input;
+}
+    
+.menu, .dialog {
     div.row {
         display: flex;
         flex-flow: nowrap;
@@ -108,12 +121,7 @@
         input[type=search],
         input[type=password] {
             @include row;
-            border: 1px solid gray;
-            transition: all .2s ease-in-out;
-    
-            &:focus {
-                outline: 1px solid var(--primary);
-            }
+            @include input;
         }
     }
     

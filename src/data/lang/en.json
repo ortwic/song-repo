@@ -190,7 +190,18 @@
     "delete-done": "Your account was deleted successfully!",
     "profile": "Profile",
     "update-profile": "Save",
-    "danger-zone": "Danger Zone"
+    "danger-zone": "Danger Zone",
+    "linktree": {
+      "empty": "No links available yet.",
+      "title": "Title"
+    },
+    "cancel": "Cancel",
+    "add": "Add",
+    "edit": "Edit",
+    "delete": "Delete",
+    "about": "Bio",
+    "move-up": "Move up",
+    "move-down": "Move down"
   },
   "user": {
     "song-list": "Song list",
