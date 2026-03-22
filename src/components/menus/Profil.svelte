@@ -2,7 +2,7 @@
     import { t } from 'svelte-i18n';
     import { push } from 'svelte-spa-router';
     import { currentUser } from "../../service/auth.service";
-    import { currentProfile$ } from '../../service/user.service';
+    import { currentProfile } from '../../service/user.service';
     import { showError, showInfo } from "../../store/notification.store";
     import { getCssVariable } from "../../styles/style.helper";
 
@@ -15,8 +15,8 @@
 
 	async function copyLink(): Promise<void> {
 		try {
-			const link = $currentProfile$.alias 
-				? `${location.origin}/@${$currentProfile$.alias}` 
+			const link = $currentProfile.alias 
+				? `${location.origin}/@${$currentProfile.alias}` 
 				: `${location.origin}/#/songs/@${$currentUser.uid}`;
 			await navigator.clipboard.writeText(link);
 			showInfo($t('profile.share-link-copied'));

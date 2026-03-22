@@ -178,7 +178,6 @@
     "title": "Settings",
     "view": "View",
     "alias": "alias",
-    "alias-updated": "Alias updated",
     "alias-exists": "Alias already exists",
     "reset-views": "Reset views",
     "reset-text": "Reset stored column settings, filters and grouping.",
@@ -189,6 +188,7 @@
     "delete-advice": "You should export your data before deletion.",
     "delete-done": "Your account was deleted successfully!",
     "profile": "Profile",
+    "profile-updated": "Profile updated",
     "update-profile": "Save",
     "danger-zone": "Danger Zone",
     "linktree": {
@@ -201,7 +201,8 @@
     "delete": "Delete",
     "about": "Bio",
     "move-up": "Move up",
-    "move-down": "Move down"
+    "move-down": "Move down",
+    "alias-available": "Alias available"
   },
   "user": {
     "song-list": "Song list",

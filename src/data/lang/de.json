@@ -175,7 +175,6 @@
     "title": "Einstellungen",
     "view": "Ansicht",
     "alias": "Alias",
-    "alias-updated": "Alias aktualisiert",
     "alias-exists": "Alias existiert bereits",
     "reset-views": "Ansichten zurücksetzen",
     "reset-text": "Gespeicherter Spalteneinstellungen, Filter und Gruppierung zurücksetzen.",
@@ -186,6 +185,7 @@
     "delete-advice": "Sie sollten Ihre Daten vor dem Löschen exportieren.",
     "delete-done": "Ihr Konto wurde erfolgreich gelöscht!",
     "profile": "Profil",
+    "profile-updated": "Profil aktualisiert",
     "update-profile": "Speichern",
     "danger-zone": "Gefahrenzone",
     "linktree": {
@@ -198,7 +198,8 @@
     "delete": "Löschen",
     "about": "Bio",
     "move-down": "Nach unten",
-    "move-up": "Nach oben"
+    "move-up": "Nach oben",
+    "alias-available": "Alias ​​verfügbar"
   },
   "user": {
     "song-list": "Songliste",

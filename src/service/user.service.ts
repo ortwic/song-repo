@@ -1,13 +1,13 @@
-import { from, Observable, of, startWith, switchMap } from 'rxjs';
+import { from, map, Observable, of, startWith, switchMap } from 'rxjs';
 import FirestoreService from './firestore.service';
 import type { UserProfile } from '../model/user.model';
 import { currentUser } from './auth.service';
 import { where } from 'firebase/firestore';
 
 export const createUserStore = () => new FirestoreService('user');
-    
 const store = createUserStore();
-export const currentProfile$ = currentUser.pipe(
+
+export const currentProfile = currentUser.pipe(
     switchMap(({ uid }) => from(store.getDocument<UserProfile>(uid))),
     startWith({ alias: '' } as UserProfile)
 );
@@ -19,19 +19,20 @@ export default class UserService {
         );
     }
 
+    isAliasAvailable(alias: string): Observable<boolean> {
+        return from(store.getDocuments<UserProfile>(where('alias', '==', alias))).pipe(
+            map(docs => docs.length === 0)
+        );
+    }
+
     async updateProfile(data: Partial<UserProfile> & { id: string }): Promise<void> {
         await store.setDocument(data, { merge: true });
     }
 
-    async setAlias(id: string, alias: string): Promise<boolean> {
-        const users = await store.getDocuments<UserProfile>();
-        if (!users.find(u => u.alias === alias)) {
-            await store.setDocument({ id, alias }, { merge: true });
-            return true;
-        }
-        return false;
+    async setAlias(id: string, alias: string): Promise<void> {
+        await store.setDocument({ id, alias }, { merge: true });
     }
-    
+
     async setDeletedFlag(id: string): Promise<void> {
         await store.setDocument({ id, deleted: new Date() });
     }
