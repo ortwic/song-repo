@@ -15,7 +15,7 @@
   import SongResource, { type Dialog } from './SongResource.class';
   import { summaryFormatter } from './templates/responsive.helper';
   import SongService, { viewStoreId } from '../../service/user-song.service';
-  import type { MessageFormatter } from '../../service/i18n';
+  import type { MessageFormatter } from '../../service/i18n.setup';
   import type { UserSong } from '../../model/song.model';
   import type { TableView } from '../../model/table-view.model';
   import { showError, showInfo } from '../../store/notification.store';

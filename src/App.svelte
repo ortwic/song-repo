@@ -18,7 +18,7 @@
   import UserPage from "./routes/UserPage.svelte";
   import NotFound from "./routes/NotFound.svelte";
   import { currentUser } from './service/auth.service';
-  import { setupI18n } from "./service/i18n";
+  import { setupI18n } from "./service/i18n.setup";
     
   const title = `${import.meta.env.DEV ? 'DEV' : 'Start'}`;
   const usertitle = currentUser.pipe(map(autoRedirect));

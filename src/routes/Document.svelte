@@ -1,6 +1,6 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
-    import { lang } from '../service/i18n';
+    import { lang } from '../service/i18n.setup';
     
     export let params: { name?: string } = {};
 
