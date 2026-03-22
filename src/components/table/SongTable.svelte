@@ -14,7 +14,7 @@
   import FileDrop from './FileDrop.svelte';
   import SongResource, { type Dialog } from './SongResource.class';
   import { summaryFormatter } from './templates/responsive.helper';
-  import SongService, { viewStoreId } from '../../service/song.service';
+  import SongService, { viewStoreId } from '../../service/user-song.service';
   import type { MessageFormatter } from '../../service/i18n';
   import type { UserSong } from '../../model/song.model';
   import type { TableView } from '../../model/table-view.model';

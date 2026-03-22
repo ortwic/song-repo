@@ -3,14 +3,28 @@ import { currentUser } from './auth.service';
 import FirestoreService, { uniqueKey } from './firestore.service';
 import type { UserSong } from '../model/song.model';
 import { Timestamp, orderBy, where } from 'firebase/firestore';
+import { createUserStore } from './user.service';
 
 export const viewStoreId = 'songs.v1';
-export const createUserStore = () => new FirestoreService('user');
 
 const store = createUserStore();
 const sampleId = '3qAbhlbXxNaLY7CMiz6uOMJlBbb2';
 const localStore = {};
 const localSubject = new BehaviorSubject<UserSong[]>([]);
+
+const appendGeneratedId = (uid: string, song: UserSong, ...more: object[]): UserSong => {
+    return !song.id && song.title
+        ? Object.assign(
+            song,
+            {
+                uid,
+                id: uniqueKey(song.artist ?? 'n/a', song.title),
+                createdAt: Timestamp.now(),
+            },
+            ...more
+        )
+        : song;
+};
 
 export default class SongService {
     private uid = '';
@@ -18,20 +32,6 @@ export default class SongService {
     isShared = () => !!this.sharedUid;
 
     readonly usersongs: Observable<UserSong[]>;
-
-    private appendId = (song: UserSong, ...more: object[]): UserSong => {
-        return !song.id && song.title
-            ? Object.assign(
-                song,
-                {
-                    id: uniqueKey(song.artist ?? 'n/a', song.title),
-                    uid: this.uid,
-                    createdAt: Timestamp.now(),
-                },
-                ...more
-            )
-            : song;
-    };
 
     constructor(private sharedUid?: string, private showSamples = false) {
         currentUser.subscribe((user) => (this.uid = user?.uid));
@@ -65,7 +65,7 @@ export default class SongService {
     }
 
     async addSong(song: Partial<UserSong>): Promise<string> {
-        const newSong = this.appendId({
+        const newSong = appendGeneratedId(this.uid, {
             fav: false,
             status: 'todo',
             progress: 0,
@@ -113,7 +113,7 @@ export default class SongService {
 
     async importSongs(data: UserSong[]): Promise<UserSong[]> {
         if (data) {
-            const songs = data.map((s) => this.appendId(s, { importedAt: new Date() }));
+            const songs = data.map((s) => appendGeneratedId(this.uid, s, { importedAt: new Date() }));
             if (this.uid) {
                 await store.setDocuments(songs, { merge: true });
             } else { 

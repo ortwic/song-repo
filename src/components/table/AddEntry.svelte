@@ -6,7 +6,7 @@
     import Image from "../ui/elements/Image.svelte";
     import SelectKey from '../ui/SelectKey.svelte';
     import LoadingBar from '../ui/elements/LoadingBar.svelte';
-    import SongService from "../../service/song.service";
+    import SongService from "../../service/user-song.service";
     import { create, settingsStore } from "../../service/search.service";
     import type { UserSong } from "../../model/song.model";
     import type { ArtistResult, SongResult } from "../../model/songbpm.model";
