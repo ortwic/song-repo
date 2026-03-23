@@ -2,8 +2,8 @@ import type { Readable } from 'svelte/store';
 import type { CellComponent, MenuObject, MenuSeparator } from 'tabulator-tables';
 import type { UserSong } from '../../model/song.model';
 import type { Status } from '../../model/types';
-import type { MessageFormatter } from '../../service/i18n';
-import type SongService from '../../service/song.service';
+import type { MessageFormatter } from '../../service/i18n.setup';
+import type SongService from '../../service/user-song.service';
 import { showError } from '../../store/notification.store';
 import { logAction } from '../../store/notification.store';
 

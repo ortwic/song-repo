@@ -2,7 +2,7 @@ import type { CellComponent, CellEditEventCallback, ColumnComponent, Editor, Lis
 import type { ColumnDefinition } from '../tabulator/types';
 import { autoFilter } from './filter.helper';
 import Format from './Formatter.class';
-import type { MessageFormatter } from '../../../service/i18n';
+import type { MessageFormatter } from '../../../service/i18n.setup';
 
 type Sorter =
     | undefined

@@ -177,6 +177,8 @@
   "settings": {
     "title": "Settings",
     "view": "View",
+    "alias": "alias",
+    "alias-exists": "Alias already exists",
     "reset-views": "Reset views",
     "reset-text": "Reset stored column settings, filters and grouping.",
     "reset-done": "All saved view reseted!",
@@ -185,6 +187,25 @@
     "delete-profile": "Delete profile",
     "delete-advice": "You should export your data before deletion.",
     "delete-done": "Your account was deleted successfully!",
-    "profile": "Profile"
+    "profile": "Profile",
+    "profile-updated": "Profile updated",
+    "update-profile": "Save",
+    "danger-zone": "Danger Zone",
+    "linktree": {
+      "empty": "No links available yet.",
+      "title": "Title"
+    },
+    "cancel": "Cancel",
+    "add": "Add",
+    "edit": "Edit",
+    "delete": "Delete",
+    "about": "Bio",
+    "move-up": "Move up",
+    "move-down": "Move down",
+    "alias-available": "Alias available"
+  },
+  "user": {
+    "song-list": "Song list",
+    "alias-unknown": "User alias is unkown!"
   }
 }

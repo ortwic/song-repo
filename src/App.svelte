@@ -15,12 +15,13 @@
   import Settings from "./routes/Settings.svelte";
   import Document from "./routes/Document.svelte";
   import Feedback from "./routes/Feedback.svelte";
+  import UserPage from "./routes/UserPage.svelte";
   import NotFound from "./routes/NotFound.svelte";
   import { currentUser } from './service/auth.service';
-  import { setupI18n } from "./service/i18n";
+  import { setupI18n } from "./service/i18n.setup";
     
   const title = `${import.meta.env.DEV ? 'DEV' : 'Start'}`;
-  const usertitle = currentUser.pipe(map(redirectToSongs));
+  const usertitle = currentUser.pipe(map(autoRedirect));
   const version = import.meta.env.PACKAGE_VERSION;
   
   const routes = {
@@ -37,6 +38,7 @@
     '/signup': Signup,
     '/settings': Settings,
     '/feedback': Feedback,
+    '/user/:alias': UserPage,
     '*': NotFound
   };
   
@@ -49,11 +51,16 @@
     }
   });
 
-  function redirectToSongs(user: User): string {
-    if (user && $location === '/') {
-      push(`/songs`);
-      const name = user.displayName || user.email.split('@')[0]?.replace('.', ' ');
-      return `${name}'s known songs`;
+  function autoRedirect(user: User): string {
+    if ($location === '/') {
+      const userParams = window.location.pathname.split('/@');
+      if (userParams.length > 1) {
+        window.location.href = `${window.location.origin}/#/user/${userParams.at(-1)}`;
+      } else if (user) {
+        push(`/songs`);
+        const name = user.displayName || user.email.split('@')[0]?.replace('.', ' ');
+        return `${name}'s known songs`;
+      }
     }
     return `${title} | Login`;
   }
@@ -62,7 +69,6 @@
 <svelte:head>
   <meta name="author" content="OCSoft, ocsoft42@gmail.com">
   <title>{$usertitle || 'Loading...'}</title>
-  <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
 </svelte:head>
 
 {#await setupI18n()}
