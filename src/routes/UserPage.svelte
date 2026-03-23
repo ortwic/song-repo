@@ -4,6 +4,7 @@
   import type { UserLink } from '../model/user.model';
   import UserService from '../service/user.service';
   import { UserLinkService } from '../service/user-link.service';
+  import Avatar from '../components/ui/Avatar.svelte';
   import NavButton from '../components/ui/elements/NavButton.svelte';
   import NotFound from './NotFound.svelte';
 
@@ -20,7 +21,10 @@
 
 <main class="content">
   {#if $profile$.id}
-  <h2>{$profile$.name}</h2>
+  <h2>
+    <Avatar photoURL={$profile$.photoURL} title={$profile$.name} />
+    {$profile$.name}
+  </h2>
   <p class="about">{$profile$.about ?? ''}</p>
   <section class="menu">
     <NavButton href="/songs/@{$profile$.id}">
@@ -47,10 +51,13 @@
 
 <style>
     h2 {
-      text-align: center;
-      color: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5em;
+        color: var(--primary);
     }
-
+    
     .about {
       padding: 0 1em;
     }

@@ -1,11 +1,9 @@
 <script lang='ts'>
     import { t } from 'svelte-i18n';
-    import { Subject, of, switchMap } from 'rxjs';
-    import { debounceTime, distinctUntilChanged } from 'rxjs';
+    import { Subject, of, switchMap, debounceTime, distinctUntilChanged } from 'rxjs';
     import { currentUser } from '../../service/auth.service';
     import UserService, { currentProfile } from '../../service/user.service';
     import { showError, showInfo } from '../../store/notification.store';
-    import { onDestroy } from 'svelte';
 
     const userService = new UserService();
     const aliasInput$ = new Subject<string>();
@@ -19,16 +17,16 @@
     );
 
     let name = '';
+    let photoUrl = '';
     let alias = '';
     let about = '';
 
-    const { unsubscribe } = currentProfile.subscribe((p) => {
+    currentProfile.subscribe((p) => {
         name  = p.name  ?? '';
+        photoUrl = p.photoURL ?? '';
         alias = p.alias ?? '';
         about = p.about ?? '';
     });
-
-    onDestroy(() => unsubscribe && unsubscribe());
 
     $: aliasInput$.next(alias);
     $: aliasChanged = alias !== ($currentProfile.alias ?? '');
@@ -58,6 +56,9 @@
 <div class="section grid">
     <label for="name">Name</label>
     <input id="name" type="text" class="input lg" bind:value={name} />
+
+    <label for="photoUrl">Photo</label>
+    <input id="photoUrl" type="url" class="input lg" bind:value={photoUrl} />
 
     <label for="alias">Alias</label>
     <div class="alias-wrap">
@@ -94,6 +95,10 @@
 </p>
 
 <style lang="scss">
+    input {
+        width: calc(100% - 1em);
+    }
+
     .grid {
         display: grid;
         grid-template-columns: auto 1fr;
