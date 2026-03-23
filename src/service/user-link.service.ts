@@ -24,7 +24,7 @@ export class UserLinkService {
             return sharedStore.getDocumentStream<UserLink>(orderBy('order'));
         }
 
-        if (user.uid) {
+        if (user?.uid) {
             this.store = new FirestoreService(`user/${user.uid}/links`);
             return this.store.getDocumentStream<UserLink>(orderBy('order'));
         }
