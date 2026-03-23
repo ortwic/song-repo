@@ -1,11 +1,13 @@
 <script lang="ts">
   import { t } from 'svelte-i18n';
+  import { marked } from 'marked';
   import { startWith, switchMap } from 'rxjs';
   import type { UserLink } from '../model/user.model';
   import UserService from '../service/user.service';
   import { UserLinkService } from '../service/user-link.service';
   import Avatar from '../components/ui/Avatar.svelte';
   import NavButton from '../components/ui/elements/NavButton.svelte';
+  import { currentMenu } from '../store/app.store';
   import NotFound from './NotFound.svelte';
 
   export let params: { alias?: string } = {};
@@ -16,6 +18,7 @@
     switchMap(p => new UserLinkService(p.id).userlinks),
     startWith([] as UserLink[])
   );
+  currentMenu.set('user');
 
 </script>
 
@@ -25,7 +28,7 @@
     <Avatar photoURL={$profile$.photoURL} title={$profile$.name} />
     {$profile$.name}
   </h2>
-  <p class="about">{$profile$.about ?? ''}</p>
+  <p class="about">{@html marked($profile$.about) ?? ''}</p>
   <section class="menu">
     <NavButton href="/songs/@{$profile$.id}">
       <span>
@@ -34,7 +37,7 @@
     </NavButton>
     {#each $links$ as link}
       <div class="row">
-        <a role="button" href="#/links/{link.url}" target="_blank">
+        <a role="button" href="{link.url}" target="_blank">
           <span>
             <i class="bx {link.icon}"></i> {link.title}
           </span>

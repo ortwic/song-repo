@@ -5,7 +5,7 @@
     import { currentMenu } from "../../../store/app.store";
 
     const dispatch = createEventDispatcher();
-    const opened = derived(currentMenu, (p) => p !== 'root');
+    const opened = derived(currentMenu, (p) => p !== 'root' && p !== 'user');
 
     export let target: MenuPages;
 
