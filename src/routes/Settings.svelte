@@ -1,9 +1,10 @@
 <script lang='ts'>
     import { t } from 'svelte-i18n';
-    import { push } from 'svelte-spa-router';
+    import { link, push } from 'svelte-spa-router';
     import Profile from '../components/settings/Profile.svelte';
     import Linktree from '../components/settings/Linktree.svelte';
     import { slideFade } from '../components/ui/transition.helper';
+    import Footer from '../components/ui/Footer.svelte';
     import AuthService, { currentUser } from '../service/auth.service';
     import UserService from '../service/user.service';
     import { currentMenu } from '../store/app.store';
@@ -92,6 +93,11 @@
             </fieldset>
         {/if}
     </section>
+    <Footer>
+        <a use:link href="/docs/imprint">{ $t('start.imprint') }</a> |
+        <a use:link href="/docs/privacypolicy">{ $t('start.privacypolicy') }</a> |
+        <a use:link href="/docs/termsofuse">{ $t('start.termsofuse') }</a>
+    </Footer>
 </main>
 
 <style lang="scss">

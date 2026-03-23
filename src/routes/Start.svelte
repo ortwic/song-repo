@@ -2,8 +2,7 @@
     import { t } from 'svelte-i18n';
     import { link } from 'svelte-spa-router';
     import { currentUser } from '../service/auth.service';
-    
-    const options = { mangle: false, headerIds: false };
+    import Footer from '../components/ui/Footer.svelte';
 </script>
 
 <main class="content">
@@ -94,12 +93,12 @@
             </li> -->
         </ul>
     </section>
-    <footer>
+    <Footer>
         <a use:link href="/docs/imprint">{ $t('start.imprint') }</a> |
         <a use:link href="/docs/privacypolicy">{ $t('start.privacypolicy') }</a> |
         <a use:link href="/docs/termsofuse">{ $t('start.termsofuse') }</a> |
         <a use:link href="/settings">{ $t('settings.title') }</a>
-    </footer>
+    </Footer>
 </main>
 
 <style lang="scss">
@@ -163,10 +162,6 @@ main {
         .smaller {
             font-size: smaller;
         }
-    }
-
-    footer {
-        text-align: center;
     }
 }
 </style>

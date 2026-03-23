@@ -7,6 +7,7 @@
   import { UserLinkService } from '../service/user-link.service';
   import Avatar from '../components/ui/Avatar.svelte';
   import NavButton from '../components/ui/elements/NavButton.svelte';
+  import Footer from '../components/ui/Footer.svelte';
   import { currentMenu } from '../store/app.store';
   import NotFound from './NotFound.svelte';
 
@@ -50,6 +51,9 @@
       <p>{$t('user.alias-unknown')}</p>
     </NotFound>
   {/if}
+  <p>
+    <Footer />
+  </p>
 </main>
 
 <style>
