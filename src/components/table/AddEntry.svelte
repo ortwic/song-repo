@@ -100,7 +100,7 @@
 {#if visible}
 <form bind:this={form} on:submit|preventDefault>
     <ConfirmDialog size='full' on:closed={done}>
-        <div class="title" slot="title">
+        <div class="title" slot="header">
             <i class="bx bx-search-alt-2"></i>&nbsp; { $t('songs.addTitle') } 
             <!-- svelte-ignore a11y-interactive-supports-focus -->
             <!-- svelte-ignore a11y-click-events-have-key-events -->

@@ -5,8 +5,9 @@
     export let value: string;
 </script>
 
-<Autocomplete inputClassName="sm" bind:text={value} minCharactersToSearch={0} showClear={true}>
-    <svelte:fragment slot="no-results">
+<Autocomplete inputClassName="sm" bind:text={value} minCharactersToSearch={0} showClear={true}
+    searchFunction={(v) => [v]}>
+    <svelte:fragment slot="item">
         <div class="popup">
             <CircleOfFifth size={120} bind:selectedKey={value} />
         </div>

@@ -8,7 +8,7 @@
 
 <aside in:slide={{ duration: 200, axis: 'x' }} out:slide={{ duration: 200, axis: 'x' }} >
     <Titlebar target='root'>
-        <slot name="title">
+        <slot name="header">
             {title}
         </slot>    
     </Titlebar>

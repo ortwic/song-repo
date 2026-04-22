@@ -34,7 +34,7 @@
 
 {#if visible}
 <ConfirmDialog size="full" on:closed={hide}>
-    <svelte:fragment slot="title">
+    <svelte:fragment slot="header">
         <i class="bx bx-detail"></i> {title} 
     </svelte:fragment>
 

@@ -12,7 +12,7 @@
     import EventList from './EventList.svelte';
     import ExportTable from './ExportTable.svelte';
     import AdvanceTable from '../table/AdvanceTable.svelte';
-    import MenuButton from '../ui/elements/MenuButton.svelte';
+    import ToggleSidebarButton from '../ui/elements/ToggleMenuButton.svelte';
     import Sidebar from '../ui/Sidebar.svelte'
     import type { MenuPages } from '../../model/types';
     import { currentUser } from '../../service/auth.service';
@@ -40,12 +40,12 @@
 
 <form on:submit|preventDefault={handleMenuNav}>
     <header>
-      <MenuButton target='main' />
+      <ToggleSidebarButton target='main' />
     </header>
     <nav>
       {#if $currentMenu === 'main'}
       <Sidebar>
-        <svelte:fragment slot="title">
+        <svelte:fragment slot="header">
           <a href="#/" on:click={() => currentMenu.set('root')}>{title}</a>
         </svelte:fragment>
         {#if $currentUser}

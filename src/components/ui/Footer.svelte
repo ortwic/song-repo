@@ -4,7 +4,7 @@
 
 <footer>
     <a href="https://song-repo.web.app" target="_blank">
-        <img src="public/logo.svg" alt="logo" width="20" />
+        <img src="logo.svg" alt="logo" width="20" />
         &copy; { year } Song Repo
     </a>
     <span>

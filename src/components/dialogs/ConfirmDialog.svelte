@@ -19,7 +19,7 @@
     in:fade={{ duration: 200, easing: cubicOut }} 
     out:fade={{ duration: 200, easing: cubicOut }}>
     <Titlebar {target} on:close={() => dispatch('closed', false)}>
-        <slot name='title'></slot> {title}
+        <slot name='header'></slot> {title}
     </Titlebar>
     <slot></slot>
     <slot name='footer'>
