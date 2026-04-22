@@ -6,6 +6,7 @@
   "instagram.com":      "bxl-instagram",
   "twitter.com":        "bxl-twitter",
   "x.com":              "bxl-twitter",
+  "github.io":          "bxl-github",
   "github.com":         "bxl-github",
   "gitlab.com":         "bxl-gitlab",
   "linkedin.com":       "bxl-linkedin",
@@ -60,5 +61,9 @@
   "linktr.ee":          "bx-link",
   "wordpress.com":      "bxl-wordpress",
   "wix.com":            "bxl-wix",
-  "squarespace.com":    "bxl-squarespace"
+  "squarespace.com":    "bxl-squarespace",
+  "musescore.com":      "bx-music",
+  "gigstarter.de":      "bx-music",
+  "gigstarter.com":     "bx-music",
+  "gigmit.com":         "bx-music"
 }

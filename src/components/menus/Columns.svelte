@@ -37,6 +37,10 @@
         $view?.table.setSort(sorter);
     }
 
+    function sortIcon(order: 'asc' | 'desc') {
+        return order === 'desc' ? 'bx bxs-chevron-down' : 'bx bxs-chevron-up';
+    }
+
     function filterBy(column: string, value: string) {
         headerFilter[column] = value;
         if (value === undefined) {
@@ -68,7 +72,7 @@
                     state={sortedFields[col.field] ?? null}
                     options={[null, 'asc', 'desc']}
                     on:toggle={({ detail }) => sortBy(col.field, detail)}>
-                    <i class="bx {sortedFields[col.field] ?? 'asc'}"></i>
+                    <i class={sortIcon(sortedFields[col.field])}></i>
                 </Switch>
                 <Switch title="{ $t('menu.table.group-by') } {col.title}"
                     state={$view?.groups.includes(col.field)}
@@ -157,16 +161,6 @@
                     width: 1.6em;
                 }
             }
-        }
-
-        i.bx.asc::before {
-            font-family: 'boxicons';
-            content: "\ec96"; // bxs-chevron-up
-        }
-
-        i.bx.desc::before {
-            font-family: 'boxicons';
-            content: "\ec89"; // bxs-chevron-down
         }
     }
 </style>

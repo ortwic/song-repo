@@ -6,6 +6,10 @@ import platformIcons from '../data/icons.json';
  * Returns undefined if no platform is recognized.
  */
 export function resolveIcon(url: string, fallback = 'bx-link'): string | undefined {
+    if (url.startsWith('mailto:')) {
+        return 'bx-envelope';
+    }
+    
     let hostname: string;
     try {
         hostname = new URL(url).hostname.replace(/^www\./, '');
