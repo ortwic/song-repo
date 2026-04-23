@@ -7,7 +7,7 @@
 </script>
 
 <aside in:slide={{ duration: 200, axis: 'x' }} out:slide={{ duration: 200, axis: 'x' }} >
-    <Titlebar target='root'>
+    <Titlebar target='hidden'>
         <slot name="header">
             {title}
         </slot>    

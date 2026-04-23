@@ -14,7 +14,7 @@
     import AdvanceTable from '../table/AdvanceTable.svelte';
     import ToggleSidebarButton from '../ui/elements/ToggleMenuButton.svelte';
     import Sidebar from '../ui/Sidebar.svelte'
-    import type { MenuPages } from '../../model/types';
+    import type { MenuTarget } from '../../model/types';
     import { currentUser } from '../../service/auth.service';
     import { currentMenu } from '../../store/app.store';
     import TagCloud from './TagCloud.svelte';
@@ -26,27 +26,31 @@
     const isEventView = derived(location, (path) => path.startsWith('/events'));
     let counter = 0;
 
-    onMount(() => currentMenu.set($isTableView ? 'root' : 'main'));
+    onMount(() => currentMenu.set($isTableView ? 'hidden' : 'dynamic'));
 
     function handleMenuNav(ev: SubmitEvent) {
-        const target = ev.submitter.getAttribute('data-target') as MenuPages;
+        const target = ev.submitter.getAttribute('data-target') as MenuTarget;
         if (target) {
             currentMenu.set(target);
         } else if (ev.submitter.getAttribute('data-close') !== null) {
-            currentMenu.set('root');
+            handleClose();
         }
+    }
+
+    function handleClose() {
+        currentMenu.set('hidden');
     }
 </script>
 
 <form on:submit|preventDefault={handleMenuNav}>
     <header>
-      <ToggleSidebarButton target='main' />
+      <ToggleSidebarButton target='dynamic' />
     </header>
     <nav>
-      {#if $currentMenu === 'main'}
+      {#if $currentMenu === 'dynamic'}
       <Sidebar>
         <svelte:fragment slot="header">
-          <a href="#/" on:click={() => currentMenu.set('root')}>{title}</a>
+          <a href="#/" on:click={handleClose}>{title}</a>
         </svelte:fragment>
         {#if $currentUser}
         <Profil email={$currentUser.email}

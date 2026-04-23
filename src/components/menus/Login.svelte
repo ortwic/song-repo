@@ -15,7 +15,7 @@
 	async function signIn(ev: MouseEvent) {
 		try {
 			await authService.signIn(email, password);
-            currentMenu.set('root');
+            currentMenu.set('hidden');
 		} catch (error) {
             if (`${error.message}`.includes('auth/wrong-password')) {
                 showError(`${ $t('menu.login.wrong-password') }`);

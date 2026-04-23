@@ -17,7 +17,7 @@
 
     async function signOut() {
         await authService.signOut();
-        currentMenu.set('main');
+        currentMenu.set('dynamic');
         push('/');
     }
 

@@ -1,20 +1,20 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
     import { derived } from "svelte/store";
-    import type { MenuPages } from "../../../model/types";
+    import type { MenuTarget } from "../../../model/types";
     import { currentMenu } from "../../../store/app.store";
 
     const dispatch = createEventDispatcher();
-    const opened = derived(currentMenu, (p) => p !== 'root' && p !== 'user');
+    const opened = derived(currentMenu, (p) => p !== 'hidden' && p !== 'user');
 
-    export let target: MenuPages;
+    export let target: MenuTarget;
 
     function open() {
-        if ($currentMenu === 'root') {
+        if ($currentMenu === 'hidden') {
             currentMenu.set(target);
             dispatch('opened');
         } else {
-            currentMenu.set('root');
+            currentMenu.set('hidden');
             dispatch('closed');
         }
     }
