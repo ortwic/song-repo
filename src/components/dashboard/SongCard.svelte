@@ -1,6 +1,5 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
-    import Color from 'color';
     import type { UserSong } from '../../model/song.model';
     import { type Status, status as statusKeys } from '../../model/types';
     import { toDate } from '../table/templates/Formatter.class';
@@ -28,14 +27,11 @@
         const gradient = hex
             ? `radial-gradient(farthest-corner at 0% 0%, transparent 66%, ${hex})`
             : undefined;
-        const genreObj = hex ? Color(hex) : undefined;
-        const genreLabelStyle = genreObj
-            ? `background: ${hex}; color: ${genreObj.isDark() ? 'white' : 'black'};`
-            : '';
-        return { gradient, genreLabelStyle };
+        const genreWatermarkStyle = hex ? `color: ${hex}40;` : '';
+        return { gradient, genreWatermarkStyle };
     }
 
-    const { gradient, genreLabelStyle } = getGenreStyles(song.genre);
+    const { gradient, genreWatermarkStyle } = getGenreStyles(song.genre);
 
     function handlePrimary() {
         if (song.uri) {
@@ -61,9 +57,9 @@
         }
     }
 
-    async function handleStatusChange(status: Status) {
-        await actions.changeStatus(song, status);
-        song = { ...song, status };
+    async function handleStatusChange(status: string) {
+        await actions.changeStatus(song, status as Status);
+        song = { ...song, status: status as Status };
     }
 </script>
 
@@ -80,7 +76,7 @@
             <p class="title fav" class:active={song.fav}>{song.title ?? '—'}</p>
         </div>
     </header>
-
+    <span class="genre-watermark" style={genreWatermarkStyle}>{song.genre}</span>
     <div>
         <!-- svelte-ignore a11y-no-static-element-interactions -->
         <progress-bar
@@ -92,28 +88,22 @@
     </div>
 
     <div class="tags">
-        {#if song.genre}
-            <span class="label genre" title="{$t('songs.columns.genre')}" style={genreLabelStyle}>{song.genre}</span>
-        {/if}
-        {#if song.style}<span class="label" title="{$t('songs.columns.style')}">{song.style}</span>{/if}
         {#if signature}<span class="label" title="{$t('songs.columns.signature')}">{signature}</span>{/if}
+        {#if song.style}<span class="label" title="{$t('songs.columns.style')}">{song.style}</span>{/if}
     </div>
 
-    {#if song.tags?.length}
-        <div class="tags" title="Labels">
+    <div class="tags" title="Labels">
+        {#if song.tags?.length}
             {#each asArray(song.tags).filter(Boolean) as tag}
                 <span class="label tag">{tag}</span>
             {/each}
-        </div>
-    {/if}
-
-    {#if song.features?.length}
-        <div class="tags" title="Features">
+        {/if}
+        {#if song.features?.length}
             {#each asArray(song.features).filter(Boolean) as tag}
                 <span class="label feature">{tag}</span>
             {/each}
-        </div>
-    {/if}
+        {/if}
+    </div>
 
     <footer>
         <button
@@ -159,6 +149,8 @@
 
 <style lang="scss">
     .song-card {
+        position: relative;
+        overflow: hidden;
         background: var(--primback);
         border: 1.5px solid var(--primghost);
         border-radius: 1rem;
@@ -174,6 +166,24 @@
         &:hover {
             border-color: silver;
         }
+    }
+
+    .genre-watermark {
+        position: absolute;
+        bottom: 0.4em;
+        left: 0.4em;
+        min-width: 60%; 
+        text-align: center; 
+        font-size: 3.5rem;
+        font-weight: 800;
+        text-shadow: 1px 1px 4px #80808040;
+        line-height: 1;
+        opacity: 0.5;
+        pointer-events: none;
+        user-select: none;
+        white-space: nowrap;
+        transform: rotate(-20deg);
+        transform-origin: bottom left;
     }
 
     header {
