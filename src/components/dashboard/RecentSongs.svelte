@@ -7,10 +7,11 @@
     import { toDate } from '../table/templates/Formatter.class';
     import { toStore } from '../../utils/rx.store';
     import SongCard from './SongCard.svelte';
+    import Switch from '../ui/elements/Switch.svelte';
 
     const MAX = 12;
 
-    let limit = 4;
+    let limit = 4, showDone = false;
 
     const service = new SongService();
     const recentSongStore = toStore(
@@ -24,13 +25,18 @@
         []
     );
 
-    $: recentSongs = $recentSongStore.slice(0, limit);
+    $: recentSongs = $recentSongStore.filter((s) => showDone || s.status !== 'done').slice(0, limit);
 </script>
 
 <section class="recent-songs">
     <header class="section-header">
         <div class="title"><i class="bx bxs-playlist"></i> {$t('songs.recent-wip')}</div>
         <div class="controls">
+            <Switch title="{ $t(`songs.${!showDone ? 'show-all' : 'without-done'}`) }"
+                state={showDone}
+                on:toggle={() => showDone = !showDone}>
+                <i class="icon bx" class:bx-check={!showDone} class:bx-music={showDone}></i> 
+            </Switch>
             <input type="range" min="2" max={MAX} step="2" bind:value={limit} aria-label={$t('songs.recent-limit')} />
             <span class="limit-val">{limit}</span>
             <a role="button" href="#/songs">

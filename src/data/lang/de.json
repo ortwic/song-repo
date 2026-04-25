@@ -136,8 +136,9 @@
       "archived": "Archiviert"
     },
     "recent-wip": "Aktuelle Songs in Arbeit",
+    "recent-limit": "Anzahl Songs",
     "show-all": "Alle anzeigen",
-    "recent-limit": "Anzahl Songs"
+    "without-done": "Ohne Erledigte"
   },
   "table": {
     "groupBy": "Gruppieren nach {title}",

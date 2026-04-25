@@ -136,8 +136,9 @@
       "archived": "Archived"
     },
     "recent-wip": "Recent songs in progress",
+    "recent-limit": "Recent limit",
     "show-all": "Show all",
-    "recent-limit": "Recent limit"
+    "without-done": "Without done"
   },
   "table": {
     "groupBy": "Group by {title}",
