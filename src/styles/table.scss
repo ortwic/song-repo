@@ -6,6 +6,11 @@
     transition: transform .2s ease-in-out;    
 }
 
+@mixin active {
+    font-weight: 500;
+    background: linear-gradient(0deg, wheat, transparent 50%);
+}
+
 div#table.tabulator {
     div.tabulator-header {
         background-color: var(--primback);
@@ -109,8 +114,7 @@ div#table.tabulator {
 
                         &.artist.active,
                         &.title.active {
-                            font-weight: 500;
-                            background: linear-gradient(0deg, wheat, transparent 50%);
+                            @include active();
                         }
                     }
                     i {
@@ -240,6 +244,10 @@ span.fav {
         text-shadow: 1px 1px 1px #A0A0A0;
         content: '✩';
     }
+}
+
+p.fav.active {
+    @include active();
 }
 
 div.tabulator-cell.fav.active, 

@@ -5,6 +5,7 @@ import { Timestamp } from 'firebase/firestore';
 import type { CellComponent, GroupComponent } from 'tabulator-tables';
 import type { ColumnDefinition } from '../tabulator/types';
 import './ProgressBar.class';
+import { SongActions } from '../SongActions.class';
 import type { UserSong } from '../../../model/song.model';
 import { status } from '../../../model/types';
 import { genreColor, redToGreenGradient, redToGreenRange } from '../../../styles/style.helper';
@@ -75,20 +76,8 @@ export default class Formatter {
                 bar.addEventListener('change', (ev: CustomEvent<number[]>) => {
                     const [newValue, oldValue] = ev.detail;
                     cell.setValue(newValue);
-        
-                    if (newValue > 90) {
-                        song.status = 'done';
-                        cell.getRow().reformat();
-                    } else if (newValue < 10) {
-                        song.status = 'archived';
-                        cell.getRow().reformat();
-                    } else if (newValue < oldValue) {
-                        song.status = 'repeat';
-                        cell.getRow().reformat();
-                    } else if (oldValue < newValue) {
-                        song.status = 'wip';
-                        cell.getRow().reformat();
-                    }
+                    song.status = SongActions.deriveStatus(newValue, oldValue) ?? song.status;
+                    cell.getRow().reformat();
                 });
                 return bar;
             },

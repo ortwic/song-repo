@@ -74,9 +74,27 @@ export class SongActions {
         await this.service.setSong(song);
     }
 
-    async changeStatus(song: UserSong, status: string): Promise<void> {
-        song.status = status as Status;
+    async changeStatus(song: UserSong, status: Status): Promise<void> {
+        song.status = status;
         await this.service.setSong(song);
+    }
+
+    static deriveStatus(newValue: number, oldValue: number): Status | undefined {
+        if (newValue > 90)        return 'done';
+        if (newValue < 10)        return 'archived';
+        if (newValue < oldValue)  return 'repeat';
+        if (newValue > oldValue)  return 'wip';
+        return undefined;
+    }
+
+    async updateProgress(song: UserSong, newValue: number, oldValue: number): Promise<Status | undefined> {
+        song.progress = newValue;
+        const newStatus = SongActions.deriveStatus(newValue, oldValue);
+        if (newStatus) {
+            song.status = newStatus ?? song.status;
+        }
+        await this.service.setSong(song);
+        return newStatus;
     }
 
     async delete(song: UserSong): Promise<void> {

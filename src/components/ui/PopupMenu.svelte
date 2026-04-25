@@ -54,7 +54,6 @@
     div.popup-menu {
       display: flex;
       flex-direction: column;
-      border: 1px solid gray;
       box-shadow: .1em .1em .4em #00000080;
     }
   }

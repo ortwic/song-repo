@@ -96,7 +96,8 @@
       "learnedOn": "Gelernt",
       "changedAt": "Geändert",
       "country": "Land",
-      "year": "Jahr"
+      "year": "Jahr",
+      "signature": "Tonangaben"
     },
     "menu": {
       "open": "Öffne Ressource",
@@ -110,7 +111,8 @@
       "change-status": "Status ändern",
       "delete": "Löschen?",
       "yes": "Ja",
-      "no": "Nein"
+      "no": "Nein",
+      "set-resource": "Ressource festlegen"
     },
     "resource": {
       "title": "Geben Sie den Ressourcenpfad ein",

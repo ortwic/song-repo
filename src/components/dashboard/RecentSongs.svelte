@@ -1,5 +1,6 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
+    import { flip } from 'svelte/animate';
     import { map } from 'rxjs';
     import SongService from '../../service/user-song.service';
     import { unfold } from '../ui/transition.helper';
@@ -16,7 +17,7 @@
         service.usersongs.pipe(
             map((songs) =>
                 [...songs]
-                    .filter((s) => s.changedAt && s.status !== 'done')
+                    .filter((s) => s.changedAt)
                     .sort((a, b) => toDate(b.changedAt).getTime() - toDate(a.changedAt).getTime())
             )
         ),
@@ -44,8 +45,8 @@
     {:else}
         <div class="card-grid">
             {#each recentSongs as song (song.id)}
-                <div class="card-wrapper" transition:unfold>
-                    <SongCard {song} />
+                <div class="card-wrapper" animate:flip={{ duration: 150 }} transition:unfold>
+                    <SongCard {song} {service} />
                 </div>
             {/each}
         </div>

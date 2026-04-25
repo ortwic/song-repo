@@ -96,7 +96,8 @@
       "learnedOn": "Learned",
       "changedAt": "Last changed",
       "country": "Country",
-      "year": "Year"
+      "year": "Year",
+      "signature": "Signature"
     },
     "menu": {
       "open": "Open resource",
@@ -110,7 +111,8 @@
       "change-status": "Change status",
       "delete": "Delete?",
       "yes": "Yes",
-      "no": "No"
+      "no": "No",
+      "set-resource": "Set resource"
     },
     "resource": {
       "title": "Enter resource path",
