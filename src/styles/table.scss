@@ -271,34 +271,33 @@ div.tabulator-cell.status {
 }
 
 .status.unkown::before {
-    content: '?';
+    content: '❓';
     color: lightgray;
 }
 
 .status.todo::before {
-    content: '○';
+    content: '⏳️';
     color: gray;
 }
 
 .status.wip::before {
-    content: '>>';
-    letter-spacing: -.25em;
+    content: '🎶';
     color: steelblue;
 }
 
 .status.done::before {
-    content: '✓';
+    content: '✔️';
+    font-size: small;
     color: green;
 }
 
 .status.repeat::before {
-    content: '<<';
-    letter-spacing: -.25em;
+    content: '↩️';
     color: red;
 }
 
 .status.archived::before {
-    content: 'A';
+    content: '📦';
     color: purple;
 }
 
