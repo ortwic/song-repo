@@ -87,7 +87,9 @@
             <li class="bxl-github">
                 <div>{ $t('start.features.github') }</div>
                 <div>
-                    <a role="button" target="_blank" href="https://github.com/users/ortwic/projects/2/views/1">Roadmap</a>
+                    <a role="button" target="_blank" href="https://github.com/users/ortwic/projects/2/views/1">
+                        <i class="bx bxl-github"></i>Roadmap
+                    </a>
                 </div>
             </li>
             <!-- <li class="bx-mail-send">

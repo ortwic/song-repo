@@ -1,7 +1,6 @@
 <script lang='ts'>
     import '../../styles/menu.scss';
     import { t } from 'svelte-i18n';
-    import { onMount } from 'svelte';
     import { derived } from 'svelte/store';
     import { location } from 'svelte-spa-router'
     import NavButton from '../ui/elements/NavButton.svelte';
@@ -25,8 +24,6 @@
     const isBlogView = derived(location, (path) => path.startsWith('/blog'));
     const isEventView = derived(location, (path) => path.startsWith('/events'));
     let counter = 0;
-
-    onMount(() => currentMenu.set($isTableView ? 'hidden' : 'dynamic'));
 
     function handleMenuNav(ev: SubmitEvent) {
         const target = ev.submitter.getAttribute('data-target') as MenuTarget;

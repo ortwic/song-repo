@@ -29,20 +29,19 @@
 </script>
 
 <section class="recent-songs">
-    <header class="section-header">
+    <header class="row">
         <div class="title"><i class="bx bxs-playlist"></i> {$t('songs.recent-wip')}</div>
         <div class="controls">
+            <input type="range" min="2" max={MAX} step="2" bind:value={limit} aria-label={$t('songs.recent-limit')} />
+            <span class="limit-val">{limit}</span>
             <Switch title="{ $t(`songs.${!showDone ? 'show-all' : 'without-done'}`) }"
                 state={showDone}
                 on:toggle={() => showDone = !showDone}>
                 <i class="icon bx" class:bx-check={!showDone} class:bx-music={showDone}></i> 
+                <span>
+                    { $t(`songs.${!showDone ? 'show-all' : 'without-done'}`) }
+                </span>
             </Switch>
-            <input type="range" min="2" max={MAX} step="2" bind:value={limit} aria-label={$t('songs.recent-limit')} />
-            <span class="limit-val">{limit}</span>
-            <a role="button" href="#/songs">
-                <i class="bx bxs-playlist"></i>
-                {$t('songs.show-all')}
-            </a>
         </div>
     </header>
 
@@ -57,11 +56,20 @@
             {/each}
         </div>
     {/if}
+
+    <p class="row">
+        <span></span>
+        <a role="button" href="#/songs">
+            <i class="bx bxs-playlist"></i>
+            <span>{ $t('menu.songs') }</span>
+        </a>
+    </p>
 </section>
 
 <style lang="scss">
-    .section-header {
+    .row {
         display: flex;
+        flex-wrap: wrap;
         align-items: center;
         justify-content: space-between;
         margin-bottom: 1rem;
@@ -96,6 +104,14 @@
         grid-template-columns: repeat(2, 1fr);
         grid-auto-rows: 1fr;
         gap: 12px;
+
+        @media screen and (orientation: portrait) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .hidden {
+        display: none;
     }
 
     .empty {
