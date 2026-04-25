@@ -1,5 +1,6 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
+    import { flip } from 'svelte/animate';
     import type { UserLink } from '../../model/user.model';
     import { UserLinkService } from '../../service/user-link.service';
     import { showError } from '../../store/notification.store';
@@ -89,7 +90,7 @@
 {#if $links$?.length}
 <ul class="link-list">
     {#each $links$ as link, i (link.id)}
-        <li class="link-item">
+        <li class="link-item" animate:flip={{ duration: 150 }}>
             {#if editingId === link.id}
                 <div class="link-form" in:slideFade={{ duration: 150 }}>
                     <input class="input" type="url"  placeholder="URL*" bind:value={editUrl} />

@@ -1,33 +1,36 @@
 <script lang="ts">
   import 'tabulator-tables/dist/css/tabulator_bulma.min.css';
-  import '../../styles/table.scss';
+  import '../styles/table.scss';
+  import { getContext } from 'svelte';
   import { t } from 'svelte-i18n';
   import { location } from 'svelte-spa-router';
   import type { CellComponent, CellEditEventCallback } from 'tabulator-tables';
-  import type { ColumnDefinition } from './tabulator/types';
-  import { column, createEditor } from './templates/column.helper';
-  import { autoFilter, rangeFilter } from './templates/filter.helper';
-  import { groupByFormatter } from './templates/Formatter.class';
-  import Prompt from '../dialogs/PromptDialog.svelte';
-  import Table from './Table.svelte'
-  import AddEntry from './AddEntry.svelte';
-  import FileDrop from './FileDrop.svelte';
-  import SongResource, { type Dialog } from './SongResource.class';
-  import { summaryFormatter } from './templates/responsive.helper';
-  import SongService, { viewStoreId } from '../../service/user-song.service';
-  import type { MessageFormatter } from '../../service/i18n.setup';
-  import type { UserSong } from '../../model/song.model';
-  import type { TableView } from '../../model/table-view.model';
-  import { showError, showInfo } from '../../store/notification.store';
-  import genres from '../../data/genres.json';
+  import type { ColumnDefinition } from '../components/table/tabulator/types';
+  import { column, createEditor } from '../components/table/templates/column.helper';
+  import { autoFilter, rangeFilter } from '../components/table/templates/filter.helper';
+  import { groupByFormatter } from '../components/table/templates/Formatter.class';
+  import Table from '../components/table/Table.svelte'
+  import AddEntry from '../components/table/AddEntry.svelte';
+  import FileDrop from '../components/table/FileDrop.svelte';
+  import { SongActions } from '../components/table/SongActions.class';
+  import { buildActionMenu } from '../components/table/templates/actionMenu.helper';
+  import { summaryFormatter } from '../components/table/templates/responsive.helper';
+  import SongService, { viewStoreId } from '../service/user-song.service';
+  import type { MessageFormatter } from '../service/i18n.setup';
+  import type { Dialog } from '../model/dialog.model';
+  import type { UserSong } from '../model/song.model';
+  import type { TableView } from '../model/table-view.model';
+  import { showError, showInfo } from '../store/notification.store';
+  import genres from '../data/genres.json';
 
   export let params: { id?: string } = {};
 
   const readonly = !!params.id;
   const service = new SongService(params.id?.slice(1), $location === '/samples');
-  const resource = !readonly ? new SongResource(service) : undefined;
+  const actions = new SongActions(service);
+  const clickMenu = !readonly ? buildActionMenu : () => undefined;
   const songs = service.usersongs;
-  let prompt: Dialog<string>;
+  const prompt = getContext<Dialog<string>>('resource-prompt');
 
   const genreList = genres.map(v => v.name);
   const editor = createEditor(updateHandler(), readonly);
@@ -35,9 +38,9 @@
   // https://tabulator.info/docs/5.4/edit#editor-list
   const columns = (t: MessageFormatter): ColumnDefinition[] => ([
     { title: "", field: "__responsive", formatter: 'responsiveCollapse', headerSort: false, responsive: 0, visible: false },
-    column("Σ", 0, "__summary", undefined, "string", "default", summaryFormatter(readonly), { visible: false, clickMenu: resource?.getMenu(t, () => prompt) }),
+    column("Σ", 0, "__summary", undefined, "string", "default", summaryFormatter(readonly), { visible: false, clickMenu: clickMenu(actions, t, () => prompt) }),
     column("✮", -1, "fav", "50", undefined, "favorite", editor()),
-    column(t, -1, "status", "50", "string", "status", autoFilter(), editor(), { visible: !readonly, clickMenu: resource?.getMenu(t, () => prompt), hozAlign: 'center' }),
+    column(t, -1, "status", "50", "string", "status", autoFilter(), editor(), { visible: !readonly, clickMenu: clickMenu(actions, t, () => prompt), hozAlign: 'center' }),
     column("#", -1, "progressLogs", "50", "array", "length", { visible: false, hozAlign: 'right', headerFilter: 'number' }),
     column(t, 2, "progress", "136", "number", "progress", rangeFilter(), editor(), { visible: !readonly }),
     column(t, 1, "artistImg", "30", undefined, "image"),
@@ -105,11 +108,6 @@
 </svelte:head>
 
 <main>
-  <Prompt bind:this={prompt} type='url' placeholder='https://example.com/files/sheet-music.pdf'
-    title='{ $t('songs.resource.title') }' caption='{ $t('songs.resource.caption') }'>
-    <div class='info' title='Tip'>{ $t('songs.resource.info') }</div>
-  </Prompt>
-
   <FileDrop on:enter={() => showInfo($t('songs.import'))} on:addJson={({ detail }) => importJSON(detail)}>
     <Table columns={columns($t)}
       data={songs}
@@ -135,19 +133,5 @@
     z-index: 20;
     height: 0;
     text-align: left;
-  }
- 
-  .info {
-      padding: .4em 1em;
-      border: 1px solid gray;
-      background-color: #8be2ff80;
-      text-align: center;
-      white-space: collapse balance;
-
-      &::before {
-          font-family: 'boxicons';
-          padding-right: .2em;
-          content: '\ea83';
-      }
   }
 </style>

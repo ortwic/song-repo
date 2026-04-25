@@ -1,9 +1,11 @@
 import Color from 'color';
+import { DateTime } from 'luxon';
 import { marked } from 'marked';
 import { Timestamp } from 'firebase/firestore';
 import type { CellComponent, GroupComponent } from 'tabulator-tables';
 import type { ColumnDefinition } from '../tabulator/types';
 import './ProgressBar.class';
+import { SongActions } from '../SongActions.class';
 import type { UserSong } from '../../../model/song.model';
 import { status } from '../../../model/types';
 import { genreColor, redToGreenGradient, redToGreenRange } from '../../../styles/style.helper';
@@ -74,20 +76,8 @@ export default class Formatter {
                 bar.addEventListener('change', (ev: CustomEvent<number[]>) => {
                     const [newValue, oldValue] = ev.detail;
                     cell.setValue(newValue);
-        
-                    if (newValue > 90) {
-                        song.status = 'done';
-                        cell.getRow().reformat();
-                    } else if (newValue < 10) {
-                        song.status = 'archived';
-                        cell.getRow().reformat();
-                    } else if (newValue < oldValue) {
-                        song.status = 'repeat';
-                        cell.getRow().reformat();
-                    } else if (oldValue < newValue) {
-                        song.status = 'wip';
-                        cell.getRow().reformat();
-                    }
+                    song.status = SongActions.deriveStatus(newValue, oldValue) ?? song.status;
+                    cell.getRow().reformat();
                 });
                 return bar;
             },
@@ -212,13 +202,7 @@ export default class Formatter {
         return {
             formatter(cell: CellComponent): string {
                 const value = cell.getValue();
-                if (value instanceof Timestamp) {
-                    return `${value.toDate()?.getFullYear()}`;
-                }
-                if (value?.seconds) {
-                    return `${new Date(value.seconds).getFullYear()}`;
-                }
-                return `${value}`;
+                return value ? DateTime.fromJSDate(toDate(value)).toISODate() : '';
             },
         }; 
     }
@@ -226,6 +210,16 @@ export default class Formatter {
     static get(key: keyof Formatter) {
         return new Formatter()[key];
     }
+}
+
+export function toDate(ts: Timestamp | Date | number | undefined): Date {
+    if (typeof (ts as Timestamp)?.toDate === 'function') 
+        return (ts as Timestamp).toDate();
+    if (ts instanceof Date) 
+        return ts;
+    if (typeof ts === 'number') 
+        return new Date(ts);
+    return new Date(0);
 }
 
 const formatterFuncs: Partial<Record<keyof UserSong, (value: unknown) => string>> = {

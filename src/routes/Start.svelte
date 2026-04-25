@@ -2,6 +2,7 @@
     import { t } from 'svelte-i18n';
     import { link } from 'svelte-spa-router';
     import { currentUser } from '../service/auth.service';
+    import RecentSongs from '../components/dashboard/RecentSongs.svelte';
     import Footer from '../components/ui/Footer.svelte';
 </script>
 
@@ -10,7 +11,11 @@
         <i class="bx bx-world"></i>&nbsp; { $t('start.hello')}
     </div>
     <section>
+        {#if $currentUser}
+        <RecentSongs />
+        {:else}
         { $t('start.intro') }
+        {/if}
         <ul class="bx-ul">
             {#if !$currentUser}
             <li class="bxs-user-plus">
@@ -22,7 +27,6 @@
                     </a>
                 </div>
             </li>
-            {/if}
             <li class="bxs-playlist">
                 <div>{ $t('start.features.list') }</div>
                 <div>
@@ -57,6 +61,7 @@
                     <a target="_blank" href="https://docs.audius.org/api">Audius</a>
                 </div>
             </li>
+            {/if}
             <li class="bx-calendar">
                 <div>
                     { $t('start.features.events') } 

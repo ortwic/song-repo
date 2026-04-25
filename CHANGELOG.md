@@ -1,3 +1,9 @@
+v0.6.0 (2026-03-22)
+-------------------
+- dashboard view on start page
+- minor design bugfixes
+- fixed songbpm search
+
 v0.5.0 (2026-03-22)
 -------------------
 - new user page feature for link trees
