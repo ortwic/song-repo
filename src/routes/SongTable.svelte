@@ -1,25 +1,25 @@
 <script lang="ts">
   import 'tabulator-tables/dist/css/tabulator_bulma.min.css';
-  import '../../styles/table.scss';
+  import '../styles/table.scss';
   import { t } from 'svelte-i18n';
   import { location } from 'svelte-spa-router';
   import type { CellComponent, CellEditEventCallback } from 'tabulator-tables';
-  import type { ColumnDefinition } from './tabulator/types';
-  import { column, createEditor } from './templates/column.helper';
-  import { autoFilter, rangeFilter } from './templates/filter.helper';
-  import { groupByFormatter } from './templates/Formatter.class';
-  import Prompt from '../dialogs/PromptDialog.svelte';
-  import Table from './Table.svelte'
-  import AddEntry from './AddEntry.svelte';
-  import FileDrop from './FileDrop.svelte';
-  import SongResource, { type Dialog } from './SongResource.class';
-  import { summaryFormatter } from './templates/responsive.helper';
-  import SongService, { viewStoreId } from '../../service/user-song.service';
-  import type { MessageFormatter } from '../../service/i18n.setup';
-  import type { UserSong } from '../../model/song.model';
-  import type { TableView } from '../../model/table-view.model';
-  import { showError, showInfo } from '../../store/notification.store';
-  import genres from '../../data/genres.json';
+  import type { ColumnDefinition } from '../components/table/tabulator/types';
+  import { column, createEditor } from '../components/table/templates/column.helper';
+  import { autoFilter, rangeFilter } from '../components/table/templates/filter.helper';
+  import { groupByFormatter } from '../components/table/templates/Formatter.class';
+  import Prompt from '../components/dialogs/PromptDialog.svelte';
+  import Table from '../components/table/Table.svelte'
+  import AddEntry from '../components/table/AddEntry.svelte';
+  import FileDrop from '../components/table/FileDrop.svelte';
+  import SongResource, { type Dialog } from '../components/table/SongResource.class';
+  import { summaryFormatter } from '../components/table/templates/responsive.helper';
+  import SongService, { viewStoreId } from '../service/user-song.service';
+  import type { MessageFormatter } from '../service/i18n.setup';
+  import type { UserSong } from '../model/song.model';
+  import type { TableView } from '../model/table-view.model';
+  import { showError, showInfo } from '../store/notification.store';
+  import genres from '../data/genres.json';
 
   export let params: { id?: string } = {};
 

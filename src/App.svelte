@@ -5,15 +5,15 @@
   import { map } from 'rxjs';
   import type { User } from 'firebase/auth';
   import Menu from './components/menus/Index.svelte';
-  import SongTable from './components/table/SongTable.svelte';
   import Snackbar from './components/ui/Snackbar.svelte';
   import Start from "./routes/Start.svelte";
   import EventCalendar from "./routes/EventCalendar.svelte";
   import EventMap from "./routes/EventMap.svelte";
   import Blog from "./routes/Blog.svelte";
+  import Document from "./routes/Document.svelte";
   import Signup from "./routes/Signup.svelte";
   import Settings from "./routes/Settings.svelte";
-  import Document from "./routes/Document.svelte";
+  import SongTable from './routes/SongTable.svelte';
   import Feedback from "./routes/Feedback.svelte";
   import UserPage from "./routes/UserPage.svelte";
   import NotFound from "./routes/NotFound.svelte";
@@ -57,7 +57,6 @@
       if (userParams.length > 1) {
         window.location.href = `${window.location.origin}/#/user/${userParams.at(-1)}`;
       } else if (user) {
-        push(`/songs`);
         const name = user.displayName || user.email.split('@')[0]?.replace('.', ' ');
         return `${name}'s known songs`;
       }
