@@ -5,6 +5,7 @@
   import { map } from 'rxjs';
   import type { User } from 'firebase/auth';
   import Menu from './components/menus/Index.svelte';
+  import Context from "./components/Context.svelte";
   import Snackbar from './components/ui/Snackbar.svelte';
   import Start from "./routes/Start.svelte";
   import EventCalendar from "./routes/EventCalendar.svelte";
@@ -73,11 +74,13 @@
 {#await setupI18n()}
   { $t('start.loading') }
 {:then} 
-  <Menu {title} footer="Version {version}" />
+  <Context>
+    <Menu {title} footer="Version {version}" />
 
-  <Router {routes}/>
+    <Router {routes}/>
 
-  <Snackbar />
+    <Snackbar />
+  </Context>
 {:catch error}
   <p>
     Error while loading translations: <br />
