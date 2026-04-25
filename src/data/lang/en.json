@@ -132,7 +132,10 @@
       "done": "Done",
       "repeat": "Repeat",
       "archived": "Archived"
-    }
+    },
+    "recent-wip": "Recent songs in progress",
+    "show-all": "Show all",
+    "recent-limit": "Recent limit"
   },
   "table": {
     "groupBy": "Group by {title}",

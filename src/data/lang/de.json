@@ -132,7 +132,10 @@
       "done": "Erledigt",
       "repeat": "Wiederholen",
       "archived": "Archiviert"
-    }
+    },
+    "recent-wip": "Aktuelle Songs in Arbeit",
+    "show-all": "Alle anzeigen",
+    "recent-limit": "Anzahl Songs"
   },
   "table": {
     "groupBy": "Gruppieren nach {title}",
