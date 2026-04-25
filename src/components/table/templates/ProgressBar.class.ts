@@ -4,9 +4,9 @@ import style from './ProgressBar.css?inline';
 class ProgressBar extends HTMLElement {
     isMouseDown = false;
     oldValue = 0;
-    value = 0;
-    min = 0;
-    max = 100;
+    _value = 0;
+    _min = 0;
+    _max = 100;
     readonly progressBar = document.createElement('div');
     readonly percentValue = document.createElement('span');
 
@@ -28,13 +28,37 @@ class ProgressBar extends HTMLElement {
         this.addEventListener('touchend', this.end);
     }
 
+    set value(val: number) {
+        this.setProgress(val);
+    }
+
+    get value(): number {
+        return this._value;
+    }
+
+    set min(val: number) {
+        this._min = val;
+    }
+
+    get min(): number {
+        return this._min;
+    }
+
+    set max(val: number) {
+        this._max = val;
+    }
+
+    get max(): number {
+        return this._max;
+    }
+
     static get observedAttributes() {
         return ['value', 'min', 'max'];
     }
 
     private start(event: MouseEvent | TouchEvent) {
         this.isMouseDown = true;
-        this.oldValue = this.value;
+        this.oldValue = this._value;
         this.updateProgress(this.clientX(event));
     }
 
@@ -59,7 +83,7 @@ class ProgressBar extends HTMLElement {
         if (this.isMouseDown) {
             this.dispatchEvent(
                 new CustomEvent<number[]>('change', {
-                    detail: [this.value, this.oldValue],
+                    detail: [this._value, this.oldValue],
                 })
             );
         }
@@ -69,10 +93,10 @@ class ProgressBar extends HTMLElement {
     attributeChangedCallback(name: string, oldValue: string, newValue: string) {
         switch (name) {
         case 'min':
-            this.min = +newValue;
+            this._min = +newValue;
             break;
         case 'max':
-            this.max = +newValue;
+            this._max = +newValue;
             break;
         case 'value':
             this.setProgress(+newValue);
@@ -81,12 +105,12 @@ class ProgressBar extends HTMLElement {
     }
 
     setProgress(value: number) {
-        this.value = value < this.min ? this.min : value > this.max ? this.max : value;
-        this.progressBar.style.width = this.max - this.value + '%';
-        this.progressBar.style.marginLeft = this.value + '%';
-        this.percentValue.textContent = this.value + '%';
+        this._value = value < this._min ? this._min : value > this._max ? this._max : value;
+        this.progressBar.style.width = this._max - this._value + '%';
+        this.progressBar.style.marginLeft = this._value + '%';
+        this.percentValue.textContent = this._value + '%';
 
-        const [ gradient, color ] = redToGreenGradient(this.value);
+        const [ gradient, color ] = redToGreenGradient(this._value);
         this.style.background = gradient;
         this.style.boxShadow = `0 0 12px ${color}80`;
     }
@@ -94,7 +118,7 @@ class ProgressBar extends HTMLElement {
     updateProgress(clientX: number): void {
         const rect = this.getBoundingClientRect();
         const clickX = clientX - rect.left;
-        const percentage = Math.round((clickX / rect.width) * this.max);
+        const percentage = Math.round((clickX / rect.width) * this._max);
         this.setProgress(percentage);
     }
 }
