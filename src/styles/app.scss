@@ -119,13 +119,6 @@ button.icon {
   }
 }
 
-button.clear {
-  border: 0;
-  outline: 0;
-  box-shadow: unset;
-  background-color: transparent;
-}
-
 button.primary, 
 a[role=button].primary,
 input[type=reset].primary, 
@@ -148,6 +141,14 @@ input[type=reset].primary:disabled,
 input[type=submit].primary:disabled {
   color: var(--textghost);
   background-color: var(--primghost);
+}
+
+button.clear,
+button.clear:disabled {
+  border: 0;
+  outline: 0;
+  box-shadow: unset;
+  background-color: transparent;
 }
 
 input, 

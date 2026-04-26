@@ -2,7 +2,7 @@
     import { t } from 'svelte-i18n';
     import { link, push } from 'svelte-spa-router';
     import Profile from '../components/settings/Profile.svelte';
-    import Linktree from '../components/settings/LinkHub.svelte';
+    import LinkHub from '../components/settings/LinkHub.svelte';
     import { slideFade } from '../components/ui/transition.helper';
     import Footer from '../components/ui/Footer.svelte';
     import AuthService, { currentUser } from '../service/auth.service';
@@ -57,7 +57,7 @@
             </p>
             <hr/>
             <p>
-                <Linktree />
+                <LinkHub />
             </p>
         </fieldset>
         {/if}

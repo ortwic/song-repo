@@ -93,23 +93,25 @@
         <li class="link-item" animate:flip={{ duration: 150 }}>
             {#if editingId === link.id}
                 <div class="link-form" in:slideFade={{ duration: 150 }}>
-                    <input class="input" type="url"  placeholder="URL*" bind:value={editUrl} />
                     <input class="input" type="text" placeholder={$t('settings.linktree.title')} bind:value={editTitle} />
+                    <input class="input" type="url"  placeholder="URL*" bind:value={editUrl} />
                     <div class="form-actions">
-                        <button class="primary small" on:click={() => saveEdit(link)}>
-                            <i class="bx bx-check"></i> {$t('settings.update-profile')}
+                        <button class="small clear" on:click={() => saveEdit(link)}>
+                            <i class="icon bx bx-check primary"></i> {$t('settings.update-profile')}
                         </button>
-                        <button class="default small" on:click={cancelEdit}>{$t('settings.cancel')}</button>
+                        <button class="default small clear" on:click={cancelEdit}>
+                            <i class="icon bx bx-x"></i> {$t('settings.cancel')}
+                        </button>
                     </div>
                 </div>
             {:else}
                 <div class="link-row">
                     <div class="order-controls">
-                        <button class="default sm icon-btn" disabled={i === 0}
+                        <button class="default sm clear" disabled={i === 0}
                             title={$t('settings.move-up')} on:click={() => moveLink(i, -1)}>
                             <i class="bx bx-chevron-up"></i>
                         </button>
-                        <button class="default sm icon-btn" disabled={i === $links$.length - 1}
+                        <button class="default sm clear" disabled={i === $links$.length - 1}
                             title={$t('settings.move-down')} on:click={() => moveLink(i, 1)}>
                             <i class="bx bx-chevron-down"></i>
                         </button>
@@ -125,14 +127,16 @@
                             <i class="bx bx-link"></i>
                         {/if}
                     </span>
-                    <span class="link-title" title={link.url}>{link.title}</span>
-                    <span class="link-url">{link.url}</span>
+                    <span class="link-info">
+                        <span class="link-title no-wrap" title={link.url}>{link.title}</span>
+                        <span class="link-url no-wrap">{link.url}</span>
+                    </span>
                     <div class="row-actions">
-                        <button class="default small icon-btn" title="{$t('settings.edit')}" on:click={() => startEdit(link)}>
-                            <i class="bx bx-pencil"></i>
+                        <button class="default small clear" title="{$t('settings.edit')}" on:click={() => startEdit(link)}>
+                            <i class="icon bx bx-pencil"></i>
                         </button>
-                        <button class="default small icon-btn danger-btn" title="{$t('settings.delete')}" on:click={() => deleteLink(link)}>
-                            <i class="bx bx-trash"></i>
+                        <button class="default small clear danger-text" title="{$t('settings.delete')}" on:click={() => deleteLink(link)}>
+                            <i class="icon bx bx-trash"></i>
                         </button>
                     </div>
                 </div>
@@ -148,20 +152,22 @@
 
 {#if addingLink}
     <div class="link-form new-form" in:slideFade={{ duration: 150 }}>
-        <input class="input" type="url"  placeholder="URL *"    bind:value={newUrl} />
         <input class="input" type="text" placeholder={$t('settings.linktree.title')} bind:value={newTitle} />
+        <input class="input" type="url"  placeholder="URL *"    bind:value={newUrl} />
         <div class="form-actions">
-            <button class="primary" on:click={addLink} disabled={!newUrl.trim()}>
-                <i class="bx bx-plus"></i> {$t('settings.add')}
+            <button class="primary clear" on:click={addLink} disabled={!newUrl.trim()}>
+                <i class="icon bx bx-plus"></i> {$t('settings.add')}
             </button>
-            <button class="default" on:click={() => (addingLink = false)}>{$t('settings.cancel')}</button>
+            <button class="clear" on:click={() => (addingLink = false)}>
+                <i class="icon bx bx-x"></i> {$t('settings.cancel')}
+            </button>
         </div>
     </div>
 {:else}
     <div class="section" style="text-align: right;">
         <span></span>
-        <button class="default" on:click={() => (addingLink = true)}>
-            <i class="bx bx-plus"></i> {$t('settings.add')}
+        <button class="clear" on:click={() => (addingLink = true)}>
+            <i class="icon bx bx-plus"></i>
         </button>
     </div>
 {/if}
@@ -183,7 +189,7 @@
 
     .link-row {
         display: grid;
-        grid-template-columns: auto 1.5rem 1fr 2fr auto;
+        grid-template-columns: auto 1.5rem 1fr auto;
         align-items: center;
         gap: 0.5rem;
         padding: 0.5rem 0.25rem;
@@ -194,25 +200,25 @@
             justify-content: center;
         }
 
-        .link-title {
-            font-weight: 500;
-            white-space: nowrap;
+        .link-info {
+            display: flex;
+            flex-direction: column;
             overflow: hidden;
             text-overflow: ellipsis;
-        }
 
-        .link-url {
-            font-size: 0.8em;
-            opacity: 0.6;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            .link-title {
+                font-weight: 500;
+            }
+
+            .link-url {
+                font-size: 0.8em;
+                opacity: 0.6;
+            }
         }
 
         .row-actions {
             display: flex;
-            gap: 0.25rem;
-            justify-content: flex-end;
+            flex-direction: column;
         }
     }
 
@@ -259,13 +265,5 @@
 
     .icon-btn {
         padding: 0.25rem 0.4rem;
-    }
-
-    .danger-btn {
-        color: red;
-
-        &:hover {
-            background-color: rgba(255, 0, 0, 0.08);
-        }
     }
 </style>
