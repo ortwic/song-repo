@@ -21,12 +21,12 @@ export class UserLinkService {
     private loadLinks(user: { uid: string }): Observable<UserLink[]> {
         if (this.sharedUid) {
             const sharedStore = new FirestoreService(`user/${this.sharedUid}/links`);
-            return sharedStore.getDocumentStream<UserLink>(orderBy('order'));
+            return sharedStore.getDocuments<UserLink>(orderBy('order'));
         }
 
         if (user?.uid) {
             this.store = new FirestoreService(`user/${user.uid}/links`);
-            return this.store.getDocumentStream<UserLink>(orderBy('order'));
+            return this.store.getDocuments<UserLink>(orderBy('order'));
         }
 
         return of([]);

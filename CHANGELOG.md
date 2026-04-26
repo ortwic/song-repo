@@ -1,10 +1,11 @@
-v0.6.0 (2026-03-22)
+v0.5.1 (2026-03-22)
 -------------------
 - dashboard view on start page
 - minor design bugfixes
 - fixed songbpm search
+- share QR-Code
 
-v0.5.0 (2026-03-22)
+v0.4.1 (2026-03-22)
 -------------------
 - new user page feature for link trees
 

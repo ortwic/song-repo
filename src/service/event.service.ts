@@ -4,7 +4,7 @@ import FirestoreService from './firestore.service';
 import type { CalendarEvent, EventDate } from '../model/event.model';
 
 const store = new FirestoreService('events');
-const settings = new FirestoreService('settings').getDocument<Settings>('google');
+const settings = new FirestoreService('settings').getDocumentAsync<Settings>('google');
 
 type Settings = {
     maps: string;
@@ -18,7 +18,7 @@ export async function getSettings(): Promise<Settings> {
 
 export function getEvents(): Observable<CalendarEvent[]> {
     const date = (date: EventDate) => DateTime.fromJSDate(new Date(date.dateTime ?? date.date));
-    return combineLatest([settings, store.getDocumentStream<CalendarEvent>()]).pipe(
+    return combineLatest([settings, store.getDocuments<CalendarEvent>()]).pipe(
         map(([settings, events]) => {
             const today = DateTime.local();
             const futureDate = today.plus({ months: settings.futureMonths });

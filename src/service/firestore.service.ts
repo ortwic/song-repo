@@ -17,7 +17,7 @@ import {
     QueryConstraint,
     Query,
 } from 'firebase/firestore';
-import { collectionData } from 'rxfire/firestore';
+import { collectionData, docData } from 'rxfire/firestore';
 import { startWith } from 'rxjs/operators';
 import type { Observable } from 'rxjs';
 
@@ -46,12 +46,12 @@ export default class FirestoreService {
         }
     }
 
-    public getDocumentStream<T extends DocumentData>(...constraints: QueryConstraint[]): Observable<T[]> {
+    public getDocuments<T extends DocumentData>(...constraints: QueryConstraint[]): Observable<T[]> {
         const query = this.createQuery<T>(...constraints);
         return collectionData<T>(query, this.options).pipe(startWith([]));
     }
     
-    public async getDocuments<T extends DocumentData>(...constraints: QueryConstraint[]): Promise<T[]> {
+    public async getDocumentsAsync<T extends DocumentData>(...constraints: QueryConstraint[]): Promise<T[]> {
         const query = this.createQuery<T>(...constraints);
         return getDocs<T>(query).then((snapshot) => {
             const result: T[] = [];
@@ -67,15 +67,20 @@ export default class FirestoreService {
         const items = collection(this.db, this.path) as CollectionReference<T>;
         return query<T>(items, ...constraints);
     }
+    
+    public getDocument<T>(id: string): Observable<T | null> {
+        const docRef = doc(this.db, this.path, id);
+        return docData(docRef, { idField: 'id' }) as Observable<T | null>;
+    }
 
-    public async getDocument<T>(id: string): Promise<T> {
+    public async getDocumentAsync<T>(id: string): Promise<T | null> {
         const docRef = doc(this.db, this.path, id);
         const snapshot = await getDoc(docRef);
         if (snapshot.exists()) {
             return snapshot.data(snapshotOptions) as T;
         }
         
-        return Promise.resolve(undefined);
+        return Promise.resolve(null);
     }
 
     public async setDocument<T extends { id: string }>(data: T, options?: SetOptions): Promise<void> {

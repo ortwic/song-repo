@@ -9,7 +9,7 @@ const createStore = (path: string, groupBy?: string[], project?: <T>(data: T[]) 
         store,
         groupBy,
         docs: <T>() => {
-            const result = store.getDocumentStream<T>();
+            const result = store.getDocuments<T>();
             return project ? result.pipe(map((data) => project(data))) : result;
         },
         update: <T extends WithId>(data: T[]) => {

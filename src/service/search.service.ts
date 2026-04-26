@@ -23,7 +23,7 @@ export const settingsStore = observableToStore(from(loadSettings()), {} as Searc
 
 async function loadSettings() {
     const store = new FirestoreService('settings');
-    return store.getDocument<SearchSettings>('search')
+    return store.getDocumentAsync<SearchSettings>('search')
         .catch(error => showError(error));
 }
 
@@ -37,7 +37,7 @@ export function create(engine: SearchEngines, settings?: ApiSettings): SearchSer
 export async function createAsync(engine: SearchEngines): Promise<SearchService> {
     const empty = { apiKey: '', baseUrl: '' };
     const store = new FirestoreService('settings');
-    const settings = await store.getDocument<Record<SearchEngines, ApiSettings>>('search')
+    const settings = await store.getDocumentAsync<Record<SearchEngines, ApiSettings>>('search')
         .then(data => data[engine])
         .catch(error => showError(error));
 

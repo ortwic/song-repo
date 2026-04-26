@@ -11,25 +11,25 @@ const store = createUserStore();
 
 // Do not use currentUser here to avoid circular dependency
 export const currentProfile = authState(auth).pipe(
-    switchMap(({ uid }) => from(store.getDocument<UserProfile>(uid))),
+    switchMap(({ uid }) => store.getDocument<UserProfile>(uid)),
     startWith({ alias: '' } as UserProfile)
 );
 
 export default class UserService {
     getProfileByAlias(alias: string): Observable<UserProfile> {
-        return store.getDocumentStream<UserProfile>(where('alias', '==', alias)).pipe(
+        return store.getDocuments<UserProfile>(where('alias', '==', alias)).pipe(
             switchMap(docs => docs.length ? of(docs[0]) : of({ alias } as UserProfile))
         );
     }
 
     isAliasAvailable(alias: string): Observable<boolean> {
-        return from(store.getDocuments<UserProfile>(where('alias', '==', alias))).pipe(
+        return from(store.getDocumentsAsync<UserProfile>(where('alias', '==', alias))).pipe(
             map(docs => docs.length === 0)
         );
     }
 
     async initProfile(user: User, provider?: string): Promise<void> {
-        const existing = await store.getDocument<UserProfile>(user.uid);
+        const existing = await store.getDocumentAsync<UserProfile>(user.uid);
         if (!existing?.email) {
             const alias = await this.resolveUniqueAlias(user);
             await store.setDocument({
@@ -45,7 +45,7 @@ export default class UserService {
 
     private async resolveUniqueAlias(user: User): Promise<string> {
         const alias = uniqueKey(user.displayName ?? user.email.split('@')[0]);
-        const docs = await store.getDocuments<UserProfile>(where('alias', '>=', alias), where('alias', '<', alias + '\uf8ff'));
+        const docs = await store.getDocumentsAsync<UserProfile>(where('alias', '>=', alias), where('alias', '<', alias + '\uf8ff'));
         const existing = new Set(docs.map(d => d.alias));
 
         if (existing.has(alias))
