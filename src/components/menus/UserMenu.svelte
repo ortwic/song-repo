@@ -1,7 +1,8 @@
 <script lang='ts'>
     import { t } from 'svelte-i18n';
     import { push } from 'svelte-spa-router';
-    import { currentUser } from "../../service/auth.service";
+	import QRCode from 'qrcode';
+    import { map } from 'rxjs';
     import { currentProfile } from '../../service/user.service';
     import { showError, showInfo } from "../../store/notification.store";
     import UserIcon from '../ui/Avatar.svelte';
@@ -11,13 +12,34 @@
     export let email: string;
 
     const emailParts = email.split('@');
+	const shareLink = currentProfile.pipe(
+		map((p) => p.alias 
+			? `${location.origin}/@${p.alias}` 
+			: `${location.origin}/#/songs/@${p.id}`
+		)
+	);
 
-	async function copyLink(): Promise<void> {
+	let qrCodeUrl = '';
+	let qrCodeCanvas: HTMLCanvasElement;
+	$: if ($currentProfile && qrCodeCanvas) {
+		setQRCodeUrl($shareLink);
+	}
+
+	async function setQRCodeUrl(text: string) {
+		await QRCode.toCanvas(qrCodeCanvas, text, {
+			width: 128,
+			margin: 0,
+			color: {
+				dark: '#000000ff',
+				light: '#ffffff00'
+			}
+		});
+		qrCodeUrl = qrCodeCanvas.toDataURL('image/png');
+	}
+
+	async function copyText(text: string): Promise<void> {
 		try {
-			const link = $currentProfile.alias 
-				? `${location.origin}/@${$currentProfile.alias}` 
-				: `${location.origin}/#/songs/@${$currentUser.uid}`;
-			await navigator.clipboard.writeText(link);
+			await navigator.clipboard.writeText(text);
 			showInfo($t('profile.share-link-copied'));
 		} catch (error) {
 			showError(error);
@@ -37,10 +59,21 @@
 		</button>
 	</div>
 	<div class="row">
-		<button title="{ $t('profile.share-link') }" on:click={copyLink}>
+		<button title="{ $t('profile.share-link') }" on:click={() => copyText($shareLink)}>
 			<i class='bx bx-share-alt'></i> { $t('profile.share-link') }
 		</button>
 	</div>
+	<div class="row">
+		<a role="button" href="{qrCodeUrl}" 
+			title="{ $t('profile.download-qrcode') } (@{$currentProfile.alias ?? $currentProfile.id})"
+			download="QR-{$currentProfile.alias ?? $currentProfile.id}.png">
+			<i class='bx bx-qr'></i> { $t('profile.download-qrcode') }
+		</a>
+	</div>
+	<p>
+		<canvas id="qrcode" bind:this={qrCodeCanvas}></canvas>
+	</p>
+	
 </section>
 
 <style lang="scss">

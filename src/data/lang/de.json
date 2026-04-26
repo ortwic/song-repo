@@ -175,7 +175,8 @@
   "profile": {
     "sign-out": "Abmelden",
     "share-link": "Share-Link kopieren",
-    "share-link-copied": "Share-Link in die Zwischenablage kopiert."
+    "share-link-copied": "Share-Link in die Zwischenablage kopiert.",
+    "download-qrcode": "QR-Code speichern"
   },
   "settings": {
     "title": "Einstellungen",
