@@ -135,8 +135,8 @@
     },
     "recent-wip": "Aktuelle Songs in Arbeit",
     "recent-limit": "Anzahl Songs",
-    "show-all": "Alle anzeigen",
-    "without-done": "Ohne Erledigte"
+    "incl-done": "Mit Erledigten",
+    "excl-done": "Ohne Erledigten"
   },
   "table": {
     "groupBy": "Gruppieren nach {title}",

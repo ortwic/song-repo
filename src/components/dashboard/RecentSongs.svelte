@@ -34,12 +34,12 @@
         <div class="controls">
             <input type="range" min="2" max={MAX} step="2" bind:value={limit} aria-label={$t('songs.recent-limit')} />
             <span class="limit-val">{limit}</span>
-            <Switch title="{ $t(`songs.${!showDone ? 'show-all' : 'without-done'}`) }"
+            <Switch title="{ $t(`songs.${!showDone ? 'incl-done' : 'excl-done'}`) }"
                 state={showDone}
                 on:toggle={() => showDone = !showDone}>
                 <i class="icon bx" class:bx-check={!showDone} class:bx-music={showDone}></i> 
                 <span>
-                    { $t(`songs.${!showDone ? 'show-all' : 'without-done'}`) }
+                    { $t(`songs.${!showDone ? 'incl-done' : 'excl-done'}`) }
                 </span>
             </Switch>
         </div>

@@ -6,7 +6,8 @@
     import NavButton from '../ui/elements/NavButton.svelte';
     import LoginMenu from './LoginMenu.svelte';
     import SignupMenu from './SignupMenu.svelte';
-    import UserMenu from './UserMenu.svelte';
+    import ProfileMenu from './ProfileMenu.svelte';
+    import ShareMenu from './ShareMenu.svelte';
     import ColumnMenu from './ColumnMenu.svelte';
     import EventListMenu from './EventListMenu.svelte';
     import ExportMenu from './ExportMenu.svelte';
@@ -50,21 +51,25 @@
           <a href="#/" on:click={handleClose}>{title}</a>
         </svelte:fragment>
         {#if $currentUser}
-        <UserMenu email={$currentUser.email}
-            photoURL={$currentUser.photoURL} 
-            displayName={$currentUser.displayName} 
-        />
+            <ProfileMenu email={$currentUser.email}
+                photoURL={$currentUser.photoURL} 
+                displayName={$currentUser.displayName}  
+            />
         {:else}
-        <LoginMenu />
+            <LoginMenu />
         {/if}
+
         {#if $isTableView}
-        <ExportMenu exportTitle="{ $t('menu.table.exportTitle') }" />
-        <ColumnMenu />
+            <ExportMenu exportTitle="{ $t('menu.table.exportTitle') }" />
+            <ColumnMenu />
         {:else if $isBlogView}
-        <TagCloud />
+            <TagCloud />
         {:else if $isEventView}
-        <EventListMenu />
+            <EventListMenu />
+        {:else if $currentUser}
+            <ShareMenu />
         {/if}
+        
         <svelte:fragment slot="lower">
             {#if counter >= 5e5 || import.meta.env.DEV}
             <AdvanceTable>{ $t('menu.masterdata') }</AdvanceTable>

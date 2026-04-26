@@ -135,8 +135,8 @@
     },
     "recent-wip": "Recent songs in progress",
     "recent-limit": "Recent limit",
-    "show-all": "Show all",
-    "without-done": "Without done"
+    "incl-done": "Include done",
+    "excl-done": "Exclude done"
   },
   "table": {
     "groupBy": "Group by {title}",
