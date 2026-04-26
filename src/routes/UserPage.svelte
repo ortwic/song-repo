@@ -8,7 +8,6 @@
   import Avatar from '../components/ui/Avatar.svelte';
   import NavButton from '../components/ui/elements/NavButton.svelte';
   import Footer from '../components/ui/Footer.svelte';
-  import { currentMenu } from '../store/app.store';
   import NotFound from './NotFound.svelte';
 
   export let params: { alias?: string } = {};
@@ -19,7 +18,6 @@
     switchMap(p => new UserLinkService(p.id).userlinks),
     startWith([] as UserLink[])
   );
-  currentMenu.set('user');
 
 </script>
 

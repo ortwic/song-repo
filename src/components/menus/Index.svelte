@@ -12,9 +12,8 @@
     import EventListMenu from './EventListMenu.svelte';
     import ExportMenu from './ExportMenu.svelte';
     import AdvanceTable from '../table/AdvanceTable.svelte';
-    import ToggleSidebarButton from '../ui/elements/ToggleMenuButton.svelte';
+    import MenuDrawer from '../ui/elements/MenuDrawer.svelte';
     import Sidebar from '../ui/Sidebar.svelte'
-    import type { MenuTarget } from '../../model/types';
     import { currentUser } from '../../service/auth.service';
     import { currentMenu } from '../../store/app.store';
     import TagCloud from './TagCloud.svelte';
@@ -25,31 +24,11 @@
     const isBlogView = derived(location, (path) => path.startsWith('/blog'));
     const isEventView = derived(location, (path) => path.startsWith('/events'));
     let counter = 0;
-
-    function handleMenuNav(ev: SubmitEvent) {
-        const target = ev.submitter.getAttribute('data-target') as MenuTarget;
-        if (target) {
-            currentMenu.set(target);
-        } else if (ev.submitter.getAttribute('data-close') !== null) {
-            handleClose();
-        }
-    }
-
-    function handleClose() {
-        currentMenu.set('hidden');
-    }
 </script>
 
-<form on:submit|preventDefault={handleMenuNav}>
-    <header>
-      <ToggleSidebarButton target='dynamic' />
-    </header>
-    <nav>
-      {#if $currentMenu === 'dynamic'}
-      <Sidebar>
-        <svelte:fragment slot="header">
-          <a href="#/" on:click={handleClose}>{title}</a>
-        </svelte:fragment>
+<MenuDrawer>
+    {#if $currentMenu === 'dynamic'}
+    <Sidebar {title}>
         {#if $currentUser}
             <ProfileMenu email={$currentUser.email}
                 photoURL={$currentUser.photoURL} 
@@ -93,41 +72,13 @@
             <div aria-hidden="true" on:click={() => counter++} on:contextmenu={() => counter = counter > 5 ? 5e5 : 0}></div>
             {footer}
         </svelte:fragment>
-      </Sidebar>
-      {:else if $currentMenu == 'signup'}
-      <Sidebar title="{ $t('menu.login.signup') }">
+    </Sidebar>
+    {:else if $currentMenu === 'signup'}
+    <Sidebar title="{ $t('menu.login.signup') }">
         <SignupMenu />
         <svelte:fragment slot="footer">
             {footer}
         </svelte:fragment>
-      </Sidebar>
-      {/if}
-    </nav>
-</form>
-  
-
-<style lang="scss">
-    header {
-      position: fixed;
-      top: 50%;
-      right: 0;
-      z-index: 100;
-      height: 0;
-      text-align: right;
-    } 
-
-    nav [aria-hidden] {
-        position: absolute;
-        right: 0;
-        width: 1.5em;
-        height: 1.5em;
-    }
-
-    a {
-        color: inherit;
-
-        &:hover {
-            text-decoration: underline;
-        }
-    }
-</style>
+    </Sidebar>
+    {/if}
+</MenuDrawer>

@@ -4,6 +4,7 @@
     import { map } from 'rxjs';
     import { currentProfile } from '../../service/user.service';
     import { showError, showInfo } from "../../store/notification.store";
+    import { onMount } from 'svelte';
 
 	const shareLink = currentProfile.pipe(
 		map((p) => p.alias 
@@ -14,9 +15,8 @@
 
 	let qrCodeUrl = '';
 	let qrCodeCanvas: HTMLCanvasElement;
-	$: if ($currentProfile && qrCodeCanvas) {
-		setQRCodeUrl($shareLink);
-	}
+
+	onMount(() => setQRCodeUrl($shareLink));
 
 	async function setQRCodeUrl(text: string) {
 		function drawWhiteCircle(center: number, size: number): void {
