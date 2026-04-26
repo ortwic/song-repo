@@ -4,12 +4,12 @@
     import { derived } from 'svelte/store';
     import { location } from 'svelte-spa-router'
     import NavButton from '../ui/elements/NavButton.svelte';
-    import Login from './Login.svelte';
-    import Signup from './Signup.svelte';
-    import Profil from './Profil.svelte';
-    import Columns from './Columns.svelte';
-    import EventList from './EventList.svelte';
-    import ExportTable from './ExportTable.svelte';
+    import LoginMenu from './LoginMenu.svelte';
+    import SignupMenu from './SignupMenu.svelte';
+    import UserMenu from './UserMenu.svelte';
+    import ColumnMenu from './ColumnMenu.svelte';
+    import EventListMenu from './EventListMenu.svelte';
+    import ExportMenu from './ExportMenu.svelte';
     import AdvanceTable from '../table/AdvanceTable.svelte';
     import ToggleSidebarButton from '../ui/elements/ToggleMenuButton.svelte';
     import Sidebar from '../ui/Sidebar.svelte'
@@ -50,20 +50,20 @@
           <a href="#/" on:click={handleClose}>{title}</a>
         </svelte:fragment>
         {#if $currentUser}
-        <Profil email={$currentUser.email}
+        <UserMenu email={$currentUser.email}
             photoURL={$currentUser.photoURL} 
             displayName={$currentUser.displayName} 
         />
         {:else}
-        <Login />
+        <LoginMenu />
         {/if}
         {#if $isTableView}
-        <ExportTable exportTitle="{ $t('menu.table.exportTitle') }" />
-        <Columns />
+        <ExportMenu exportTitle="{ $t('menu.table.exportTitle') }" />
+        <ColumnMenu />
         {:else if $isBlogView}
         <TagCloud />
         {:else if $isEventView}
-        <EventList />
+        <EventListMenu />
         {/if}
         <svelte:fragment slot="lower">
             {#if counter >= 5e5 || import.meta.env.DEV}
@@ -91,7 +91,7 @@
       </Sidebar>
       {:else if $currentMenu == 'signup'}
       <Sidebar title="{ $t('menu.login.signup') }">
-        <Signup />
+        <SignupMenu />
         <svelte:fragment slot="footer">
             {footer}
         </svelte:fragment>

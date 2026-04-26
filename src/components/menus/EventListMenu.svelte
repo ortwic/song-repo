@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { t } from "svelte-i18n";
-    import NavButton from "../ui/elements/NavButton.svelte";
-    import { formatRange, getEvents } from "../../service/event.service";
+    import { t } from 'svelte-i18n';
+    import NavButton from '../ui/elements/NavButton.svelte';
+    import { formatRange, getEvents } from '../../service/event.service';
     
     const events = getEvents();
 </script>

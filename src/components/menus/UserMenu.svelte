@@ -28,7 +28,7 @@
 <section class="menu">
 	<div class="row">
 		<button class="profil" data-close title="{ $t('settings.title') }" on:click={() => push('/settings')}>
-			<UserIcon {photoURL} width="50" title={email} />
+			<UserIcon {photoURL} size="50px" title={email} />
 			{#if displayName}
 			<span class="name">{displayName}</span>
 			{:else}
