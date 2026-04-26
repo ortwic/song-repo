@@ -2,7 +2,7 @@
     import '../../styles/menu.scss';
     import { t } from 'svelte-i18n';
     import { derived } from 'svelte/store';
-    import { location } from 'svelte-spa-router'
+    import { link, location } from 'svelte-spa-router'
     import NavButton from '../ui/elements/NavButton.svelte';
     import LoginMenu from './LoginMenu.svelte';
     import SignupMenu from './SignupMenu.svelte';
@@ -79,7 +79,7 @@
                 <span><i class='bx bx-bulb'></i> { $t('menu.howto') }</span>
             </NavButton>
             <div class="row">
-                <a class="warn" role="button" target="_blank" href="https://liberapay.com/OCSoft42/donate">
+                <a use:link class="warn" role="button" href="/user/ocsoft42">
                     <span><i class='bx bxs-coffee'></i> { $t('menu.donate') }</span>
                 </a>
             </div>

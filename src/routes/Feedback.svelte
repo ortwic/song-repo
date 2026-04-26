@@ -13,7 +13,7 @@
         console.table(json)
         
         try {
-            // await store.setDocument(json);
+            await store.setDocument(json);
         } catch (error) {
             showError(error);
         }
@@ -66,17 +66,8 @@
             {#if !sent}
             <p>{ $t('feedback.note')}</p>
             <input type="hidden" name="id" value={format(new Date(), 'YYMMDD.HHmmss.SSS')}>
-            <fieldset name="backup">
-                <legend>{ $t('feedback.qBackup')}</legend>
-                <div class="flex">
-                    <span><input type="checkbox" name="import-csv"> Import CSV</span>
-                    <span><input type="checkbox" name="export-csv"> Export CSV</span>
-                    <span><input type="checkbox" name="export-xlsx"> Export XLSX</span>
-                    <span><input type="checkbox" name="export-pdf"> Export PDF</span>
-                </div>
-            </fieldset>
             <fieldset name="search">
-                <legend>{ $t('feedback.qSearch')}</legend>
+                <legend>❓️{ $t('feedback.qSearch')}</legend>
                 <ul>
                     <li><input type="number" placeholder="1-10" name="search-genre" min="1" max="10"> <label for="search-genre">{ $t('feedback.genre')}</label></li>
                     <li><input type="number" placeholder="1-10" name="search-title" min="1" max="10"> <label for="search-title">{ $t('feedback.title')}</label></li>
@@ -87,7 +78,7 @@
                 </ul>
             </fieldset>
             <fieldset name="share">
-                <legend>{ $t('feedback.qShare')}</legend>
+                <legend>❓️{ $t('feedback.qShare')}</legend>
                 <ul>
                     <li><input type="number" placeholder="1-10" name="share-link" min="1" max="10"> <label for="share-link">{ $t('feedback.pubLink')}</label></li>
                     <li><input type="number" placeholder="1-10" name="share-within" min="1" max="10"> <label for="share-within">{ $t('feedback.otherUsers')}</label></li>
@@ -96,7 +87,7 @@
                 </ul>
             </fieldset>
             <fieldset name="blog">
-                <legend>{ $t('feedback.qBlog')}</legend>
+                <legend>❓️{ $t('feedback.qBlog')}</legend>
                 <ul>
                     <li><input type="number" placeholder="1-10" name="blog-howto" min="1" max="10"> <label for="share-link">{ $t('feedback.blogHowto')}</label></li>
                     <li><input type="number" placeholder="1-10" name="blog-refs" min="1" max="10"> <label for="share-within">{ $t('feedback.blogRefs')}</label></li>
@@ -105,7 +96,7 @@
                 </ul>
             </fieldset>
             <fieldset>
-                <legend>{ $t('feedback.qOther')}</legend>
+                <legend>❓️{ $t('feedback.qOther')}</legend>
                 <textarea required name="message" rows="4" cols="50"></textarea>
                 <p>
                     <button type="submit">

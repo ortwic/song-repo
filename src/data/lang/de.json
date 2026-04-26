@@ -6,7 +6,7 @@
     "events": "Veranstaltungen",
     "event-calendar": "Veranstaltungeskalender",
     "events-empty": "Keine Veranstaltungen gefunden!",
-    "donate": "Spenden",
+    "donate": "An Song-Repo spenden",
     "masterdata": "Stammdaten",
     "login": {
       "login": "Login",
@@ -43,9 +43,7 @@
       "share": "Liste des Repertoires öffentlich teilen oder exportieren",
       "search": "Suche mit Vervollständigung der Genres, Künstler und Titel",
       "events": "Öffentliche events wie",
-      "blog": "HowTo's und weitere Artikel über das musizieren",
-      "github": "Überblick geplanter Features und bekannte Bugs",
-      "feedback": "Wir hoffen, dass Sie unsere App nützlich finden."
+      "blog": "HowTo's und weitere Artikel über das musizieren"
     },
     "imprint": "Impressum",
     "privacypolicy": "Datenschutz",

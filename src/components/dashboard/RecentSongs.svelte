@@ -56,14 +56,6 @@
             {/each}
         </div>
     {/if}
-
-    <p class="row">
-        <span></span>
-        <a role="button" href="#/songs">
-            <i class="bx bxs-playlist"></i>
-            <span>{ $t('menu.songs') }</span>
-        </a>
-    </p>
 </section>
 
 <style lang="scss">

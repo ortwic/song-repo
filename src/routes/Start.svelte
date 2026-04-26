@@ -13,11 +13,25 @@
     <section>
         {#if $currentUser}
         <RecentSongs />
+        <p class="center">
+            <a href="#/songs" class="no-wrap">
+                <i class="bx bxs-playlist"></i>
+                <span>{ $t('menu.songs') }</span>
+            </a> 
+            |
+            <a href="#/blog" class="no-wrap">
+                <i class="bx bx-bulb"></i>
+                { $t('menu.howto') }
+            </a> 
+            |
+            <a href="#/events" class="no-wrap">
+                <i class="bx bx-calendar"></i>
+                { $t('menu.events') }
+            </a>
+        </p>
         {:else}
         { $t('start.intro') }
-        {/if}
         <ul class="bx-ul">
-            {#if !$currentUser}
             <li class="bxs-user-plus">
                 <div>{ $t('start.features.signup') }</div>
                 <div>
@@ -61,7 +75,6 @@
                     <a target="_blank" href="https://docs.audius.org/api">Audius</a>
                 </div>
             </li>
-            {/if}
             <li class="bx-calendar">
                 <div>
                     { $t('start.features.events') } 
@@ -84,27 +97,14 @@
                     </a>
                 </div>
             </li>
-            <li class="bxl-github">
-                <div>{ $t('start.features.github') }</div>
-                <div>
-                    <a role="button" target="_blank" href="https://github.com/users/ortwic/projects/2/views/1">
-                        <i class="bx bxl-github"></i>Roadmap
-                    </a>
-                </div>
-            </li>
-            <!-- <li class="bx-mail-send">
-                <div>{ $t('start.features.feedback') }</div>
-                <div>
-                    <a role="button" class="primary" href="#/feedback">Feedback</a>
-                </div>
-            </li> -->
         </ul>
+        {/if}
     </section>
     <Footer>
-        <a use:link href="/docs/imprint">{ $t('start.imprint') }</a> |
-        <a use:link href="/docs/privacypolicy">{ $t('start.privacypolicy') }</a> |
-        <a use:link href="/docs/termsofuse">{ $t('start.termsofuse') }</a> |
-        <a use:link href="/settings">{ $t('settings.title') }</a>
+        <a use:link href="/docs/imprint" class="no-wrap">{ $t('start.imprint') }</a> |
+        <a use:link href="/docs/privacypolicy" class="no-wrap">{ $t('start.privacypolicy') }</a> |
+        <a use:link href="/docs/termsofuse" class="no-wrap">{ $t('start.termsofuse') }</a> |
+        <a use:link href="/settings" class="no-wrap">{ $t('settings.title') }</a>
     </Footer>
 </main>
 

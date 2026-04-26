@@ -6,7 +6,7 @@
     "events": "Public events",
     "event-calendar": "Public event calendar",
     "events-empty": "No events found!",
-    "donate": "Donate",
+    "donate": "Donate Song-Repo",
     "masterdata": "Master data",
     "login": {
       "login": "Login",
@@ -43,9 +43,7 @@
       "share": "Share or export list of your repertoire",
       "search": "Search with autocomplete for genres, artists, and titles",
       "events": "Public events like",
-      "blog": "How-tos and further articles about making",
-      "github": "Planned feature overview and known bugs",
-      "feedback": "We hope you find our app useful and look forward to your"
+      "blog": "How-tos and further articles about making"
     },
     "imprint": "Imprint",
     "privacypolicy": "Privacy policy",

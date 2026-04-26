@@ -24,7 +24,7 @@
   --primback: #E9E3D6;
   --primback-opaque: #E9E3D680;
   --text: #0B0802;
-  --textghost: #0B080280;
+  --textghost: #827560;
 }
 
 body {
@@ -300,6 +300,10 @@ div.autocomplete {
       padding: 0;
     }
   }
+}
+
+.center {
+    text-align: center;
 }
 
 .no-wrap {
