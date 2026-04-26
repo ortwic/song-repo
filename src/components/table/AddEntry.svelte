@@ -106,8 +106,10 @@
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <a style="cursor: pointer;" role="listbox" id="searchEngine" on:click={selectSearchEngine}>{$currentSearchEngine}</a>
             <PopupMenu bind:showPopupMenu={selectSearchEngine}>
-                <button on:click={() => currentSearchEngine.set('songbpm')}>GetSongbpm</button>
-                <button on:click={() => currentSearchEngine.set('audius')}>Audius</button>
+                <button class="option" class:active={$currentSearchEngine === 'songbpm'} 
+                    on:click={() => currentSearchEngine.set('songbpm')}>GetSongbpm</button>
+                <button class="option" class:active={$currentSearchEngine === 'audius'} 
+                    on:click={() => currentSearchEngine.set('audius')}>Audius</button>
             </PopupMenu>
         </div>
         <section>

@@ -1,6 +1,7 @@
 <script lang='ts'>
   import { onDestroy, tick } from "svelte";
   import { slideFade } from "./transition.helper";
+  import { portal } from "svelte-portal";
 
   export let width: string | number = "auto";
   let menu: HTMLDivElement;
@@ -39,7 +40,7 @@
   }
 </script>
 
-<div class="container" aria-hidden="true" bind:this={menu} style:left style:top style:width
+<div use:portal={document.body} class="container" aria-hidden="true" bind:this={menu} style:left style:top style:width
     bind:offsetWidth bind:offsetHeight on:click={hide}>
     {#if visible}
     <div class='popup-menu' in:slideFade={{ duration: 200 }} out:slideFade={{ duration: 200 }}>

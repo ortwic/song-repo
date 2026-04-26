@@ -37,10 +37,10 @@
             <Switch title="{ $t(`songs.${!showDone ? 'incl-done' : 'excl-done'}`) }"
                 state={showDone}
                 on:toggle={() => showDone = !showDone}>
-                <i class="icon bx" class:bx-check={!showDone} class:bx-music={showDone}></i> 
                 <span>
                     { $t(`songs.${!showDone ? 'incl-done' : 'excl-done'}`) }
                 </span>
+                <i class="icon bx" class:bx-check={!showDone} class:bx-x={showDone}></i> 
             </Switch>
         </div>
     </header>

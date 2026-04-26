@@ -125,7 +125,7 @@
 
     <PopupMenu bind:this={searchPopupMenu}>
         {#each SEARCH_ACTIONS as action}
-            <button class="empty no-wrap" on:click={() => actions.search(song, action)}>
+            <button class="option" on:click={() => actions.search(song, action)}>
                 <i class="bx {action.icon}"></i>
                 {action.label}
             </button>
@@ -134,7 +134,7 @@
 
     <PopupMenu bind:this={statusPopupMenu}>
         {#each Object.keys(statusKeys) as s}
-            <button class="empty no-wrap"
+            <button class="option"
                 class:active={song.status === s}
                 on:click={() => handleStatusChange(s)}
             >

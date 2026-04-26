@@ -93,12 +93,12 @@
                         <i class="bx bx-filter-alt"></i>
                     </Switch>
                     <PopupMenu bind:this={menus[col.field]}>
-                        <div class="values">
-                            <button class="empty" on:click={() => filterBy(col.field, undefined)}>
+                        <div class="y-flex">
+                            <button class="option empty" on:click={() => filterBy(col.field, undefined)}>
                                 &lt; { $t('table.filter.empty') } {col.title} &gt;
                             </button>
                             {#each filterListValues(col) as value}
-                                <button on:click={() => filterBy(col.field, value)}>
+                                <button class="option" on:click={() => filterBy(col.field, value)}>
                                     <i class="{col.field} {value}"></i> { $t(`songs.${col.field}.${value}`) }
                                 </button>
                             {/each}
@@ -130,36 +130,6 @@
             span.active {
                 color: var(--primary);
                 font-weight: 500;
-            }
-        }
-
-        div.values {
-            display: flex;
-            flex-direction: column;
-            
-            button {
-                border: 0;
-                border-radius: 0;
-                color: var(--text);
-                padding: 6px 20px 6px 12px;
-                text-align: left;
-                font-weight: normal;
-                transition: all .2s ease-in-out;
-
-                &.empty {
-                    color: gray;
-                    text-align: center;
-                    font-style: italic;
-                }
-
-                &:hover {
-                    background-color: white;
-                }
-
-                i.status {
-                    display: inline-block;
-                    width: 1.6em;
-                }
             }
         }
     }
