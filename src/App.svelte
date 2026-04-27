@@ -1,18 +1,17 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { t } from "svelte-i18n";
-  import Router, { location, push } from "svelte-spa-router";
+  import Router, { location } from "svelte-spa-router";
   import { map } from 'rxjs';
   import type { User } from 'firebase/auth';
   import Menu from './components/menus/Index.svelte';
   import Context from "./components/Context.svelte";
   import Snackbar from './components/ui/Snackbar.svelte';
-  import Start from "./routes/Start.svelte";
+  import Blog from "./routes/Blog.svelte";
+  import Dashboard from "./routes/Dashboard.svelte";
+  import Document from "./routes/Document.svelte";
   import EventCalendar from "./routes/EventCalendar.svelte";
   import EventMap from "./routes/EventMap.svelte";
-  import Blog from "./routes/Blog.svelte";
-  import Document from "./routes/Document.svelte";
-  import Signup from "./routes/Signup.svelte";
   import Settings from "./routes/Settings.svelte";
   import SongTable from './routes/SongTable.svelte';
   import Feedback from "./routes/Feedback.svelte";
@@ -26,7 +25,7 @@
   const version = import.meta.env.PACKAGE_VERSION;
   
   const routes = {
-    '/': Start,
+    '/': Dashboard,
     '/songs': SongTable,
     '/songs/:id': SongTable,
     '/samples': SongTable,
@@ -36,7 +35,6 @@
     '/blog': Blog,
     '/blog/:label': Blog,
     '/docs/:name': Document,
-    '/signup': Signup,
     '/settings': Settings,
     '/feedback': Feedback,
     '/user/:alias': UserPage,

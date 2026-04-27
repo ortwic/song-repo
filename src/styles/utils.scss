@@ -22,6 +22,10 @@ input.lg {
 .secondary:visited {
     color: var(--secghost);
 }
+    
+.smaller {
+    font-size: smaller;
+}
 
 .larger {
     transform: scale(1.5);
