@@ -8,10 +8,9 @@
     import SignupMenu from './SignupMenu.svelte';
     import ProfileMenu from './ProfileMenu.svelte';
     import ShareMenu from './ShareMenu.svelte';
+    import BackupMenu from './BackupMenu.svelte';
     import ColumnMenu from './ColumnMenu.svelte';
     import EventListMenu from './EventListMenu.svelte';
-    import ExportMenu from './ExportMenu.svelte';
-    import AdvanceTable from '../table/AdvanceTable.svelte';
     import MenuDrawer from '../ui/elements/MenuDrawer.svelte';
     import Sidebar from '../ui/Sidebar.svelte'
     import { currentUser } from '../../service/auth.service';
@@ -23,7 +22,6 @@
     const isTableView = derived(location, (path) => path.startsWith('/songs') || path.startsWith('/samples'));
     const isBlogView = derived(location, (path) => path.startsWith('/blog'));
     const isEventView = derived(location, (path) => path.startsWith('/events'));
-    let counter = 0;
 </script>
 
 <MenuDrawer>
@@ -39,7 +37,7 @@
         {/if}
 
         {#if $isTableView}
-            <ExportMenu exportTitle="{ $t('menu.table.exportTitle') }" />
+            <BackupMenu exportTitle="{ $t('menu.table.exportTitle') }" />
             <ColumnMenu />
         {:else if $isBlogView}
             <TagCloud />
@@ -50,9 +48,6 @@
         {/if}
         
         <svelte:fragment slot="lower">
-            {#if counter >= 5e5 || import.meta.env.DEV}
-            <AdvanceTable>{ $t('menu.masterdata') }</AdvanceTable>
-            {/if}
             <NavButton href="/songs" title="{ $t('menu.songs') }">
                 <span><i class='bx bxs-playlist'></i> { $t('menu.songs') }</span>
             </NavButton>
@@ -69,7 +64,6 @@
             </div>
         </svelte:fragment>
         <svelte:fragment slot="footer">
-            <div aria-hidden="true" on:click={() => counter++} on:contextmenu={() => counter = counter > 5 ? 5e5 : 0}></div>
             {footer}
         </svelte:fragment>
     </Sidebar>
