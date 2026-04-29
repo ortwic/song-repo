@@ -6,6 +6,11 @@
     transition: transform .2s ease-in-out;    
 }
 
+@mixin active {
+    font-weight: 500;
+    background: linear-gradient(0deg, wheat, transparent 50%);
+}
+
 div#table.tabulator {
     div.tabulator-header {
         background-color: var(--primback);
@@ -109,8 +114,7 @@ div#table.tabulator {
 
                         &.artist.active,
                         &.title.active {
-                            font-weight: 500;
-                            background: linear-gradient(0deg, wheat, transparent 50%);
+                            @include active();
                         }
                     }
                     i {
@@ -242,6 +246,10 @@ span.fav {
     }
 }
 
+p.fav.active {
+    @include active();
+}
+
 div.tabulator-cell.fav.active, 
 span.fav.active {
     // background: radial-gradient(white, wheat 40%, gold 50%, gray, transparent 55%);
@@ -263,34 +271,33 @@ div.tabulator-cell.status {
 }
 
 .status.unkown::before {
-    content: '?';
+    content: '❓';
     color: lightgray;
 }
 
 .status.todo::before {
-    content: '○';
+    content: '⏳️';
     color: gray;
 }
 
 .status.wip::before {
-    content: '>>';
-    letter-spacing: -.25em;
+    content: '🎶';
     color: steelblue;
 }
 
 .status.done::before {
-    content: '✓';
+    content: '✔️';
+    font-size: small;
     color: green;
 }
 
 .status.repeat::before {
-    content: '<<';
-    letter-spacing: -.25em;
+    content: '↩️';
     color: red;
 }
 
 .status.archived::before {
-    content: 'A';
+    content: '📦';
     color: purple;
 }
 

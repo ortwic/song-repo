@@ -18,11 +18,11 @@
   "monochromeIconUrl": "https://song-repo.web.app/logo-mono.png",
   "splashScreenFadeOutDuration": 300,
   "signingKey": {
-    "path": "/home/ortwin/Dev/Deployment/android.keystore",
+    "path": "/home/ortwin/Dev/android/song-repo/android.keystore",
     "alias": "android"
   },
-  "appVersionName": "3",
-  "appVersionCode": 3,
+  "appVersionName": "internal-4",
+  "appVersionCode": 6,
   "shortcuts": [],
   "generatorApp": "bubblewrap-cli",
   "webManifestUrl": "https://song-repo.web.app/manifest.webmanifest",
@@ -35,10 +35,11 @@
   "isChromeOSOnly": false,
   "isMetaQuest": false,
   "fullScopeUrl": "https://song-repo.web.app/",
-  "minSdkVersion": 19,
+  "minSdkVersion": 21,
   "orientation": "any",
   "fingerprints": [],
   "additionalTrustedOrigins": [],
   "retainedBundles": [],
-  "appVersion": "3"
+  "displayOverride": [],
+  "appVersion": "internal-4"
 }

@@ -1,11 +1,35 @@
-.menu, .dialog {
+@mixin row {
+    display: block;
+    padding: .4rem;
+    text-align: left;
+}
 
-    @mixin row {
-        display: block;
-        padding: .4rem;
-        text-align: left;
+@mixin input {
+    border: 1px solid gray;
+    padding: .4rem;
+    transition: all .2s ease-in-out;
+
+    &:focus {
+        outline: 1px solid var(--primary);
     }
+}
 
+@mixin icon {
+    border: 1px solid silver;
+    border-radius: 1em;
+    background-color: white;
+    padding: 4px;
+}
+
+.icon {
+    @include icon;
+}
+
+.input {
+    @include input;
+}
+    
+.menu, .dialog {
     div.row {
         display: flex;
         flex-flow: nowrap;
@@ -35,10 +59,7 @@
             }
 
             i:not(.bx-sm) {
-                border: 1px solid silver;
-                border-radius: 1em;
-                background-color: white;
-                padding: 4px;
+                @include icon;
             }
 
             &:hover {
@@ -108,12 +129,7 @@
         input[type=search],
         input[type=password] {
             @include row;
-            border: 1px solid gray;
-            transition: all .2s ease-in-out;
-    
-            &:focus {
-                outline: 1px solid var(--primary);
-            }
+            @include input;
         }
     }
     

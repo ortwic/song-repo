@@ -5,7 +5,8 @@
     "howto-blog": "Wie geht Musik Blog",
     "events": "Veranstaltungen",
     "event-calendar": "Veranstaltungeskalender",
-    "donate": "Spenden",
+    "events-empty": "Keine Veranstaltungen gefunden!",
+    "donate": "An Song-Repo spenden",
     "masterdata": "Stammdaten",
     "login": {
       "login": "Login",
@@ -42,9 +43,7 @@
       "share": "Liste des Repertoires öffentlich teilen oder exportieren",
       "search": "Suche mit Vervollständigung der Genres, Künstler und Titel",
       "events": "Öffentliche events wie",
-      "blog": "HowTo's und weitere Artikel über das musizieren",
-      "github": "Überblick geplanter Features und bekannte Bugs",
-      "feedback": "Wir hoffen, dass Sie unsere App nützlich finden."
+      "blog": "HowTo's und weitere Artikel über das musizieren"
     },
     "imprint": "Impressum",
     "privacypolicy": "Datenschutz",
@@ -95,7 +94,8 @@
       "learnedOn": "Gelernt",
       "changedAt": "Geändert",
       "country": "Land",
-      "year": "Jahr"
+      "year": "Jahr",
+      "signature": "Tonangaben"
     },
     "menu": {
       "open": "Öffne Ressource",
@@ -109,7 +109,8 @@
       "change-status": "Status ändern",
       "delete": "Löschen?",
       "yes": "Ja",
-      "no": "Nein"
+      "no": "Nein",
+      "set-resource": "Ressource festlegen"
     },
     "resource": {
       "title": "Geben Sie den Ressourcenpfad ein",
@@ -131,7 +132,11 @@
       "done": "Erledigt",
       "repeat": "Wiederholen",
       "archived": "Archiviert"
-    }
+    },
+    "recent-wip": "Aktuelle Songs in Arbeit",
+    "recent-limit": "Anzahl Songs",
+    "incl-done": "Mit Erledigten",
+    "excl-done": "Ohne Erledigten"
   },
   "table": {
     "groupBy": "Gruppieren nach {title}",
@@ -168,11 +173,14 @@
   "profile": {
     "sign-out": "Abmelden",
     "share-link": "Share-Link kopieren",
-    "share-link-copied": "Share-Link in die Zwischenablage kopiert."
+    "share-link-copied": "Share-Link in die Zwischenablage kopiert.",
+    "download-qrcode": "QR-Code speichern"
   },
   "settings": {
     "title": "Einstellungen",
     "view": "Ansicht",
+    "alias": "Alias",
+    "alias-exists": "Alias existiert bereits",
     "reset-views": "Ansichten zurücksetzen",
     "reset-text": "Gespeicherter Spalteneinstellungen, Filter und Gruppierung zurücksetzen.",
     "reset-done": "Alle gespeicherten Ansichten wurden zurückgesetzt!",
@@ -181,6 +189,26 @@
     "delete-profile": "Profil löschen",
     "delete-advice": "Sie sollten Ihre Daten vor dem Löschen exportieren.",
     "delete-done": "Ihr Konto wurde erfolgreich gelöscht!",
-    "profile": "Profil"
+    "profile": "Profil",
+    "profile-updated": "Profil aktualisiert",
+    "update-profile": "Speichern",
+    "danger-zone": "Gefahrenzone",
+    "linktree": {
+      "empty": "Noch keine Links vorhanden.",
+      "title": "Titel"
+    },
+    "cancel": "Abbrechen",
+    "add": "Hinzufügen",
+    "edit": "Bearbeiten",
+    "delete": "Löschen",
+    "about": "Bio",
+    "move-down": "Nach unten",
+    "move-up": "Nach oben",
+    "alias-available": "Alias ​​verfügbar"
+  },
+  "user": {
+    "song-list": "Songliste",
+    "not-found": "Benutzer nicht gefunden!",
+    "alias-unknown": "Benutzeralias ist unbekannt!"
   }
 }

@@ -24,7 +24,7 @@
   --primback: #E9E3D6;
   --primback-opaque: #E9E3D680;
   --text: #0B0802;
-  --textghost: #0B080280;
+  --textghost: #827560;
 }
 
 body {
@@ -44,7 +44,6 @@ main {
 }
 
 a {
-  font-weight: 500;
   color: var(--primary);
   text-decoration: inherit;
 }
@@ -120,13 +119,6 @@ button.icon {
   }
 }
 
-button.clear {
-  border: 0;
-  outline: 0;
-  box-shadow: unset;
-  background-color: transparent;
-}
-
 button.primary, 
 a[role=button].primary,
 input[type=reset].primary, 
@@ -151,68 +143,44 @@ input[type=submit].primary:disabled {
   background-color: var(--primghost);
 }
 
-input {
+button.clear,
+button.clear:disabled {
+  border: 0;
+  outline: 0;
+  box-shadow: unset;
+  background-color: transparent;
+}
+
+input, 
+textarea {
   color: var(--text);
   background-color: white;
 }
 
-input:disabled {
+input:disabled,
+textarea:disabled {
   color: var(--text);
   background-color: var(--primback);
 }
 
-input.error, input.mark:focus {
+input.error, 
+textarea.error,
+input.mark:focus,
+textarea.mark:focus {
   outline: 2px solid var(--secondary);
   outline-offset: 1px;
   border-radius: 4px;
   box-shadow: 0px 0px 8px var(--secondary);
 }
 
-input.valid, input.valid:focus {
+input.valid, 
+input.valid:focus,
+textarea.valid,
+textarea.valid:focus {
   outline: 2px solid var(--primary);
   outline-offset: 1px;
   border-radius: 4px;
   box-shadow: 0px 0px 8px var(--primary);
-}
-
-input.sm {
-    width: 5rem;
-}
-
-input.lg {
-    width: 15rem;
-}
-
-.primary {
-  color: var(--primary);
-}
-
-.secondary {
-  color: var(--secondary);
-}
-
-.secondary:hover, .secondary:active {
-  color: var(--secactive);
-}
-
-.secondary:visited {
-  color: var(--secghost);
-}
-
-.larger {
-  transform: scale(1.5);
-}
-
-.error, .error::before {
-    color: red;
-}
-
-.left {
-  text-align: left !important;
-}
-
-.right {
-  text-align: right !important;
 }
 
 div.titlebar {

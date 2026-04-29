@@ -1,10 +1,10 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
-    import type { MenuPages } from "../../../model/types";
+    import type { MenuTarget } from "../../../model/types";
     
     const dispatch = createEventDispatcher();
 
-    export let target: MenuPages = 'root';
+    export let target: MenuTarget = 'hidden';
 </script>
 
 <div class="titlebar">

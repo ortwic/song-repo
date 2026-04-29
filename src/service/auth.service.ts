@@ -15,12 +15,12 @@ import { authState } from 'rxfire/auth';
 import { auth } from './firebase.setup';
 import { showInfo } from '../store/notification.store';
 import { app } from '../service/firebase.setup';
+import UserService from './user.service';
 
 export const currentUser = authState(auth);
+export const analytics = getAnalytics(app);
 const googleProvider = new GoogleAuthProvider();
 // googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
-export const analytics = getAnalytics(app);
-
 const msProvider = new OAuthProvider('microsoft.com');
 msProvider.setCustomParameters({
     prompt: 'consent',
@@ -35,18 +35,23 @@ onAuthStateChanged(auth, (user) => {
 });
 
 export default class AuthService {
+    private userService = new UserService();
+
     async loginWithGoogle(): Promise<void> {
         // signInWithPopup can cause CORS problems in MS Edge (prod only)
-        await signInWithPopup(auth, googleProvider);
+        const { user } = await signInWithPopup(auth, googleProvider);
+        await this.userService.initProfile(user, GoogleAuthProvider.PROVIDER_ID);
     }
 
     async loginWithMicrosoft(): Promise<void> {
         // signInWithPopup can cause CORS problems in MS Edge (prod only)
-        await signInWithPopup(auth, msProvider);
+        const { user } = await signInWithPopup(auth, msProvider);
+        await this.userService.initProfile(user, msProvider.providerId);
     }
 
     async signUp(email: string, password: string): Promise<void> {
-        await createUserWithEmailAndPassword(auth, email, password);
+        const { user } = await createUserWithEmailAndPassword(auth, email, password);
+        await this.userService.initProfile(user);
     }
 
     async signIn(email: string, password: string): Promise<void> {

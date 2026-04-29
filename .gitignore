@@ -14,11 +14,19 @@ dist-ssr
 dev-dist
 *.local
 
+# android build
+.gradle
+build/
+*.aab
+*.apk
+*.idsig
+
 # Editor directories and files
 !.vscode/extensions.json
 .idea
 .firebase
 .DS_Store
+*.lnk
 *.suo
 *.ntvs*
 *.njsproj

@@ -21,7 +21,7 @@
     $: selected = state ? 'selected' : 'disabled';
 </script>
 
-<button {title} class='sm {selected}'
+<button {title} class='sm clear {selected}'
     on:click={toggle}>
     <slot>{state}</slot>
 </button>

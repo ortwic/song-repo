@@ -1,9 +1,11 @@
 <script lang='ts'>
-  import { onDestroy } from "svelte";
+  import { onDestroy, tick } from "svelte";
   import { slideFade } from "./transition.helper";
+  import { portal } from "svelte-portal";
 
   export let width: string | number = "auto";
   let menu: HTMLDivElement;
+  let clientX = 0, clientY = 0;
   let left: string | number, top: string | number, offsetWidth: number, offsetHeight: number;
   let visible = false;
     
@@ -13,18 +15,19 @@
 
   document.addEventListener('click', clickOutside, true);
 
-  export const showPopupMenu = ({ clientX, clientY }) => {
-    const setPosition = () => {
-      const maxTop = document.body.offsetHeight - offsetHeight;
-      const maxLeft = document.body.offsetWidth - offsetWidth;
-      top = `${clientY > maxTop ? clientY - offsetHeight : clientY}px`;
-      left = `${clientX > maxLeft ? clientX - offsetWidth : clientX}px`;
-    };
-
+  export const showPopupMenu = (e: { clientX: number, clientY: number }) => {
+    clientX = e.clientX;
+    clientY = e.clientY;
     visible = true;
-    setPosition();
   };
 
+  $: top = clientY + offsetHeight > window.innerHeight 
+    ? `${clientY - offsetHeight}px`
+    : `${clientY}px`;
+    
+  $: left = clientX + offsetWidth > window.innerWidth 
+      ? `${clientX - offsetWidth}px`
+      : `${clientX}px`;
 
   function clickOutside({ target }) {
     if (!menu.contains(target)) {
@@ -37,7 +40,7 @@
   }
 </script>
 
-<div class="container" aria-hidden="true" bind:this={menu} style:left style:top style:width
+<div use:portal={document.body} class="container" aria-hidden="true" bind:this={menu} style:left style:top style:width
     bind:offsetWidth bind:offsetHeight on:click={hide}>
     {#if visible}
     <div class='popup-menu' in:slideFade={{ duration: 200 }} out:slideFade={{ duration: 200 }}>
@@ -54,7 +57,6 @@
     div.popup-menu {
       display: flex;
       flex-direction: column;
-      border: 1px solid gray;
       box-shadow: .1em .1em .4em #00000080;
     }
   }

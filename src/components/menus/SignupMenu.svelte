@@ -2,7 +2,7 @@
     import { t } from 'svelte-i18n';
     import ConfirmDialog from '../dialogs/ConfirmDialog.svelte';
 	import AuthService from '../../service/auth.service';
-    import { lang } from '../../service/i18n';
+    import { lang } from '../../service/i18n.setup';
     import { logPageView, showError } from '../../store/notification.store';
 	
 	interface RequiredPageChecks {
@@ -10,18 +10,19 @@
 		privacypolicy: boolean;
 	}
 
+	const MIN_PWD_LENGTH = 6;
 	const checkedIcon = 'bx bxs-check-circle bx-sm success-text';
 	const uncheckedIcon = 'bx bx-circle bx-sm';
 	const authService = new AuthService();
 
 	let email = import.meta.env.DEV ? 'john.doe@example.com' : '';
-	let password1 = import.meta.env.DEV ? 'john.doe@example.com' : '';
-	let password2 = import.meta.env.DEV ? 'john.doe@example.com' : '';
+	let password = '';
+	let pwdRepeat = '';
 	let page: keyof RequiredPageChecks;
 
 	const checks: RequiredPageChecks = {
-		privacypolicy: import.meta.env.DEV,
-		termsofuse: import.meta.env.DEV,
+		privacypolicy: false,
+		termsofuse: false,
 	 };
 
 	function confirm({ detail: accepted }) {		
@@ -31,7 +32,7 @@
 
 	async function signUp() {
 		try {
-			await authService.signUp(email, password1);
+			await authService.signUp(email, password);
 		} catch (error) {
         	showError(error.message);
 		}
@@ -58,7 +59,9 @@
         logPageView({ page: 'signup', target });
 	}
 
-	$: valid = password1 === password2 && Object.values(checks).every(v => v);
+	$: valid = password?.length >= MIN_PWD_LENGTH 
+		&& password === pwdRepeat 
+		&& Object.values(checks).every(v => v);
 </script>
 
 <section class="menu">
@@ -66,9 +69,9 @@
 		<label for="email">{ $t('menu.login.email') }</label>
 		<input id="email" autocomplete="email" type="email" placeholder="{ $t('menu.login.email') }" bind:value={email}>
 		<label for="password">{ $t('menu.login.password') }</label>
-		<input id="password" type="password" placeholder="{ $t('menu.login.password') }" bind:value={password1}>
+		<input id="password" type="password" placeholder="{ $t('menu.login.password') }" bind:value={password}>
 		<label for="new-password">{ $t('menu.login.repeat') }</label>
-		<input id="new-password" type="password" placeholder="{ $t('menu.login.repeat') }" bind:value={password2}>
+		<input id="new-password" type="password" placeholder="{ $t('menu.login.repeat') }" bind:value={pwdRepeat}>
 		<br/>
 	</div>
     <div class="row">
@@ -95,7 +98,7 @@
 		{/if}
     </div>
     <div class="row">
-        <button title="{ $t('menu.login.signup') }" on:click={signUp} 
+        <button data-close={valid ? '' : undefined} title="{ $t('menu.login.signup') }" on:click={signUp} 
 			disabled={!valid}>
             <i class='bx bxs-edit'></i> { $t('menu.login.signup') }
         </button>

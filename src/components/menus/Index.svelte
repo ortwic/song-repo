@@ -1,20 +1,18 @@
 <script lang='ts'>
     import '../../styles/menu.scss';
     import { t } from 'svelte-i18n';
-    import { onMount } from 'svelte';
     import { derived } from 'svelte/store';
-    import { location } from 'svelte-spa-router'
+    import { link, location } from 'svelte-spa-router'
     import NavButton from '../ui/elements/NavButton.svelte';
-    import Login from './Login.svelte';
-    import Signup from './Signup.svelte';
-    import Profil from './Profil.svelte';
-    import Columns from './Columns.svelte';
-    import EventList from './EventList.svelte';
-    import ExportTable from './ExportTable.svelte';
-    import AdvanceTable from '../table/AdvanceTable.svelte';
-    import MenuButton from '../ui/elements/MenuButton.svelte';
+    import LoginMenu from './LoginMenu.svelte';
+    import SignupMenu from './SignupMenu.svelte';
+    import ProfileMenu from './ProfileMenu.svelte';
+    import ShareMenu from './ShareMenu.svelte';
+    import BackupMenu from './BackupMenu.svelte';
+    import ColumnMenu from './ColumnMenu.svelte';
+    import EventListMenu from './EventListMenu.svelte';
+    import MenuDrawer from '../ui/elements/MenuDrawer.svelte';
     import Sidebar from '../ui/Sidebar.svelte'
-    import type { MenuPages } from '../../model/types';
     import { currentUser } from '../../service/auth.service';
     import { currentMenu } from '../../store/app.store';
     import TagCloud from './TagCloud.svelte';
@@ -24,50 +22,32 @@
     const isTableView = derived(location, (path) => path.startsWith('/songs') || path.startsWith('/samples'));
     const isBlogView = derived(location, (path) => path.startsWith('/blog'));
     const isEventView = derived(location, (path) => path.startsWith('/events'));
-    let counter = 0;
-
-    onMount(() => currentMenu.set($isTableView ? 'root' : 'main'));
-
-    function handleMenuNav(ev: SubmitEvent) {
-        const target = ev.submitter.getAttribute('data-target') as MenuPages;
-        if (target) {
-            currentMenu.set(target);
-        } else if (ev.submitter.getAttribute('data-close') !== null) {
-            currentMenu.set('root');
-        }
-    }
 </script>
 
-<form on:submit|preventDefault={handleMenuNav}>
-    <header>
-      <MenuButton target='main' />
-    </header>
-    <nav>
-      {#if $currentMenu === 'main'}
-      <Sidebar>
-        <svelte:fragment slot="title">
-          <a href="#/" on:click={() => currentMenu.set('root')}>{title}</a>
-        </svelte:fragment>
+<MenuDrawer>
+    {#if $currentMenu === 'dynamic'}
+    <Sidebar {title}>
         {#if $currentUser}
-        <Profil email={$currentUser.email}
-            photoURL={$currentUser.photoURL} 
-            displayName={$currentUser.displayName} 
-        />
+            <ProfileMenu email={$currentUser.email}
+                photoURL={$currentUser.photoURL} 
+                displayName={$currentUser.displayName}  
+            />
         {:else}
-        <Login />
+            <LoginMenu />
         {/if}
+
         {#if $isTableView}
-        <ExportTable exportTitle="{ $t('menu.table.exportTitle') }" />
-        <Columns />
+            <BackupMenu exportTitle="{ $t('menu.table.exportTitle') }" />
+            <ColumnMenu />
         {:else if $isBlogView}
-        <TagCloud />
+            <TagCloud />
         {:else if $isEventView}
-        <EventList />
+            <EventListMenu />
+        {:else if $currentUser}
+            <ShareMenu />
         {/if}
+        
         <svelte:fragment slot="lower">
-            {#if counter >= 5e5 || import.meta.env.DEV}
-            <AdvanceTable>{ $t('menu.masterdata') }</AdvanceTable>
-            {/if}
             <NavButton href="/songs" title="{ $t('menu.songs') }">
                 <span><i class='bx bxs-playlist'></i> { $t('menu.songs') }</span>
             </NavButton>
@@ -78,50 +58,21 @@
                 <span><i class='bx bx-bulb'></i> { $t('menu.howto') }</span>
             </NavButton>
             <div class="row">
-                <a class="warn" role="button" target="_blank" href="https://liberapay.com/OCSoft42/donate">
+                <a use:link class="warn" role="button" href="/user/ocsoft42">
                     <span><i class='bx bxs-coffee'></i> { $t('menu.donate') }</span>
                 </a>
             </div>
         </svelte:fragment>
         <svelte:fragment slot="footer">
-            <div aria-hidden="true" on:click={() => counter++} on:contextmenu={() => counter = counter > 5 ? 5e5 : 0}></div>
             {footer}
         </svelte:fragment>
-      </Sidebar>
-      {:else if $currentMenu == 'signup'}
-      <Sidebar title="{ $t('menu.login.signup') }">
-        <Signup />
+    </Sidebar>
+    {:else if $currentMenu === 'signup'}
+    <Sidebar title="{ $t('menu.login.signup') }">
+        <SignupMenu />
         <svelte:fragment slot="footer">
             {footer}
         </svelte:fragment>
-      </Sidebar>
-      {/if}
-    </nav>
-</form>
-  
-
-<style lang="scss">
-    header {
-      position: fixed;
-      top: 50%;
-      right: 0;
-      z-index: 100;
-      height: 0;
-      text-align: right;
-    } 
-
-    nav [aria-hidden] {
-        position: absolute;
-        right: 0;
-        width: 1.5em;
-        height: 1.5em;
-    }
-
-    a {
-        color: inherit;
-
-        &:hover {
-            text-decoration: underline;
-        }
-    }
-</style>
+    </Sidebar>
+    {/if}
+</MenuDrawer>

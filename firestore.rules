@@ -11,9 +11,18 @@ service cloud.firestore {
       allow write, delete: if request.auth.uid == request.resource.data.uid;
       allow read: if true;
     }
+
+    match /user/{uid}/links/{docId} {
+      allow write, delete: if request.auth.uid == request.resource.data.uid;
+      allow read: if true;
+    }
     
     match /feedback/{docId} {
       allow write: if true;
+      allow read: if true;
+    }
+
+    match /settings/{docId} {
       allow read: if true;
     }
 

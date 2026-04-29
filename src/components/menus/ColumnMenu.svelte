@@ -37,6 +37,10 @@
         $view?.table.setSort(sorter);
     }
 
+    function sortIcon(order: 'asc' | 'desc') {
+        return order === 'desc' ? 'bx bxs-chevron-down' : 'bx bxs-chevron-up';
+    }
+
     function filterBy(column: string, value: string) {
         headerFilter[column] = value;
         if (value === undefined) {
@@ -68,7 +72,7 @@
                     state={sortedFields[col.field] ?? null}
                     options={[null, 'asc', 'desc']}
                     on:toggle={({ detail }) => sortBy(col.field, detail)}>
-                    <i class="bx {sortedFields[col.field] ?? 'asc'}"></i>
+                    <i class={sortIcon(sortedFields[col.field])}></i>
                 </Switch>
                 <Switch title="{ $t('menu.table.group-by') } {col.title}"
                     state={$view?.groups.includes(col.field)}
@@ -89,12 +93,12 @@
                         <i class="bx bx-filter-alt"></i>
                     </Switch>
                     <PopupMenu bind:this={menus[col.field]}>
-                        <div class="values">
-                            <button class="empty" on:click={() => filterBy(col.field, undefined)}>
+                        <div class="y-flex">
+                            <button class="option empty" on:click={() => filterBy(col.field, undefined)}>
                                 &lt; { $t('table.filter.empty') } {col.title} &gt;
                             </button>
                             {#each filterListValues(col) as value}
-                                <button on:click={() => filterBy(col.field, value)}>
+                                <button class="option" on:click={() => filterBy(col.field, value)}>
                                     <i class="{col.field} {value}"></i> { $t(`songs.${col.field}.${value}`) }
                                 </button>
                             {/each}
@@ -127,46 +131,6 @@
                 color: var(--primary);
                 font-weight: 500;
             }
-        }
-
-        div.values {
-            display: flex;
-            flex-direction: column;
-            
-            button {
-                border: 0;
-                border-radius: 0;
-                color: var(--text);
-                padding: 6px 20px 6px 12px;
-                text-align: left;
-                font-weight: normal;
-                transition: all .2s ease-in-out;
-
-                &.empty {
-                    color: gray;
-                    text-align: center;
-                    font-style: italic;
-                }
-
-                &:hover {
-                    background-color: white;
-                }
-
-                i.status {
-                    display: inline-block;
-                    width: 1.6em;
-                }
-            }
-        }
-
-        i.bx.asc::before {
-            font-family: 'boxicons';
-            content: "\ec96"; // bxs-chevron-up
-        }
-
-        i.bx.desc::before {
-            font-family: 'boxicons';
-            content: "\ec89"; // bxs-chevron-down
         }
     }
 </style>

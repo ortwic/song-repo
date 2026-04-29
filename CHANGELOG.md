@@ -1,3 +1,14 @@
+v0.5.1 (2026-03-22)
+-------------------
+- dashboard view on start page
+- minor design bugfixes
+- fixed songbpm search
+- share QR-Code
+
+v0.4.1 (2026-03-22)
+-------------------
+- new user page feature for link trees
+
 v0.4.0 (2024-04-27)
 -------------------
 - fixed filter blog by labels

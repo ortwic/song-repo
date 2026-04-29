@@ -5,12 +5,12 @@
     import { t } from "svelte-i18n";
     import Portal from "svelte-portal";
     import Titlebar from "../ui/elements/Titlebar.svelte";
-    import type { MenuPages } from "../../model/types";
+    import type { MenuTarget } from "../../model/types";
     
     const dispatch = createEventDispatcher();
 
     export let size: 'auto' | 'max' | 'full';
-    export let target: MenuPages = 'root';
+    export let target: MenuTarget = 'hidden';
     export let title = '';
 </script>
 
@@ -19,7 +19,7 @@
     in:fade={{ duration: 200, easing: cubicOut }} 
     out:fade={{ duration: 200, easing: cubicOut }}>
     <Titlebar {target} on:close={() => dispatch('closed', false)}>
-        <slot name='title'></slot> {title}
+        <slot name='header'></slot> {title}
     </Titlebar>
     <slot></slot>
     <slot name='footer'>

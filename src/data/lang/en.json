@@ -5,7 +5,8 @@
     "howto-blog": "How to make music blog",
     "events": "Public events",
     "event-calendar": "Public event calendar",
-    "donate": "Donate",
+    "events-empty": "No events found!",
+    "donate": "Donate Song-Repo",
     "masterdata": "Master data",
     "login": {
       "login": "Login",
@@ -42,9 +43,7 @@
       "share": "Share or export list of your repertoire",
       "search": "Search with autocomplete for genres, artists, and titles",
       "events": "Public events like",
-      "blog": "How-tos and further articles about making",
-      "github": "Planned feature overview and known bugs",
-      "feedback": "We hope you find our app useful and look forward to your"
+      "blog": "How-tos and further articles about making"
     },
     "imprint": "Imprint",
     "privacypolicy": "Privacy policy",
@@ -95,7 +94,8 @@
       "learnedOn": "Learned",
       "changedAt": "Last changed",
       "country": "Country",
-      "year": "Year"
+      "year": "Year",
+      "signature": "Signature"
     },
     "menu": {
       "open": "Open resource",
@@ -109,7 +109,8 @@
       "change-status": "Change status",
       "delete": "Delete?",
       "yes": "Yes",
-      "no": "No"
+      "no": "No",
+      "set-resource": "Set resource"
     },
     "resource": {
       "title": "Enter resource path",
@@ -131,7 +132,11 @@
       "done": "Done",
       "repeat": "Repeat",
       "archived": "Archived"
-    }
+    },
+    "recent-wip": "Recent songs in progress",
+    "recent-limit": "Recent limit",
+    "incl-done": "Include done",
+    "excl-done": "Exclude done"
   },
   "table": {
     "groupBy": "Group by {title}",
@@ -171,11 +176,14 @@
   "profile": {
     "sign-out": "Sign out",
     "share-link": "Copy link to share",
-    "share-link-copied": "Copied link for sharing into clipboard."
+    "share-link-copied": "Copied link for sharing into clipboard.",
+    "download-qrcode": "Download QR-Code"
   },
   "settings": {
     "title": "Settings",
     "view": "View",
+    "alias": "alias",
+    "alias-exists": "Alias already exists",
     "reset-views": "Reset views",
     "reset-text": "Reset stored column settings, filters and grouping.",
     "reset-done": "All saved view reseted!",
@@ -184,6 +192,25 @@
     "delete-profile": "Delete profile",
     "delete-advice": "You should export your data before deletion.",
     "delete-done": "Your account was deleted successfully!",
-    "profile": "Profile"
+    "profile": "Profile",
+    "profile-updated": "Profile updated",
+    "update-profile": "Save",
+    "danger-zone": "Danger Zone",
+    "linktree": {
+      "empty": "No links available yet.",
+      "title": "Title"
+    },
+    "cancel": "Cancel",
+    "add": "Add",
+    "edit": "Edit",
+    "delete": "Delete",
+    "about": "Bio",
+    "move-up": "Move up",
+    "move-down": "Move down",
+    "alias-available": "Alias available"
+  },
+  "user": {
+    "song-list": "Song list",
+    "alias-unknown": "User alias is unkown!"
   }
 }

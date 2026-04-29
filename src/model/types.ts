@@ -19,4 +19,8 @@ type ObjectValues<T> = T[keyof T];
 
 export type Status = ObjectValues<typeof status>;
 
-export type MenuPages = 'root' | 'main' | 'signup';
+export type MenuTarget = 'hidden' | 'dynamic' | 'signup';
+
+export type ApiSettings =  { apiKey: string, baseUrl: string };
+export type SearchEngines = 'audius' | 'songbpm';
+export type SearchSettings = Record<SearchEngines, ApiSettings>;

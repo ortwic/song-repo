@@ -1,5 +1,6 @@
 <script lang='ts'>
     import '../../styles/menu.scss';
+    import { push } from 'svelte-spa-router';
     import { slide } from 'svelte/transition';
     import Titlebar from './elements/Titlebar.svelte';
 
@@ -7,10 +8,10 @@
 </script>
 
 <aside in:slide={{ duration: 200, axis: 'x' }} out:slide={{ duration: 200, axis: 'x' }} >
-    <Titlebar target='root'>
-        <slot name="title">
+    <Titlebar target='hidden'>
+        <button class="clear" data-close on:click={() => push('/')}>
             {title}
-        </slot>    
+        </button>
     </Titlebar>
     <section>
         <slot></slot>
@@ -36,6 +37,16 @@ aside {
     height: 100%;
     z-index: 100;
     box-shadow: 0 0 2em #00000080;
+
+    button {
+        padding: 0;
+        font-style: italic;
+        color: inherit;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
 
     section {
         text-align: center;

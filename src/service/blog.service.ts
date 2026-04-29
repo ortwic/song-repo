@@ -14,5 +14,5 @@ export function getBlogPosts(tag?: string): Observable<Post[]> {
         constraints.push(where('tags', 'array-contains', tag));
     }
     
-    return store.getDocumentStream<Post>(...constraints);
+    return store.getDocuments<Post>(...constraints);
 }

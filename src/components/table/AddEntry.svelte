@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { onMount } from "svelte";
     import { t } from 'svelte-i18n';
     import Autocomplete from 'simple-svelte-autocomplete/src/SimpleAutocomplete.svelte';
     import AddButton from "../ui/AddButton.svelte";
@@ -7,16 +6,21 @@
     import Image from "../ui/elements/Image.svelte";
     import SelectKey from '../ui/SelectKey.svelte';
     import LoadingBar from '../ui/elements/LoadingBar.svelte';
-    import SongService from "../../service/song.service";
-    import SearchService, { create } from "../../service/search.service";
+    import SongService from "../../service/user-song.service";
+    import { create, settingsStore } from "../../service/search.service";
     import type { UserSong } from "../../model/song.model";
     import type { ArtistResult, SongResult } from "../../model/songbpm.model";
+    import type { SearchEngines } from "../../model/types";
     import genres from '../../data/genres.json';
     import { logAction } from '../../store/notification.store';
+    import { derived, writable } from "svelte/store";
+    import PopupMenu from "../ui/PopupMenu.svelte";
     
     const required = true;
     const songService = new SongService();
-    let searchService: SearchService;
+    const currentSearchEngine = writable<SearchEngines>('songbpm');
+    const searchService = derived([currentSearchEngine, settingsStore], ([e, s]) => create(e, s[e]));
+    let selectSearchEngine = ({}) => {};
     let form: HTMLFormElement;
     let visible = false;
 
@@ -25,7 +29,6 @@
     let label = '';
 
     reset();
-    onMount(async () => searchService = await create());
     
     async function done({ detail: confirm }): Promise<void> {
         if (!confirm) {
@@ -97,8 +100,17 @@
 {#if visible}
 <form bind:this={form} on:submit|preventDefault>
     <ConfirmDialog size='full' on:closed={done}>
-        <div class="title" slot="title">
-            <i class="bx bx-search-alt-2"></i>&nbsp; { $t('songs.addTitle') } <a href="https://getsongbpm.com/api" target="_blank">GetSongbpm</a>
+        <div class="title" slot="header">
+            <i class="bx bx-search-alt-2"></i>&nbsp; { $t('songs.addTitle') } 
+            <!-- svelte-ignore a11y-interactive-supports-focus -->
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <a style="cursor: pointer;" role="listbox" id="searchEngine" on:click={selectSearchEngine}>{$currentSearchEngine}</a>
+            <PopupMenu bind:showPopupMenu={selectSearchEngine}>
+                <button class="option" class:active={$currentSearchEngine === 'songbpm'} 
+                    on:click={() => currentSearchEngine.set('songbpm')}>GetSongbpm</button>
+                <button class="option" class:active={$currentSearchEngine === 'audius'} 
+                    on:click={() => currentSearchEngine.set('audius')}>Audius</button>
+            </PopupMenu>
         </div>
         <section>
             <div class="section">
@@ -106,7 +118,7 @@
                     <label for="artist">{ $t('songs.columns.artist') }</label>
                     <Autocomplete inputClassName="lg" labelFieldName="name" {required} placeholder="artist"
                         delay={500} minCharactersToSearch={2} hideArrow={true} bind:text={newSong.artist}
-                        searchFunction={(value) => searchService.findArtists(value)}
+                        searchFunction={(value) => $searchService.findArtists(value)}
                         onChange={(item) => setArtist(item)} clearSelection={() => setArtist()} showClear={true}
                         showLoadingIndicator={true}>
                         <div class="card" slot="item" let:item>
@@ -131,7 +143,7 @@
                     <label for="title">{ $t('songs.columns.title') }</label>
                     <Autocomplete inputClassName="lg" labelFieldName="title" {required} placeholder="title"
                         delay={newSong.artist ? 500 : 990} minCharactersToSearch={newSong.artist ? 0 : 3} hideArrow={true}
-                        searchFunction={(value) => searchService.findSongs(value, newSong.artist)} bind:text={newSong.title}
+                        searchFunction={(value) => $searchService.findSongs(value, newSong.artist)} bind:text={newSong.title}
                         onChange={(item) => setSong(item)} clearSelection={() => setSong()} showClear={true}
                         showLoadingIndicator={true}>
                         <div class="card" slot="item" let:item>

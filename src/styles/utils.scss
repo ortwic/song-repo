@@ -1,0 +1,89 @@
+input.sm {
+    width: 5rem;
+}
+
+input.lg {
+    width: 15rem;
+}
+
+.primary {
+    color: var(--primary);
+}
+
+.secondary {
+    color: var(--secondary);
+}
+
+.secondary:hover,
+.secondary:active {
+    color: var(--secactive);
+}
+
+.secondary:visited {
+    color: var(--secghost);
+}
+    
+.smaller {
+    font-size: smaller;
+}
+
+.larger {
+    transform: scale(1.5);
+}
+
+.error,
+.error::before {
+    color: red;
+}
+
+.left {
+    text-align: left !important;
+}
+
+.right {
+    text-align: right !important;
+}
+
+.center {
+    text-align: center;
+}
+
+.no-wrap {
+    white-space: nowrap;
+}
+
+.y-flex {
+    display: flex;
+    flex-direction: column;
+}
+
+.option {
+    border: 0;
+    border-radius: 0;
+    color: var(--text);
+    padding: 6px 20px 6px 12px;
+    text-align: left;
+    font-weight: normal;
+    white-space: nowrap;
+    transition: all 0.2s ease-in-out;
+
+    &.empty {
+        color: gray;
+        text-align: center;
+        font-style: italic;
+    }
+
+    &:hover {
+        color: var(--primary);
+    }
+
+    &.active {
+        cursor: pointer;
+        color: var(--primselect);
+        text-shadow: none;
+    }
+
+    &.active:hover {
+        text-shadow: none;
+    }
+}
