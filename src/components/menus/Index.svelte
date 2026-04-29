@@ -17,16 +17,24 @@
     import { currentMenu } from '../../store/app.store';
     import TagCloud from './TagCloud.svelte';
 
-    export let title: string;
-    export let footer: string;
+    interface Props {
+        title: string;
+        footer: string;
+    }
+
+    let { title, footer }: Props = $props();
     const isTableView = derived(location, (path) => path.startsWith('/songs') || path.startsWith('/samples'));
     const isBlogView = derived(location, (path) => path.startsWith('/blog'));
     const isEventView = derived(location, (path) => path.startsWith('/events'));
+
+    function hide() {
+        currentMenu.set('hidden');
+    }
 </script>
 
 <MenuDrawer>
     {#if $currentMenu === 'dynamic'}
-    <Sidebar {title}>
+    <Sidebar {title} onclose={hide}>
         {#if $currentUser}
             <ProfileMenu email={$currentUser.email}
                 photoURL={$currentUser.photoURL} 
@@ -47,7 +55,7 @@
             <ShareMenu />
         {/if}
         
-        <svelte:fragment slot="lower">
+        {#snippet lower()}
             <NavButton href="/songs" title="{ $t('menu.songs') }">
                 <span><i class='bx bxs-playlist'></i> { $t('menu.songs') }</span>
             </NavButton>
@@ -62,17 +70,17 @@
                     <span><i class='bx bxs-coffee'></i> { $t('menu.donate') }</span>
                 </a>
             </div>
-        </svelte:fragment>
-        <svelte:fragment slot="footer">
+        {/snippet}
+        {#snippet footer()}
             {footer}
-        </svelte:fragment>
+        {/snippet}
     </Sidebar>
     {:else if $currentMenu === 'signup'}
-    <Sidebar title="{ $t('menu.login.signup') }">
+    <Sidebar title="{ $t('menu.login.signup') }" onclose={hide}>
         <SignupMenu />
-        <svelte:fragment slot="footer">
+        {#snippet footer()}
             {footer}
-        </svelte:fragment>
+        {/snippet}
     </Sidebar>
     {/if}
 </MenuDrawer>

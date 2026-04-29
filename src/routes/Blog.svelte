@@ -10,7 +10,7 @@
     import { orientation } from "../store/media.store";
 
     const width = derived(orientation, (o) => o === 'landscape' ? 120 : 80);
-    let posts = of([]);
+    let posts = $state(of([]));
     
     params$.subscribe((p) => {
         posts = getBlogPosts(p?.label);

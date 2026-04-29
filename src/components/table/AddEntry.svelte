@@ -1,4 +1,7 @@
 <script lang="ts">
+    import { createBubbler, preventDefault } from 'svelte/legacy';
+
+    const bubble = createBubbler();
     import { t } from 'svelte-i18n';
     import Autocomplete from 'simple-svelte-autocomplete/src/SimpleAutocomplete.svelte';
     import AddButton from "../ui/AddButton.svelte";
@@ -20,17 +23,17 @@
     const songService = new SongService();
     const currentSearchEngine = writable<SearchEngines>('songbpm');
     const searchService = derived([currentSearchEngine, settingsStore], ([e, s]) => create(e, s[e]));
-    let selectSearchEngine = ({}) => {};
-    let form: HTMLFormElement;
-    let visible = false;
+    let selectSearchEngine = $state(({}) => {});
+    let form: HTMLFormElement = $state();
+    let visible = $state(false);
 
-    let newSong: Partial<UserSong>;
+    let newSong: Partial<UserSong> = $state();
     const styles = (genre: string) => (genres.find(v => v.name === genre) ?? genres[0]).styles;
-    let label = '';
+    let label = $state('');
 
     reset();
     
-    async function done({ detail: confirm }): Promise<void> {
+    async function done(confirm: boolean): Promise<void> {
         if (!confirm) {
             reset();
         } else if (form.checkValidity()) {
@@ -98,20 +101,22 @@
 {/if}
 
 {#if visible}
-<form bind:this={form} on:submit|preventDefault>
-    <ConfirmDialog size='full' on:closed={done}>
-        <div class="title" slot="header">
-            <i class="bx bx-search-alt-2"></i>&nbsp; { $t('songs.addTitle') } 
-            <!-- svelte-ignore a11y-interactive-supports-focus -->
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <a style="cursor: pointer;" role="listbox" id="searchEngine" on:click={selectSearchEngine}>{$currentSearchEngine}</a>
-            <PopupMenu bind:showPopupMenu={selectSearchEngine}>
-                <button class="option" class:active={$currentSearchEngine === 'songbpm'} 
-                    on:click={() => currentSearchEngine.set('songbpm')}>GetSongbpm</button>
-                <button class="option" class:active={$currentSearchEngine === 'audius'} 
-                    on:click={() => currentSearchEngine.set('audius')}>Audius</button>
-            </PopupMenu>
-        </div>
+<form bind:this={form} onsubmit={preventDefault(bubble('submit'))}>
+    <ConfirmDialog size='full' onClose={done}>
+        {#snippet header()}
+                        <div class="title" >
+                <i class="bx bx-search-alt-2"></i>&nbsp; { $t('songs.addTitle') } 
+                <!-- svelte-ignore a11y_interactive_supports_focus -->
+                <!-- svelte-ignore a11y_click_events_have_key_events -->
+                <a style="cursor: pointer;" role="listbox" id="searchEngine" onclick={selectSearchEngine}>{$currentSearchEngine}</a>
+                <PopupMenu bind:showPopupMenu={selectSearchEngine}>
+                    <button class="option" class:active={$currentSearchEngine === 'songbpm'} 
+                        onclick={() => currentSearchEngine.set('songbpm')}>GetSongbpm</button>
+                    <button class="option" class:active={$currentSearchEngine === 'audius'} 
+                        onclick={() => currentSearchEngine.set('audius')}>Audius</button>
+                </PopupMenu>
+            </div>
+                    {/snippet}
         <section>
             <div class="section">
                 <div class="group">
@@ -121,22 +126,26 @@
                         searchFunction={(value) => $searchService.findArtists(value)}
                         onChange={(item) => setArtist(item)} clearSelection={() => setArtist()} showClear={true}
                         showLoadingIndicator={true}>
-                        <div class="card" slot="item" let:item>
-                            <Image src={item.img} />
-                            <div class="col">
-                                {item.name} | 
-                                <span title="{ $t('songs.columns.country') }">{item.from ?? ''}</span>
-                                <a title="{ $t('songs.columns.artist') }" href={item.uri} target="_blank"><i class="bx bx-info-circle"></i></a>
-                                <p>
-                                    {#each item.genres ?? [] as genre}
-                                    <span class='label'>{genre}</span>
-                                    {/each}
-                                </p>
+                        {#snippet item({ item })}
+                                                        <div class="card"  >
+                                <Image src={item.img} />
+                                <div class="col">
+                                    {item.name} | 
+                                    <span title="{ $t('songs.columns.country') }">{item.from ?? ''}</span>
+                                    <a title="{ $t('songs.columns.artist') }" href={item.uri} target="_blank"><i class="bx bx-info-circle"></i></a>
+                                    <p>
+                                        {#each item.genres ?? [] as genre}
+                                        <span class='label'>{genre}</span>
+                                        {/each}
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                        <div slot="loading">
-                            <LoadingBar />
-                        </div>
+                                                    {/snippet}
+                        {#snippet loading()}
+                                                        <div >
+                                <LoadingBar />
+                            </div>
+                                                    {/snippet}
                     </Autocomplete>
                 </div>
                 <div class="group">
@@ -146,31 +155,33 @@
                         searchFunction={(value) => $searchService.findSongs(value, newSong.artist)} bind:text={newSong.title}
                         onChange={(item) => setSong(item)} clearSelection={() => setSong()} showClear={true}
                         showLoadingIndicator={true}>
-                        <div class="card" slot="item" let:item>
-                            <a title={item.album?.title} href={item.album?.uri ?? item.artist?.uri} target="_blank">
-                                <Image src={item.album?.img ?? item.artist?.img} />
-                            </a>
-                            <div class="col">
-                                {item.title} | 
-                                <a title="{ $t('songs.columns.title') }" href={item.uri} target="_blank"><i class="bx bx-info-circle"></i></a>
-                                {#if newSong.artist}
-                                <span title="{ $t('songs.columns.year') }">({item.album?.year})</span>
-                                <p>
-                                    <span title="{ $t('songs.columns.bpm') }" class='label'>{item.tempo}</span>
-                                    <span title="{ $t('songs.columns.time') }" class='label'>{item.time_sig}</span>
-                                    <span title="{ $t('songs.columns.key') }" class='label'>{item.key_of}</span>
-                                </p>
-                                {:else}
-                                <br>
-                                <a title="{ $t('songs.columns.artist') }" href={item.artist?.uri} target="_blank">{item.artist?.name}</a>
-                                <p>
-                                    {#each item.artist?.genres ?? [] as genre}
-                                    <span class='label'>{genre}</span>
-                                    {/each}
-                                </p>
-                                {/if}
+                        {#snippet item({ item })}
+                                                        <div class="card"  >
+                                <a title={item.album?.title} href={item.album?.uri ?? item.artist?.uri} target="_blank">
+                                    <Image src={item.album?.img ?? item.artist?.img} />
+                                </a>
+                                <div class="col">
+                                    {item.title} | 
+                                    <a title="{ $t('songs.columns.title') }" href={item.uri} target="_blank"><i class="bx bx-info-circle"></i></a>
+                                    {#if newSong.artist}
+                                    <span title="{ $t('songs.columns.year') }">({item.album?.year})</span>
+                                    <p>
+                                        <span title="{ $t('songs.columns.bpm') }" class='label'>{item.tempo}</span>
+                                        <span title="{ $t('songs.columns.time') }" class='label'>{item.time_sig}</span>
+                                        <span title="{ $t('songs.columns.key') }" class='label'>{item.key_of}</span>
+                                    </p>
+                                    {:else}
+                                    <br>
+                                    <a title="{ $t('songs.columns.artist') }" href={item.artist?.uri} target="_blank">{item.artist?.name}</a>
+                                    <p>
+                                        {#each item.artist?.genres ?? [] as genre}
+                                        <span class='label'>{genre}</span>
+                                        {/each}
+                                    </p>
+                                    {/if}
+                                </div>
                             </div>
-                        </div>
+                                                    {/snippet}
                     </Autocomplete>
                 </div>
                 <div class="group">
@@ -179,19 +190,23 @@
                         minCharactersToSearch={0} items={genres} showClear={true}
                         bind:text={newSong.genre} hideArrow={true}
                         onChange={() => newSong.style = undefined}>
-                        <svelte:fragment slot="item" let:item let:label>
-                            <div class="square" style:background-color={item.color}></div>
-                            <span class="option">{@html label}</span>
-                        </svelte:fragment>
+                        {#snippet item({ item, label })}
+                                                    
+                                <div class="square" style:background-color={item.color}></div>
+                                <span class="option">{@html label}</span>
+                            
+                                                    {/snippet}
                     </Autocomplete>
                 </div>
                 <div class="group">
                     <label for="style">{ $t('songs.columns.style') }</label>
                     <Autocomplete inputClassName="lg" placeholder="style" hideArrow={true}
                         minCharactersToSearch={0} searchFunction="{() => styles(newSong.genre && newSong.genre[0])}" showClear={true}>
-                        <svelte:fragment slot="item" let:item let:label>
-                            <span class="option">{@html label}</span>
-                        </svelte:fragment>
+                        {#snippet item({ item, label })}
+                                                    
+                                <span class="option">{@html label}</span>
+                            
+                                                    {/snippet}
                     </Autocomplete>
                 </div>
                 <div class="group">
@@ -200,7 +215,7 @@
                 </div>
                 <div class="group">
                     <label for="tags" title="{ $t('songs.hint-label') }">{ $t('songs.columns.tags') } <i class='bx bx-help-circle'></i></label>
-                    <input id="tags" class="lg" type="text" bind:value={label} on:keydown={addLabel}>
+                    <input id="tags" class="lg" type="text" bind:value={label} onkeydown={addLabel}>
                     <div class="flex labels">
                         {#each newSong.tags as tag}
                         <span class='label'>{tag}</span>
@@ -213,11 +228,11 @@
                 </div>
                 <div class="group">
                     <label for="bpm">{ $t('songs.columns.bpm') }</label>
-                    <input id="bpm" class="sm" type="text" bind:value={newSong.bpm} on:keydown={addLabel}>
+                    <input id="bpm" class="sm" type="text" bind:value={newSong.bpm} onkeydown={addLabel}>
                 </div>
                 <div class="group">
                     <label for="time">{ $t('songs.columns.time') }</label>
-                    <input id="time" class="sm" type="text" bind:value={newSong.time} on:keydown={addLabel}>
+                    <input id="time" class="sm" type="text" bind:value={newSong.time} onkeydown={addLabel}>
                 </div>
             </div>
         </section>

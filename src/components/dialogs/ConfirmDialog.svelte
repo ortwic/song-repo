@@ -1,39 +1,60 @@
 <script lang="ts">
-    import { createEventDispatcher } from "svelte";
     import { fade } from "svelte/transition";
     import { cubicOut } from 'svelte/easing';
     import { t } from "svelte-i18n";
     import Portal from "svelte-portal";
     import Titlebar from "../ui/elements/Titlebar.svelte";
     import type { MenuTarget } from "../../model/types";
-    
-    const dispatch = createEventDispatcher();
 
-    export let size: 'auto' | 'max' | 'full';
-    export let target: MenuTarget = 'hidden';
-    export let title = '';
+    interface Props {
+        size: 'auto' | 'max' | 'full';
+        target?: MenuTarget;
+        title?: string;
+        header?: import('svelte').Snippet;
+        children?: import('svelte').Snippet;
+        footer?: import('svelte').Snippet;
+        onClose: (confirmed: boolean) => void;
+    }
+
+    let {
+        size,
+        target = 'hidden',
+        title = '',
+        header,
+        children,
+        footer,
+        onClose
+    }: Props = $props();
+
+    function confirm(event: Event) {
+        event.stopPropagation();
+        onClose(true);
+    }
+
+    function decline(event: Event) {
+        event.stopPropagation();
+        onClose(false);
+    }
 </script>
 
 <Portal>
     <div class='dialog {size}'
     in:fade={{ duration: 200, easing: cubicOut }} 
     out:fade={{ duration: 200, easing: cubicOut }}>
-    <Titlebar {target} on:close={() => dispatch('closed', false)}>
-        <slot name='header'></slot> {title}
+    <Titlebar {target} onClose={() => onClose(false)}>
+        {@render header?.()} {title}
     </Titlebar>
-    <slot></slot>
-    <slot name='footer'>
+    {@render children?.()}
+    {#if footer}{@render footer()}{:else}
         <div class="row">
-            <button data-target={target} 
-                on:click|stopPropagation={() => dispatch('closed', true)}>
+            <button data-target={target} onclick={confirm}>
                 { $t('dialog.confirm') }
             </button>
-            <button data-target={target} 
-                on:click|stopPropagation={() => dispatch('closed', false)}>
+            <button data-target={target} onclick={decline}>
                 { $t('dialog.decline') }
             </button>
         </div>
-    </slot>
+    {/if}
     </div>
 </Portal>
 {#if size == 'auto'}

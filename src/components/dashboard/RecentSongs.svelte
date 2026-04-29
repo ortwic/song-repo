@@ -11,7 +11,7 @@
 
     const MAX = 12;
 
-    let limit = 4, showDone = false;
+    let limit = $state(4), showDone = $state(false);
 
     const service = new SongService();
     const recentSongStore = toStore(
@@ -25,7 +25,7 @@
         []
     );
 
-    $: recentSongs = $recentSongStore.filter((s) => showDone || s.status !== 'done').slice(0, limit);
+    let recentSongs = $derived($recentSongStore.filter((s) => showDone || s.status !== 'done').slice(0, limit));
 </script>
 
 <section class="recent-songs">
@@ -36,7 +36,7 @@
             <span class="limit-val">{limit}</span>
             <Switch title="{ $t(`songs.${!showDone ? 'incl-done' : 'excl-done'}`) }"
                 state={showDone}
-                on:toggle={() => showDone = !showDone}>
+                onToggle={() => showDone = !showDone}>
                 <span>
                     { $t(`songs.${!showDone ? 'incl-done' : 'excl-done'}`) }
                 </span>

@@ -10,8 +10,12 @@
     import type { Dialog } from '../../model/dialog.model';
     import PopupMenu from '../ui/PopupMenu.svelte';
 
-    export let song: UserSong;
-    export let service: SongService;
+    interface Props {
+        song: UserSong;
+        service: SongService;
+    }
+
+    let { song = $bindable(), service }: Props = $props();
 
     const actions = new SongActions(service);
     const prompt = getContext<Dialog<string>>('resource-prompt');
@@ -19,8 +23,8 @@
     const asArray = <T,>(obj: T) => (Array.isArray(obj) ? obj : [obj]);
     const signature = [song.key, song.time, song.bpm].filter(Boolean).join(' | ');
 
-    let searchPopupMenu: PopupMenu;
-    let statusPopupMenu: PopupMenu;
+    let searchPopupMenu: PopupMenu = $state();
+    let statusPopupMenu: PopupMenu = $state();
 
     function getGenreStyles(genre: string) {
         const hex = genreColor(genre);
@@ -33,17 +37,15 @@
 
     const { gradient, genreWatermarkStyle } = getGenreStyles(song.genre);
 
-    function handlePrimary() {
+    async function handlePrimary() {
         if (song.uri) {
             actions.openUri(song);
         } else {
-            const unsub = prompt.showDialog('').subscribe(async (result) => {
-                if (result) {
-                    await actions.setUri(song, result);
-                    song = { ...song, uri: result };
-                }
-                unsub();
-            });
+            const result = await prompt.showDialog('');
+            if (result) {
+                await actions.setUri(song, result);
+                song = { ...song, uri: result };
+            }
         }
     }
 
@@ -65,10 +67,12 @@
 
 <article class="song-card" style={gradient ? `background: ${gradient};` : undefined}>
     <header title={toDate(song.changedAt).toLocaleString()}>
-        <button class="lg clear" on:click|stopPropagation={(e) => statusPopupMenu.showPopupMenu(e)}>
-            <span class="status {song.status}" title={$t(`songs.status.${song.status}`)}></span>
+        <button class="lg clear" title="{$t(`songs.status.${song.status}`)}"
+            onclick={(e) => statusPopupMenu.showPopupMenu(e)}>
+            <span class="status {song.status}"></span>
         </button>
-        <button class="lg clear" on:click|stopPropagation={() => actions.toggleFavorite(song)}>
+        <button class="lg clear" title="{$t('songs.menu.toggle-favorite')}"
+            onclick={() => actions.toggleFavorite(song)}>
             <span class="fav" class:active={song.fav}></span>
         </button>
         <div class="song-info">
@@ -78,12 +82,12 @@
     </header>
     <span class="genre-watermark" style={genreWatermarkStyle}>{song.genre}</span>
     <div>
-        <!-- svelte-ignore a11y-no-static-element-interactions -->
+        <!-- svelte-ignore a11y_no_static_element_interactions -->
         <progress-bar
             value="{song.progress ?? 0}"
             max="100"
             min="0"
-            on:change={handleProgressChange}
+            onchange={handleProgressChange}
         ></progress-bar>
     </div>
 
@@ -109,14 +113,14 @@
         <button
             class="clear sm"
             title={$t('songs.menu.search')}
-            on:click|stopPropagation={(e) => searchPopupMenu.showPopupMenu(e)}
+            onclick={(e) => searchPopupMenu.showPopupMenu(e)}
         >
             <i class="icon bx bx-search"></i>
         </button>
         <button
             class="clear sm max-width"
             title={song.uri ? $t('songs.menu.open') : $t('songs.menu.change-resource')}
-            on:click|stopPropagation={handlePrimary}
+            onclick={() => handlePrimary()}
         >
             <i class="icon bx {song.uri ? 'bx-link-external' : 'bx-unlink'}"></i>
             {song.uri ? $t('songs.menu.open') : $t('songs.menu.set-resource')}
@@ -125,7 +129,7 @@
 
     <PopupMenu bind:this={searchPopupMenu}>
         {#each SEARCH_ACTIONS as action}
-            <button class="option" on:click={() => actions.search(song, action)}>
+            <button class="option" onclick={() => actions.search(song, action)}>
                 <i class="bx {action.icon}"></i>
                 {action.label}
             </button>
@@ -136,7 +140,7 @@
         {#each Object.keys(statusKeys) as s}
             <button class="option"
                 class:active={song.status === s}
-                on:click={() => handleStatusChange(s)}
+                onclick={() => handleStatusChange(s)}
             >
                 <span class="status {s}"></span>
                 <span style="margin-left: 8px">

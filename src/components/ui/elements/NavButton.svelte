@@ -1,9 +1,19 @@
 <script lang="ts">
     import { location, push } from "svelte-spa-router";
 
-    export let href: string;
-    export let title = '';
-    export let className = '';
+    interface Props {
+        href: string;
+        title?: string;
+        className?: string;
+        children?: import('svelte').Snippet;
+    }
+
+    let {
+        href,
+        title = '',
+        className = '',
+        children
+    }: Props = $props();
 
     const self = $location.startsWith(href);
     
@@ -14,8 +24,8 @@
 
 {#if !self}
 <div class="row">
-    <button data-close class={className} {title} on:click={clicked}>
-        <slot></slot>
+    <button data-close class={className} {title} onclick={clicked}>
+        {@render children?.()}
     </button>
 </div>
 {/if}

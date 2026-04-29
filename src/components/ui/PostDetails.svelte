@@ -1,15 +1,27 @@
 <script lang="ts">
+    import { preventDefault } from 'svelte/legacy';
+
     import { t } from 'svelte-i18n';
     import ConfirmDialog from '../dialogs/ConfirmDialog.svelte';
     import { logPageView } from '../../store/notification.store';
     import type { Content } from '../../model/post.model';
     import { marked } from 'marked';
     
-    export let title: string;
-    export let excerpt: string;
-    export let content: Content[] = [];
-    export let visible = false;
-    export let showMore = true;
+    interface Props {
+        title: string;
+        excerpt: string;
+        content?: Content[];
+        visible?: boolean;
+        showMore?: boolean;
+    }
+
+    let {
+        title,
+        excerpt,
+        content = [],
+        visible = $bindable(false),
+        showMore = true
+    }: Props = $props();
 
     const options = { mangle: false, headerIds: false };
 
@@ -28,16 +40,15 @@
 <summary>
     <span class="content">{excerpt}</span>
     {#if showMore}
-        <button class="more" on:click|preventDefault={show}>{ $t('blog.more') }</button>
+        <button class="more" onclick={preventDefault(show)}>{ $t('blog.more') }</button>
     {/if}
 </summary>
 
 {#if visible}
-<ConfirmDialog size="full" on:closed={hide}>
-    <svelte:fragment slot="header">
+<ConfirmDialog size="full" onClose={hide}>
+    {#snippet header()}
         <i class="bx bx-detail"></i> {title} 
-    </svelte:fragment>
-
+    {/snippet}
     <section>
     {#each content as entry}
         {#if entry.type === 'youtube'}
@@ -62,13 +73,15 @@
     {/each}
     </section>
 
-    <svelte:fragment slot="footer">
-        <div class="row">
-            <button on:click|preventDefault={hide}>
-                { $t('blog.back') }
-            </button>
-        </div>
-    </svelte:fragment>
+    {#snippet footer()}
+            
+            <div class="row">
+                <button onclick={preventDefault(hide)}>
+                    { $t('blog.back') }
+                </button>
+            </div>
+        
+            {/snippet}
 </ConfirmDialog>
 {/if}
 

@@ -23,7 +23,11 @@
   import { showError, showInfo } from '../store/notification.store';
   import genres from '../data/genres.json';
 
-  export let params: { id?: string } = {};
+  interface Props {
+    params?: { id?: string };
+  }
+
+  let { params = {} }: Props = $props();
 
   const readonly = !!params.id;
   const service = new SongService(params.id?.slice(1), $location === '/samples');
@@ -108,7 +112,7 @@
 </svelte:head>
 
 <main>
-  <FileDrop on:enter={() => showInfo($t('songs.import'))} on:addJson={({ detail }) => importJSON(detail)}>
+  <FileDrop onEnter={() => showInfo($t('songs.import'))} onAddJson={(detail) => importJSON(detail)}>
     <Table columns={columns($t)}
       data={songs}
       idField='id'
@@ -116,8 +120,8 @@
       placeholderSearch={ $t('table.search') }
       persistenceID={readonly ? `ro-${viewStoreId}` : viewStoreId}
       groupHeader={groupByFormatter}
-      on:init={({ detail }) => init(detail)}
-      on:error={({ detail }) => showError(detail)}
+      onInit={init}
+      onError={showError}
     />
   </FileDrop>
 </main>

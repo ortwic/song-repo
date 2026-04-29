@@ -2,16 +2,22 @@
     import Autocomplete from 'simple-svelte-autocomplete';
     import CircleOfFifth from "./elements/CircleOfFifth.svelte";
 
-    export let value: string;
+    interface Props {
+        value: string;
+    }
+
+    let { value = $bindable() }: Props = $props();
 </script>
 
 <Autocomplete inputClassName="sm" bind:text={value} minCharactersToSearch={0} showClear={true}
     searchFunction={(v) => [v]}>
-    <svelte:fragment slot="item">
-        <div class="popup">
-            <CircleOfFifth size={120} bind:selectedKey={value} />
-        </div>
-    </svelte:fragment>
+    {#snippet item()}
+    
+            <div class="popup">
+                <CircleOfFifth size={120} bind:selectedKey={value} />
+            </div>
+        
+    {/snippet}
 </Autocomplete>
 
 <style>

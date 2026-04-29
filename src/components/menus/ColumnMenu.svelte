@@ -14,9 +14,9 @@
         acc[field] = value;
         return acc;
     };
-    const sortedFields = $view?.table.getSorters().reduce(sortEntry, {} as Record<string, SortDirection>) ?? {};
-    const headerFilter = $view?.table.getHeaderFilters().reduce(filterEntry, {} as Record<string, string>) ?? {};
-    const menus: Record<string, PopupMenu> = {};
+    const sortedFields = $state($view?.table.getSorters().reduce(sortEntry, {} as Record<string, SortDirection>) ?? {});
+    const headerFilter = $state($view?.table.getHeaderFilters().reduce(filterEntry, {} as Record<string, string>) ?? {});
+    const menus: Record<string, PopupMenu> = $state({});
     const columns = derived(view, (v) => v?.table.getColumnDefinitions()
         .filter(c => !c.field.startsWith('__') && (!v.useResponsiveLayout || c.visible !== false)) ?? []);
 
@@ -64,26 +64,26 @@
                 {#if !$view.useResponsiveLayout}
                 <Switch title="{ $t('menu.table.show-hide') } {col.title}"
                     state={col.visible !== false}
-                    on:toggle={() => $view?.table.getColumn(col.field).toggle()}>
+                    onToggle={() => $view?.table.getColumn(col.field).toggle()}>
                     <i class="bx bx-show"></i> 
                 </Switch>
                 {/if}
                 <Switch title="{ $t('menu.table.sort-by') } {col.title}"
                     state={sortedFields[col.field] ?? null}
                     options={[null, 'asc', 'desc']}
-                    on:toggle={({ detail }) => sortBy(col.field, detail)}>
+                    onToggle={({ detail }) => sortBy(col.field, detail)}>
                     <i class={sortIcon(sortedFields[col.field])}></i>
                 </Switch>
                 <Switch title="{ $t('menu.table.group-by') } {col.title}"
                     state={$view?.groups.includes(col.field)}
-                    on:toggle={() => $view?.toggleGroup(col.field)}>
+                    onToggle={() => $view?.toggleGroup(col.field)}>
                     <i class="bx bx-collection bx-flip-vertical"></i> 
                 </Switch>
                 {#if col.headerFilter === 'tickCross'}
                     <Switch title="{ $t('menu.table.filter-by') } {col.title}"
                         state={headerFilter[col.field] ?? undefined}
                         options={[undefined, true, false]}
-                        on:toggle={({ detail }) => filterBy(col.field, detail)}>
+                        onToggle={({ detail }) => filterBy(col.field, detail)}>
                         <i class="bx bx-filter-alt"></i>
                     </Switch>
                 {:else if filterListValues(col)}
@@ -94,11 +94,11 @@
                     </Switch>
                     <PopupMenu bind:this={menus[col.field]}>
                         <div class="y-flex">
-                            <button class="option empty" on:click={() => filterBy(col.field, undefined)}>
+                            <button class="option empty" onclick={() => filterBy(col.field, undefined)}>
                                 &lt; { $t('table.filter.empty') } {col.title} &gt;
                             </button>
                             {#each filterListValues(col) as value}
-                                <button class="option" on:click={() => filterBy(col.field, value)}>
+                                <button class="option" onclick={() => filterBy(col.field, value)}>
                                     <i class="{col.field} {value}"></i> { $t(`songs.${col.field}.${value}`) }
                                 </button>
                             {/each}

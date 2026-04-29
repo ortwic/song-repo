@@ -10,7 +10,11 @@
   import Footer from '../components/ui/Footer.svelte';
   import NotFound from './NotFound.svelte';
 
-  export let params: { alias?: string } = {};
+  interface Props {
+    params?: { alias?: string };
+  }
+
+  let { params = {} }: Props = $props();
 
   const userService = new UserService();
   const profile$ = userService.getProfileByAlias(params.alias);

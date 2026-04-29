@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import 'tabulator-tables/dist/css/tabulator_bulma.min.css';
   import { 
     type ColumnComponent, 
@@ -31,7 +33,7 @@
   import type { ColumnDefinition } from './tabulator/types';
   import { default as ResponsiveLayoutModule, type CollapsedCellData } from './tabulator/modules/ResponsiveLayout';
   import { t } from 'svelte-i18n';
-  import { onMount, createEventDispatcher, onDestroy } from 'svelte';
+  import { onMount, onDestroy } from 'svelte';
   import { Observable, fromEvent, map, take } from 'rxjs';
   import type { TableView } from '../../model/table-view.model';
   import { tableView } from '../../store/app.store';
@@ -71,23 +73,42 @@
   type GroupFormatter = (value: unknown, count: number, data: T[], group?: GroupComponent) => string;
 
   const rowGroups: Record<string, GroupArg> = {};
-  export let idField: keyof T;
-  export let columns: ColumnDefinition[] = undefined;
-  export let data: Observable<T[]>;
-  export let groupBy: string[] = undefined;
-  export let placeholder = '';
-  export let placeholderSearch = '';
-  export let groupHeader: GroupFormatter = undefined;
-  export let detailFormatter: (data: CollapsedCellData[]) => HTMLElement = undefined;
   export const isGroupedBy = (field: string) => field in rowGroups;
-  export let persistenceID = '';
-  let useResponsiveLayout = false;
-  let searchTerm = '';
-  let table: Observable<Tabulator>;
-  let tableContainer: HTMLElement;
+  interface Props {
+    idField: keyof T;
+    columns?: ColumnDefinition[];
+    data: Observable<T[]>;
+    groupBy?: string[];
+    placeholder?: string;
+    placeholderSearch?: string;
+    groupHeader?: GroupFormatter;
+    detailFormatter?: (data: CollapsedCellData[]) => HTMLElement;
+    persistenceID?: string;
+    footer?: import('svelte').Snippet;
+    onInit?: (view: TableView) => void;
+    onError?: (error: string) => void;
+  }
+
+  let {
+    idField,
+    columns = undefined,
+    data,
+    groupBy = undefined,
+    placeholder = '',
+    placeholderSearch = '',
+    groupHeader = undefined,
+    detailFormatter = undefined,
+    persistenceID = '',
+    footer,
+    onInit,
+    onError
+  }: Props = $props();
+  let useResponsiveLayout = $state(false);
+  let searchTerm = $state('');
+  let table: Observable<Tabulator> = $state();
+  let tableContainer: HTMLElement = $state();
   let endOrientation = () => {};
 
-  const dispatch = createEventDispatcher();
   const groupContextMenu = [
     {
       label: 'Open all', // TODO not working
@@ -180,7 +201,7 @@
       toggleGroup
     };
     tableView.set(view);
-    dispatch('init', view);
+    onInit(view);
     return table;
   }
 
@@ -189,10 +210,12 @@
       if (c.headerMenu.length) {
         c.headerMenu.length = 0;
       }
-      c.headerMenu.push({
-        label: `${$t('menu.table.group-by')} ${c.title}`,
-        action: (ev: Event, column: ColumnComponent) => toggleGroup(c.field, column.getElement())
-      });
+      if (Array.isArray(c.headerMenu)) {
+        c.headerMenu.push({
+            label: `${$t('menu.table.group-by')} ${c.title}`,
+            action: (ev: Event, column: ColumnComponent) => toggleGroup(c.field, column.getElement())
+        }); 
+      }
     });
   }
 
@@ -243,7 +266,6 @@
     }
   }
 
-  $: setData($table, $data);
 
   async function setData(table: Tabulator, data: T[]): Promise<void> {
     const areEquivalent = (source: T[]) => {
@@ -261,18 +283,21 @@
       }
     }
   }
+  run(() => {
+    setData($table, $data);
+  });
 </script>
 
 <span class="menu {useResponsiveLayout ? 'responsive' : 'static'}">
   <div class="section">
-    <input type="search" placeholder={placeholderSearch} autocomplete="off" bind:value={searchTerm} on:input={search}/>
+    <input type="search" placeholder={placeholderSearch} autocomplete="off" bind:value={searchTerm} oninput={search}/>
   </div>
 </span>
 
 <div id="table" bind:this={tableContainer}>
 </div>
 <span id="footer">
-  <slot name="footer"></slot>
+  {@render footer?.()}
 </span>
 
 <style lang="scss">

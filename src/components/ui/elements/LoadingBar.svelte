@@ -1,7 +1,12 @@
 <script lang="ts">
     import { fade } from "svelte/transition";
-    export let height = 'auto';
-    export let isLoading = false;
+    interface Props {
+        height?: string;
+        isLoading?: boolean;
+        children?: import('svelte').Snippet;
+    }
+
+    let { height = 'auto', isLoading = $bindable(false), children }: Props = $props();
 
     export function set(value: boolean) {
         isLoading = value;
@@ -36,6 +41,6 @@ div#loader {
 
 {#if isLoading}
     <div id="loader" style:height transition:fade>
-        <slot></slot>
+        {@render children?.()}
     </div>
 {/if}

@@ -13,7 +13,7 @@
 
     const authService = new AuthService();
     const userService = new UserService();
-    let confirmDelete = false;
+    let confirmDelete = $state(false);
 
     async function signOut() {
         await authService.signOut();
@@ -45,7 +45,7 @@
     <section>
         {#if $currentUser}
         <div style="text-align: right;">
-            <button class="primary" title={$t('profile.sign-out')} on:click={signOut}>
+            <button class="primary" title={$t('profile.sign-out')} onclick={signOut}>
                 <i class="bx bx-log-out-circle"></i>
                 {$t('profile.sign-out')}
             </button>
@@ -66,7 +66,7 @@
             <legend>{$t('settings.view')}</legend>
             <div>
                 <span>{$t('settings.reset-text')}</span>
-                <button class="default" on:click={resetViews}>{$t('settings.reset-cookies')}</button>
+                <button class="default" onclick={resetViews}>{$t('settings.reset-cookies')}</button>
             </div>
         </fieldset>
 
@@ -79,7 +79,7 @@
                         <label for="delete">{$t('settings.delete-profile')}</label>
                         ({$t('settings.data-lost')})
                     </span>
-                    <button class="primary" disabled={!confirmDelete} on:click={deleteProfile}>
+                    <button class="primary" disabled={!confirmDelete} onclick={deleteProfile}>
                         {$t('settings.delete-profile')}
                     </button>
                 </div>

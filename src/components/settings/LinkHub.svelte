@@ -9,13 +9,13 @@
     const linkService = new UserLinkService();
     const links$ = linkService.userlinks;
 
-    let addingLink = false;
-    let newUrl = '';
-    let newTitle = '';
+    let addingLink = $state(false);
+    let newUrl = $state('');
+    let newTitle = $state('');
 
-    let editingId: string | null = null;
-    let editUrl = '';
-    let editTitle = '';
+    let editingId: string | null = $state(null);
+    let editUrl = $state('');
+    let editTitle = $state('');
 
     function startEdit(link: UserLink) {
         editingId = link.id;
@@ -96,10 +96,10 @@
                     <input class="input" type="text" placeholder={$t('settings.linktree.title')} bind:value={editTitle} />
                     <input class="input" type="url"  placeholder="URL*" bind:value={editUrl} />
                     <div class="form-actions">
-                        <button class="small clear" on:click={() => saveEdit(link)}>
+                        <button class="small clear" onclick={() => saveEdit(link)}>
                             <i class="icon bx bx-check primary"></i> {$t('settings.update-profile')}
                         </button>
-                        <button class="default small clear" on:click={cancelEdit}>
+                        <button class="default small clear" onclick={cancelEdit}>
                             <i class="icon bx bx-x"></i> {$t('settings.cancel')}
                         </button>
                     </div>
@@ -108,11 +108,11 @@
                 <div class="link-row">
                     <div class="order-controls">
                         <button class="default sm clear" disabled={i === 0}
-                            title={$t('settings.move-up')} on:click={() => moveLink(i, -1)}>
+                            title={$t('settings.move-up')} onclick={() => moveLink(i, -1)}>
                             <i class="bx bx-chevron-up"></i>
                         </button>
                         <button class="default sm clear" disabled={i === $links$.length - 1}
-                            title={$t('settings.move-down')} on:click={() => moveLink(i, 1)}>
+                            title={$t('settings.move-down')} onclick={() => moveLink(i, 1)}>
                             <i class="bx bx-chevron-down"></i>
                         </button>
                     </div>
@@ -132,10 +132,10 @@
                         <span class="link-url no-wrap">{link.url}</span>
                     </span>
                     <div class="row-actions">
-                        <button class="default small clear" title="{$t('settings.edit')}" on:click={() => startEdit(link)}>
+                        <button class="default small clear" title="{$t('settings.edit')}" onclick={() => startEdit(link)}>
                             <i class="icon bx bx-pencil"></i>
                         </button>
-                        <button class="default small clear danger-text" title="{$t('settings.delete')}" on:click={() => deleteLink(link)}>
+                        <button class="default small clear danger-text" title="{$t('settings.delete')}" onclick={() => deleteLink(link)}>
                             <i class="icon bx bx-trash"></i>
                         </button>
                     </div>
@@ -155,10 +155,10 @@
         <input class="input" type="text" placeholder={$t('settings.linktree.title')} bind:value={newTitle} />
         <input class="input" type="url"  placeholder="URL *"    bind:value={newUrl} />
         <div class="form-actions">
-            <button class="primary clear" on:click={addLink} disabled={!newUrl.trim()}>
+            <button class="primary clear" onclick={addLink} disabled={!newUrl.trim()}>
                 <i class="icon bx bx-plus"></i> {$t('settings.add')}
             </button>
-            <button class="clear" on:click={() => (addingLink = false)}>
+            <button class="clear" onclick={() => (addingLink = false)}>
                 <i class="icon bx bx-x"></i> {$t('settings.cancel')}
             </button>
         </div>
@@ -166,7 +166,7 @@
 {:else}
     <div class="section" style="text-align: right;">
         <span></span>
-        <button class="clear" on:click={() => (addingLink = true)}>
+        <button class="clear" onclick={() => (addingLink = true)}>
             <i class="icon bx bx-plus"></i>
         </button>
     </div>

@@ -1,22 +1,37 @@
 <script lang="ts">
-    import { writable, type Readable } from "svelte/store";
+    import { createBubbler, preventDefault } from 'svelte/legacy';
+
+    const bubble = createBubbler();
     import ConfirmDialog from "./ConfirmDialog.svelte"
+    import { createDeferred } from '../../utils/promise.helper';
     
     type InputType = 'text' | 'numer' | 'date' | 'email' | 'url';
-    export let caption = '';
-    export let title = '';
-    export let type: InputType = 'text';
-    export let placeholder = '';
-    
-    const store = writable<string>();
-    let form: HTMLFormElement;
-    let input: HTMLInputElement;
-    let visible = false;
+    interface Props {
+        caption?: string;
+        title?: string;
+        type?: InputType;
+        placeholder?: string;
+        children?: import('svelte').Snippet;
+    }
 
-    export function showDialog(initial = ''): Readable<string> {
+    let {
+        caption = '',
+        title = '',
+        type = 'text',
+        placeholder = '',
+        children
+    }: Props = $props();
+    
+    let result = $state('');
+    const { promise, resolve } = createDeferred<string>();
+    let form: HTMLFormElement = $state();
+    let input: HTMLInputElement = $state();
+    let visible = $state(false);
+
+    export function showDialog(initial = ''): Promise<string> {
         visible = true;
-        store.set(initial);
-        return store;
+        result = initial;
+        return promise;
     }
 
     function handleDrop(event: DragEvent) {
@@ -27,30 +42,32 @@
         }
     }
 
-    function done({ detail: confirm }): void {
+    function done(confirm: boolean): void {
         if (!confirm) {
-            visible = false;
-            form.reset();
+            resolve(null);
         } else if (form.checkValidity()) {
-            store.set(input.value);
-            visible = false;
-            form.reset();
+            resolve(input.value);
+        } else {
+            return;
         }
+
+        visible = false;
+        form.reset();
     }
 </script>
 
 {#if visible}
-<form bind:this={form} on:submit|preventDefault>
-    <ConfirmDialog size='auto' {title} on:closed={done}>
-        <slot></slot>
+<form bind:this={form} onsubmit={preventDefault(bubble('submit'))}>
+    <ConfirmDialog size='auto' {title} onClose={done}>
+        {@render children?.()}
         <section aria-hidden="true"
-            on:dragover|preventDefault="{() => { }}" 
-            on:dragenter|preventDefault="{() => { }}" 
-            on:dragleave|preventDefault="{() => { }}"
-            on:drop|preventDefault="{handleDrop}">
+            ondragover={preventDefault(() => { })} 
+            ondragenter={preventDefault(() => { })} 
+            ondragleave={preventDefault(() => { })}
+            ondrop={preventDefault(handleDrop)}>
             <div class="section">
                 <label for="prompt">{caption}</label>
-                <input id="prompt" bind:this={input} {type} value={$store} {placeholder}/>
+                <input id="prompt" bind:this={input} {type} bind:value={result} {placeholder}/>
             </div>
         </section>
     </ConfirmDialog>

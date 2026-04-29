@@ -1,6 +1,11 @@
 <script lang="ts">
   import { messageStack } from "../../store/notification.store";
   import { slideFade } from './transition.helper';
+  interface Props {
+    message?: import('svelte').Snippet;
+  }
+
+  let { message }: Props = $props();
 </script>
 
 <section>  
@@ -9,7 +14,7 @@
     in:slideFade={{ duration: 200 }} 
     out:slideFade={{ duration: 200 }}>
     {item.message}
-    <slot name="message"></slot>
+    {@render message?.()}
   </div>
   {/each}
 </section>
