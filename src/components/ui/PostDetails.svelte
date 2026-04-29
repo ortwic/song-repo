@@ -45,13 +45,10 @@
 </summary>
 
 {#if visible}
-<ConfirmDialog size="full" on:closed={hide}>
+<ConfirmDialog size="full" onClose={hide}>
     {#snippet header()}
-            
-            <i class="bx bx-detail"></i> {title} 
-        
-            {/snippet}
-
+        <i class="bx bx-detail"></i> {title} 
+    {/snippet}
     <section>
     {#each content as entry}
         {#if entry.type === 'youtube'}

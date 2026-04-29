@@ -112,7 +112,7 @@
 </svelte:head>
 
 <main>
-  <FileDrop on:enter={() => showInfo($t('songs.import'))} on:addJson={({ detail }) => importJSON(detail)}>
+  <FileDrop onEnter={() => showInfo($t('songs.import'))} onAddJson={(detail) => importJSON(detail)}>
     <Table columns={columns($t)}
       data={songs}
       idField='id'
@@ -120,8 +120,8 @@
       placeholderSearch={ $t('table.search') }
       persistenceID={readonly ? `ro-${viewStoreId}` : viewStoreId}
       groupHeader={groupByFormatter}
-      on:init={({ detail }) => init(detail)}
-      on:error={({ detail }) => showError(detail)}
+      onInit={init}
+      onError={showError}
     />
   </FileDrop>
 </main>

@@ -6,13 +6,15 @@
         state: unknown;
         options?: Array<unknown>;
         children?: import('svelte').Snippet;
+        onToggle?: (state: unknown) => void;
     }
 
     let {
         title = '',
         state = $bindable(),
         options = [false, true],
-        children
+        children,
+        onToggle
     }: Props = $props();
     let index: number;
 
@@ -24,15 +26,14 @@
         if (dispatcher('click', event, { cancelable: true })) {
             index = (index + 1) % options.length;
             state = options[index];
-            dispatcher('toggle', state);
+            onToggle(state);
         }
     }
     
     let selected = $derived(state ? 'selected' : 'disabled');
 </script>
 
-<button {title} class='sm clear {selected}'
-    onclick={toggle}>
+<button {title} class='sm clear {selected}' onclick={toggle}>
     {#if children}{@render children()}{:else}{state}{/if}
 </button>
 

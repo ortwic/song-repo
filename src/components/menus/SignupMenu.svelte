@@ -25,7 +25,7 @@
         termsofuse: false,
     });
 
-    function confirm({ detail: accepted }) {        
+    function confirm(accepted: boolean) {
         checks[page] = accepted;
         page = undefined;
     }
@@ -91,7 +91,7 @@
         </button>
 
         {#if page}
-        <ConfirmDialog title='{ $t('menu.login.read-carefully') }' target='signup' size='full' on:closed={confirm}>
+        <ConfirmDialog title='{ $t('menu.login.read-carefully') }' target='signup' size='full' onClose={confirm}>
             <object title="Embedded page '{page}'" data="/docs/{page}{lang.startsWith('de') ? '_de' : ''}.html">
             </object>
         </ConfirmDialog>

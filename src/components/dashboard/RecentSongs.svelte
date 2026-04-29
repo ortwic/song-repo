@@ -36,7 +36,7 @@
             <span class="limit-val">{limit}</span>
             <Switch title="{ $t(`songs.${!showDone ? 'incl-done' : 'excl-done'}`) }"
                 state={showDone}
-                on:toggle={() => showDone = !showDone}>
+                onToggle={() => showDone = !showDone}>
                 <span>
                     { $t(`songs.${!showDone ? 'incl-done' : 'excl-done'}`) }
                 </span>

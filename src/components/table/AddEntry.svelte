@@ -33,7 +33,7 @@
 
     reset();
     
-    async function done({ detail: confirm }): Promise<void> {
+    async function done(confirm: boolean): Promise<void> {
         if (!confirm) {
             reset();
         } else if (form.checkValidity()) {
@@ -102,7 +102,7 @@
 
 {#if visible}
 <form bind:this={form} onsubmit={preventDefault(bubble('submit'))}>
-    <ConfirmDialog size='full' on:closed={done}>
+    <ConfirmDialog size='full' onClose={done}>
         {#snippet header()}
                         <div class="title" >
                 <i class="bx bx-search-alt-2"></i>&nbsp; { $t('songs.addTitle') } 

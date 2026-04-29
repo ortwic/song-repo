@@ -1,22 +1,20 @@
 <script lang="ts">
-    import { createEventDispatcher } from "svelte";
     import type { MenuTarget } from "../../../model/types";
-    
-    const dispatch = createEventDispatcher();
 
     interface Props {
         target?: MenuTarget;
         children?: import('svelte').Snippet;
+        onClose?: () => void;
     }
 
-    let { target = 'hidden', children }: Props = $props();
+    let { target = 'hidden', children, onClose }: Props = $props();
 </script>
 
 <div class="titlebar">
     <span>
         {@render children?.()}
     </span>
-    <button data-target={target} class="close" onclick={() => dispatch('close')}>✕</button>
+    <button data-target={target} class="close" onclick={onClose}>✕</button>
 </div>
 
 <style lang="scss">

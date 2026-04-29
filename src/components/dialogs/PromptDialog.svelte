@@ -42,7 +42,7 @@
         }
     }
 
-    function done({ detail: confirm }): void {
+    function done(confirm: boolean): void {
         if (!confirm) {
             resolve(null);
         } else if (form.checkValidity()) {
@@ -58,7 +58,7 @@
 
 {#if visible}
 <form bind:this={form} onsubmit={preventDefault(bubble('submit'))}>
-    <ConfirmDialog size='auto' {title} on:closed={done}>
+    <ConfirmDialog size='auto' {title} onClose={done}>
         {@render children?.()}
         <section aria-hidden="true"
             ondragover={preventDefault(() => { })} 

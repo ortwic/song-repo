@@ -1,15 +1,10 @@
 <script lang="ts">
-    import { stopPropagation } from 'svelte/legacy';
-
-    import { createEventDispatcher } from "svelte";
     import { fade } from "svelte/transition";
     import { cubicOut } from 'svelte/easing';
     import { t } from "svelte-i18n";
     import Portal from "svelte-portal";
     import Titlebar from "../ui/elements/Titlebar.svelte";
     import type { MenuTarget } from "../../model/types";
-    
-    const dispatch = createEventDispatcher();
 
     interface Props {
         size: 'auto' | 'max' | 'full';
@@ -18,6 +13,7 @@
         header?: import('svelte').Snippet;
         children?: import('svelte').Snippet;
         footer?: import('svelte').Snippet;
+        onClose: (confirmed: boolean) => void;
     }
 
     let {
@@ -26,26 +22,35 @@
         title = '',
         header,
         children,
-        footer
+        footer,
+        onClose
     }: Props = $props();
+
+    function confirm(event: Event) {
+        event.stopPropagation();
+        onClose(true);
+    }
+
+    function decline(event: Event) {
+        event.stopPropagation();
+        onClose(false);
+    }
 </script>
 
 <Portal>
     <div class='dialog {size}'
     in:fade={{ duration: 200, easing: cubicOut }} 
     out:fade={{ duration: 200, easing: cubicOut }}>
-    <Titlebar {target} on:close={() => dispatch('closed', false)}>
+    <Titlebar {target} onClose={() => onClose(false)}>
         {@render header?.()} {title}
     </Titlebar>
     {@render children?.()}
     {#if footer}{@render footer()}{:else}
         <div class="row">
-            <button data-target={target} 
-                onclick={stopPropagation(() => dispatch('closed', true))}>
+            <button data-target={target} onclick={confirm}>
                 { $t('dialog.confirm') }
             </button>
-            <button data-target={target} 
-                onclick={stopPropagation(() => dispatch('closed', false))}>
+            <button data-target={target} onclick={decline}>
                 { $t('dialog.decline') }
             </button>
         </div>

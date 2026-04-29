@@ -33,7 +33,7 @@
   import type { ColumnDefinition } from './tabulator/types';
   import { default as ResponsiveLayoutModule, type CollapsedCellData } from './tabulator/modules/ResponsiveLayout';
   import { t } from 'svelte-i18n';
-  import { onMount, createEventDispatcher, onDestroy } from 'svelte';
+  import { onMount, onDestroy } from 'svelte';
   import { Observable, fromEvent, map, take } from 'rxjs';
   import type { TableView } from '../../model/table-view.model';
   import { tableView } from '../../store/app.store';
@@ -85,6 +85,8 @@
     detailFormatter?: (data: CollapsedCellData[]) => HTMLElement;
     persistenceID?: string;
     footer?: import('svelte').Snippet;
+    onInit?: (view: TableView) => void;
+    onError?: (error: string) => void;
   }
 
   let {
@@ -97,7 +99,9 @@
     groupHeader = undefined,
     detailFormatter = undefined,
     persistenceID = '',
-    footer
+    footer,
+    onInit,
+    onError
   }: Props = $props();
   let useResponsiveLayout = $state(false);
   let searchTerm = $state('');
@@ -105,7 +109,6 @@
   let tableContainer: HTMLElement = $state();
   let endOrientation = () => {};
 
-  const dispatch = createEventDispatcher();
   const groupContextMenu = [
     {
       label: 'Open all', // TODO not working
@@ -198,7 +201,7 @@
       toggleGroup
     };
     tableView.set(view);
-    dispatch('init', view);
+    onInit(view);
     return table;
   }
 
@@ -207,10 +210,12 @@
       if (c.headerMenu.length) {
         c.headerMenu.length = 0;
       }
-      c.headerMenu.push({
-        label: `${$t('menu.table.group-by')} ${c.title}`,
-        action: (ev: Event, column: ColumnComponent) => toggleGroup(c.field, column.getElement())
-      });
+      if (Array.isArray(c.headerMenu)) {
+        c.headerMenu.push({
+            label: `${$t('menu.table.group-by')} ${c.title}`,
+            action: (ev: Event, column: ColumnComponent) => toggleGroup(c.field, column.getElement())
+        }); 
+      }
     });
   }
 
