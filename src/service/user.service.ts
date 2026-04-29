@@ -36,12 +36,14 @@ export default class UserService {
             const alias = await this.resolveUniqueAlias(user);
             await store.setDocument({
                 id: user.uid,
+                created: new Date(),
+                deleted: null,
                 name: user.displayName,
                 photoURL: user.photoURL ?? undefined,
                 email: user.email,
                 alias,
                 ...(provider && { provider }),
-            }, { merge: true });
+            } as UserProfile, { merge: true });
         }
     }
 

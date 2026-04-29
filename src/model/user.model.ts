@@ -8,6 +8,7 @@ export interface UserProfile {
     photoURL?: string;
     alias?: string;
     about?: string;
+    created: Date;
     deleted?: Date;
 }
 
