@@ -72,7 +72,7 @@
 		<br/>
 	</div>
     <div class="row">
-		<button title="{ $t('menu.login.read-privacy-policy') }" on:click={() => load('privacypolicy')}>
+		<button data-close title="{ $t('menu.login.read-privacy-policy') }" on:click={() => load('privacypolicy')}>
 			<span class="caption">
 				<i class={checks.privacypolicy ? checkedIcon : uncheckedIcon}></i>
 				<span>{ $t('menu.login.read-privacy-policy') }</span>

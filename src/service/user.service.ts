@@ -8,11 +8,13 @@ import type { UserProfile } from '../model/user.model';
 
 export const createUserStore = () => new FirestoreService('user');
 const store = createUserStore();
+const empty = { alias: '' } as UserProfile;
 
 // Do not use currentUser here to avoid circular dependency
 export const currentProfile = authState(auth).pipe(
     switchMap(({ uid }) => store.getDocument<UserProfile>(uid)),
-    startWith({ alias: '' } as UserProfile)
+    map(p => p || empty),
+    startWith(empty)
 );
 
 export default class UserService {
