@@ -2,6 +2,7 @@
     import '../../styles/menu.scss';
     import { push } from 'svelte-spa-router';
     import { slide } from 'svelte/transition';
+    import { swipeable } from '@svelte-put/swipeable';
     import Titlebar from './elements/Titlebar.svelte';
 
   interface Props {
@@ -9,17 +10,22 @@
     children?: import('svelte').Snippet;
     lower?: import('svelte').Snippet;
     footer?: import('svelte').Snippet;
+    onclose: () => void;
   }
 
   let {
     title = '',
     children,
     lower,
-    footer
+    footer,
+    onclose
   }: Props = $props();
 </script>
 
-<aside in:slide={{ duration: 200, axis: 'x' }} out:slide={{ duration: 200, axis: 'x' }} >
+<aside 
+    use:swipeable={{ direction: 'right', threshold: '1rem' }} onswipeend={onclose}
+    in:slide={{ duration: 200, axis: 'x' }} 
+    out:slide={{ duration: 200, axis: 'x' }} >
     <Titlebar target='hidden'>
         <button class="clear" data-close onclick={() => push('/')}>
             {title}

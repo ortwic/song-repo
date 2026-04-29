@@ -11,6 +11,9 @@ importers:
       '@googlemaps/js-api-loader':
         specifier: ^1.16.6
         version: 1.16.6
+      '@svelte-put/swipeable':
+        specifier: ^1.1.0
+        version: 1.1.0(svelte@5.55.5)
       '@sveltejs/vite-plugin-svelte':
         specifier: ^4.0.0
         version: 4.0.4(svelte@5.55.5)(vite@5.4.21(@types/node@20.4.2)(sass@1.70.0)(terser@5.31.1))
@@ -1570,6 +1573,11 @@ packages:
 
   '@surma/rollup-plugin-off-main-thread@2.2.3':
     resolution: {integrity: sha512-lR8q/9W7hZpMWweNiAKU7NQerBnzQQLvi8qnTDU/fxItPhtZVMbPV3lbCwjhIlNBe9Bbr5V+KHshvWmVSG9cxQ==}
+
+  '@svelte-put/swipeable@1.1.0':
+    resolution: {integrity: sha512-1Q5mtL7LrMhxVr3zdfUxjJsIObhPms2TVWm/L+8HvNg7LsDnfx1WholKRmxcoup7dIbup5V6v9buAr0qSY3VzA==}
+    peerDependencies:
+      svelte: ^5.1.0
 
   '@sveltejs/acorn-typescript@1.0.9':
     resolution: {integrity: sha512-lVJX6qEgs/4DOcRTpo56tmKzVPtoWAaVbL4hfO7t7NVwl9AAXzQR6cihesW1BmNMPl+bK6dreu2sOKBP2Q9CIA==}
@@ -6107,6 +6115,10 @@ snapshots:
       magic-string: 0.25.9
       string.prototype.matchall: 4.0.11
 
+  '@svelte-put/swipeable@1.1.0(svelte@5.55.5)':
+    dependencies:
+      svelte: 5.55.5
+
   '@sveltejs/acorn-typescript@1.0.9(acorn@8.12.1)':
     dependencies:
       acorn: 8.12.1
@@ -8995,7 +9007,7 @@ snapshots:
   terser@5.31.1:
     dependencies:
       '@jridgewell/source-map': 0.3.6
-      acorn: 8.12.1
+      acorn: 8.16.0
       commander: 2.20.3
       source-map-support: 0.5.21
 

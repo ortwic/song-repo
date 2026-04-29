@@ -1,7 +1,6 @@
 <script lang="ts">
-    import { preventDefault } from 'svelte/legacy';
-
     import { derived, get } from "svelte/store";
+    import { swipeable } from '@svelte-put/swipeable';
     import type { MenuTarget } from "../../../model/types";
     import { currentMenu } from "../../../store/app.store";
     interface Props {
@@ -21,6 +20,8 @@
     }
 
     function navigate(ev: SubmitEvent) {
+        ev.preventDefault();
+
         const target = ev.submitter.getAttribute('data-target') as MenuTarget;
         if (target) {
             currentMenu.set(target);
@@ -30,11 +31,13 @@
     }
 </script>
 
-<form onsubmit={preventDefault(navigate)}>
-    <header>
+<form onsubmit={navigate}>
+    <header 
+        use:swipeable={{ direction: 'x', threshold: '30px' }} 
+        onswipeend={toggle}>
         <button class="toggle clear icon {$opened ? 'opened' : ''}" 
             title="{$opened ? 'Close menu' : 'Open menu'}"
-            onclick={() => toggle()}>
+            onclick={toggle}>
             <i class="bx bxs-chevrons-left"></i>    
         </button>
     </header>
@@ -53,7 +56,6 @@ header {
     flex-direction: column;
     justify-content: center;
     right: 0;
-//   background-color: #cccc;
     z-index: 100;
     height: 100%;
     text-align: right;
@@ -62,9 +64,10 @@ header {
         transform: scale(.4, 1);
         transition: margin-right 0.2s;
         color: var(--primary-opaque);
+        padding: .2em;
         
         &.opened {
-            margin-right: vars.$sidebar-width;
+            margin-right: calc(vars.$sidebar-width - .8em);
 
             i {
                 transform: rotate(180deg);

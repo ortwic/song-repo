@@ -26,11 +26,15 @@
     const isTableView = derived(location, (path) => path.startsWith('/songs') || path.startsWith('/samples'));
     const isBlogView = derived(location, (path) => path.startsWith('/blog'));
     const isEventView = derived(location, (path) => path.startsWith('/events'));
+
+    function hide() {
+        currentMenu.set('hidden');
+    }
 </script>
 
 <MenuDrawer>
     {#if $currentMenu === 'dynamic'}
-    <Sidebar {title}>
+    <Sidebar {title} onclose={hide}>
         {#if $currentUser}
             <ProfileMenu email={$currentUser.email}
                 photoURL={$currentUser.photoURL} 
@@ -52,37 +56,31 @@
         {/if}
         
         {#snippet lower()}
-                    
-                <NavButton href="/songs" title="{ $t('menu.songs') }">
-                    <span><i class='bx bxs-playlist'></i> { $t('menu.songs') }</span>
-                </NavButton>
-                <NavButton href="/events" title="{ $t('menu.event-calendar') }">
-                    <span><i class='bx bx-calendar'></i> { $t('menu.events') }</span>
-                </NavButton>
-                <NavButton href="/blog" title="{ $t('menu.howto-blog') }">
-                    <span><i class='bx bx-bulb'></i> { $t('menu.howto') }</span>
-                </NavButton>
-                <div class="row">
-                    <a use:link class="warn" role="button" href="/user/ocsoft42">
-                        <span><i class='bx bxs-coffee'></i> { $t('menu.donate') }</span>
-                    </a>
-                </div>
-            
-                    {/snippet}
+            <NavButton href="/songs" title="{ $t('menu.songs') }">
+                <span><i class='bx bxs-playlist'></i> { $t('menu.songs') }</span>
+            </NavButton>
+            <NavButton href="/events" title="{ $t('menu.event-calendar') }">
+                <span><i class='bx bx-calendar'></i> { $t('menu.events') }</span>
+            </NavButton>
+            <NavButton href="/blog" title="{ $t('menu.howto-blog') }">
+                <span><i class='bx bx-bulb'></i> { $t('menu.howto') }</span>
+            </NavButton>
+            <div class="row">
+                <a use:link class="warn" role="button" href="/user/ocsoft42">
+                    <span><i class='bx bxs-coffee'></i> { $t('menu.donate') }</span>
+                </a>
+            </div>
+        {/snippet}
         {#snippet footer()}
-                    
-                {footer}
-            
-                    {/snippet}
+            {footer}
+        {/snippet}
     </Sidebar>
     {:else if $currentMenu === 'signup'}
-    <Sidebar title="{ $t('menu.login.signup') }">
+    <Sidebar title="{ $t('menu.login.signup') }" onclose={hide}>
         <SignupMenu />
         {#snippet footer()}
-                            
-                {footer}
-            
-                            {/snippet}
+            {footer}
+        {/snippet}
     </Sidebar>
     {/if}
 </MenuDrawer>
