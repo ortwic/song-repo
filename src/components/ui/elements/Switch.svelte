@@ -1,9 +1,19 @@
 <script lang="ts">
     import { createEventDispatcher, onMount } from "svelte";
 
-    export let title = '';
-    export let state: unknown;
-    export let options: Array<unknown> = [false, true];
+    interface Props {
+        title?: string;
+        state: unknown;
+        options?: Array<unknown>;
+        children?: import('svelte').Snippet;
+    }
+
+    let {
+        title = '',
+        state = $bindable(),
+        options = [false, true],
+        children
+    }: Props = $props();
     let index: number;
 
     const dispatcher = createEventDispatcher();
@@ -18,12 +28,12 @@
         }
     }
     
-    $: selected = state ? 'selected' : 'disabled';
+    let selected = $derived(state ? 'selected' : 'disabled');
 </script>
 
 <button {title} class='sm clear {selected}'
-    on:click={toggle}>
-    <slot>{state}</slot>
+    onclick={toggle}>
+    {#if children}{@render children()}{:else}{state}{/if}
 </button>
 
 <style lang="scss">

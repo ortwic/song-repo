@@ -1,8 +1,12 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
 
-    export let selectedKey = '';
-    export let size = 100;
+  interface Props {
+    selectedKey?: string;
+    size?: number;
+  }
+
+  let { selectedKey = $bindable(''), size = 100 }: Props = $props();
   
     const majorKeys = [
       ['C'], 
@@ -83,9 +87,9 @@
     <circle r={mdCircleRadius} cx={center} cy={center} fill="WhiteSmoke" />
     <circle r={smCircleRadius} cx={center} cy={center} fill="white" stroke="Gainsboro" stroke-width=".4" />
     {#each majorKeys as _, idx (idx)}  
-      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <!-- svelte-ignore a11y_click_events_have_key_events -->
       <g class="key" role="button" tabindex="0" class:selectedKey={minorKeys[idx].includes(selectedKey)} 
-        on:click={() => changeKey(minorKeys[idx][0])}>
+        onclick={() => changeKey(minorKeys[idx][0])}>
         <circle class="minor"
             cx={calcX(idx, innerRadius)}
             cy={calcY(idx, innerRadius)}
@@ -101,9 +105,9 @@
         </text>
       </g>
   
-      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <!-- svelte-ignore a11y_click_events_have_key_events -->
       <g class="key" role="button" tabindex="0" class:selectedKey={majorKeys[idx].includes(selectedKey)} 
-        on:click={() => changeKey(majorKeys[idx][0])}>
+        onclick={() => changeKey(majorKeys[idx][0])}>
         <circle class="major"
           cx={calcX(idx, outerRadius)}
           cy={calcY(idx, outerRadius)}

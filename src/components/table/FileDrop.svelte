@@ -1,6 +1,13 @@
 <script lang="ts">
+  import { preventDefault } from 'svelte/legacy';
+
     import { createEventDispatcher } from 'svelte';
     import { showError } from '../../store/notification.store';
+  interface Props {
+    children?: import('svelte').Snippet;
+  }
+
+  let { children }: Props = $props();
 
     const dispatch = createEventDispatcher();
     
@@ -27,11 +34,11 @@
 </script>
 
 <div title='Drop file here to import data' aria-hidden="true"
-  on:dragover|preventDefault="{() => { }}" 
-  on:dragenter|preventDefault="{() => dispatch('enter')}" 
-  on:dragleave|preventDefault="{() => { }}"
-  on:drop|preventDefault="{handleDrop}">
-  <slot></slot>
+  ondragover={preventDefault(() => { })} 
+  ondragenter={preventDefault(() => dispatch('enter'))} 
+  ondragleave={preventDefault(() => { })}
+  ondrop={preventDefault(handleDrop)}>
+  {@render children?.()}
 </div>
 
 <style>

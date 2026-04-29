@@ -7,8 +7,8 @@
     import { showError } from "../store/notification.store";
     import type { CalendarEvent } from "../model/event.model";
 
-    let mapContainer: HTMLDivElement;
-    let infoContents: Record<string, HTMLDivElement> = {};
+    let mapContainer: HTMLDivElement = $state();
+    let infoContents: Record<string, HTMLDivElement> = $state({});
     let currentInfo: google.maps.InfoWindow;
 
     const mapId = 'song-repo-map';

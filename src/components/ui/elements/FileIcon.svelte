@@ -1,11 +1,23 @@
 <script lang="ts">
-    export let width = '28px';
-    export let height = '28px';
-    export let type = 'FILE';
-    export let fill = 'gray';
-    export let fontStretch = 'normal';
-    export let letterSpacing = 'unset';
-    export let style: 'normal' | 'condensed' = 'normal';
+  interface Props {
+    width?: string;
+    height?: string;
+    type?: string;
+    fill?: string;
+    fontStretch?: string;
+    letterSpacing?: string;
+    style?: 'normal' | 'condensed';
+  }
+
+  let {
+    width = '28px',
+    height = '28px',
+    type = 'FILE',
+    fill = 'gray',
+    fontStretch = 'normal',
+    letterSpacing = 'unset',
+    style = 'normal'
+  }: Props = $props();
 </script>
 
 <svg {fill} {width} {height} viewBox="0 0 24 24" version="1.1" id="svg10" xmlns="http://www.w3.org/2000/svg">

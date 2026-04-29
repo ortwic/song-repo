@@ -4,14 +4,19 @@
     
     const dispatch = createEventDispatcher();
 
-    export let target: MenuTarget = 'hidden';
+    interface Props {
+        target?: MenuTarget;
+        children?: import('svelte').Snippet;
+    }
+
+    let { target = 'hidden', children }: Props = $props();
 </script>
 
 <div class="titlebar">
     <span>
-        <slot></slot>
+        {@render children?.()}
     </span>
-    <button data-target={target} class="close" on:click={() => dispatch('close')}>✕</button>
+    <button data-target={target} class="close" onclick={() => dispatch('close')}>✕</button>
 </div>
 
 <style lang="scss">

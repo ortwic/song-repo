@@ -5,9 +5,13 @@
     import UserIcon from '../ui/Avatar.svelte';
     import { currentProfile } from '../../service/user.service';
 
-    export let displayName: string;
-    export let photoURL: string;
-    export let email: string;
+    interface Props {
+        displayName: string;
+        photoURL: string;
+        email: string;
+    }
+
+    let { displayName, photoURL, email }: Props = $props();
 
     const name = currentProfile.pipe(
         map((profile) => {
@@ -24,7 +28,7 @@
 
 <section class="menu">
     <div class="row">
-        <button class="profil" data-close title="{ $t('settings.title') }" on:click={() => push('/settings')}>
+        <button class="profil" data-close title="{ $t('settings.title') }" onclick={() => push('/settings')}>
             <UserIcon photoURL={$currentProfile.photoURL ?? photoURL} size="50px" />
             <span class="name">{$name}</span>
         </button>

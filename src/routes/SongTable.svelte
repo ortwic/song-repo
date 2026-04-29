@@ -23,7 +23,11 @@
   import { showError, showInfo } from '../store/notification.store';
   import genres from '../data/genres.json';
 
-  export let params: { id?: string } = {};
+  interface Props {
+    params?: { id?: string };
+  }
+
+  let { params = {} }: Props = $props();
 
   const readonly = !!params.id;
   const service = new SongService(params.id?.slice(1), $location === '/samples');

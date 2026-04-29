@@ -3,7 +3,11 @@
     import FileIcon from "../ui/elements/FileIcon.svelte";
     import { tableView } from "../../store/app.store";
     import { showError } from "../../store/notification.store";
-    export let exportTitle = 'export';
+  interface Props {
+    exportTitle?: string;
+  }
+
+  let { exportTitle = 'export' }: Props = $props();
 
     async function downloadPdf() {
         if (!window['jspdf']) {
@@ -33,16 +37,16 @@
 
 <section class="menu">
     <div class="row">
-        <button class="icon-export" data-close title="Export CSV" on:click={() => download('csv', { delimiter: ';' })}>
+        <button class="icon-export" data-close title="Export CSV" onclick={() => download('csv', { delimiter: ';' })}>
             <FileIcon type="CSV" fill="OliveDrab"></FileIcon>
         </button>
-        <button class="icon-export" data-close title="Export JSON" on:click={() => download('json')}>
+        <button class="icon-export" data-close title="Export JSON" onclick={() => download('json')}>
             <FileIcon type="JSON" fill="MediumPurple" letterSpacing="-10px" style="condensed"></FileIcon>
         </button>
-        <button class="icon-export" data-close title="Export XLSX" on:click={() => download('xlsx', { sheetName: exportTitle })}>
+        <button class="icon-export" data-close title="Export XLSX" onclick={() => download('xlsx', { sheetName: exportTitle })}>
             <FileIcon type="XLSX" fill="MediumSeaGreen" letterSpacing="-8px" style="condensed"></FileIcon>
         </button>
-        <button class="icon-export" data-close title="Export PDF" on:click={downloadPdf}>
+        <button class="icon-export" data-close title="Export PDF" onclick={downloadPdf}>
             <FileIcon type="PDF" fill="IndianRed" letterSpacing="5px"></FileIcon>
         </button>
     </div>

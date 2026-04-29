@@ -1,14 +1,23 @@
-<script>
+<script lang="ts">
     import { getCssVariable } from '../../styles/style.helper';
 
-    export let photoURL = '';
-    export let title = '';
-    export let size = '50px';
-	export let color = getCssVariable('--primary');
+    interface Props {
+        photoURL?: string;
+        title?: string;
+        size?: string;
+        color?: any;
+    }
+
+    let {
+        photoURL = '',
+        title = '',
+        size = '50px',
+        color = getCssVariable('--primary')
+    }: Props = $props();
 </script>
 
 {#if photoURL}
-<img class="avatar border" src={photoURL} style:width={size} alt={title} {title}>	
+<img class="avatar border" src={photoURL} style:width={size} alt={title} {title}>
 {:else}
 <span class="avatar" style:width={size} style:height={size}>
     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

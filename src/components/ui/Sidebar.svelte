@@ -4,22 +4,34 @@
     import { slide } from 'svelte/transition';
     import Titlebar from './elements/Titlebar.svelte';
 
-    export let title = '';
+  interface Props {
+    title?: string;
+    children?: import('svelte').Snippet;
+    lower?: import('svelte').Snippet;
+    footer?: import('svelte').Snippet;
+  }
+
+  let {
+    title = '',
+    children,
+    lower,
+    footer
+  }: Props = $props();
 </script>
 
 <aside in:slide={{ duration: 200, axis: 'x' }} out:slide={{ duration: 200, axis: 'x' }} >
     <Titlebar target='hidden'>
-        <button class="clear" data-close on:click={() => push('/')}>
+        <button class="clear" data-close onclick={() => push('/')}>
             {title}
         </button>
     </Titlebar>
     <section>
-        <slot></slot>
+        {@render children?.()}
     </section>
     <footer class="menu">
-        <slot name="lower"></slot>
+        {@render lower?.()}
         <div class="info">
-            <slot name="footer"></slot>
+            {@render footer?.()}
         </div>
     </footer>
 </aside>

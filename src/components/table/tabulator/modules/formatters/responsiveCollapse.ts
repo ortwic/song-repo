@@ -6,7 +6,7 @@ export default function(cell){
 
     const div = document.createElement('div');
     div.classList.add('tabulator-responsive-collapse-toggle');
-	
+
     div.innerHTML = `<svg class='tabulator-responsive-collapse-toggle-open' viewbox="0 0 24 24">
   <line x1="7" y1="12" x2="17" y2="12" fill="none" stroke-width="3" stroke-linecap="round" />
   <line y1="7" x1="12" y2="17" x2="12" fill="none" stroke-width="3" stroke-linecap="round" />

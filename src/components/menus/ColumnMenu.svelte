@@ -14,9 +14,9 @@
         acc[field] = value;
         return acc;
     };
-    const sortedFields = $view?.table.getSorters().reduce(sortEntry, {} as Record<string, SortDirection>) ?? {};
-    const headerFilter = $view?.table.getHeaderFilters().reduce(filterEntry, {} as Record<string, string>) ?? {};
-    const menus: Record<string, PopupMenu> = {};
+    const sortedFields = $state($view?.table.getSorters().reduce(sortEntry, {} as Record<string, SortDirection>) ?? {});
+    const headerFilter = $state($view?.table.getHeaderFilters().reduce(filterEntry, {} as Record<string, string>) ?? {});
+    const menus: Record<string, PopupMenu> = $state({});
     const columns = derived(view, (v) => v?.table.getColumnDefinitions()
         .filter(c => !c.field.startsWith('__') && (!v.useResponsiveLayout || c.visible !== false)) ?? []);
 
@@ -94,11 +94,11 @@
                     </Switch>
                     <PopupMenu bind:this={menus[col.field]}>
                         <div class="y-flex">
-                            <button class="option empty" on:click={() => filterBy(col.field, undefined)}>
+                            <button class="option empty" onclick={() => filterBy(col.field, undefined)}>
                                 &lt; { $t('table.filter.empty') } {col.title} &gt;
                             </button>
                             {#each filterListValues(col) as value}
-                                <button class="option" on:click={() => filterBy(col.field, value)}>
+                                <button class="option" onclick={() => filterBy(col.field, value)}>
                                     <i class="{col.field} {value}"></i> { $t(`songs.${col.field}.${value}`) }
                                 </button>
                             {/each}

@@ -1,5 +1,10 @@
-<script>
+<script lang="ts">
     import { t } from 'svelte-i18n';
+    interface Props {
+        children?: import('svelte').Snippet;
+    }
+
+    let { children }: Props = $props();
 
     const no = Math.floor(Math.random() * $t('notfound.messages').length );
 </script>
@@ -10,7 +15,7 @@
         { $t(`notfound.messages.${no}`) }
     </p>
     <p style="color: red">
-        <slot></slot>
+        {@render children?.()}
     </p>
 </div>
 

@@ -1,4 +1,6 @@
 <script lang='ts'>
+    import { run } from 'svelte/legacy';
+
     import { t } from 'svelte-i18n';
     import { Subject, of, switchMap, debounceTime, distinctUntilChanged } from 'rxjs';
     import { currentUser } from '../../service/auth.service';
@@ -16,10 +18,10 @@
         })
     );
 
-    let name = '';
-    let photoUrl = '';
-    let alias = '';
-    let about = '';
+    let name = $state('');
+    let photoUrl = $state('');
+    let alias = $state('');
+    let about = $state('');
 
     currentProfile.subscribe((p) => {
         name  = p.name  ?? '';
@@ -28,12 +30,14 @@
         about = p.about ?? '';
     });
 
-    $: aliasInput$.next(alias);
-    $: aliasChanged = alias !== ($currentProfile.alias ?? '');
-    $: dirty = name  !== ($currentProfile.name  ?? '')
+    run(() => {
+        aliasInput$.next(alias);
+    });
+    let aliasChanged = $derived(alias !== ($currentProfile.alias ?? ''));
+    let dirty = $derived(name  !== ($currentProfile.name  ?? '')
             || aliasChanged
-            || about !== ($currentProfile.about ?? '');
-    $: canSave = dirty && (aliasChanged ? $aliasStatus$ === true : true);
+            || about !== ($currentProfile.about ?? ''));
+    let canSave = $derived(dirty && (aliasChanged ? $aliasStatus$ === true : true));
 
     async function saveProfile() {
         if (!canSave) return;
@@ -89,7 +93,7 @@
 </div>
 
 <p style="text-align: right;">
-    <button class="primary" disabled={!canSave} on:click={saveProfile}>
+    <button class="primary" disabled={!canSave} onclick={saveProfile}>
         {$t('settings.update-profile')}
     </button>
 </p>

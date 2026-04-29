@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { stopPropagation } from 'svelte/legacy';
+
     import { createEventDispatcher } from "svelte";
     import { fade } from "svelte/transition";
     import { cubicOut } from 'svelte/easing';
@@ -9,9 +11,23 @@
     
     const dispatch = createEventDispatcher();
 
-    export let size: 'auto' | 'max' | 'full';
-    export let target: MenuTarget = 'hidden';
-    export let title = '';
+    interface Props {
+        size: 'auto' | 'max' | 'full';
+        target?: MenuTarget;
+        title?: string;
+        header?: import('svelte').Snippet;
+        children?: import('svelte').Snippet;
+        footer?: import('svelte').Snippet;
+    }
+
+    let {
+        size,
+        target = 'hidden',
+        title = '',
+        header,
+        children,
+        footer
+    }: Props = $props();
 </script>
 
 <Portal>
@@ -19,21 +35,21 @@
     in:fade={{ duration: 200, easing: cubicOut }} 
     out:fade={{ duration: 200, easing: cubicOut }}>
     <Titlebar {target} on:close={() => dispatch('closed', false)}>
-        <slot name='header'></slot> {title}
+        {@render header?.()} {title}
     </Titlebar>
-    <slot></slot>
-    <slot name='footer'>
+    {@render children?.()}
+    {#if footer}{@render footer()}{:else}
         <div class="row">
             <button data-target={target} 
-                on:click|stopPropagation={() => dispatch('closed', true)}>
+                onclick={stopPropagation(() => dispatch('closed', true))}>
                 { $t('dialog.confirm') }
             </button>
             <button data-target={target} 
-                on:click|stopPropagation={() => dispatch('closed', false)}>
+                onclick={stopPropagation(() => dispatch('closed', false))}>
                 { $t('dialog.decline') }
             </button>
         </div>
-    </slot>
+    {/if}
     </div>
 </Portal>
 {#if size == 'auto'}

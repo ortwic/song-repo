@@ -13,7 +13,7 @@
     <li class="bxs-user-plus">
         <div>{$t('start.features.signup')}</div>
         <div>
-            <a use:link role="button" class="primary" href="/" on:click={signup}>
+            <a use:link role="button" class="primary" href="/" onclick={signup}>
                 <i class="bx bxs-edit"></i>
                 {$t('menu.login.signup')}
             </a>

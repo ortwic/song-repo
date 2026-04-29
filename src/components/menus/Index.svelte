@@ -17,8 +17,12 @@
     import { currentMenu } from '../../store/app.store';
     import TagCloud from './TagCloud.svelte';
 
-    export let title: string;
-    export let footer: string;
+    interface Props {
+        title: string;
+        footer: string;
+    }
+
+    let { title, footer }: Props = $props();
     const isTableView = derived(location, (path) => path.startsWith('/songs') || path.startsWith('/samples'));
     const isBlogView = derived(location, (path) => path.startsWith('/blog'));
     const isEventView = derived(location, (path) => path.startsWith('/events'));
@@ -47,32 +51,38 @@
             <ShareMenu />
         {/if}
         
-        <svelte:fragment slot="lower">
-            <NavButton href="/songs" title="{ $t('menu.songs') }">
-                <span><i class='bx bxs-playlist'></i> { $t('menu.songs') }</span>
-            </NavButton>
-            <NavButton href="/events" title="{ $t('menu.event-calendar') }">
-                <span><i class='bx bx-calendar'></i> { $t('menu.events') }</span>
-            </NavButton>
-            <NavButton href="/blog" title="{ $t('menu.howto-blog') }">
-                <span><i class='bx bx-bulb'></i> { $t('menu.howto') }</span>
-            </NavButton>
-            <div class="row">
-                <a use:link class="warn" role="button" href="/user/ocsoft42">
-                    <span><i class='bx bxs-coffee'></i> { $t('menu.donate') }</span>
-                </a>
-            </div>
-        </svelte:fragment>
-        <svelte:fragment slot="footer">
-            {footer}
-        </svelte:fragment>
+        {#snippet lower()}
+                    
+                <NavButton href="/songs" title="{ $t('menu.songs') }">
+                    <span><i class='bx bxs-playlist'></i> { $t('menu.songs') }</span>
+                </NavButton>
+                <NavButton href="/events" title="{ $t('menu.event-calendar') }">
+                    <span><i class='bx bx-calendar'></i> { $t('menu.events') }</span>
+                </NavButton>
+                <NavButton href="/blog" title="{ $t('menu.howto-blog') }">
+                    <span><i class='bx bx-bulb'></i> { $t('menu.howto') }</span>
+                </NavButton>
+                <div class="row">
+                    <a use:link class="warn" role="button" href="/user/ocsoft42">
+                        <span><i class='bx bxs-coffee'></i> { $t('menu.donate') }</span>
+                    </a>
+                </div>
+            
+                    {/snippet}
+        {#snippet footer()}
+                    
+                {footer}
+            
+                    {/snippet}
     </Sidebar>
     {:else if $currentMenu === 'signup'}
     <Sidebar title="{ $t('menu.login.signup') }">
         <SignupMenu />
-        <svelte:fragment slot="footer">
-            {footer}
-        </svelte:fragment>
+        {#snippet footer()}
+                            
+                {footer}
+            
+                            {/snippet}
     </Sidebar>
     {/if}
 </MenuDrawer>

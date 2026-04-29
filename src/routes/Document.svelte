@@ -4,7 +4,11 @@
     import { lang } from '../service/i18n.setup';
     import Footer from '../components/ui/Footer.svelte';
     
-    export let params: { name?: string } = {};
+    interface Props {
+        params?: { name?: string };
+    }
+
+    let { params = {} }: Props = $props();
 
     const code = lang.startsWith('de') ? '_de' : '';
 </script>

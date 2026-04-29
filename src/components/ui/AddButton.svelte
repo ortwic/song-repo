@@ -1,17 +1,21 @@
-<script>
+<script lang="ts">
     import { createEventDispatcher } from "svelte";
     import { getCssVariable } from "../../styles/style.helper";
 
-    export let title = '';
-    export let highlight = getCssVariable('--primary');
-    export let color = getCssVariable('--primghost');
+    interface Props {
+        title?: string;
+        highlight?: any;
+        color?: any;
+    }
+
+    let { title = '', highlight = getCssVariable('--primary'), color = getCssVariable('--primghost') }: Props = $props();
     const width = '48px';
     const height = '48px';
 
     const dispatch = createEventDispatcher();
 </script>
 
-<button class="clear icon" {title} on:click={() => dispatch('click')}>
+<button class="clear icon" {title} onclick={() => dispatch('click')}>
     <!-- <i class="bx bx-plus-circle"></i> -->
     <svg {width} {height} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path fill={highlight} d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4z"></path>

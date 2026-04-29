@@ -1,11 +1,13 @@
 <script lang='ts'>
+    import { preventDefault } from 'svelte/legacy';
+
     import { t } from 'svelte-i18n';
     import { format } from 'fecha';
     import FirestoreService from "../service/firestore.service";
     import { showError } from '../store/notification.store';
 
     const store = new FirestoreService('feedback');
-    let sent = false;
+    let sent = $state(false);
 
     async function handleForm({ target }) {
         const data = new FormData(target);
@@ -61,7 +63,7 @@
     <div class="titlebar">
         <i class="bx bx-mail-send"></i>&nbsp; { $t('feedback.submit')}
     </div>
-    <form on:submit|preventDefault={handleForm}>
+    <form onsubmit={preventDefault(handleForm)}>
         <div class="section">
             {#if !sent}
             <p>{ $t('feedback.note')}</p>

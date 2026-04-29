@@ -3,11 +3,20 @@
   import { slideFade } from "./transition.helper";
   import { portal } from "svelte-portal";
 
-  export let width: string | number = "auto";
-  let menu: HTMLDivElement;
-  let clientX = 0, clientY = 0;
-  let left: string | number, top: string | number, offsetWidth: number, offsetHeight: number;
-  let visible = false;
+  interface Props {
+    width?: string | number;
+    children?: import('svelte').Snippet;
+  }
+
+  let { width = "auto", children }: Props = $props();
+  let menu: HTMLDivElement = $state();
+  let clientX = $state(0), clientY = $state(0);
+  let left: string | number = $derived(clientX + offsetWidth > window.innerWidth 
+      ? `${clientX - offsetWidth}px`
+      : `${clientX}px`), top: string | number = $derived(clientY + offsetHeight > window.innerHeight 
+    ? `${clientY - offsetHeight}px`
+    : `${clientY}px`), offsetWidth: number = $state(), offsetHeight: number = $state();
+  let visible = $state(false);
     
   onDestroy(() => {
     document.removeEventListener('click', clickOutside, true);
@@ -21,13 +30,9 @@
     visible = true;
   };
 
-  $: top = clientY + offsetHeight > window.innerHeight 
-    ? `${clientY - offsetHeight}px`
-    : `${clientY}px`;
+  
     
-  $: left = clientX + offsetWidth > window.innerWidth 
-      ? `${clientX - offsetWidth}px`
-      : `${clientX}px`;
+  
 
   function clickOutside({ target }) {
     if (!menu.contains(target)) {
@@ -41,10 +46,10 @@
 </script>
 
 <div use:portal={document.body} class="container" aria-hidden="true" bind:this={menu} style:left style:top style:width
-    bind:offsetWidth bind:offsetHeight on:click={hide}>
+    bind:offsetWidth bind:offsetHeight onclick={hide}>
     {#if visible}
     <div class='popup-menu' in:slideFade={{ duration: 200 }} out:slideFade={{ duration: 200 }}>
-      <slot></slot>
+      {@render children?.()}
     </div>
     {/if}
 </div>

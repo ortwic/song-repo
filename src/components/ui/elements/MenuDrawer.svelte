@@ -1,7 +1,14 @@
 <script lang="ts">
+    import { preventDefault } from 'svelte/legacy';
+
     import { derived, get } from "svelte/store";
     import type { MenuTarget } from "../../../model/types";
     import { currentMenu } from "../../../store/app.store";
+    interface Props {
+        children?: import('svelte').Snippet;
+    }
+
+    let { children }: Props = $props();
 
     const opened = derived(currentMenu, (p) => p !== 'hidden');
 
@@ -23,17 +30,17 @@
     }
 </script>
 
-<form on:submit|preventDefault={navigate}>
+<form onsubmit={preventDefault(navigate)}>
     <header>
         <button class="toggle clear icon {$opened ? 'opened' : ''}" 
             title="{$opened ? 'Close menu' : 'Open menu'}"
-            on:click={() => toggle()}>
+            onclick={() => toggle()}>
             <i class="bx bxs-chevrons-left"></i>    
         </button>
     </header>
 
     <nav>
-        <slot></slot>
+        {@render children?.()}
     </nav>
 </form>
 

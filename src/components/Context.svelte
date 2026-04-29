@@ -3,8 +3,13 @@
     import { setContext } from 'svelte';
     import Prompt from './dialogs/PromptDialog.svelte';
     import type { Dialog } from '../model/dialog.model';
+    interface Props {
+        children?: import('svelte').Snippet;
+    }
 
-    let prompt: Dialog<string>;
+    let { children }: Props = $props();
+
+    let prompt: Dialog<string> = $state();
 
     setContext('resource-prompt', {
         showDialog: (uri: string) => prompt.showDialog(uri)
@@ -24,7 +29,7 @@
     </div>
 </Prompt>
 
-<slot></slot>
+{@render children?.()}
 
 <style lang="scss"> 
   .info {
