@@ -1,6 +1,4 @@
 <script lang="ts">
-    import { stopPropagation } from 'svelte/legacy';
-
     import { t } from 'svelte-i18n';
     import type { UserSong } from '../../model/song.model';
     import { type Status, status as statusKeys } from '../../model/types';
@@ -39,17 +37,15 @@
 
     const { gradient, genreWatermarkStyle } = getGenreStyles(song.genre);
 
-    function handlePrimary() {
+    async function handlePrimary() {
         if (song.uri) {
             actions.openUri(song);
         } else {
-            const unsub = prompt.showDialog('').subscribe(async (result) => {
-                if (result) {
-                    await actions.setUri(song, result);
-                    song = { ...song, uri: result };
-                }
-                unsub();
-            });
+            const result = await prompt.showDialog('');
+            if (result) {
+                await actions.setUri(song, result);
+                song = { ...song, uri: result };
+            }
         }
     }
 
@@ -71,10 +67,12 @@
 
 <article class="song-card" style={gradient ? `background: ${gradient};` : undefined}>
     <header title={toDate(song.changedAt).toLocaleString()}>
-        <button class="lg clear" onclick={stopPropagation((e) => statusPopupMenu.showPopupMenu(e))}>
-            <span class="status {song.status}" title={$t(`songs.status.${song.status}`)}></span>
+        <button class="lg clear" title="{$t(`songs.status.${song.status}`)}"
+            onclick={(e) => statusPopupMenu.showPopupMenu(e)}>
+            <span class="status {song.status}"></span>
         </button>
-        <button class="lg clear" onclick={stopPropagation(() => actions.toggleFavorite(song))}>
+        <button class="lg clear" title="{$t('songs.menu.toggle-favorite')}"
+            onclick={() => actions.toggleFavorite(song)}>
             <span class="fav" class:active={song.fav}></span>
         </button>
         <div class="song-info">
@@ -115,14 +113,14 @@
         <button
             class="clear sm"
             title={$t('songs.menu.search')}
-            onclick={stopPropagation((e) => searchPopupMenu.showPopupMenu(e))}
+            onclick={(e) => searchPopupMenu.showPopupMenu(e)}
         >
             <i class="icon bx bx-search"></i>
         </button>
         <button
             class="clear sm max-width"
             title={song.uri ? $t('songs.menu.open') : $t('songs.menu.change-resource')}
-            onclick={stopPropagation(handlePrimary)}
+            onclick={() => handlePrimary()}
         >
             <i class="icon bx {song.uri ? 'bx-link-external' : 'bx-unlink'}"></i>
             {song.uri ? $t('songs.menu.open') : $t('songs.menu.set-resource')}

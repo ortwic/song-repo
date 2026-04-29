@@ -2,8 +2,8 @@
     import { createBubbler, preventDefault } from 'svelte/legacy';
 
     const bubble = createBubbler();
-    import { writable, type Readable } from "svelte/store";
     import ConfirmDialog from "./ConfirmDialog.svelte"
+    import { createDeferred } from '../../utils/promise.helper';
     
     type InputType = 'text' | 'numer' | 'date' | 'email' | 'url';
     interface Props {
@@ -22,15 +22,16 @@
         children
     }: Props = $props();
     
-    const store = writable<string>();
+    let result = $state('');
+    const { promise, resolve } = createDeferred<string>();
     let form: HTMLFormElement = $state();
     let input: HTMLInputElement = $state();
     let visible = $state(false);
 
-    export function showDialog(initial = ''): Readable<string> {
+    export function showDialog(initial = ''): Promise<string> {
         visible = true;
-        store.set(initial);
-        return store;
+        result = initial;
+        return promise;
     }
 
     function handleDrop(event: DragEvent) {
@@ -43,13 +44,15 @@
 
     function done({ detail: confirm }): void {
         if (!confirm) {
-            visible = false;
-            form.reset();
+            resolve(null);
         } else if (form.checkValidity()) {
-            store.set(input.value);
-            visible = false;
-            form.reset();
+            resolve(input.value);
+        } else {
+            return;
         }
+
+        visible = false;
+        form.reset();
     }
 </script>
 
@@ -64,7 +67,7 @@
             ondrop={preventDefault(handleDrop)}>
             <div class="section">
                 <label for="prompt">{caption}</label>
-                <input id="prompt" bind:this={input} {type} value={$store} {placeholder}/>
+                <input id="prompt" bind:this={input} {type} bind:value={result} {placeholder}/>
             </div>
         </section>
     </ConfirmDialog>
