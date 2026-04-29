@@ -19,7 +19,7 @@ import {
 } from 'firebase/firestore';
 import { collectionData, docData } from 'rxfire/firestore';
 import { startWith } from 'rxjs/operators';
-import type { Observable } from 'rxjs';
+import { of, type Observable } from 'rxjs';
 
 // firestore does not like undefined values so omit them
 const omitUndefinedFields = (data: object) => {
@@ -69,8 +69,11 @@ export default class FirestoreService {
     }
     
     public getDocument<T>(id: string): Observable<T | null> {
-        const docRef = doc(this.db, this.path, id);
-        return docData(docRef, { idField: 'id' }) as Observable<T | null>;
+        if (id) {
+            const docRef = doc(this.db, this.path, id);
+            return docData(docRef, { idField: 'id' }) as Observable<T | null>;
+        }
+        return of(null);
     }
 
     public async getDocumentAsync<T>(id: string): Promise<T | null> {

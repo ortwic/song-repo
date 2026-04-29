@@ -12,7 +12,7 @@ const empty = { alias: '' } as UserProfile;
 
 // Do not use currentUser here to avoid circular dependency
 export const currentProfile = authState(auth).pipe(
-    switchMap(({ uid }) => store.getDocument<UserProfile>(uid)),
+    switchMap((p) => store.getDocument<UserProfile>(p?.uid)),
     map(p => p || empty),
     startWith(empty)
 );
@@ -36,12 +36,14 @@ export default class UserService {
             const alias = await this.resolveUniqueAlias(user);
             await store.setDocument({
                 id: user.uid,
+                created: new Date(),
+                deleted: null,
                 name: user.displayName,
                 photoURL: user.photoURL ?? undefined,
                 email: user.email,
                 alias,
                 ...(provider && { provider }),
-            }, { merge: true });
+            } as UserProfile, { merge: true });
         }
     }
 
