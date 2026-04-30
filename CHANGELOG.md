@@ -1,3 +1,11 @@
+v0.6.0 (2026-04-30)
+-------------------
+- svelte 5 migration
+- swipeable drawer menu
+- general UX improvments
+- removed demo samples
+- removed master data views
+
 v0.5.1 (2026-03-22)
 -------------------
 - dashboard view on start page

@@ -4,7 +4,7 @@
     import { type Status, status as statusKeys } from '../../model/types';
     import { toDate } from '../table/templates/Formatter.class';
     import { genreColor } from '../../styles/style.helper';
-    import type SongService from '../../service/user-song.service';
+    import SongService from '../../service/user-song.service';
     import { SEARCH_ACTIONS, SongActions } from '../table/SongActions.class';
     import { getContext } from 'svelte';
     import type { Dialog } from '../../model/dialog.model';
@@ -12,12 +12,11 @@
 
     interface Props {
         song: UserSong;
-        service: SongService;
     }
 
-    let { song = $bindable(), service }: Props = $props();
+    let { song = $bindable() }: Props = $props();
 
-    const actions = new SongActions(service);
+    const actions = new SongActions(new SongService());
     const prompt = getContext<Dialog<string>>('resource-prompt');
 
     const asArray = <T,>(obj: T) => (Array.isArray(obj) ? obj : [obj]);
@@ -65,14 +64,16 @@
     }
 </script>
 
+<!-- Inline-Arrow onclick={() => { ... }} not working properly -->
+<!-- svelte-ignore event_directive_deprecated -->
 <article class="song-card" style={gradient ? `background: ${gradient};` : undefined}>
     <header title={toDate(song.changedAt).toLocaleString()}>
         <button class="lg clear" title="{$t(`songs.status.${song.status}`)}"
-            onclick={(e) => statusPopupMenu.showPopupMenu(e)}>
+            on:click={(e) => statusPopupMenu.showPopupMenu(e)}>
             <span class="status {song.status}"></span>
         </button>
         <button class="lg clear" title="{$t('songs.menu.toggle-favorite')}"
-            onclick={() => actions.toggleFavorite(song)}>
+            on:click={() => actions.toggleFavorite(song)}>
             <span class="fav" class:active={song.fav}></span>
         </button>
         <div class="song-info">
@@ -87,7 +88,7 @@
             value="{song.progress ?? 0}"
             max="100"
             min="0"
-            onchange={handleProgressChange}
+            on:change={handleProgressChange}
         ></progress-bar>
     </div>
 
@@ -113,14 +114,14 @@
         <button
             class="clear sm"
             title={$t('songs.menu.search')}
-            onclick={(e) => searchPopupMenu.showPopupMenu(e)}
+            on:click={(e) => searchPopupMenu.showPopupMenu(e)}
         >
             <i class="icon bx bx-search"></i>
         </button>
         <button
             class="clear sm max-width"
             title={song.uri ? $t('songs.menu.open') : $t('songs.menu.change-resource')}
-            onclick={() => handlePrimary()}
+            on:click={() => handlePrimary()}
         >
             <i class="icon bx {song.uri ? 'bx-link-external' : 'bx-unlink'}"></i>
             {song.uri ? $t('songs.menu.open') : $t('songs.menu.set-resource')}
@@ -129,7 +130,7 @@
 
     <PopupMenu bind:this={searchPopupMenu}>
         {#each SEARCH_ACTIONS as action}
-            <button class="option" onclick={() => actions.search(song, action)}>
+            <button class="option" on:click={() => actions.search(song, action)}>
                 <i class="bx {action.icon}"></i>
                 {action.label}
             </button>
@@ -140,7 +141,7 @@
         {#each Object.keys(statusKeys) as s}
             <button class="option"
                 class:active={song.status === s}
-                onclick={() => handleStatusChange(s)}
+                on:click={() => handleStatusChange(s)}
             >
                 <span class="status {s}"></span>
                 <span style="margin-left: 8px">

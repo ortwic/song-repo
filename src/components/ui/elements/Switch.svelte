@@ -34,7 +34,11 @@
 </script>
 
 <button {title} class='sm clear {selected}' onclick={toggle}>
-    {#if children}{@render children()}{:else}{state}{/if}
+    {#if children}
+        {@render children()}
+    {:else}
+        {state}
+    {/if}
 </button>
 
 <style lang="scss">

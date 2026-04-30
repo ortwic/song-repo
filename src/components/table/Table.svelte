@@ -201,7 +201,7 @@
       toggleGroup
     };
     tableView.set(view);
-    onInit(view);
+    onInit?.(view);
     return table;
   }
 

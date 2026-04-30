@@ -71,7 +71,7 @@
                 <Switch title="{ $t('menu.table.sort-by') } {col.title}"
                     state={sortedFields[col.field] ?? null}
                     options={[null, 'asc', 'desc']}
-                    onToggle={({ detail }) => sortBy(col.field, detail)}>
+                    onToggle={(dir) => sortBy(col.field, dir as SortDirection)}>
                     <i class={sortIcon(sortedFields[col.field])}></i>
                 </Switch>
                 <Switch title="{ $t('menu.table.group-by') } {col.title}"
@@ -83,7 +83,7 @@
                     <Switch title="{ $t('menu.table.filter-by') } {col.title}"
                         state={headerFilter[col.field] ?? undefined}
                         options={[undefined, true, false]}
-                        onToggle={({ detail }) => filterBy(col.field, detail)}>
+                        onToggle={(state) => filterBy(col.field, state as string)}>
                         <i class="bx bx-filter-alt"></i>
                     </Switch>
                 {:else if filterListValues(col)}

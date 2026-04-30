@@ -61,7 +61,7 @@
         <div class="card-grid">
             {#each recentSongs as song (song.id)}
                 <div class="card-wrapper" animate:flip={{ duration: 150 }} transition:unfold>
-                    <SongCard {song} {service} />
+                    <SongCard {song} />
                 </div>
             {/each}
         </div>
