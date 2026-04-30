@@ -32,7 +32,8 @@
     let { params = {} }: Props = $props();
 
     const readonly = !!params.id;
-    const service = new SongService(params.id?.slice(1), $location === '/samples');
+    const sharedUid = params.id?.slice(1);
+    const service = new SongService(sharedUid);
     const actions = new SongActions(service);
     const clickMenu = !readonly ? buildActionMenu : () => undefined;
     const songs = service.usersongs;

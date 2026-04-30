@@ -28,15 +28,6 @@
             </a>
         </div>
     </li>
-    <li class="bx-test-tube">
-        <div>{$t('start.samples')}</div>
-        <div>
-            <a use:link role="button" href="/samples">
-                <i class="bx bx-test-tube"></i>
-                Demo
-            </a>
-        </div>
-    </li>
     <li class="bx-bar-chart">{$t('start.features.track')}</li>
     <li class="bx-share-alt">
         {$t('start.features.share')}

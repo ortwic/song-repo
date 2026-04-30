@@ -22,7 +22,7 @@
     }
 
     let { footer }: Props = $props();
-    const isTableView = derived(location, (path) => path.startsWith('/songs') || path.startsWith('/samples'));
+    const isTableView = derived(location, (path) => path.startsWith('/songs'));
     const isBlogView = derived(location, (path) => path.startsWith('/blog'));
     const isEventView = derived(location, (path) => path.startsWith('/events'));
 

@@ -8,7 +8,6 @@ import { createUserStore } from './user.service';
 export const viewStoreId = 'songs.v1';
 
 const store = createUserStore();
-const sampleId = '3qAbhlbXxNaLY7CMiz6uOMJlBbb2';
 const localStore = {};
 const localSubject = new BehaviorSubject<UserSong[]>([]);
 
@@ -33,7 +32,7 @@ export default class SongService {
 
     readonly usersongs: Observable<UserSong[]>;
 
-    constructor(private sharedUid?: string, private showSamples = false) {
+    constructor(private sharedUid?: string) {
         currentUser.subscribe((user) => (this.uid = user?.uid));
         this.usersongs = currentUser.pipe(
             switchMap(user => this.loadSongs(user)),
@@ -45,15 +44,6 @@ export default class SongService {
         if (this.sharedUid) {
             const sharedStore = new FirestoreService(`user/${this.sharedUid}/songs`);
             return sharedStore.getDocuments(orderBy('id'), where('status', '==', 'done'));
-        }
-
-        if (this.showSamples) {
-            const sampleStore = new FirestoreService(`user/${sampleId}/songs`);
-            const samplesFromFile = from(import('../data/samples.json'))
-                .pipe(map<{ default }, UserSong[]>(({ default: data }) => data));
-            const samples = sampleStore.getDocuments<UserSong>(orderBy('id'))
-                .pipe(switchMap(docs => docs.length ? of(docs) : samplesFromFile));
-            return merge(samples, localSubject);
         }
 
         if (user) {
@@ -88,7 +78,7 @@ export default class SongService {
     }
 
     async setSong(song: UserSong, forceLocalUpdate = false): Promise<string> {
-        if (this.uid && !this.showSamples) {
+        if (this.uid) {
             song.changedAt = Timestamp.now();
             if (song.progressLogs && song.progressLogs.at(-1) !== song.progress) {
                 song.progressLogs.push(song.progress);
@@ -97,13 +87,13 @@ export default class SongService {
                 await store.setDocument(song, { merge: true });
                 return song.id;
             }
-        } else if (!this.showSamples || forceLocalUpdate) {
+        } else if (forceLocalUpdate) {
             localSubject.next(Object.values(localStore));
         }
     }
 
     async deleteSong(song: UserSong): Promise<void> {
-        if (this.uid && !this.showSamples) {
+        if (this.uid) {
             return store.removeDocument(song.id);
         } else {
             delete localStore[song.id];

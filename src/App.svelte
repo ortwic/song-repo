@@ -27,7 +27,6 @@
     '/': Dashboard,
     '/songs': SongTable,
     '/songs/:id': SongTable,
-    '/samples': SongTable,
     '/calendar': EventCalendar,
     '/events': EventMap,
     '/events/:id': EventMap,
