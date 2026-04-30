@@ -1,6 +1,8 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
     import { flip } from 'svelte/animate';
+    import { cubicOut } from 'svelte/easing';
+    import { slide } from 'svelte/transition';
     import { map } from 'rxjs';
     import SongService from '../../service/user-song.service';
     import { unfold } from '../ui/transition.helper';
@@ -11,7 +13,7 @@
 
     const MAX = 12;
 
-    let limit = $state(4), showDone = $state(false);
+    let showFilter = $state(false), limit = $state(4), showDone = $state(false);
 
     const service = new SongService();
     const recentSongStore = toStore(
@@ -31,7 +33,15 @@
 <section class="recent-songs">
     <header class="row">
         <div class="title"><i class="bx bxs-playlist"></i> {$t('songs.recent-wip')}</div>
-        <div class="controls">
+        <Switch title={$t('songs.filter')}
+                state={showFilter}
+                onToggle={() => showFilter = !showFilter}>
+            <i class="icon bx bx-filter"></i>
+        </Switch>
+    </header>
+
+    {#if showFilter}
+        <div class="controls" transition:slide={{ duration: 200, easing: cubicOut }}>
             <input type="range" min="2" max={MAX} step="2" bind:value={limit} aria-label={$t('songs.recent-limit')} />
             <span class="limit-val">{limit}</span>
             <Switch title="{ $t(`songs.${!showDone ? 'incl-done' : 'excl-done'}`) }"
@@ -43,7 +53,7 @@
                 <i class="icon bx" class:bx-check={!showDone} class:bx-x={showDone}></i> 
             </Switch>
         </div>
-    </header>
+    {/if}
 
     {#if recentSongs.length === 0}
         <p class="empty">{$t('songs.nosongs')}</p>
@@ -71,23 +81,24 @@
             font-weight: 500;
             flex-shrink: 0;
         }
+    }
 
-        .controls {
-            display: flex;
-            align-items: center;
-            gap: 8px;
+    .controls {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 8px;
 
-            input[type='range'] {
-                width: 80px;
-                accent-color: var(--primary);
-            }
+        input[type='range'] {
+            width: 80px;
+            accent-color: var(--primary);
+        }
 
-            .limit-val {
-                font-size: 13px;
-                color: var(--textghost);
-                min-width: 16px;
-                text-align: right;
-            }
+        .limit-val {
+            font-size: 13px;
+            color: var(--textghost);
+            min-width: 16px;
+            text-align: right;
         }
     }
 

@@ -1,7 +1,8 @@
 {
   "menu": {
-    "songs": "Your songs",
-    "howto": "Making music",
+    "start": "Start",
+    "repo": "Repertory",
+    "howto": "How to music",
     "howto-blog": "How to make music blog",
     "events": "Public events",
     "event-calendar": "Public event calendar",
@@ -30,11 +31,14 @@
       "group-by": "Group by",
       "sort-by": "Sort by",
       "filter-by": "Filter by"
-    }
+    },
+    "open": "Open",
+    "close": "Close"
   },
   "start": {
     "loading": "Loading...",
-    "hello": "Hello musician!",
+    "hello": "Hello",
+    "anonymous": "musician!",
     "intro": "This app was specifically designed for musicians like you to keep track of your repertoire and your progress. Some features of this app:",
     "features": {
       "signup": "Sign up to store your own song list",
@@ -136,7 +140,8 @@
     "recent-wip": "Recent songs in progress",
     "recent-limit": "Recent limit",
     "incl-done": "Include done",
-    "excl-done": "Exclude done"
+    "excl-done": "Exclude done",
+    "add-new": "Add song"
   },
   "table": {
     "groupBy": "Group by {title}",
@@ -146,7 +151,7 @@
     }
   },
   "blog": {
-    "title": "Everthing about making music",
+    "title": "How to music",
     "more": "more...",
     "less": "...lesser",
     "back": "Back"

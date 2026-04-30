@@ -19,8 +19,7 @@
   import NotFound from "./routes/NotFound.svelte";
   import { currentUser } from './service/auth.service';
   import { setupI18n } from "./service/i18n.setup";
-    
-  const title = `${import.meta.env.DEV ? 'DEV' : 'Start'}`;
+
   const usertitle = currentUser.pipe(map(autoRedirect));
   const version = import.meta.env.PACKAGE_VERSION;
   
@@ -60,7 +59,7 @@
         return `${name}'s known songs`;
       }
     }
-    return `${title} | Login`;
+    return `Start | Login`;
   }
 </script>
 
@@ -73,7 +72,7 @@
   { $t('start.loading') }
 {:then} 
   <Context>
-    <Menu {title} footer="Version {version}" />
+    <Menu footer="Version {version}" />
 
     <Router {routes}/>
 

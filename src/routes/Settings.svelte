@@ -1,25 +1,19 @@
 <script lang='ts'>
     import { t } from 'svelte-i18n';
-    import { link, push } from 'svelte-spa-router';
+    import { link } from 'svelte-spa-router';
+    import TitlebarMenu from '../components/menus/TitlebarMenu.svelte';
     import Profile from '../components/settings/Profile.svelte';
     import LinkHub from '../components/settings/LinkHub.svelte';
     import { slideFade } from '../components/ui/transition.helper';
     import Footer from '../components/ui/Footer.svelte';
     import AuthService, { currentUser } from '../service/auth.service';
     import UserService from '../service/user.service';
-    import { currentMenu } from '../store/app.store';
     import { showError, showInfo } from '../store/notification.store';
     import '../styles/menu.scss';
 
     const authService = new AuthService();
     const userService = new UserService();
     let confirmDelete = $state(false);
-
-    async function signOut() {
-        await authService.signOut();
-        currentMenu.set('dynamic');
-        push('/');
-    }
 
     function resetViews() {
         localStorage.clear();
@@ -39,17 +33,11 @@
 </script>
 
 <main class="content">
-    <div class="titlebar">
+    <TitlebarMenu>
         <i class="bx bx-cog"></i>&nbsp; {$t('settings.title')}
-    </div>
+    </TitlebarMenu>
     <section>
         {#if $currentUser}
-        <div style="text-align: right;">
-            <button class="primary" title={$t('profile.sign-out')} onclick={signOut}>
-                <i class="bx bx-log-out-circle"></i>
-                {$t('profile.sign-out')}
-            </button>
-        </div>
         <fieldset class="menu">
             <legend>{$t('settings.profile')}</legend>
             <p>

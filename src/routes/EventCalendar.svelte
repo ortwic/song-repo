@@ -1,5 +1,6 @@
 <script lang="ts">
     import { t } from "svelte-i18n";
+    import TitlebarMenu from "../components/menus/TitlebarMenu.svelte";
 
     let src = `https://calendar.google.com/calendar/embed
 ?height=600
@@ -22,6 +23,7 @@
 </svelte:head>
 
 <main>
+    <TitlebarMenu minimal={true} />
    <iframe title={ $t('calendar.title') } {src} frameborder="0" scrolling="no"></iframe>
 </main>
 

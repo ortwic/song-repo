@@ -1,7 +1,7 @@
 {
   "menu": {
-    "songs": "Deine Songs",
-    "howto": "Musizieren",
+    "repo": "Repertoire",
+    "howto": "Wie geht Musik",
     "howto-blog": "Wie geht Musik Blog",
     "events": "Veranstaltungen",
     "event-calendar": "Veranstaltungeskalender",
@@ -30,11 +30,15 @@
       "group-by": "Gruppiere nach",
       "sort-by": "Sortiere nach",
       "filter-by": "Filtern nach"
-    }
+    },
+    "open": "Öffnen",
+    "close": "Schließen",
+    "start": "Start"
   },
   "start": {
     "loading": "Wird geladen...",
-    "hello": "Hallo Musiker!",
+    "hello": "Hallo",
+    "anonymous": "Musiker!",
     "intro": "Diese App wurde speziell für Musiker wie Sie entwickelt, um einen Überblick über Ihr Repertoire und Ihre Fortschritte zu behalten. Einige Funktionen dieser App:",
     "features": {
       "signup": "Melden Sie sich an, um Ihre eigene Songliste zu speichern",
@@ -136,7 +140,8 @@
     "recent-wip": "Aktuelle Songs in Arbeit",
     "recent-limit": "Anzahl Songs",
     "incl-done": "Mit Erledigten",
-    "excl-done": "Ohne Erledigten"
+    "excl-done": "Ohne Erledigten",
+    "add-new": "Song hinzufügen"
   },
   "table": {
     "groupBy": "Gruppieren nach {title}",
@@ -146,7 +151,7 @@
     }
   },
   "blog": {
-    "title": "Alles über das Musizieren",
+    "title": "Wie geht Musik",
     "less": "...weniger",
     "more": "mehr...",
     "back": "Zurück"

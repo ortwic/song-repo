@@ -28,7 +28,7 @@
 
 <section class="menu">
     <div class="row">
-        <button class="profil" data-close title="{ $t('settings.title') }" onclick={() => push('/settings')}>
+        <button class="profil" data-close title="{ $t('start.hello') } {$name ?? $t('start.anonymous')}" onclick={() => push('/')}>
             <UserIcon photoURL={$currentProfile.photoURL ?? photoURL} size="50px" />
             <span class="name">{$name}</span>
         </button>

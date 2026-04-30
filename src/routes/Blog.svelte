@@ -3,6 +3,7 @@
     import { t } from "svelte-i18n";
     import { derived } from "svelte/store";
     import { of } from "rxjs";
+    import TitlebarMenu from "../components/menus/TitlebarMenu.svelte";
     import Image from "../components/ui/elements/Image.svelte";
     import PostDetails from "../components/ui/PostDetails.svelte";
     import { getBlogPosts } from "../service/blog.service";
@@ -23,9 +24,9 @@
 </svelte:head>
 
 <main class="content">
-    <div class="titlebar">
-        <i class="bx bx-bulb"></i>&nbsp; { $t('blog.title') }
-    </div>
+    <TitlebarMenu>
+        <i class="bx bx-music"></i>&nbsp; { $t('blog.title') }
+    </TitlebarMenu>
     {#each $posts as post}
     <div class="post">
         {#if post.images?.length}

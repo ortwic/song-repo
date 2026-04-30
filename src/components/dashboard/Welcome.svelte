@@ -24,7 +24,7 @@
         <div>
             <a use:link role="button" href="/songs">
                 <i class="bx bxs-playlist"></i>
-                {$t('menu.songs')}
+                {$t('menu.repo')}
             </a>
         </div>
     </li>
@@ -64,11 +64,11 @@
             </a>
         </div>
     </li>
-    <li class="bx-bulb">
+    <li class="bx-music">
         <div>{$t('start.features.blog')}</div>
         <div>
             <a use:link role="button" href="/blog">
-                <i class="bx bx-bulb"></i>
+                <i class="bx bx-music"></i>
                 {$t('menu.howto')}
             </a>
         </div>

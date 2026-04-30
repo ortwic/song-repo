@@ -18,11 +18,10 @@
     import TagCloud from './TagCloud.svelte';
 
     interface Props {
-        title: string;
         footer: string;
     }
 
-    let { title, footer }: Props = $props();
+    let { footer }: Props = $props();
     const isTableView = derived(location, (path) => path.startsWith('/songs') || path.startsWith('/samples'));
     const isBlogView = derived(location, (path) => path.startsWith('/blog'));
     const isEventView = derived(location, (path) => path.startsWith('/events'));
@@ -34,7 +33,7 @@
 
 <MenuDrawer>
     {#if $currentMenu === 'dynamic'}
-    <Sidebar {title} onclose={hide}>
+    <Sidebar title="{ $t('menu.start') }" onclose={hide}>
         {#if $currentUser}
             <ProfileMenu email={$currentUser.email}
                 photoURL={$currentUser.photoURL} 
@@ -56,14 +55,14 @@
         {/if}
         
         {#snippet lower()}
-            <NavButton href="/songs" title="{ $t('menu.songs') }">
-                <span><i class='bx bxs-playlist'></i> { $t('menu.songs') }</span>
+            <NavButton href="/songs" title="{ $t('menu.repo') }">
+                <span><i class='bx bxs-playlist'></i> { $t('menu.repo') }</span>
             </NavButton>
             <NavButton href="/events" title="{ $t('menu.event-calendar') }">
                 <span><i class='bx bx-calendar'></i> { $t('menu.events') }</span>
             </NavButton>
             <NavButton href="/blog" title="{ $t('menu.howto-blog') }">
-                <span><i class='bx bx-bulb'></i> { $t('menu.howto') }</span>
+                <span><i class='bx bx-music'></i> { $t('menu.howto') }</span>
             </NavButton>
             <div class="row">
                 <a use:link class="warn" role="button" href="/user/ocsoft42">

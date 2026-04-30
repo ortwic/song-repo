@@ -1,208 +1,242 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
 
-  color-scheme: dark light;
-  color: #213547;
-  background-color: white;
+    color-scheme: dark light;
+    color: #213547;
+    background-color: white;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
-  
-  /* https://coolors.co/e9e3d6-e0d7c7-bfb9aa-a71908-0b0802 */
-  --primary: #A71908;
-  --primary-opaque: #A71908C0;
-  --secondary: #d0ff00;
-  --secondary-opaque: #d0ff00C0;
-  --primdark: hwb(6 3% 60%);
-  --primselect: #BFB9AA;
-  --primghost: #E0D7C7;
-  --primback: #E9E3D6;
-  --primback-opaque: #E9E3D680;
-  --text: #0B0802;
-  --textghost: #827560;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+
+    /* https://coolors.co/e9e3d6-e0d7c7-bfb9aa-a71908-0b0802 */
+    --primary: #a71908;
+    --primary-opaque: #a71908c0;
+    --secondary: #d0ff00;
+    --secondary-opaque: #d0ff00c0;
+    --primdark: hwb(6 3% 60%);
+    --primselect: #bfb9aa;
+    --primghost: #e0d7c7;
+    --primback: #e9e3d6;
+    --primback-opaque: #e9e3d680;
+    --text: #0b0802;
+    --textghost: #827560;
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  color: var(--text);
-  overflow: hidden;
+    margin: 0;
+    padding: 0;
+    color: var(--text);
+    overflow: hidden;
 }
 
 main {
-  height: 100vh;
+    height: 100vh;
 
-  &.content {
-    hyphens: auto; 
-    overflow: auto;
-  }
+    &.content {
+        hyphens: auto;
+        overflow: auto;
+    }
 }
 
 a {
-  color: var(--primary);
-  text-decoration: inherit;
+    color: var(--primary);
+    text-decoration: inherit;
 }
-a:hover, a:hover:visited {
-  color: var(--primactive);
+a:hover,
+a:hover:visited {
+    color: var(--primactive);
 }
 a:visited {
-  font-weight: 300;
-  color: var(--textghost);
+    font-weight: 300;
+    color: var(--textghost);
 }
 
 h1 {
-  font-size: 3.2em;
-  line-height: 1.2;
+    font-size: 3.2em;
+    line-height: 1.2;
 }
 
-h1, h2, h3 {
-  letter-spacing: -.2pt;
+h1,
+h2,
+h3 {
+    letter-spacing: -0.2pt;
 }
 
-button, 
+button,
 button.default,
-a[role=button],
-input[type=reset], 
-input[type=submit],
+a[role='button'],
+input[type='reset'],
+input[type='submit'],
 select {
-  border-radius: 4px;
-  border: 1px solid #606060;
-  padding: .4em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  color: var(--primary);
-  background-color: var(--primback);
-  cursor: pointer;
-  transition: border-color 0.25s;
-  text-shadow: 0px 0px 2px rgba(0, 0, 0, 20%);
-
-  &:hover {
-    border-color: gray;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
-  }
-
-  &:disabled {
-    cursor: default;
-    color: var(--textghost);
-    border-color: var(--primghost);
+    border-radius: 4px;
+    border: 1px solid #606060;
+    padding: 0.4em 1.2em;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    color: var(--primary);
     background-color: var(--primback);
-    text-shadow: unset;
-  }
+    cursor: pointer;
+    transition: border-color 0.25s;
+    text-shadow: 0px 0px 2px rgba(0, 0, 0, 20%);
+
+    &:hover {
+        border-color: gray;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+    }
+
+    &:disabled {
+        cursor: default;
+        color: var(--textghost);
+        border-color: var(--primghost);
+        background-color: var(--primback);
+        text-shadow: unset;
+    }
 }
 
 button:focus,
 button:focus-visible,
 button.default:focus,
 button.default:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+    outline: 4px auto -webkit-focus-ring-color;
 }
 
 button.icon {
-  color: var(--primselect);
-  padding: 0 .5em;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 70%);
-  transition: opacity 0.25s;
-  opacity: .7;
+    color: var(--primselect);
+    padding: 0 0.5em;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 70%);
+    transition: opacity 0.25s;
+    opacity: 0.7;
 
-  &:hover {
-    opacity: 1;
-  }
+    &:hover {
+        opacity: 1;
+    }
 
-  i.bx {
-    font-size: 3em;
-  }
+    i.bx {
+        font-size: 3em;
+    }
 }
 
-button.primary, 
-a[role=button].primary,
-input[type=reset].primary, 
-input[type=submit].primary {
-  color: var(--primback);
-  background-color: var(--primary);
-  box-shadow: 0px 2px 6px hsla(0, 0%, 60%);
+button.primary,
+a[role='button'].primary,
+input[type='reset'].primary,
+input[type='submit'].primary {
+    color: var(--primback);
+    background-color: var(--primary);
+    box-shadow: 0px 2px 6px hsla(0, 0%, 60%);
 }
 
-button.primary:hover, 
-a[role=button].primary:hover,
-input[type=reset].primary:hover, 
-input[type=submit].primary:hover {
-  background-color: var(--primdark);
+button.primary:hover,
+a[role='button'].primary:hover,
+input[type='reset'].primary:hover,
+input[type='submit'].primary:hover {
+    background-color: var(--primdark);
 }
 
-button.primary:disabled, 
-a[role=button].primary:disabled,
-input[type=reset].primary:disabled, 
-input[type=submit].primary:disabled {
-  color: var(--textghost);
-  background-color: var(--primghost);
+button.primary:disabled,
+a[role='button'].primary:disabled,
+input[type='reset'].primary:disabled,
+input[type='submit'].primary:disabled {
+    color: var(--textghost);
+    background-color: var(--primghost);
 }
 
 button.clear,
 button.clear:disabled {
-  border: 0;
-  outline: 0;
-  box-shadow: unset;
-  background-color: transparent;
+    border: 0;
+    outline: 0;
+    box-shadow: unset;
+    background-color: transparent;
 }
 
-input, 
+input,
 textarea {
-  color: var(--text);
-  background-color: white;
+    color: var(--text);
+    background-color: white;
 }
 
 input:disabled,
 textarea:disabled {
-  color: var(--text);
-  background-color: var(--primback);
+    color: var(--text);
+    background-color: var(--primback);
 }
 
-input.error, 
+input.error,
 textarea.error,
 input.mark:focus,
 textarea.mark:focus {
-  outline: 2px solid var(--secondary);
-  outline-offset: 1px;
-  border-radius: 4px;
-  box-shadow: 0px 0px 8px var(--secondary);
+    outline: 2px solid var(--secondary);
+    outline-offset: 1px;
+    border-radius: 4px;
+    box-shadow: 0px 0px 8px var(--secondary);
 }
 
-input.valid, 
+input.valid,
 input.valid:focus,
 textarea.valid,
 textarea.valid:focus {
-  outline: 2px solid var(--primary);
-  outline-offset: 1px;
-  border-radius: 4px;
-  box-shadow: 0px 0px 8px var(--primary);
+    outline: 2px solid var(--primary);
+    outline-offset: 1px;
+    border-radius: 4px;
+    box-shadow: 0px 0px 8px var(--primary);
 }
 
 div.titlebar {
-  color: var(--primback);
-  background: linear-gradient(to right, var(--primdark) 20%, var(--primary));
-  white-space: nowrap;
-  font-weight: 500;
-  font-style: italic;
-  width: 100%;
-  max-height: 2.2em;
-  padding: .35em .8em;
+    display: flex;
+    justify-content: space-between;
+    color: var(--primback);
+    background: linear-gradient(to right, var(--primdark) 20%, var(--primary));
+    white-space: nowrap;
+    font-weight: 500;
+    font-style: italic;
+    width: 100%;
+    max-height: 2.2em;
+    padding: 0;
+
+    .text {
+        display: inline-block;
+        flex-grow: 1;
+        font-style: italic;
+        padding: .4em .8em;
+    }
+
+    .titlebar-button {
+        color: inherit;
+        background-color: transparent;
+        box-shadow: unset;
+        padding: 0.2em 0.8em 0 0.8em;
+        border: 0;
+        outline: 0;
+        max-width: 4em;
+        max-height: inherit;
+        transition: all 0.2s ease-in-out;
+        font-size: smaller;
+
+        &:hover {
+            background-color: #f0f0f040;
+        }
+    }
+    
+    a.titlebar-button {
+        display: flex;
+        align-items: center;
+    }
 }
 
 a.label,
 span.label {
-  border: 1px solid silver;
-  background-color: #F0F0F0C0;
-  box-shadow: 2px 2px 4px #80808060;
-  margin: .4rem .2rem;
-  padding: .2rem .6rem;
-  border-radius: 1rem;
-  font-size: smaller;
+    border: 1px solid silver;
+    background-color: #f0f0f0c0;
+    box-shadow: 2px 2px 4px #80808060;
+    margin: 0.4rem 0.2rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 1rem;
+    font-size: smaller;
 }
 
 a.label:hover {
@@ -210,55 +244,55 @@ a.label:hover {
 }
 
 blockquote {
-  background-color: var(--primback);
-  font-size: 14pt;
-  margin: 30px 0;
-  padding: 30px 30px 30px 40px;
-  position: relative;
-  font-style: normal;
-  border-left: 3px solid var(--primary);
+    background-color: var(--primback);
+    font-size: 14pt;
+    margin: 30px 0;
+    padding: 30px 30px 30px 40px;
+    position: relative;
+    font-style: normal;
+    border-left: 3px solid var(--primary);
 
-  cite {
-      color: gray;
-      text-transform: uppercase;
-      font-size: 10pt;
-      font-style: normal;
-      letter-spacing: 1px;
-  }
+    cite {
+        color: gray;
+        text-transform: uppercase;
+        font-size: 10pt;
+        font-style: normal;
+        letter-spacing: 1px;
+    }
 }
 
 div.autocomplete {
-  .input-container {
-    width: 16em;
+    .input-container {
+        width: 16em;
 
-    .autocomplete-clear-button {
-      left: 14em;
-      right: unset !important;
-      transition: all .2s ease-in-out;
+        .autocomplete-clear-button {
+            left: 14em;
+            right: unset !important;
+            transition: all 0.2s ease-in-out;
 
-      &:hover {
-        color: var(--primary);
-      }
-    }
-  }
-
-  div.autocomplete-list {
-    background-color: var(--primback) !important;
-    max-width: 100vw;
-  
-    div.autocomplete-list-item {
-      padding: 0;
-  
-      &.selected,
-      &:hover {
-        color: black !important;
-        background-color: var(--primselect) !important;
-        transition: all .2s ease-in-out;
-      }
+            &:hover {
+                color: var(--primary);
+            }
+        }
     }
 
-    div.autocomplete-list-item-no-results {
-      padding: 0;
+    div.autocomplete-list {
+        background-color: var(--primback) !important;
+        max-width: 100vw;
+
+        div.autocomplete-list-item {
+            padding: 0;
+
+            &.selected,
+            &:hover {
+                color: black !important;
+                background-color: var(--primselect) !important;
+                transition: all 0.2s ease-in-out;
+            }
+        }
+
+        div.autocomplete-list-item-no-results {
+            padding: 0;
+        }
     }
-  }
 }

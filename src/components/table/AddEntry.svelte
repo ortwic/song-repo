@@ -4,7 +4,6 @@
     const bubble = createBubbler();
     import { t } from 'svelte-i18n';
     import Autocomplete from 'simple-svelte-autocomplete/src/SimpleAutocomplete.svelte';
-    import AddButton from "../ui/AddButton.svelte";
     import ConfirmDialog from "../dialogs/ConfirmDialog.svelte";
     import Image from "../ui/elements/Image.svelte";
     import SelectKey from '../ui/SelectKey.svelte';
@@ -18,6 +17,10 @@
     import { logAction } from '../../store/notification.store';
     import { derived, writable } from "svelte/store";
     import PopupMenu from "../ui/PopupMenu.svelte";
+
+    let {
+        visible = $bindable(false)
+    }: { visible: boolean } = $props();
     
     const required = true;
     const songService = new SongService();
@@ -25,7 +28,6 @@
     const searchService = derived([currentSearchEngine, settingsStore], ([e, s]) => create(e, s[e]));
     let selectSearchEngine = $state(({}) => {});
     let form: HTMLFormElement = $state();
-    let visible = $state(false);
 
     let newSong: Partial<UserSong> = $state();
     const styles = (genre: string) => (genres.find(v => v.name === genre) ?? genres[0]).styles;
@@ -96,15 +98,11 @@
 
 </script>
 
-{#if !songService.isShared()}
-<AddButton title="add song" on:click={() => visible = true}/>
-{/if}
-
 {#if visible}
 <form bind:this={form} onsubmit={preventDefault(bubble('submit'))}>
     <ConfirmDialog size='full' onClose={done}>
         {#snippet header()}
-                        <div class="title" >
+        <div class="title" >
                 <i class="bx bx-search-alt-2"></i>&nbsp; { $t('songs.addTitle') } 
                 <!-- svelte-ignore a11y_interactive_supports_focus -->
                 <!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -116,7 +114,7 @@
                         onclick={() => currentSearchEngine.set('audius')}>Audius</button>
                 </PopupMenu>
             </div>
-                    {/snippet}
+        {/snippet}
         <section>
             <div class="section">
                 <div class="group">
@@ -127,7 +125,7 @@
                         onChange={(item) => setArtist(item)} clearSelection={() => setArtist()} showClear={true}
                         showLoadingIndicator={true}>
                         {#snippet item({ item })}
-                                                        <div class="card"  >
+                            <div class="card">
                                 <Image src={item.img} />
                                 <div class="col">
                                     {item.name} | 
@@ -140,12 +138,12 @@
                                     </p>
                                 </div>
                             </div>
-                                                    {/snippet}
+                        {/snippet}
                         {#snippet loading()}
-                                                        <div >
+                            <div >
                                 <LoadingBar />
                             </div>
-                                                    {/snippet}
+                        {/snippet}
                     </Autocomplete>
                 </div>
                 <div class="group">
@@ -156,7 +154,7 @@
                         onChange={(item) => setSong(item)} clearSelection={() => setSong()} showClear={true}
                         showLoadingIndicator={true}>
                         {#snippet item({ item })}
-                                                        <div class="card"  >
+                            <div class="card">
                                 <a title={item.album?.title} href={item.album?.uri ?? item.artist?.uri} target="_blank">
                                     <Image src={item.album?.img ?? item.artist?.img} />
                                 </a>
@@ -181,7 +179,7 @@
                                     {/if}
                                 </div>
                             </div>
-                                                    {/snippet}
+                        {/snippet}
                     </Autocomplete>
                 </div>
                 <div class="group">
@@ -191,22 +189,18 @@
                         bind:text={newSong.genre} hideArrow={true}
                         onChange={() => newSong.style = undefined}>
                         {#snippet item({ item, label })}
-                                                    
-                                <div class="square" style:background-color={item.color}></div>
-                                <span class="option">{@html label}</span>
-                            
-                                                    {/snippet}
+                            <div class="square" style:background-color={item.color}></div>
+                            <span class="option">{@html label}</span>
+                        {/snippet}
                     </Autocomplete>
                 </div>
                 <div class="group">
                     <label for="style">{ $t('songs.columns.style') }</label>
                     <Autocomplete inputClassName="lg" placeholder="style" hideArrow={true}
                         minCharactersToSearch={0} searchFunction="{() => styles(newSong.genre && newSong.genre[0])}" showClear={true}>
-                        {#snippet item({ item, label })}
-                                                    
-                                <span class="option">{@html label}</span>
-                            
-                                                    {/snippet}
+                        {#snippet item({ item, label })}                 
+                            <span class="option">{@html label}</span>
+                        {/snippet}
                     </Autocomplete>
                 </div>
                 <div class="group">

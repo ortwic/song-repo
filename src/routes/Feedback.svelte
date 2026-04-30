@@ -5,6 +5,7 @@
     import { format } from 'fecha';
     import FirestoreService from "../service/firestore.service";
     import { showError } from '../store/notification.store';
+    import TitlebarMenu from '../components/menus/TitlebarMenu.svelte';
 
     const store = new FirestoreService('feedback');
     let sent = $state(false);
@@ -60,9 +61,9 @@
 </style>
 
 <main class="content dialog">
-    <div class="titlebar">
+    <TitlebarMenu>
         <i class="bx bx-mail-send"></i>&nbsp; { $t('feedback.submit')}
-    </div>
+    </TitlebarMenu>
     <form onsubmit={preventDefault(handleForm)}>
         <div class="section">
             {#if !sent}
