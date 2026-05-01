@@ -7,7 +7,7 @@
     import type { CellComponent, CellEditEventCallback } from 'tabulator-tables';
     import TitlebarMenu from '../components/menus/TitlebarMenu.svelte';
     import type { ColumnDefinition } from '../components/table/tabulator/types';
-    import { column, createEditor } from '../components/table/templates/column.helper';
+    import { createColumnBuilder, createEditor } from '../components/table/templates/column.helper';
     import { autoFilter, rangeFilter } from '../components/table/templates/filter.helper';
     import { groupByFormatter } from '../components/table/templates/Formatter.class';
     import Table from '../components/table/Table.svelte';
@@ -38,6 +38,7 @@
     const clickMenu = !readonly ? buildActionMenu : () => undefined;
     const songs = service.usersongs;
     const prompt = getContext<Dialog<string>>('resource-prompt');
+    const column = createColumnBuilder(actions);
 
     const genreList = genres.map((v) => v.name);
     const editor = createEditor(updateHandler(), readonly);

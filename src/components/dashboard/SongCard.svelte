@@ -50,12 +50,8 @@
 
     async function handleProgressChange(e: CustomEvent<number[]>) {
         const [newValue, oldValue] = e.detail;
-        const newStatus = await actions.updateProgress(song, newValue, oldValue);
-        if (newStatus) {
-            song = { ...song, progress: newValue, status: newStatus };
-        } else {
-            song = { ...song, progress: newValue };
-        }
+        await actions.updateProgress(song, newValue, oldValue);
+        song = { ...song, progress: newValue };
     }
 
     async function handleStatusChange(status: string) {

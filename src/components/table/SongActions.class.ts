@@ -45,7 +45,7 @@ export const SEARCH_ACTIONS: SearchAction[] = [
 ];
 
 export class SongActions {
-    constructor(private service: SongService) {}
+    constructor(public service: SongService) {}
 
     openUri(song: UserSong): void {
         if (!song.uri) return;
@@ -79,22 +79,30 @@ export class SongActions {
         await this.service.setSong(song);
     }
 
-    static deriveStatus(newValue: number, oldValue: number): Status | undefined {
-        if (newValue > 90)        return 'done';
-        if (newValue < 10)        return 'archived';
-        if (newValue < oldValue)  return 'repeat';
-        if (newValue > oldValue)  return 'wip';
-        return undefined;
+    deriveStatusFromProgress(song: UserSong, newValue: number, oldValue: number): boolean {
+        if (newValue > 90 && song.status !== 'done') {
+            song.status = 'done';
+            return true;
+        }
+        if (newValue < 10 && song.status !== 'archived') {
+            song.status = 'archived';
+            return true;
+        }
+        if (newValue < oldValue && song.status !== 'repeat') {
+            song.status = 'repeat';
+            return true;
+        }
+        if (newValue > oldValue && song.status !== 'wip') {
+            song.status = 'wip';
+            return true;
+        }
+        return false;
     }
 
-    async updateProgress(song: UserSong, newValue: number, oldValue: number): Promise<Status | undefined> {
+    async updateProgress(song: UserSong, newValue: number, oldValue: number): Promise<void> {
         song.progress = newValue;
-        const newStatus = SongActions.deriveStatus(newValue, oldValue);
-        if (newStatus) {
-            song.status = newStatus ?? song.status;
-        }
+        this.deriveStatusFromProgress(song, newValue, oldValue);
         await this.service.setSong(song);
-        return newStatus;
     }
 
     async delete(song: UserSong): Promise<void> {

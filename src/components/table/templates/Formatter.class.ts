@@ -11,6 +11,8 @@ import { status } from '../../../model/types';
 import { genreColor, redToGreenGradient, redToGreenRange } from '../../../styles/style.helper';
 
 export default class Formatter {
+    constructor(private actions: SongActions) {}
+
     get default(): Partial<ColumnDefinition> { 
         return { }; 
     }
@@ -58,6 +60,11 @@ export default class Formatter {
     }
 
     get progress(): Partial<ColumnDefinition> { 
+        const {
+            deriveStatusFromProgress,
+            service
+        } = this.actions;
+        
         const progress = (data: UserSong) => {
             if (data.progress > 0) {
                 const value = Math.floor((data.progress - 1) / 10) * 10 + 1;
@@ -76,8 +83,9 @@ export default class Formatter {
                 bar.addEventListener('change', (ev: CustomEvent<number[]>) => {
                     const [newValue, oldValue] = ev.detail;
                     cell.setValue(newValue);
-                    song.status = SongActions.deriveStatus(newValue, oldValue) ?? song.status;
-                    cell.getRow().reformat();
+                    deriveStatusFromProgress(song,newValue, oldValue);
+                    service.setSong(song)
+                        .then(() => cell.getRow().reformat());
                 });
                 return bar;
             },
@@ -205,10 +213,6 @@ export default class Formatter {
                 return value ? DateTime.fromJSDate(toDate(value)).toISODate() : '';
             },
         }; 
-    }
-
-    static get(key: keyof Formatter) {
-        return new Formatter()[key];
     }
 }
 

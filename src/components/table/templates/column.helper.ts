@@ -1,7 +1,7 @@
-import type { CellComponent, CellEditEventCallback, ColumnComponent, Editor, ListEditorParams, RowComponent, SortDirection } from 'tabulator-tables';
+import type { CellEditEventCallback, ColumnComponent, Editor, ListEditorParams, RowComponent, SortDirection } from 'tabulator-tables';
 import type { ColumnDefinition } from '../tabulator/types';
-import { autoFilter } from './filter.helper';
-import Format from './Formatter.class';
+import Formatter from './Formatter.class';
+import { SongActions } from '../SongActions.class';
 import type { MessageFormatter } from '../../../service/i18n.setup';
 
 type Sorter =
@@ -25,58 +25,33 @@ type Sorter =
         sorterParams: NonNullable<unknown>,
     ) => number);
 
-export const column = (
-    t: string | MessageFormatter,
-    responsive: number,
-    field: string,
-    width: string,
-    sorter: Sorter,
-    format: keyof Format,
-    ...more: Partial<ColumnDefinition>[]
-): ColumnDefinition => {
-    const title = typeof t === 'string' ? t : t(`songs.columns.${field}`);
-    return Object.assign(
-        {
-            title,
-            field,
-            width,
-            sorter,
-            responsive,
-            resizable: true,
-            headerMenu: [],
-        },
-        Format.get(format),
-        ...more
-    );
-};
-
-export const autoColumns = <T>(data: T[]): ColumnDefinition[] => {
-    if (data.length) {
-        const total = Object.keys(data[0]).length;
-        const column = (key: string) => {
-            const def = {
-                title: key,
-                field: key,
-                width: total < 6 ? `${100 / total}%` : '18%',
-                editor: 'input',
+export function createColumnBuilder(actions: SongActions) {
+    const formatter = new Formatter(actions);
+    return (
+        t: string | MessageFormatter,
+        responsive: number,
+        field: string,
+        width: string,
+        sorter: Sorter,
+        formatKey: keyof Formatter,
+        ...more: Partial<ColumnDefinition>[]
+    ): ColumnDefinition => {
+        const title = typeof t === 'string' ? t : t(`songs.columns.${field}`);
+        return Object.assign(
+            {
+                title,
+                field,
+                width,
+                sorter,
+                responsive,
                 resizable: true,
-                ...autoFilter(),
-            };
-            if (Array.isArray(data[0][key])) {
-                def.formatter = Format.get('label').formatter;
-            } else if (typeof data[0][key] === 'object') {
-                def.formatter = (cell: CellComponent) => {
-                    const value = cell.getValue();
-                    return JSON.stringify(value, null, 2);
-                };
-            }
-            return def as ColumnDefinition;
-        };
-        if (total) {
-            return Object.keys(data[0]).map(column);
-        }
-    }
-};
+                headerMenu: [],
+            },
+            formatter[formatKey],
+            ...more
+        );
+    };
+}
 
 export function createEditor(cellEdited: CellEditEventCallback, readonly = false) {  
     const listParams = (values?: string[]) => {
