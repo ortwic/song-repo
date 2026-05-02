@@ -1,8 +1,6 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
-    import { getContext } from 'svelte';
     import type { UserSong } from '../../model/song.model';
-    import type { Dialog } from '../../model/dialog.model';
     import { type Status, status as statusKeys } from '../../model/types';
     import SongService from '../../service/user-song.service';
     import { genreColor } from '../../styles/style.helper';
@@ -18,8 +16,6 @@
     let { song = $bindable() }: Props = $props();
 
     const actions = new SongActions(new SongService());
-    const prompt = getContext<Dialog<string>>('resource-prompt');
-
     const asArray = <T,>(obj: T) => (Array.isArray(obj) ? obj : [obj]);
     const signature = [song.key, song.time, song.bpm].filter(Boolean).join(' | ');
 
@@ -48,11 +44,12 @@
     }
 
     async function handleChangeResource() {
-        const result = await prompt.showDialog(song.uri);
-        if (result !== null) {
-            await actions.setUri(song, result);
-            song = { ...song, uri: result };
-        }
+        const uri = await actions.setUri(song);
+        song = { ...song, uri };
+    }
+
+    async function handleEditEntry() {
+        await actions.editSong(song);
     }
 
     async function handleProgressChange(e: CustomEvent<number[]>) {
@@ -131,7 +128,7 @@
         </button>
         <button
             class="clear sm max-width"
-            title={song.uri ? $t('songs.menu.open') : $t('songs.menu.change-resource')}
+            title={song.uri ? $t('songs.menu.open') : $t('songs.menu.edit-resource')}
             on:click={() => handlePrimary()}
         >
             <i class="icon bx {song.uri ? 'bx-link-external' : 'bx-unlink'}"></i>
@@ -170,10 +167,15 @@
     </PopupMenu>
 
     <PopupMenu bind:this={morePopupMenu}>
-        <button class="option" title="{$t('songs.menu.change-resource"')}"
+        <button class="option" title="{$t('songs.menu.edit')}"
+            on:click={handleEditEntry}>
+            <i class="bx bx-edit"></i>
+            {$t('songs.menu.edit')}
+        </button>
+        <button class="option" title="{$t('songs.menu.edit-resource"')}"
             on:click={handleChangeResource}>
             <i class="bx bx-link"></i>
-            {$t('songs.menu.change-resource')}
+            {$t('songs.menu.edit-resource')}
         </button>
         <button class="option" on:click={() => deleteDialogVisible = true}>
             <i class="bx bx-trash"></i>

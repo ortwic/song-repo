@@ -1,5 +1,7 @@
+import { getContext } from 'svelte';
 import { logAction } from '../../store/notification.store';
 import { showError } from '../../store/notification.store';
+import type { Dialog } from '../../model/dialog.model';
 import type { UserSong } from '../../model/song.model';
 import type { Status } from '../../model/types';
 import type SongService from '../../service/user-song.service';
@@ -45,6 +47,9 @@ export const SEARCH_ACTIONS: SearchAction[] = [
 ];
 
 export class SongActions {
+    readonly resourceDialog = getContext<Dialog<string>>('resource-dialog');
+    readonly editSongDialog = getContext<Dialog<UserSong>>('editsong-dialog');
+
     constructor(public service: SongService) {}
 
     openUri(song: UserSong): void {
@@ -62,11 +67,20 @@ export class SongActions {
         window.open(action.url(song), '_blank');
     }
 
-    async setUri(song: UserSong, uri: string): Promise<void> {
-        if (uri && song.uri !== uri) {
+    async editSong(song: UserSong): Promise<void> {
+        const editedSong = await this.editSongDialog.open(song);
+        if (editedSong) {
+            await this.service.setSong(editedSong);
+        }
+    }
+
+    async setUri(song: UserSong): Promise<string> {
+        const uri = await this.resourceDialog.open(song.uri);
+        if (uri !== null && song.uri !== uri) {
             song.uri = uri;
             await this.service.setSong(song);
         }
+        return song.uri;
     }
 
     async toggleFavorite(song: UserSong): Promise<void> {

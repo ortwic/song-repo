@@ -1,9 +1,7 @@
 <script lang="ts">
     import 'tabulator-tables/dist/css/tabulator_bulma.min.css';
     import '../styles/table.scss';
-    import { getContext } from 'svelte';
     import { t } from 'svelte-i18n';
-    import { location } from 'svelte-spa-router';
     import type { CellComponent, CellEditEventCallback } from 'tabulator-tables';
     import TitlebarMenu from '../components/menus/TitlebarMenu.svelte';
     import type { ColumnDefinition } from '../components/table/tabulator/types';
@@ -11,15 +9,12 @@
     import { autoFilter, rangeFilter } from '../components/table/templates/filter.helper';
     import { groupByFormatter } from '../components/table/templates/Formatter.class';
     import Table from '../components/table/Table.svelte';
-    import AddButton from '../components/ui/AddButton.svelte';
-    import AddEntry from '../components/table/AddEntry.svelte';
     import FileDrop from '../components/table/FileDrop.svelte';
     import { SongActions } from '../components/table/SongActions.class';
     import { buildActionMenu } from '../components/table/templates/actionMenu.helper';
     import { summaryFormatter } from '../components/table/templates/responsive.helper';
     import SongService, { viewStoreId } from '../service/user-song.service';
     import type { MessageFormatter } from '../service/i18n.setup';
-    import type { Dialog } from '../model/dialog.model';
     import type { UserSong } from '../model/song.model';
     import type { TableView } from '../model/table-view.model';
     import { showError, showInfo } from '../store/notification.store';
@@ -35,15 +30,12 @@
     const sharedUid = params.id?.slice(1);
     const service = new SongService(sharedUid);
     const actions = new SongActions(service);
-    const clickMenu = !readonly ? buildActionMenu : () => undefined;
+    const actionMenu = buildActionMenu(actions, $t);
     const songs = service.usersongs;
-    const prompt = getContext<Dialog<string>>('resource-prompt');
     const column = createColumnBuilder(actions);
 
     const genreList = genres.map((v) => v.name);
     const editor = createEditor(updateHandler(), readonly);
-
-    let addEntryVisible = $state(false);
 
     // https://tabulator.info/docs/5.4/edit#editor-list
     const columns = (t: MessageFormatter): ColumnDefinition[] => [
@@ -57,12 +49,12 @@
         },
         column('Σ', 0, '__summary', undefined, 'string', 'default', summaryFormatter(readonly), {
             visible: false,
-            clickMenu: clickMenu(actions, t, () => prompt),
+            clickMenu: !readonly ? actionMenu : undefined,
         }),
         column('✮', -1, 'fav', '50', undefined, 'favorite', editor()),
         column(t, -1, 'status', '50', 'string', 'status', autoFilter(), editor(), {
             visible: !readonly,
-            clickMenu: clickMenu(actions, t, () => prompt),
+            clickMenu: !readonly ? actionMenu : undefined,
             hozAlign: 'center',
         }),
         column('#', -1, 'progressLogs', '50', 'array', 'length', {
@@ -153,15 +145,6 @@
         />
     </FileDrop>
 </main>
-
-{#if !readonly}
-    <footer>
-        {#if !service.isShared()}
-            <AddButton title={$t('songs.add-new')} on:click={() => (addEntryVisible = true)} />
-        {/if}
-        <AddEntry bind:visible={addEntryVisible} />
-    </footer>
-{/if}
 
 <style lang="scss">
     footer {

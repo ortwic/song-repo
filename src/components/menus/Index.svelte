@@ -8,7 +8,7 @@
     import SignupMenu from './SignupMenu.svelte';
     import ProfileMenu from './ProfileMenu.svelte';
     import ShareMenu from './ShareMenu.svelte';
-    import BackupMenu from './BackupMenu.svelte';
+    import TableMenu from './TableMenu.svelte';
     import ColumnMenu from './ColumnMenu.svelte';
     import EventListMenu from './EventListMenu.svelte';
     import MenuDrawer from '../ui/elements/MenuDrawer.svelte';
@@ -44,7 +44,7 @@
         {/if}
 
         {#if $isTableView}
-            <BackupMenu exportTitle="{ $t('menu.table.exportTitle') }" />
+            <TableMenu exportTitle="{ $t('menu.table.exportTitle') }" />
             <ColumnMenu />
         {:else if $isBlogView}
             <TagCloud />

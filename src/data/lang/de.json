@@ -107,7 +107,7 @@
       "search-tutorial": "Tutorial suchen",
       "search-lyrics": "Songtexte suchen",
       "search-midi-file": "Midi-Dateien suchen",
-      "change-resource": "Ressource ändern",
+      "edit-resource": "Ressource ändern",
       "toggle-favorite": "Favorit umschalten",
       "change-status": "Status ändern",
       "delete": "Löschen?",
@@ -115,7 +115,8 @@
       "no": "Nein",
       "set-resource": "Ressource festlegen",
       "more": "Mehr...",
-      "delete-confirm": "Song wirklich löschen?"
+      "delete-confirm": "Song wirklich löschen?",
+      "edit": "Eintrag bearbeiten"
     },
     "resource": {
       "title": "Geben Sie den Ressourcenpfad ein",

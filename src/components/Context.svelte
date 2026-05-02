@@ -1,22 +1,29 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
     import { setContext } from 'svelte';
-    import Prompt from './dialogs/PromptDialog.svelte';
+    import PromptDialog from './dialogs/PromptDialog.svelte';
+    import EditSongDialog from './dialogs/EditSongDialog.svelte';
     import type { Dialog } from '../model/dialog.model';
+    import type { UserSong } from '../model/song.model';
     interface Props {
         children?: import('svelte').Snippet;
     }
 
     let { children }: Props = $props();
 
-    let prompt: Dialog<string> = $state();
+    let prompt: PromptDialog = $state();
+    let editSong: EditSongDialog = $state();
 
-    setContext('resource-prompt', {
-        showDialog: (uri: string) => prompt.showDialog(uri)
+    setContext<Dialog<string>>('resource-dialog', {
+        open: (uri: string) => prompt.showDialog(uri)
+    });
+
+    setContext<Dialog<Partial<UserSong>>>('editsong-dialog', {
+        open: (song?: Partial<UserSong>) => editSong.showDialog(song)
     });
 </script>
 
-<Prompt
+<PromptDialog
     bind:this={prompt}
     type="url"
     placeholder="https://example.com/files/sheet-music.pdf"
@@ -27,7 +34,9 @@
         <i class="bx bx-info-circle"></i>
         {$t('songs.resource.info')}
     </div>
-</Prompt>
+</PromptDialog>
+
+<EditSongDialog bind:this={editSong} />
 
 {@render children?.()}
 

@@ -4,7 +4,7 @@
     const bubble = createBubbler();
     import { t } from 'svelte-i18n';
     import Autocomplete from 'simple-svelte-autocomplete/src/SimpleAutocomplete.svelte';
-    import ConfirmDialog from "../dialogs/ConfirmDialog.svelte";
+    import ConfirmDialog from "./ConfirmDialog.svelte";
     import Image from "../ui/elements/Image.svelte";
     import SelectKey from '../ui/SelectKey.svelte';
     import LoadingBar from '../ui/elements/LoadingBar.svelte';
@@ -17,10 +17,7 @@
     import { logAction } from '../../store/notification.store';
     import { derived, writable } from "svelte/store";
     import PopupMenu from "../ui/PopupMenu.svelte";
-
-    let {
-        visible = $bindable(false)
-    }: { visible: boolean } = $props();
+    import { createDeferred } from '../../utils/promise.helper';
     
     const required = true;
     const songService = new SongService();
@@ -28,6 +25,7 @@
     const searchService = derived([currentSearchEngine, settingsStore], ([e, s]) => create(e, s[e]));
     let selectSearchEngine = $state(({}) => {});
     let form: HTMLFormElement = $state();
+    let visible = $state(false);
 
     let newSong: Partial<UserSong> = $state();
     const styles = (genre: string) => (genres.find(v => v.name === genre) ?? genres[0]).styles;
@@ -35,14 +33,27 @@
 
     reset();
     
-    async function done(confirm: boolean): Promise<void> {
-        if (!confirm) {
+    let deferred: ReturnType<typeof createDeferred<UserSong>> | null = null;
+
+    export function showDialog(initial?: Partial<UserSong>): Promise<UserSong> {
+        // TODO fill form
+        console.log('initial', initial);
+        
+        deferred = createDeferred<UserSong>();
+        newSong = initial ?? { features: [], tags: [] };
+        visible = true;
+        return deferred.promise;
+    }
+    
+    function done(confirmed: boolean): void {
+        if (!confirmed) {
+            deferred?.resolve(null);
             reset();
         } else if (form.checkValidity()) {
             if (label) {
                 newSong.tags.push(label);
             }
-            await songService.addSong(newSong);
+            deferred?.resolve(newSong as UserSong);
 
             reset();
         }

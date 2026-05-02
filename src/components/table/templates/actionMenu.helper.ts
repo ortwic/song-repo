@@ -1,22 +1,10 @@
 import type { CellComponent, MenuObject, MenuSeparator } from 'tabulator-tables';
-import type { Dialog } from '../../../model/dialog.model';
 import type { UserSong } from '../../../model/song.model';
 import type { MessageFormatter } from '../../../service/i18n.setup';
 import { SEARCH_ACTIONS, SongActions } from '../SongActions.class';
-import { showError } from '../../../store/notification.store';
 
-export function buildActionMenu(actions: SongActions, t: MessageFormatter, getDialog: () => Dialog<string>): Array<MenuObject<CellComponent> | MenuSeparator> {
-    const promptResource = async (song: UserSong) => {
-        const result = await getDialog().showDialog(song.uri);
-        if (result !== null) {
-            try {
-                await actions.setUri(song, result);
-            } catch (error) {
-                showError(error.message);
-            }
-        }
-    };
-
+export function buildActionMenu(actions: SongActions, t: MessageFormatter): Array<MenuObject<CellComponent> | MenuSeparator> {
+    const changeResource = async (song: UserSong) => await actions.setUri(song);
     const cell = (c: CellComponent) => c.getData() as UserSong;
     const reformat = (c: CellComponent) => c.getRow().reformat();
 
@@ -25,7 +13,7 @@ export function buildActionMenu(actions: SongActions, t: MessageFormatter, getDi
             label: `<i class='bx bx-link-external'></i> <b>${t('songs.menu.open')}</b>`,
             action(e, c) {
                 const song = cell(c);
-                song.uri ? void (actions.openUri(song)) : promptResource(song);
+                song.uri ? void (actions.openUri(song)) : changeResource(song);
             }
         },
         {
@@ -36,8 +24,8 @@ export function buildActionMenu(actions: SongActions, t: MessageFormatter, getDi
             })),
         },
         {
-            label: `<i class='bx bx-link'></i> ${t('songs.menu.change-resource')}`,
-            action: (e, c) => promptResource(cell(c)),
+            label: `<i class='bx bx-link'></i> ${t('songs.menu.edit-resource')}`,
+            action: (e, c) => changeResource(cell(c)),
         },
         { separator: true },
         {

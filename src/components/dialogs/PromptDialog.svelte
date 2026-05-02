@@ -35,28 +35,26 @@
         return deferred.promise;
     }
 
+    function done(confirm: boolean): void {
+        if (deferred) {
+            if (!confirm) {
+                deferred.resolve(null);
+            } else {
+                deferred.resolve(input.value);
+            }
+
+            visible = false;
+            form.reset();
+            deferred = null;
+        }
+    }
+
     function handleDrop(event: DragEvent) {
         for (const item of event.dataTransfer.items) {
             if (item.kind === 'string') {
                 item.getAsString(s => (input.value = s));
             }
         }
-    }
-
-    function done(confirm: boolean): void {
-        if (!deferred) return;
-
-        if (!confirm) {
-            deferred.resolve(null);
-        } else if (form.checkValidity()) {
-            deferred.resolve(input.value);
-        } else {
-            return;
-        }
-
-        visible = false;
-        form.reset();
-        deferred = null;
     }
 </script>
 
