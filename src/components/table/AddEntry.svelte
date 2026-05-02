@@ -98,9 +98,8 @@
 
 </script>
 
-{#if visible}
 <form bind:this={form} onsubmit={preventDefault(bubble('submit'))}>
-    <ConfirmDialog size='full' onClose={done}>
+    <ConfirmDialog {visible} size='full' onClose={done}>
         {#snippet header()}
         <div class="title" >
                 <i class="bx bx-search-alt-2"></i>&nbsp; { $t('songs.addTitle') } 
@@ -235,7 +234,6 @@
         {/if}
     </ConfirmDialog>
 </form>
-{/if}
 
 <style lang="scss">
 :root {

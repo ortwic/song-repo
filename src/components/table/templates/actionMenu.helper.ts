@@ -8,10 +8,12 @@ import { showError } from '../../../store/notification.store';
 export function buildActionMenu(actions: SongActions, t: MessageFormatter, getDialog: () => Dialog<string>): Array<MenuObject<CellComponent> | MenuSeparator> {
     const promptResource = async (song: UserSong) => {
         const result = await getDialog().showDialog(song.uri);
-        try {
-            await actions.setUri(song, result);
-        } catch (error) {
-            showError(error.message);
+        if (result !== null) {
+            try {
+                await actions.setUri(song, result);
+            } catch (error) {
+                showError(error.message);
+            }
         }
     };
 

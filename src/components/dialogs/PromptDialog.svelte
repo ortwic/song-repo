@@ -1,11 +1,10 @@
 <script lang="ts">
-    import { createBubbler, preventDefault } from 'svelte/legacy';
-
-    const bubble = createBubbler();
-    import ConfirmDialog from "./ConfirmDialog.svelte"
+    import { preventDefault } from 'svelte/legacy';
+    import ConfirmDialog from "./ConfirmDialog.svelte";
     import { createDeferred } from '../../utils/promise.helper';
-    
-    type InputType = 'text' | 'numer' | 'date' | 'email' | 'url';
+
+    type InputType = 'text' | 'number' | 'date' | 'email' | 'url';
+
     interface Props {
         caption?: string;
         title?: string;
@@ -19,46 +18,50 @@
         title = '',
         type = 'text',
         placeholder = '',
-        children
+        children,
     }: Props = $props();
-    
+
     let result = $state('');
-    const { promise, resolve } = createDeferred<string>();
     let form: HTMLFormElement = $state();
     let input: HTMLInputElement = $state();
     let visible = $state(false);
 
+    let deferred: ReturnType<typeof createDeferred<string>> | null = null;
+
     export function showDialog(initial = ''): Promise<string> {
-        visible = true;
+        deferred = createDeferred<string>();
         result = initial;
-        return promise;
+        visible = true;
+        return deferred.promise;
     }
 
     function handleDrop(event: DragEvent) {
         for (const item of event.dataTransfer.items) {
             if (item.kind === 'string') {
-                item.getAsString(s => input.value = s);
+                item.getAsString(s => (input.value = s));
             }
         }
     }
 
     function done(confirm: boolean): void {
+        if (!deferred) return;
+
         if (!confirm) {
-            resolve(null);
+            deferred.resolve(null);
         } else if (form.checkValidity()) {
-            resolve(input.value);
+            deferred.resolve(input.value);
         } else {
             return;
         }
 
         visible = false;
         form.reset();
+        deferred = null;
     }
 </script>
 
-{#if visible}
 <form bind:this={form} onsubmit={preventDefault(bubble('submit'))}>
-    <ConfirmDialog size='auto' {title} onClose={done}>
+    <ConfirmDialog size='auto' {title} {visible} onClose={done}>
         {@render children?.()}
         <section aria-hidden="true"
             ondragover={preventDefault(() => { })} 
@@ -72,7 +75,6 @@
         </section>
     </ConfirmDialog>
 </form>
-{/if}
 
 <style lang="scss">
 section {

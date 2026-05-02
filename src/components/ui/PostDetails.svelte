@@ -44,8 +44,7 @@
     {/if}
 </summary>
 
-{#if visible}
-<ConfirmDialog size="full" onClose={hide}>
+<ConfirmDialog size="full" onClose={hide} {visible}>
     {#snippet header()}
         <i class="bx bx-detail"></i> {title} 
     {/snippet}
@@ -83,7 +82,6 @@
         
             {/snippet}
 </ConfirmDialog>
-{/if}
 
 <style lang="scss">
     h2 {

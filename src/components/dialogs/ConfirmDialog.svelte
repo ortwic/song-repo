@@ -10,6 +10,7 @@
         size: 'auto' | 'max' | 'full';
         target?: MenuTarget;
         title?: string;
+        visible?: boolean;
         header?: import('svelte').Snippet;
         children?: import('svelte').Snippet;
         footer?: import('svelte').Snippet;
@@ -20,6 +21,7 @@
         size,
         target = 'hidden',
         title = '',
+        visible = false,
         header,
         children,
         footer,
@@ -37,28 +39,30 @@
     }
 </script>
 
-<Portal>
-    <div class='dialog {size}'
-    in:fade={{ duration: 200, easing: cubicOut }} 
-    out:fade={{ duration: 200, easing: cubicOut }}>
-    <Titlebar {target} onClose={() => onClose(false)}>
-        {@render header?.()} {title}
-    </Titlebar>
-    {@render children?.()}
-    {#if footer}{@render footer()}{:else}
-        <div class="row">
-            <button data-target={target} onclick={confirm}>
-                { $t('dialog.confirm') }
-            </button>
-            <button data-target={target} onclick={decline}>
-                { $t('dialog.decline') }
-            </button>
+{#if visible}
+    <Portal>
+        <div class='dialog {size}'
+        in:fade={{ duration: 200, easing: cubicOut }} 
+        out:fade={{ duration: 200, easing: cubicOut }}>
+        <Titlebar {target} onClose={() => onClose(false)}>
+            {@render header?.()} {title}
+        </Titlebar>
+        {@render children?.()}
+        {#if footer}{@render footer()}{:else}
+            <div class="row">
+                <button data-target={target} onclick={confirm}>
+                    { $t('dialog.confirm') }
+                </button>
+                <button data-target={target} onclick={decline}>
+                    { $t('dialog.decline') }
+                </button>
+            </div>
+        {/if}
         </div>
+    </Portal>
+    {#if size == 'auto'}
+    <div class='backdrop'></div>
     {/if}
-    </div>
-</Portal>
-{#if size == 'auto'}
-<div class='backdrop'></div>
 {/if}
 
 <style lang="scss">

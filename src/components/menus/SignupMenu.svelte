@@ -90,12 +90,11 @@
             </span>
         </button>
 
-        {#if page}
-        <ConfirmDialog title='{ $t('menu.login.read-carefully') }' target='signup' size='full' onClose={confirm}>
+        <ConfirmDialog title='{ $t('menu.login.read-carefully') }' 
+            visible={!!page} target='signup' size='full' onClose={confirm}>
             <object title="Embedded page '{page}'" data="/docs/{page}{lang.startsWith('de') ? '_de' : ''}.html">
             </object>
         </ConfirmDialog>
-        {/if}
     </div>
     <div class="row">
         <button data-close={valid ? '' : undefined} title="{ $t('menu.login.signup') }" onclick={signUp} 
