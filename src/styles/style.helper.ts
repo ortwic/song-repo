@@ -8,10 +8,21 @@ export function getCssVariable(name: string): string {
     return getComputedStyle(root).getPropertyValue(name);
 }
 
-export const genreColor = (name: string) => {
+export const genreColor = (name: string): string => {
     const genre = genres.find((v) => v.name.toLowerCase() == name?.toLowerCase());
-    return genre && colornames[genre.color.toLowerCase()];
+    return genre && colornames[genre.color.toLowerCase()] || generateColorCode(name);
 };
+
+function generateColorCode(name: string) {
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+        hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const r = (hash >> 16) & 0xff;
+    const g = (hash >> 8) & 0xff;
+    const b = hash & 0xff;
+    return `#${[r, g, b].map((v) => v.toString(16).padStart(2, '0')).join('')}`;
+}
 
 export const redToGreenRange = (value: number, maxLight = 50, minLight = 36, margin = 25) => {
     const greenMax = 1.2;
