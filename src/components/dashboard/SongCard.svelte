@@ -1,14 +1,15 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
-    import type { UserSong } from '../../model/song.model';
-    import { type Status, status as statusKeys } from '../../model/types';
-    import { toDate } from '../table/templates/Formatter.class';
-    import { genreColor } from '../../styles/style.helper';
-    import SongService from '../../service/user-song.service';
-    import { SEARCH_ACTIONS, SongActions } from '../table/SongActions.class';
     import { getContext } from 'svelte';
+    import type { UserSong } from '../../model/song.model';
     import type { Dialog } from '../../model/dialog.model';
+    import { type Status, status as statusKeys } from '../../model/types';
+    import SongService from '../../service/user-song.service';
+    import { genreColor } from '../../styles/style.helper';
+    import ConfirmDialog from '../dialogs/ConfirmDialog.svelte';
     import PopupMenu from '../ui/PopupMenu.svelte';
+    import { toDate } from '../table/templates/Formatter.class';
+    import { SEARCH_ACTIONS, SongActions } from '../table/SongActions.class';
 
     interface Props {
         song: UserSong;
@@ -24,6 +25,8 @@
 
     let searchPopupMenu: PopupMenu = $state();
     let statusPopupMenu: PopupMenu = $state();
+    let morePopupMenu: PopupMenu = $state();
+    let deleteDialogVisible = $state(false);
 
     function getGenreStyles(genre: string) {
         const hex = genreColor(genre);
@@ -40,11 +43,15 @@
         if (song.uri) {
             actions.openUri(song);
         } else {
-            const result = await prompt.showDialog('');
-            if (result) {
-                await actions.setUri(song, result);
-                song = { ...song, uri: result };
-            }
+            await handleChangeResource();
+        }
+    }
+
+    async function handleChangeResource() {
+        const result = await prompt.showDialog(song.uri);
+        if (result !== null) {
+            await actions.setUri(song, result);
+            song = { ...song, uri: result };
         }
     }
 
@@ -57,6 +64,14 @@
     async function handleStatusChange(status: string) {
         await actions.changeStatus(song, status as Status);
         song = { ...song, status: status as Status };
+    }
+
+    function handleDelete(confirm: boolean) {
+        if (confirm) {
+            actions.delete(song);
+        }
+        deleteDialogVisible = false;
+        
     }
 </script>
 
@@ -122,6 +137,13 @@
             <i class="icon bx {song.uri ? 'bx-link-external' : 'bx-unlink'}"></i>
             {song.uri ? $t('songs.menu.open') : $t('songs.menu.set-resource')}
         </button>
+        <button
+            class="clear sm"
+            title={$t('songs.menu.more')}
+            on:click={(e) => morePopupMenu.showPopupMenu(e)}
+        >
+            <i class="icon bx bx-dots-vertical-rounded"></i>
+        </button>
     </footer>
 
     <PopupMenu bind:this={searchPopupMenu}>
@@ -146,6 +168,26 @@
             </button>
         {/each}
     </PopupMenu>
+
+    <PopupMenu bind:this={morePopupMenu}>
+        <button class="option" title="{$t('songs.menu.change-resource"')}"
+            on:click={handleChangeResource}>
+            <i class="bx bx-link"></i>
+            {$t('songs.menu.change-resource')}
+        </button>
+        <button class="option" on:click={() => deleteDialogVisible = true}>
+            <i class="bx bx-trash"></i>
+            {$t('songs.menu.delete')}
+        </button>
+    </PopupMenu>
+
+    <ConfirmDialog size="auto"
+        title={$t('songs.menu.delete')}
+        visible={deleteDialogVisible}
+        onClose={handleDelete}
+    >
+        <p class="center">{$t('songs.menu.delete-confirm')}</p>
+    </ConfirmDialog>
 </article>
 
 <style lang="scss">

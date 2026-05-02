@@ -42,13 +42,13 @@
 
     {#if showFilter}
         <div class="controls" transition:slide={{ duration: 200, easing: cubicOut }}>
-            <input type="range" min="2" max={MAX} step="2" bind:value={limit} aria-label={$t('songs.recent-limit')} />
+            <input type="range" title={limit.toString()} min="2" max={MAX} step="2" bind:value={limit} aria-label={$t('songs.recent-limit')} />
             <span>
-                { $t(`songs.${!showDone ? 'incl-done' : 'excl-done'}`) }
+                <span>{ $t(`songs.${!showDone ? 'incl-done' : 'excl-done'}`) }</span>
+                <Switch title={ $t(`songs.${!showDone ? 'incl-done' : 'excl-done'}`) }
+                    state={showDone} icon='bx-check'
+                    onToggle={() => showDone = !showDone} />
             </span>
-            <Switch title={ $t(`songs.${!showDone ? 'incl-done' : 'excl-done'}`) }
-                state={showDone} icon='bx-check'
-                onToggle={() => showDone = !showDone} />
         </div>
     {/if}
 
@@ -84,7 +84,8 @@
         display: flex;
         justify-content: flex-end;
         align-items: center;
-        gap: 8px;
+        gap: .6em;
+        padding: .6em 0;
 
         input[type='range'] {
             width: 80px;

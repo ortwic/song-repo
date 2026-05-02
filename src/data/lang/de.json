@@ -113,7 +113,9 @@
       "delete": "Löschen?",
       "yes": "Ja",
       "no": "Nein",
-      "set-resource": "Ressource festlegen"
+      "set-resource": "Ressource festlegen",
+      "more": "Mehr...",
+      "delete-confirm": "Song wirklich löschen?"
     },
     "resource": {
       "title": "Geben Sie den Ressourcenpfad ein",

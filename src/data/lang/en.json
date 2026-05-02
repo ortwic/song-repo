@@ -113,7 +113,9 @@
       "delete": "Delete?",
       "yes": "Yes",
       "no": "No",
-      "set-resource": "Set resource"
+      "set-resource": "Set resource",
+      "more": "More...",
+      "delete-confirm": "Really delete song?"
     },
     "resource": {
       "title": "Enter resource path",
