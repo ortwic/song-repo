@@ -140,7 +140,9 @@
     "recent-limit": "Recent limit",
     "incl-done": "Include done",
     "excl-done": "Exclude done",
-    "add-new": "Add song"
+    "add-new": "Add song",
+    "filter": "Show/Hide filter",
+    "shuffle-list": "Shuffle list"
   },
   "table": {
     "groupBy": "Group by {title}",

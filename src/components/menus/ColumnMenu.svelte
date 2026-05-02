@@ -38,7 +38,7 @@
     }
 
     function sortIcon(order: 'asc' | 'desc') {
-        return order === 'desc' ? 'bx bxs-chevron-down' : 'bx bxs-chevron-up';
+        return order === 'desc' ? 'bxs-chevron-down' : 'bxs-chevron-up';
     }
 
     function filterBy(column: string, value: string) {
@@ -63,35 +63,25 @@
             <p>
                 {#if !$view.useResponsiveLayout}
                 <Switch title="{ $t('menu.table.show-hide') } {col.title}"
-                    state={col.visible !== false}
-                    onToggle={() => $view?.table.getColumn(col.field).toggle()}>
-                    <i class="bx bx-show"></i> 
-                </Switch>
+                    state={col.visible !== false} icon="bx-show"
+                    onToggle={() => $view?.table.getColumn(col.field).toggle()} />
                 {/if}
                 <Switch title="{ $t('menu.table.sort-by') } {col.title}"
                     state={sortedFields[col.field] ?? null}
-                    options={[null, 'asc', 'desc']}
-                    onToggle={(dir) => sortBy(col.field, dir as SortDirection)}>
-                    <i class={sortIcon(sortedFields[col.field])}></i>
-                </Switch>
+                    options={[null, 'asc', 'desc']} icon={sortIcon(sortedFields[col.field])}
+                    onToggle={(dir) => sortBy(col.field, dir as SortDirection)} />
                 <Switch title="{ $t('menu.table.group-by') } {col.title}"
-                    state={$view?.groups.includes(col.field)}
-                    onToggle={() => $view?.toggleGroup(col.field)}>
-                    <i class="bx bx-collection bx-flip-vertical"></i> 
-                </Switch>
+                    state={$view?.groups.includes(col.field)} icon="bx-collection bx-flip-vertical"
+                    onToggle={() => $view?.toggleGroup(col.field)} />
                 {#if col.headerFilter === 'tickCross'}
                     <Switch title="{ $t('menu.table.filter-by') } {col.title}"
                         state={headerFilter[col.field] ?? undefined}
-                        options={[undefined, true, false]}
-                        onToggle={(state) => filterBy(col.field, state as string)}>
-                        <i class="bx bx-filter-alt"></i>
-                    </Switch>
+                        options={[undefined, true, false]} icon="bx-filter-alt"
+                        onToggle={(state) => filterBy(col.field, state as string)} />
                 {:else if filterListValues(col)}
                     <Switch title="{ $t('menu.table.filter-by') } {col.title}"
-                        state={!!headerFilter[col.field]}
-                        on:click={(event) => showPopupMenu(event, col.field)}>
-                        <i class="bx bx-filter-alt"></i>
-                    </Switch>
+                        state={!!headerFilter[col.field]} icon="bx-filter-alt"
+                        on:click={(event) => showPopupMenu(event, col.field)} />
                     <PopupMenu bind:this={menus[col.field]}>
                         <div class="y-flex">
                             <button class="option empty" onclick={() => filterBy(col.field, undefined)}>

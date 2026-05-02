@@ -140,7 +140,9 @@
     "recent-limit": "Anzahl Songs",
     "incl-done": "Mit Erledigten",
     "excl-done": "Ohne Erledigten",
-    "add-new": "Song hinzufügen"
+    "add-new": "Song hinzufügen",
+    "filter": "Filter ein-/ausblenden",
+    "shuffle-list": "Liste mischen"
   },
   "table": {
     "groupBy": "Gruppieren nach {title}",

@@ -3,17 +3,17 @@
 
     interface Props {
         title?: string;
+        icon?: string;
         state: unknown;
         options?: Array<unknown>;
-        children?: import('svelte').Snippet;
         onToggle?: (state: unknown) => void;
     }
 
     let {
         title = '',
+        icon = '',
         state = $bindable(),
         options = [false, true],
-        children,
         onToggle
     }: Props = $props();
     let index: number;
@@ -29,22 +29,12 @@
             onToggle(state);
         }
     }
-    
-    let selected = $derived(state ? 'selected' : 'disabled');
 </script>
 
-<button {title} class='sm clear {selected}' onclick={toggle}>
-    {#if children}
-        {@render children()}
-    {:else}
-        {state}
-    {/if}
+<button {title} 
+    class='switch-icon' 
+    class:selected={state} 
+    class:disabled={!state} 
+    onclick={toggle}>
+    <i class="bx {icon ?? 'bx-check'}"></i>
 </button>
-
-<style lang="scss">
-    button.selected {
-        color: var(--primary);
-        border-color: var(--primary);
-        background-color: white;
-    }
-</style>

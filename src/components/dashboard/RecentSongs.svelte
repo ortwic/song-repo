@@ -11,7 +11,7 @@
     import SongCard from './SongCard.svelte';
     import Switch from '../ui/elements/Switch.svelte';
 
-    const MAX = 12;
+    const MAX = 16;
 
     let showFilter = $state(false), limit = $state(4), showDone = $state(false);
 
@@ -33,25 +33,22 @@
 <section class="recent-songs">
     <header class="row">
         <div class="title"><i class="bx bxs-playlist"></i> {$t('songs.recent-wip')}</div>
-        <Switch title={$t('songs.filter')}
-                state={showFilter}
-                onToggle={() => showFilter = !showFilter}>
-            <i class="icon bx bx-filter"></i>
-        </Switch>
+        <span>
+            <Switch title={$t('songs.filter')}
+                    state={showFilter} icon="bx-filter"
+                    onToggle={() => showFilter = !showFilter} />
+        </span>
     </header>
 
     {#if showFilter}
         <div class="controls" transition:slide={{ duration: 200, easing: cubicOut }}>
             <input type="range" min="2" max={MAX} step="2" bind:value={limit} aria-label={$t('songs.recent-limit')} />
-            <span class="limit-val">{limit}</span>
-            <Switch title="{ $t(`songs.${!showDone ? 'incl-done' : 'excl-done'}`) }"
-                state={showDone}
-                onToggle={() => showDone = !showDone}>
-                <span>
-                    { $t(`songs.${!showDone ? 'incl-done' : 'excl-done'}`) }
-                </span>
-                <i class="icon bx" class:bx-check={!showDone} class:bx-x={showDone}></i> 
-            </Switch>
+            <span>
+                { $t(`songs.${!showDone ? 'incl-done' : 'excl-done'}`) }
+            </span>
+            <Switch title={ $t(`songs.${!showDone ? 'incl-done' : 'excl-done'}`) }
+                state={showDone} icon='bx-check'
+                onToggle={() => showDone = !showDone} />
         </div>
     {/if}
 
@@ -92,13 +89,6 @@
         input[type='range'] {
             width: 80px;
             accent-color: var(--primary);
-        }
-
-        .limit-val {
-            font-size: 13px;
-            color: var(--textghost);
-            min-width: 16px;
-            text-align: right;
         }
     }
 
