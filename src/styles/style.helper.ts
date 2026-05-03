@@ -10,7 +10,7 @@ export function getCssVariable(name: string): string {
 
 export const genreColor = (name: string): string => {
     const genre = genres.find((v) => v.name.toLowerCase() == name?.toLowerCase());
-    return genre && colornames[genre.color.toLowerCase()] || generateColorCode(name);
+    return genre && colornames[genre.color.toLowerCase()] || generateColorCode(name.toLocaleLowerCase());
 };
 
 function generateColorCode(name: string) {

@@ -3,6 +3,7 @@
     import { link } from 'svelte-spa-router';
     import RecentSongs from '../components/dashboard/RecentSongs.svelte';
     import Footer from '../components/ui/Footer.svelte';
+    import SearchSongs from '../components/dashboard/SearchSongs.svelte';
     import Welcome from '../components/dashboard/Welcome.svelte';
     import TitlebarMenu from '../components/menus/TitlebarMenu.svelte';
     import AuthService, { currentUser } from '../service/auth.service';
@@ -27,7 +28,12 @@
     </TitlebarMenu>
     <section>
         {#if $currentUser}
-        <RecentSongs />
+        <p>
+            <SearchSongs />
+        </p>
+        <p>
+            <RecentSongs />
+        </p>
         <div style="text-align: right;">
             <button class="clear" title={$t('profile.sign-out')} data-close onclick={signOut}>
                 <i class="bx bx-log-out-circle"></i> {$t('profile.sign-out')}

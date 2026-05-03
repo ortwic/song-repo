@@ -51,7 +51,11 @@
     },
     "imprint": "Imprint",
     "privacypolicy": "Privacy policy",
-    "termsofuse": "Terms of use"
+    "termsofuse": "Terms of use",
+    "search": {
+      "search-with": "Search with",
+      "custom": "Add custom song entry"
+    }
   },
   "feedback": {
     "submit": "Submit feedback",

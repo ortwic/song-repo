@@ -51,7 +51,11 @@
     },
     "imprint": "Impressum",
     "privacypolicy": "Datenschutz",
-    "termsofuse": "Nutzungsbedingungen"
+    "termsofuse": "Nutzungsbedingungen",
+    "search": {
+      "search-with": "Suche mit",
+      "custom": "Eigenen Songeintrag hinzufügen"
+    }
   },
   "feedback": {
     "submit": "Feedback senden",
