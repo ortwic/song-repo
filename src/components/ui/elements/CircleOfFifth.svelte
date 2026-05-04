@@ -40,33 +40,30 @@
     const center = 0.5 * size;
     const outerRadius = 0.4 * size;
     const innerRadius = 0.6 * outerRadius;
-    const lgCircleRadius = outerRadius * 1.2;
-    const mdCircleRadius = innerRadius * 1.3;
-    const smCircleRadius = innerRadius * 0.7;
-    const outerItemRadius = outerRadius * 0.18;
-    const innerItemRadius = innerRadius * 0.24;
+
     const calcX = (i: number, r: number) => center + r * Math.cos((dblPi * i) / 12 - halfPi);
     const calcY = (i: number, r: number) => center + r * Math.sin((dblPi * i) / 12 - halfPi);
-    
-    // HACK arrow functions inside onclick handlers not working anymore after svelte 5 migration
-    const majorHandlers = majorKeys.map((_, i) => () => selectedKey = majorKeys[i][0]);
-    const minorHandlers = minorKeys.map((_, i) => () => selectedKey = minorKeys[i][0]);
+
+    // Hilfsfunktion statt Array von Funktionen
+    const select = (key: string) => (selectedKey = key);
 </script>
 
 <svg viewBox="0 0 {size} {size}">
-    <circle r={lgCircleRadius} cx={center} cy={center} fill="Gainsboro" stroke="Silver" stroke-width=".4" />
-    <circle r={mdCircleRadius} cx={center} cy={center} fill="WhiteSmoke" />
-    <circle r={smCircleRadius} cx={center} cy={center} fill="white" stroke="Gainsboro" stroke-width=".4" />
-    {#each majorKeys as _, idx (idx)}
+    <circle r={outerRadius * 1.2} cx={center} cy={center} fill="Gainsboro" stroke="Silver" stroke-width=".4" />
+    <circle r={innerRadius * 1.3} cx={center} cy={center} fill="WhiteSmoke" />
+    <circle r={innerRadius * 0.7} cx={center} cy={center} fill="white" stroke="Gainsboro" stroke-width=".4" />
+
+    {#each majorKeys as keys, idx}
+        <!-- Minor Keys -->
         <!-- svelte-ignore a11y_click_events_have_key_events -->
         <g
             class="key"
             role="button"
             tabindex="0"
-            class:selectedKey={minorKeys[idx].includes(selectedKey)}
-            onclick={minorHandlers[idx]}
+            class:selectedKey={minorKeys[idx].includes(selectedKey ?? '')}
+            onclick={() => select(minorKeys[idx][0])}
         >
-            <circle class="minor" cx={calcX(idx, innerRadius)} cy={calcY(idx, innerRadius)} r={innerItemRadius} />
+            <circle cx={calcX(idx, innerRadius)} cy={calcY(idx, innerRadius)} r={innerRadius * 0.24} />
             <text
                 class="minor"
                 x={calcX(idx, innerRadius)}
@@ -78,15 +75,16 @@
             </text>
         </g>
 
+        <!-- Major Keys -->
         <!-- svelte-ignore a11y_click_events_have_key_events -->
         <g
             class="key"
             role="button"
             tabindex="0"
-            class:selectedKey={majorKeys[idx].includes(selectedKey)}
-            onclick={majorHandlers[idx]}
+            class:selectedKey={keys.includes(selectedKey ?? '')}
+            onclick={() => select(keys[0])}
         >
-            <circle class="major" cx={calcX(idx, outerRadius)} cy={calcY(idx, outerRadius)} r={outerItemRadius} />
+            <circle cx={calcX(idx, outerRadius)} cy={calcY(idx, outerRadius)} r={outerRadius * 0.18} />
             <text
                 class="major"
                 x={calcX(idx, outerRadius)}
@@ -94,7 +92,7 @@
                 text-anchor="middle"
                 dominant-baseline="middle"
             >
-                {majorKeys[idx][0]}
+                {keys[0]}
             </text>
         </g>
     {/each}
@@ -129,5 +127,9 @@
     g.selectedKey > text,
     g.selectedKey:hover > text {
         fill: var(--primback);
+    }
+
+    .key circle {
+        transition: fill 0.2s;
     }
 </style>
