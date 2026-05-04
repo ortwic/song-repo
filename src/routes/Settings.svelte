@@ -5,6 +5,7 @@
     import Profile from '../components/settings/Profile.svelte';
     import LinkHub from '../components/settings/LinkHub.svelte';
     import { slideFade } from '../components/ui/transition.helper';
+    import Expand from '../components/ui/Expand.svelte';
     import Footer from '../components/ui/Footer.svelte';
     import AuthService, { currentUser } from '../service/auth.service';
     import UserService from '../service/user.service';
@@ -38,35 +39,36 @@
     </TitlebarMenu>
     <section>
         {#if $currentUser}
-        <fieldset class="menu">
-            <legend>{$t('settings.profile')}</legend>
+        <Expand title={$t('settings.profile')}>
             <p>
                 <Profile />
             </p>
-            <hr/>
+        </Expand>
+
+        <Expand title="Linkhub">
             <p>
                 <LinkHub />
             </p>
-        </fieldset>
+        </Expand>
         {/if}
 
-        <fieldset>
-            <legend>{$t('settings.view')}</legend>
-            <div>
-                <span>{$t('settings.reset-text')}</span>
+        <Expand title={$t('settings.view')}>
+            <p>{$t('settings.reset-text')}</p>
+            <div class="right">
                 <button class="default" onclick={resetViews}>{$t('settings.reset-cookies')}</button>
             </div>
-        </fieldset>
+        </Expand>
 
         {#if $currentUser}
-            <fieldset class="menu danger">
-                <legend>{$t('settings.danger-zone')}</legend>
+            <Expand open={false} title={$t('settings.danger-zone')}>
                 <div class="section danger-text">
                     <span>
                         <input id="delete" type="checkbox" bind:checked={confirmDelete} />
                         <label for="delete">{$t('settings.delete-profile')}</label>
                         ({$t('settings.data-lost')})
                     </span>
+                </div>
+                <div class="right">
                     <button class="primary" disabled={!confirmDelete} onclick={deleteProfile}>
                         {$t('settings.delete-profile')}
                     </button>
@@ -78,7 +80,7 @@
                         </div>
                     </span>
                 {/if}
-            </fieldset>
+            </Expand>
         {/if}
     </section>
     <Footer>
@@ -93,7 +95,7 @@
         padding: 1em 5%;
         max-width: 40em;
 
-        fieldset,
+        Expand,
         div {
             margin: 1rem;
             text-align: left;
@@ -113,10 +115,6 @@
                 justify-content: space-between;
                 align-items: center;
             }
-        }
-
-        .danger {
-            border-color: red;
         }
 
         .warn {

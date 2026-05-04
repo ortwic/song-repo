@@ -21,7 +21,7 @@
 
 {#if minimal}
     <button class="clear float" title={$t('menu.open')} onclick={toggleMenu}>
-        <i class="item bx bx-sidebar bx-flip-horizontal"></i>
+        <i class="icon shadow bx bx-sidebar bx-flip-horizontal"></i>
     </button>
 {:else}
 <div class="titlebar">
@@ -74,5 +74,10 @@
         left: 0;
         right: 0;
         z-index: 80;
+    }
+
+    .shadow {
+        box-shadow: 2px 2px 4px #80808060;
+        border-radius: 50%;
     }
 </style>
