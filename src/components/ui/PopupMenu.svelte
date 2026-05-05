@@ -1,7 +1,6 @@
 <script lang="ts">
     import { onDestroy } from 'svelte';
     import { slideFade } from './transition.helper';
-    import { portal } from 'svelte-portal';
 
     interface Props {
         width?: string | number;
@@ -11,7 +10,6 @@
 
     let { width = 'auto', children, position = 'fixed' }: Props = $props();
     
-    const moveToBody = (node: HTMLElement) => (position === 'fixed') ? portal(node, document.body) : undefined;
     let menu: HTMLDivElement = $state();
     let clientX = $state(0),
         clientY = $state(0),
@@ -58,8 +56,7 @@
     });
 </script>
 
-<div use:moveToBody
-    class="container {position}"
+<div class="container {position}"
     inert={!visible}
     bind:this={menu}
     style:left

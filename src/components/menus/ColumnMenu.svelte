@@ -1,6 +1,7 @@
 <script lang="ts">
     import { t } from "svelte-i18n";
     import { derived } from "svelte/store";
+    import { portal } from "svelte-portal";
     import type { ColumnDefinition, SortDirection, Sorter } from "tabulator-tables";
     import Switch from "../ui/elements/Switch.svelte";
     import PopupMenu from "../ui/PopupMenu.svelte";
@@ -82,18 +83,21 @@
                     <Switch title="{ $t('menu.table.filter-by') } {col.title}"
                         state={!!headerFilter[col.field]} icon="bx-filter-alt"
                         on:click={(event) => showPopupMenu(event, col.field)} />
-                    <PopupMenu bind:this={menus[col.field]}>
-                        <div class="y-flex">
-                            <button class="option empty" onclick={() => filterBy(col.field, undefined)}>
-                                &lt; { $t('table.filter.empty') } {col.title} &gt;
-                            </button>
-                            {#each filterListValues(col) as value}
-                                <button class="option" onclick={() => filterBy(col.field, value)}>
-                                    <i class="{col.field} {value}"></i> { $t(`songs.${col.field}.${value}`) }
+                    <!-- fix wrong position menu positionis fixed too -->
+                    <span use:portal={document.body}>
+                        <PopupMenu bind:this={menus[col.field]}>
+                            <div class="y-flex">
+                                <button class="option empty" onclick={() => filterBy(col.field, undefined)}>
+                                    &lt; { $t('table.filter.empty') } {col.title} &gt;
                                 </button>
-                            {/each}
-                        </div>
-                    </PopupMenu>
+                                {#each filterListValues(col) as value}
+                                    <button class="option" onclick={() => filterBy(col.field, value)}>
+                                        <i class="{col.field} {value}"></i> { $t(`songs.${col.field}.${value}`) }
+                                    </button>
+                                {/each}
+                            </div>
+                        </PopupMenu>
+                    </span>
                 {/if}
                 <span class="{headerFilter && headerFilter[col.field] ? 'active' : ''}">
                     {col.title}
