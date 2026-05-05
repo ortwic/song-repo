@@ -8,6 +8,7 @@
     import type { UserSong } from '../../model/song.model';
     import { createDeferred } from '../../utils/promise.helper';
     import Expand from '../ui/elements/Expand.svelte';
+    import TagCloud from '../ui/elements/TagCloud.svelte';
     import genres from '../../data/genres.json';
     import { redToGreenRange } from '../../styles/style.helper';
 
@@ -41,15 +42,6 @@
     function reset(): void {
         editSong = { features: [], tags: [] };
         visible = false;
-    }
-
-    function addLabel(ev: KeyboardEvent, type: 'features' | 'tags'): void {
-        const input = ev.target as HTMLInputElement;
-        if (ev.key === ',') {
-            ev.preventDefault();
-            editSong[type] = [...editSong[type], input.value];
-            input.value = '';
-        }
     }
 </script>
 
@@ -188,17 +180,7 @@
                         <label for="features">
                             {$t('songs.columns.features')}
                         </label>
-                        <input
-                            id="feature"
-                            placeholder={$t('songs.hint-label')}
-                            type="text"
-                            onkeydown={(e) => addLabel(e, 'features')}
-                        />
-                        <div class="flex labels">
-                            {#each editSong.features as label}
-                                <span class="label">{label}</span>
-                            {/each}
-                        </div>
+                        <TagCloud bind:labels={editSong.features} />
                     </div>
                 </div>
             </Expand>
@@ -221,18 +203,7 @@
                         <label for="tags">
                             {$t('songs.columns.tags')}
                         </label>
-                        <input
-                            id="tag"
-                            placeholder={$t('songs.hint-label')}
-                            class="lg"
-                            type="text"
-                            onkeydown={(e) => addLabel(e, 'tags')}
-                        />
-                        <div class="flex labels">
-                            {#each editSong.tags as label}
-                                <span class="label">{label}</span>
-                            {/each}
-                        </div>
+                        <TagCloud bind:labels={editSong.tags} />
                     </div>
 
                     <div class="group span-full">

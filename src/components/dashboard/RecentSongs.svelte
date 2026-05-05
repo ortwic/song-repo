@@ -5,7 +5,7 @@
     import { slide } from 'svelte/transition';
     import { map } from 'rxjs';
     import SongService from '../../service/user-song.service';
-    import { unfold } from '../ui/transition.helper';
+    import { unfold } from '../ui/helper/transition.helper';
     import { toDate } from '../table/templates/Formatter.class';
     import { toStore } from '../../utils/rx.store';
     import SongCard from './SongCard.svelte';

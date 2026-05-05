@@ -4,7 +4,7 @@
     import type { UserLink } from '../../model/user.model';
     import { UserLinkService } from '../../service/user-link.service';
     import { showError } from '../../store/notification.store';
-    import { slideFade } from '../ui/transition.helper';
+    import { slideFade } from '../ui/helper/transition.helper';
 
     const linkService = new UserLinkService();
     const links$ = linkService.userlinks;

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { messageStack } from "../../store/notification.store";
-  import { slideFade } from './transition.helper';
+  import { slideFade } from './helper/transition.helper';
   interface Props {
     message?: import('svelte').Snippet;
   }

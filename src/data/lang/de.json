@@ -135,7 +135,6 @@
     "importDone": "{found} Songs gefunden. Gesamtzahl der Songs: {total}",
     "addTitle": "Neuen Song hinzufügen",
     "noPersist": "Sie sind nicht angemeldet, daher bleiben die Daten nach dem Verlassen der App nicht erhalten!",
-    "hint-label": "Komma getrennt, z.B. \nFoo, Bar",
     "hint-markdown": "Markdown unterstützt z.B.",
     "status": {
       "todo": "Offen",
@@ -225,7 +224,8 @@
     "about": "Bio",
     "move-down": "Nach unten",
     "move-up": "Nach oben",
-    "alias-available": "Alias ​​verfügbar"
+    "alias-available": "Alias ​​verfügbar",
+    "remove": "Entfernen"
   },
   "user": {
     "song-list": "Songliste",

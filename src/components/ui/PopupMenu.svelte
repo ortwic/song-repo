@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onDestroy } from 'svelte';
-    import { slideFade } from './transition.helper';
+    import { slideFade } from './helper/transition.helper';
 
     interface Props {
         width?: string | number;

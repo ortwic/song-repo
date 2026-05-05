@@ -136,7 +136,6 @@
     "addTitle": "Add new song",
     "noPersist": "You are not signed in, so data won't be persisted after leaving the app!",
     "hint-markdown": "markdown supported e.g.",
-    "hint-label": "comma separated e.g. Foo, Bar",
     "status": {
       "todo": "Todo",
       "wip": "Wip",
@@ -228,7 +227,8 @@
     "about": "Bio",
     "move-up": "Move up",
     "move-down": "Move down",
-    "alias-available": "Alias available"
+    "alias-available": "Alias available",
+    "remove": "Remove"
   },
   "user": {
     "song-list": "Song list",
