@@ -67,6 +67,11 @@
 
 <section class="menu">
     <div class="row">
+        <button data-close title="{ $t('profile.preview-linkhub') }" onclick={() => window.open($shareLink) }>
+            <i class='bx bx-sitemap'></i> { $t('profile.preview-linkhub') }
+        </button>
+    </div>
+    <div class="row">
         <button title="{ $t('profile.share-link') }" onclick={() => copyText($shareLink)}>
             <i class='bx bx-share-alt'></i> { $t('profile.share-link') }
         </button>

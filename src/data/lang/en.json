@@ -197,7 +197,8 @@
     "sign-out": "Sign out",
     "share-link": "Copy link to share",
     "share-link-copied": "Copied link for sharing into clipboard.",
-    "download-qrcode": "Download QR-Code"
+    "download-qrcode": "Download QR-Code",
+    "preview-linkhub": "Preview linkhub"
   },
   "settings": {
     "title": "Settings",

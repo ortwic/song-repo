@@ -4,7 +4,6 @@ import type { MessageFormatter } from '../../../service/base/i18n.setup';
 import { SEARCH_ACTIONS, SongActions } from '../SongActions.class';
 
 export function buildActionMenu(actions: SongActions, t: MessageFormatter): Array<MenuObject<CellComponent> | MenuSeparator> {
-    const changeResource = async (song: UserSong) => await actions.setUri(song);
     const cell = (c: CellComponent) => c.getData() as UserSong;
     const reformat = (c: CellComponent) => c.getRow().reformat();
 
@@ -13,8 +12,12 @@ export function buildActionMenu(actions: SongActions, t: MessageFormatter): Arra
             label: `<i class='bx bx-link-external'></i> <b>${t('songs.menu.open')}</b>`,
             action(e, c) {
                 const song = cell(c);
-                song.uri ? void (actions.openUri(song)) : changeResource(song);
+                song.uri ? void (actions.openUri(song)) : actions.setUri(song);
             }
+        },
+        {
+            label: `<i class='bx bx-edit'></i> ${t('songs.menu.edit')}`,
+            action: (e, c) => actions.editSong(cell(c)),
         },
         {
             label: `<i class='bx bx-search'></i> ${t('songs.menu.search')}`,
@@ -22,10 +25,6 @@ export function buildActionMenu(actions: SongActions, t: MessageFormatter): Arra
                 label: `<i class='bx ${a.icon}'></i> ${t(`songs.menu.search-${a.resource.replace(' ', '-')}`) ?? a.label}`,
                 action: (e, c) => actions.search(cell(c), a),
             })),
-        },
-        {
-            label: `<i class='bx bx-link'></i> ${t('songs.menu.edit-resource')}`,
-            action: (e, c) => changeResource(cell(c)),
         },
         { separator: true },
         {

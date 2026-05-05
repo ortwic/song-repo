@@ -194,7 +194,8 @@
     "sign-out": "Abmelden",
     "share-link": "Share-Link kopieren",
     "share-link-copied": "Share-Link in die Zwischenablage kopiert.",
-    "download-qrcode": "QR-Code speichern"
+    "download-qrcode": "QR-Code speichern",
+    "preview-linkhub": "Vorschau Link-Hub"
   },
   "settings": {
     "title": "Einstellungen",
