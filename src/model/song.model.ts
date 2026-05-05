@@ -18,11 +18,13 @@ export interface Song {
 export interface UserSong extends Song {
     uid: string;
     status: Status;
+    statusLogs?: Status[]; // unused
     progress?: number;
-    progressLogs?: number[];
+    progressLogs?: number[]; // unused
     uri?: string;
+    notes?: string;
     difficulty?: number;
-    complete?: Complete;
+    complete?: Complete; // unused
     createdAt?: Timestamp;
     changedAt?: Timestamp;
     learnedOn?: Date;

@@ -1,13 +1,13 @@
 @mixin row {
     display: block;
-    padding: .4rem;
+    padding: 0.4rem;
     text-align: left;
 }
 
 @mixin input {
     border: 1px solid gray;
-    padding: .4rem;
-    transition: all .2s ease-in-out;
+    padding: 0.4rem;
+    transition: all 0.2s ease-in-out;
 
     &:focus {
         outline: 1px solid var(--primary);
@@ -28,8 +28,9 @@ i.icon {
 .input {
     @include input;
 }
-    
-.menu, .dialog {
+
+.menu,
+.dialog {
     div.row {
         display: flex;
         flex-flow: nowrap;
@@ -39,9 +40,9 @@ i.icon {
         border-top: 1px solid silver;
         width: 100%;
         white-space: nowrap;
-        
-        button, 
-        a[role="button"] {
+
+        button,
+        a[role='button'] {
             flex: 1 1 0;
             width: 100%;
             min-width: 0; /* https://stackoverflow.com/a/44782536/2598771 */
@@ -51,7 +52,7 @@ i.icon {
             box-shadow: unset;
             text-align: center;
             background-color: inherit;
-            transition: all .2s ease-in-out;
+            transition: all 0.2s ease-in-out;
 
             span {
                 display: inline-block;
@@ -63,17 +64,17 @@ i.icon {
             }
 
             &:hover {
-                background-color: #FFFFFFC0;
+                background-color: #ffffffc0;
             }
 
             &:disabled {
                 background-color: transparent;
             }
-            
+
             &:not(:last-child) {
                 border-right: 1px solid silver;
             }
-    
+
             &.warn {
                 color: black;
                 background-color: var(--secondary-opaque);
@@ -88,18 +89,18 @@ i.icon {
             }
         }
 
-        a[role="button"] {
+        a[role='button'] {
             display: block;
 
             span {
                 color: var(--primary);
-                padding-top: .6em;
+                padding-top: 0.6em;
                 vertical-align: middle;
             }
         }
-        
+
         p {
-            margin: .6rem 1rem;
+            margin: 0.6rem 1rem;
             width: 100%;
         }
     }
@@ -107,8 +108,9 @@ i.icon {
     div.row:last-child {
         border-bottom: 1px solid silver;
     }
-    
-    div.section {
+
+    div.section,
+    div.group {
         &.indent {
             margin: 0 1rem;
         }
@@ -116,20 +118,25 @@ i.icon {
         label {
             @include row;
         }
-    
+
         p {
-            margin: .6rem 1rem;
+            margin: 0.6rem 1rem;
             text-align: left;
         }
-        
-        input[type=text], 
-        input[type=email],
-        input[type=number],
-        input[type=url],
-        input[type=search],
-        input[type=password] {
+
+        input[type='text'],
+        input[type='email'],
+        input[type='number'],
+        input[type='url'],
+        input[type='search'],
+        input[type='password'] {
             @include row;
             @include input;
+        }
+
+        input[type='range'] {
+            max-width: 14em;
+            margin-top: 0.5em;
         }
     }
 

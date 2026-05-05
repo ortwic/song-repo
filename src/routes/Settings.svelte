@@ -5,7 +5,7 @@
     import Profile from '../components/settings/Profile.svelte';
     import LinkHub from '../components/settings/LinkHub.svelte';
     import { slideFade } from '../components/ui/transition.helper';
-    import Expand from '../components/ui/Expand.svelte';
+    import Expand from '../components/ui/elements/Expand.svelte';
     import Footer from '../components/ui/Footer.svelte';
     import AuthService, { currentUser } from '../service/auth.service';
     import UserService from '../service/user.service';

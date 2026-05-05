@@ -102,7 +102,8 @@
       "changedAt": "Geändert",
       "country": "Land",
       "year": "Jahr",
-      "signature": "Tonangaben"
+      "signature": "Tonangaben",
+      "notes": "Notizen"
     },
     "menu": {
       "open": "Öffne Ressource",
@@ -132,7 +133,7 @@
     "exportTitle": "Meine Songliste",
     "import": "Import starten...",
     "importDone": "{found} Songs gefunden. Gesamtzahl der Songs: {total}",
-    "addTitle": "Suche – unterstützt von",
+    "addTitle": "Neuen Song hinzufügen",
     "noPersist": "Sie sind nicht angemeldet, daher bleiben die Daten nach dem Verlassen der App nicht erhalten!",
     "hint-label": "Komma getrennt, z.B. \nFoo, Bar",
     "hint-markdown": "Markdown unterstützt z.B.",
@@ -149,7 +150,14 @@
     "excl-done": "Ohne Erledigten",
     "add-new": "Song hinzufügen",
     "filter": "Filter ein-/ausblenden",
-    "shuffle-list": "Liste mischen"
+    "shuffle-list": "Liste mischen",
+    "hint-uri": "Share-Link von Cloud",
+    "sections": {
+      "mydata": "Meine Angaben",
+      "song-details": "Songdetails",
+      "song-general": "Allgemein"
+    },
+    "edit": "Bearbeite"
   },
   "table": {
     "groupBy": "Gruppieren nach {title}",
@@ -223,5 +231,9 @@
     "song-list": "Songliste",
     "not-found": "Benutzer nicht gefunden!",
     "alias-unknown": "Benutzeralias ist unbekannt!"
+  },
+  "common": {
+    "expand": "Erweitern",
+    "collapse": "Minimieren"
   }
 }

@@ -1,328 +1,340 @@
 <script lang="ts">
-    import { createBubbler, preventDefault } from 'svelte/legacy';
-
-    const bubble = createBubbler();
     import { t } from 'svelte-i18n';
     import Autocomplete from 'simple-svelte-autocomplete/src/SimpleAutocomplete.svelte';
-    import ConfirmDialog from "./ConfirmDialog.svelte";
-    import Image from "../ui/elements/Image.svelte";
+    import '../../styles/overrides/simple-autocomplete.scss';
+    import ConfirmDialog from './ConfirmDialog.svelte';
     import SelectKey from '../ui/SelectKey.svelte';
-    import LoadingBar from '../ui/elements/LoadingBar.svelte';
-    import SongService from "../../service/user-song.service";
-    import { create, settingsStore } from "../../service/search.service";
-    import type { UserSong } from "../../model/song.model";
-    import type { ArtistResult, SongResult } from "../../model/songbpm.model";
-    import type { SearchEngines } from "../../model/types";
-    import genres from '../../data/genres.json';
-    import { logAction } from '../../store/notification.store';
-    import { derived, writable } from "svelte/store";
-    import PopupMenu from "../ui/PopupMenu.svelte";
+    import SongService from '../../service/user-song.service';
+    import type { UserSong } from '../../model/song.model';
     import { createDeferred } from '../../utils/promise.helper';
-    
-    const required = true;
+    import Expand from '../ui/elements/Expand.svelte';
+    import genres from '../../data/genres.json';
+    import { redToGreenRange } from '../../styles/style.helper';
+
+    const TIME_PRESETS = ['4/4', '3/4', '6/8', '2/4', '12/8', '5/4', '7/8', '2/2'];
     const songService = new SongService();
-    const currentSearchEngine = writable<SearchEngines>('songbpm');
-    const searchService = derived([currentSearchEngine, settingsStore], ([e, s]) => create(e, s[e]));
-    let selectSearchEngine = $state(({}) => {});
     let form: HTMLFormElement = $state();
     let visible = $state(false);
-
-    let newSong: Partial<UserSong> = $state();
-    const styles = (genre: string) => (genres.find(v => v.name === genre) ?? genres[0]).styles;
-    let label = $state('');
-
-    reset();
-    
+    let editSong: Partial<UserSong> = $state({ features: [], tags: [] });
+    const isNew = $derived(editSong.id === undefined);
+    const difficultyColor = $derived(redToGreenRange(100 - editSong.difficulty * 10));
+    const styles = (genre: string) => (genres.find((v) => v.name === genre) ?? genres[0]).styles;
     let deferred: ReturnType<typeof createDeferred<UserSong>> | null = null;
 
     export function showDialog(initial?: Partial<UserSong>): Promise<UserSong> {
-        // TODO fill form
-        console.log('initial', initial);
-        
         deferred = createDeferred<UserSong>();
-        newSong = initial ?? { features: [], tags: [] };
+        editSong = { features: [], tags: [], ...initial };
         visible = true;
         return deferred.promise;
     }
-    
+
     function done(confirmed: boolean): void {
         if (!confirmed) {
             deferred?.resolve(null);
             reset();
         } else if (form.checkValidity()) {
-            if (label) {
-                newSong.tags.push(label);
-            }
-            deferred?.resolve(newSong as UserSong);
-
+            deferred?.resolve(editSong as UserSong);
             reset();
         }
     }
 
     function reset(): void {
-        newSong = { features: [], tags: [] };
+        editSong = { features: [], tags: [] };
         visible = false;
     }
 
-    function addLabel(ev: KeyboardEvent) {
-        if(ev.key === ',') {
+    function addLabel(ev: KeyboardEvent, type: 'features' | 'tags'): void {
+        const input = ev.target as HTMLInputElement;
+        if (ev.key === ',') {
             ev.preventDefault();
-            newSong.tags = [ ...newSong.tags, label ];
-            label = '';
+            editSong[type] = [...editSong[type], input.value];
+            input.value = '';
         }
     }
-
-    function setArtist(artist?: ArtistResult) {
-        logAction({ type: 'search', artist });
-        
-        newSong.artist = artist?.name;
-        newSong.artistImg = artist?.img;
-        if (artist?.genres?.length) {
-            newSong.genre = artist.genres[0];
-            if (newSong.genre?.length > 1) {
-                newSong.style = artist.genres.slice(1).join(', ');
-            }
-        } else {
-            newSong.genre = undefined;
-            newSong.style = undefined;
-        }
-        if (artist?.from) {
-            newSong.features?.push(artist.from)
-        }
-    }
-
-    function setSong(song?: SongResult) {
-        logAction({ type: 'search', song });
-
-        newSong.title = song?.title;
-        newSong.bpm = song?.tempo;
-        newSong.key = song?.key_of;
-        newSong.time = song?.time_sig;
-        if (song?.album?.title && song?.album?.uri) {            
-            newSong.source = `[${song.album.title}](${song.album.uri})`;
-        }
-
-        if (!newSong.artist) {
-            setArtist(song?.artist);
-        }
-    }
-
 </script>
 
-<form bind:this={form} onsubmit={preventDefault(bubble('submit'))}>
-    <ConfirmDialog {visible} size='full' onClose={done}>
+<form bind:this={form} onsubmit={(e) => e.preventDefault()}>
+    <ConfirmDialog {visible} size="full" onClose={done}>
         {#snippet header()}
-        <div class="title" >
-                <i class="bx bx-search-alt-2"></i>&nbsp; { $t('songs.addTitle') } 
-                <!-- svelte-ignore a11y_interactive_supports_focus -->
-                <!-- svelte-ignore a11y_click_events_have_key_events -->
-                <a style="cursor: pointer;" role="listbox" id="searchEngine" onclick={selectSearchEngine}>{$currentSearchEngine}</a>
-                <PopupMenu bind:showPopupMenu={selectSearchEngine}>
-                    <button class="option" class:active={$currentSearchEngine === 'songbpm'} 
-                        onclick={() => currentSearchEngine.set('songbpm')}>GetSongbpm</button>
-                    <button class="option" class:active={$currentSearchEngine === 'audius'} 
-                        onclick={() => currentSearchEngine.set('audius')}>Audius</button>
-                </PopupMenu>
-            </div>
+            <span>
+                <i class="bx bx-music"></i>
+                {isNew ? $t('songs.addTitle') : `${$t('songs.edit')} ${editSong.title}`}
+            </span>
         {/snippet}
-        <section>
-            <div class="section">
-                <div class="group">
-                    <label for="artist">{ $t('songs.columns.artist') }</label>
-                    <Autocomplete inputClassName="lg" labelFieldName="name" {required} placeholder="artist"
-                        delay={500} minCharactersToSearch={2} hideArrow={true} bind:text={newSong.artist}
-                        searchFunction={(value) => $searchService.findArtists(value)}
-                        onChange={(item) => setArtist(item)} clearSelection={() => setArtist()} showClear={true}
-                        showLoadingIndicator={true}>
-                        {#snippet item({ item })}
-                            <div class="card">
-                                <Image src={item.img} />
-                                <div class="col">
-                                    {item.name} | 
-                                    <span title="{ $t('songs.columns.country') }">{item.from ?? ''}</span>
-                                    <a title="{ $t('songs.columns.artist') }" href={item.uri} target="_blank"><i class="bx bx-info-circle"></i></a>
-                                    <p>
-                                        {#each item.genres ?? [] as genre}
-                                        <span class='label'>{genre}</span>
-                                        {/each}
-                                    </p>
-                                </div>
-                            </div>
-                        {/snippet}
-                        {#snippet loading()}
-                            <div >
-                                <LoadingBar />
-                            </div>
-                        {/snippet}
-                    </Autocomplete>
-                </div>
-                <div class="group">
-                    <label for="title">{ $t('songs.columns.title') }</label>
-                    <Autocomplete inputClassName="lg" labelFieldName="title" {required} placeholder="title"
-                        delay={newSong.artist ? 500 : 990} minCharactersToSearch={newSong.artist ? 0 : 3} hideArrow={true}
-                        searchFunction={(value) => $searchService.findSongs(value, newSong.artist)} bind:text={newSong.title}
-                        onChange={(item) => setSong(item)} clearSelection={() => setSong()} showClear={true}
-                        showLoadingIndicator={true}>
-                        {#snippet item({ item })}
-                            <div class="card">
-                                <a title={item.album?.title} href={item.album?.uri ?? item.artist?.uri} target="_blank">
-                                    <Image src={item.album?.img ?? item.artist?.img} />
-                                </a>
-                                <div class="col">
-                                    {item.title} | 
-                                    <a title="{ $t('songs.columns.title') }" href={item.uri} target="_blank"><i class="bx bx-info-circle"></i></a>
-                                    {#if newSong.artist}
-                                    <span title="{ $t('songs.columns.year') }">({item.album?.year})</span>
-                                    <p>
-                                        <span title="{ $t('songs.columns.bpm') }" class='label'>{item.tempo}</span>
-                                        <span title="{ $t('songs.columns.time') }" class='label'>{item.time_sig}</span>
-                                        <span title="{ $t('songs.columns.key') }" class='label'>{item.key_of}</span>
-                                    </p>
-                                    {:else}
-                                    <br>
-                                    <a title="{ $t('songs.columns.artist') }" href={item.artist?.uri} target="_blank">{item.artist?.name}</a>
-                                    <p>
-                                        {#each item.artist?.genres ?? [] as genre}
-                                        <span class='label'>{genre}</span>
-                                        {/each}
-                                    </p>
-                                    {/if}
-                                </div>
-                            </div>
-                        {/snippet}
-                    </Autocomplete>
-                </div>
-                <div class="group">
-                    <label for="genre">{ $t('songs.columns.genre') }</label>
-                    <Autocomplete inputClassName="lg" labelFieldName="name" placeholder="genre"
-                        minCharactersToSearch={0} items={genres} showClear={true}
-                        bind:text={newSong.genre} hideArrow={true}
-                        onChange={() => newSong.style = undefined}>
-                        {#snippet item({ item, label })}
-                            <div class="square" style:background-color={item.color}></div>
-                            <span class="option">{@html label}</span>
-                        {/snippet}
-                    </Autocomplete>
-                </div>
-                <div class="group">
-                    <label for="style">{ $t('songs.columns.style') }</label>
-                    <Autocomplete inputClassName="lg" placeholder="style" hideArrow={true}
-                        minCharactersToSearch={0} searchFunction="{() => styles(newSong.genre && newSong.genre[0])}" showClear={true}>
-                        {#snippet item({ item, label })}                 
-                            <span class="option">{@html label}</span>
-                        {/snippet}
-                    </Autocomplete>
-                </div>
-                <div class="group">
-                    <label for="source" title="{ $t('songs.hint-markdown') } [link](http://example.com)">{ $t('songs.columns.source') } <i class='bx bx-help-circle'></i></label>
-                    <input id="source" class="lg" type="text" bind:value={newSong.source}>
-                </div>
-                <div class="group">
-                    <label for="tags" title="{ $t('songs.hint-label') }">{ $t('songs.columns.tags') } <i class='bx bx-help-circle'></i></label>
-                    <input id="tags" class="lg" type="text" bind:value={label} onkeydown={addLabel}>
-                    <div class="flex labels">
-                        {#each newSong.tags as tag}
-                        <span class='label'>{tag}</span>
-                        {/each}
+
+        <div class="dialog-body">
+            <Expand open={isNew} title={$t('songs.sections.song-general')}>
+                <div class="field-grid">
+                    <div class="group">
+                        <label for="title">{$t('songs.columns.title')} *</label>
+                        <input id="title" type="text" bind:value={editSong.title} required placeholder="Title" />
+                    </div>
+
+                    <div class="group">
+                        <label for="artist">{$t('songs.columns.artist')} *</label>
+                        <input id="artist" type="text" bind:value={editSong.artist} required placeholder="Artist" />
+                    </div>
+
+                    <div class="group">
+                        <label for="genre">{$t('songs.columns.genre')}</label>
+                        <Autocomplete
+                            inputClassName="lg"
+                            labelFieldName="name"
+                            placeholder="genre"
+                            minCharactersToSearch={0}
+                            items={genres}
+                            showClear={true}
+                            bind:text={editSong.genre}
+                            hideArrow={true}
+                        >
+                            {#snippet item({ item, label })}
+                                <div class="square" style:background-color={item.color}></div>
+                                <span class="option">{@html label}</span>
+                            {/snippet}
+                        </Autocomplete>
+                    </div>
+
+                    <div class="group">
+                        <label for="style">{$t('songs.columns.style')}</label>
+                        <Autocomplete
+                            inputClassName="lg"
+                            placeholder="style"
+                            hideArrow={true}
+                            minCharactersToSearch={0}
+                            searchFunction={() => styles(editSong.genre && editSong.genre[0])}
+                            showClear={true}
+                            bind:text={editSong.style}
+                        >
+                            {#snippet item({ item, label })}
+                                <span class="option">{@html label}</span>
+                            {/snippet}
+                        </Autocomplete>
+                    </div>
+                </div></Expand
+            >
+
+            <Expand open={isNew} title={$t('songs.sections.song-details')}>
+                <div class="field-grid">
+                    <div class="group sm">
+                        <label for="key">{$t('songs.columns.key')}</label>
+                        <SelectKey bind:value={editSong.key} />
+                    </div>
+
+                    <div class="group sm">
+                        <label for="bpm">{$t('songs.columns.bpm')}</label>
+                        <input
+                            id="bpm"
+                            type="number"
+                            min="40"
+                            max="280"
+                            step="1"
+                            bind:value={editSong.bpm}
+                            placeholder="120"
+                        />
+                    </div>
+
+                    <div class="group sm">
+                        <label for="time">{$t('songs.columns.time')}</label>
+                        <Autocomplete
+                            className="sm"
+                            inputClassName="sm"
+                            hideArrow={true}
+                            minCharactersToSearch={0}
+                            items={TIME_PRESETS}
+                            showClear={true}
+                            bind:text={editSong.time}
+                        >
+                            {#snippet item({ item, label })}
+                                <span class="option">{@html label}</span>
+                            {/snippet}
+                        </Autocomplete>
+                    </div>
+
+                    <div class="group sm">
+                        <label for="difficulty">
+                            {$t('songs.columns.difficulty')}
+                            {#if editSong.difficulty != null}
+                                <span class="label difficulty-value"
+                                    style:color={difficultyColor.isDark() ? '#eee' : '#444'}
+                                    style:background-color={difficultyColor.hex()}>
+                                    {editSong.difficulty}/10
+                                </span>
+                            {/if}
+                        </label>
+                        <input
+                            id="difficulty"
+                            style:accent-color={difficultyColor.hex()}
+                            type="range"
+                            min="1"
+                            max="10"
+                            step="1"
+                            bind:value={editSong.difficulty}
+                        />
+                    </div>
+
+                    <div class="group span-full">
+                        <label for="source">
+                            {$t('songs.columns.source')}
+                        </label>
+                        <input
+                            id="source"
+                            type="text"
+                            bind:value={editSong.source}
+                            placeholder="{$t('songs.hint-markdown')} [Sheet Music](https://...)"
+                        />
+                    </div>
+
+                    <div class="group span-full">
+                        <label for="features">
+                            {$t('songs.columns.features')}
+                        </label>
+                        <input
+                            id="feature"
+                            placeholder={$t('songs.hint-label')}
+                            type="text"
+                            onkeydown={(e) => addLabel(e, 'features')}
+                        />
+                        <div class="flex labels">
+                            {#each editSong.features as label}
+                                <span class="label">{label}</span>
+                            {/each}
+                        </div>
                     </div>
                 </div>
-                <div class="group">
-                    <label for="key">{ $t('songs.columns.key') }</label>
-                    <SelectKey bind:value={newSong.key} />
+            </Expand>
+
+            <Expand open={!isNew} title={$t('songs.sections.mydata')}>
+                <div class="field-grid">
+                    <div class="group span-full">
+                        <label for="uri">
+                            {$t('songs.columns.uri')}
+                            {#if editSong.uri}
+                                <a href={editSong.uri} title={$t('songs.menu.open')} target="_blank" rel="noopener">
+                                    <i class="bx bx-link-external"></i>
+                                </a>
+                            {/if}
+                        </label>
+                        <input id="uri" type="url" bind:value={editSong.uri} placeholder="{$t('songs.hint-uri')}: https://example.com/sheet-music.pdf" />
+                    </div>
+
+                    <div class="group span-full">
+                        <label for="tags">
+                            {$t('songs.columns.tags')}
+                        </label>
+                        <input
+                            id="tag"
+                            placeholder={$t('songs.hint-label')}
+                            class="lg"
+                            type="text"
+                            onkeydown={(e) => addLabel(e, 'tags')}
+                        />
+                        <div class="flex labels">
+                            {#each editSong.tags as label}
+                                <span class="label">{label}</span>
+                            {/each}
+                        </div>
+                    </div>
+
+                    <div class="group span-full">
+                        <label for="notes">{$t('songs.columns.notes')}</label>
+                        <textarea id="notes" bind:value={editSong.notes} placeholder="..."></textarea>
+                    </div>
                 </div>
-                <div class="group">
-                    <label for="bpm">{ $t('songs.columns.bpm') }</label>
-                    <input id="bpm" class="sm" type="text" bind:value={newSong.bpm} onkeydown={addLabel}>
-                </div>
-                <div class="group">
-                    <label for="time">{ $t('songs.columns.time') }</label>
-                    <input id="time" class="sm" type="text" bind:value={newSong.time} onkeydown={addLabel}>
-                </div>
-            </div>
-        </section>
+            </Expand>
+        </div>
+
         {#if !songService.hasUser()}
-        <div class='warn'>{ $t('songs.noPersist') }</div>
+            <div class="warn">{$t('songs.noPersist')}</div>
         {/if}
     </ConfirmDialog>
 </form>
 
 <style lang="scss">
-:root {
-    text-align: left;
-}
-
-div.title a {
-    color: var(--primback);
-    text-decoration: underline;
-
-    &:hover {
-        color: white;
-    }
-}
-
-div.card {
-    display: flex;
-    padding: 4px;
-
-    a, span {
-        white-space: nowrap;
+    .dialog-body {
+        padding: 1em;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5em;
+        min-width: min(80vw, 600px);
+        height: 100%;
+        overflow-y: auto;
     }
 
-    div.col {
-        padding: 0 1em;
-    }
-}
-
-div.square {
-    display: inline-block;
-    width: 1.2em;
-    height: 1.2em;
-}
-
-span.option {
-    padding: .4em;
-}
-
-section {
-    margin: 1em;
-    min-width: 80vw;
-    height: 100%;
-
-    // not working as autocomplete-list not overlapping anymore
-    overflow-y: auto; 
-
-    & > div {
+    .field-grid {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        max-height: 100%;
-        gap: .4em 1.6em;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.5em 1em;
+        align-items: start;
 
-        @media only screen and (max-width: 50rem) {
+        @media (max-width: 540px) {
+            grid-template-columns: 1fr 1fr;
+            .sm {
+                grid-column: span 1;
+            }
+            .span-full {
+                grid-column: 1 / -1;
+            }
+        }
+        @media (max-width: 320px) {
             grid-template-columns: 1fr;
-        }
-        
-        div.group {
-            display: grid;
-        }
-
-        i.bx {
-            color: gray;
-            font-size: smaller;
+            .sm,
+            .span-full {
+                grid-column: 1 / -1;
+            }
         }
     }
-}
 
-.warn {
-    padding: .4em 1em;
-    border: 1px solid gray;
-    background-color: var(--secondary-opaque);
-    text-align: center;
-    white-space: nowrap;
-
-    &::before {
-        font-family: 'boxicons';
-        padding-right: .2em;
-        content: '\ea27';
+    .group {
+        grid-column: span 2;
     }
-}
+    .group.sm {
+        grid-column: span 1;
+    }
+    .span-full {
+        grid-column: 1 / -1;
+    }
+
+    .group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25em;
+    }
+
+    div.square {
+        display: inline-block;
+        width: 1.2em;
+        height: 1.2em;
+    }
+
+    .difficulty-value {
+        font-weight: 600;
+        margin-left: 0.4em;
+        color: var(--textghost);
+    }
+    
+    #notes {
+        resize: vertical;
+        height: 32vh;
+        width: 100%;
+        box-sizing: border-box;
+
+        &:focus {
+            outline: 1px solid var(--primary);
+            border-color: var(--primary);
+        }
+    }
+
+    .warn {
+        padding: 0.4em 1em;
+        border: 1px solid var(--primselect);
+        background-color: var(--secondary-opaque);
+        text-align: center;
+        white-space: nowrap;
+
+        &::before {
+            font-family: 'boxicons';
+            padding-right: 0.2em;
+            content: '\ea27';
+        }
+    }
 </style>

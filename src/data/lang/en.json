@@ -102,7 +102,8 @@
       "changedAt": "Last changed",
       "country": "Country",
       "year": "Year",
-      "signature": "Signature"
+      "signature": "Signature",
+      "notes": "Notes"
     },
     "menu": {
       "open": "Open resource",
@@ -132,7 +133,7 @@
     "exportTitle": "My Song List",
     "import": "Start importing...",
     "importDone": "Found {found} songs. Total songs: {total}",
-    "addTitle": "Search - powered by",
+    "addTitle": "Add new song",
     "noPersist": "You are not signed in, so data won't be persisted after leaving the app!",
     "hint-markdown": "markdown supported e.g.",
     "hint-label": "comma separated e.g. Foo, Bar",
@@ -149,7 +150,14 @@
     "excl-done": "Exclude done",
     "add-new": "Add song",
     "filter": "Show/Hide filter",
-    "shuffle-list": "Shuffle list"
+    "shuffle-list": "Shuffle list",
+    "hint-uri": "Share link from cloud",
+    "sections": {
+      "mydata": "My data",
+      "song-details": "Song details",
+      "song-general": "General"
+    },
+    "edit": "Edit"
   },
   "table": {
     "groupBy": "Group by {title}",
@@ -225,5 +233,9 @@
   "user": {
     "song-list": "Song list",
     "alias-unknown": "User alias is unkown!"
+  },
+  "common": {
+    "collapse": "Collapse",
+    "expand": "Expand"
   }
 }
