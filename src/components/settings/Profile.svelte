@@ -3,8 +3,8 @@
 
     import { t } from 'svelte-i18n';
     import { Subject, of, switchMap, debounceTime, distinctUntilChanged } from 'rxjs';
-    import { currentUser } from '../../service/auth.service';
-    import UserService, { currentProfile } from '../../service/user.service';
+    import { currentUser } from '../../service/user/auth.service';
+    import UserService, { currentProfile } from '../../service/user/user.service';
     import { showError, showInfo } from '../../store/notification.store';
 
     const userService = new UserService();

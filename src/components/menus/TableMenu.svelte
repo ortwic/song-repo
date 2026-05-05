@@ -5,7 +5,7 @@
     import type { Dialog } from '../../model/dialog.model';
     import type { UserSong } from '../../model/song.model';
     import FileIcon from '../ui/elements/FileIcon.svelte';
-    import SongService from '../../service/user-song.service';
+    import SongService from '../../service/user/user-song.service';
     import { tableView } from '../../store/app.store';
     import { showError } from '../../store/notification.store';
 

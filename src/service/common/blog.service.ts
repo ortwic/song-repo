@@ -1,7 +1,7 @@
 import type { Observable } from 'rxjs';
 import { QueryConstraint, orderBy, where } from 'firebase/firestore';
-import FirestoreService from './firestore.service';
-import type { Post } from '../model/post.model';
+import FirestoreService from '../base/firestore.service';
+import type { Post } from '../../model/post.model';
 
 const store = new FirestoreService('blog');
 

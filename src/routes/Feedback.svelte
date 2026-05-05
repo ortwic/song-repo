@@ -3,7 +3,7 @@
 
     import { t } from 'svelte-i18n';
     import { format } from 'fecha';
-    import FirestoreService from "../service/firestore.service";
+    import FirestoreService from "../service/base/firestore.service";
     import { showError } from '../store/notification.store';
     import TitlebarMenu from '../components/menus/TitlebarMenu.svelte';
 

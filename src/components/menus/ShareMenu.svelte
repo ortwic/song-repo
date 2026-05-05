@@ -2,7 +2,7 @@
     import { t } from 'svelte-i18n';
     import QRCode from 'qrcode';
     import { map } from 'rxjs';
-    import { currentProfile } from '../../service/user.service';
+    import { currentProfile } from '../../service/user/user.service';
     import { showError, showInfo } from "../../store/notification.store";
     import { onMount } from 'svelte';
 

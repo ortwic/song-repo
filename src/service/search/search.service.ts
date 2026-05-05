@@ -1,8 +1,8 @@
 import { from, type Observable } from 'rxjs';
-import type { ArtistResult, SongResult } from '../model/songbpm.model';
-import type { SearchEngines, ApiSettings, SearchSettings } from '../model/types';
-import { showError } from '../store/notification.store';
-import FirestoreService from './firestore.service';
+import type { ArtistResult, SongResult } from '../../model/songbpm.model';
+import type { SearchEngines, ApiSettings, SearchSettings } from '../../model/types';
+import { showError } from '../../store/notification.store';
+import FirestoreService from '../base/firestore.service';
 import SearchAudiusService from './search-audius.service';
 import SearchSongBpmService from './search-get-song-bpm.service';
 import { readable, type Readable } from 'svelte/store';

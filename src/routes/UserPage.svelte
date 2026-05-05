@@ -3,8 +3,8 @@
   import { marked } from 'marked';
   import { startWith, switchMap } from 'rxjs';
   import type { UserLink } from '../model/user.model';
-  import UserService from '../service/user.service';
-  import { UserLinkService } from '../service/user-link.service';
+  import UserService from '../service/user/user.service';
+  import { UserLinkService } from '../service/user/user-link.service';
   import Avatar from '../components/ui/Avatar.svelte';
   import NavButton from '../components/ui/elements/NavButton.svelte';
   import Footer from '../components/ui/Footer.svelte';

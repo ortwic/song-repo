@@ -1,6 +1,6 @@
-import type { ArtistResult, SongResult } from '../model/songbpm.model';
-import { showError } from '../store/notification.store';
-import type { ApiSettings } from '../model/types';
+import type { ArtistResult, SongResult } from '../../model/songbpm.model';
+import { showError } from '../../store/notification.store';
+import type { ApiSettings } from '../../model/types';
 import type { SearchService } from './search.service';
 
 const appNameQueryParam = 'app_name=ocsoft42_songrepo'; 

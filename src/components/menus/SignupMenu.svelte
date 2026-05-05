@@ -1,8 +1,8 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
     import ConfirmDialog from '../dialogs/ConfirmDialog.svelte';
-    import AuthService from '../../service/auth.service';
-    import { lang } from '../../service/i18n.setup';
+    import AuthService from '../../service/user/auth.service';
+    import { lang } from '../../service/base/i18n.setup';
     import { logPageView, showError } from '../../store/notification.store';
     
     interface RequiredPageChecks {

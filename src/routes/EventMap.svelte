@@ -3,7 +3,7 @@
     import { params as params$ } from "svelte-spa-router";
     import { t } from "svelte-i18n";
     import { Loader } from '@googlemaps/js-api-loader';
-    import { getEvents, getSettings } from "../service/event.service";
+    import { getEvents, getSettings } from "../service/common/event.service";
     import { showError } from "../store/notification.store";
     import type { CalendarEvent } from "../model/event.model";
 

@@ -1,7 +1,7 @@
 import { combineLatest, map, startWith, type Observable } from 'rxjs';
 import { DateTime } from 'luxon';
-import FirestoreService from './firestore.service';
-import type { CalendarEvent, EventDate } from '../model/event.model';
+import FirestoreService from '../base/firestore.service';
+import type { CalendarEvent, EventDate } from '../../model/event.model';
 
 const store = new FirestoreService('events');
 const settings = new FirestoreService('settings').getDocumentAsync<Settings>('google');

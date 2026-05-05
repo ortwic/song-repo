@@ -4,8 +4,8 @@
     import SongAutocomplete from '../ui/Autocomplete.svelte';
     import Image from '../ui/elements/Image.svelte';
     import PopupMenu from '../ui/PopupMenu.svelte';
-    import SongService from '../../service/user-song.service';
-    import { create, settingsStore } from '../../service/search.service';
+    import SongService from '../../service/user/user-song.service';
+    import { create, settingsStore } from '../../service/search/search.service';
     import type { Dialog } from '../../model/dialog.model';
     import type { SearchEngines } from '../../model/types';
     import type { SongResult } from '../../model/songbpm.model';

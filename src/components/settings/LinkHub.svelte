@@ -2,7 +2,7 @@
     import { t } from 'svelte-i18n';
     import { flip } from 'svelte/animate';
     import type { UserLink } from '../../model/user.model';
-    import { UserLinkService } from '../../service/user-link.service';
+    import { UserLinkService } from '../../service/user/user-link.service';
     import { showError } from '../../store/notification.store';
     import { slideFade } from '../ui/helper/transition.helper';
 

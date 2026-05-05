@@ -1,7 +1,7 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
     import { link } from 'svelte-spa-router';
-    import { lang } from '../service/i18n.setup';
+    import { lang } from '../service/base/i18n.setup';
     import Footer from '../components/ui/Footer.svelte';
     
     interface Props {

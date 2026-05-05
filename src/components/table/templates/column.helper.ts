@@ -2,7 +2,7 @@ import type { CellEditEventCallback, ColumnComponent, Editor, ListEditorParams, 
 import type { ColumnDefinition } from '../tabulator/types';
 import Formatter from './Formatter.class';
 import { SongActions } from '../SongActions.class';
-import type { MessageFormatter } from '../../../service/i18n.setup';
+import type { MessageFormatter } from '../../../service/base/i18n.setup';
 
 type Sorter =
     | undefined

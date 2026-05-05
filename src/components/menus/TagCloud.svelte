@@ -1,7 +1,7 @@
 <script lang="ts">
     import { link } from "svelte-spa-router";
     import { map } from "rxjs";
-    import { getBlogPosts } from "../../service/blog.service";
+    import { getBlogPosts } from "../../service/common/blog.service";
     import type { Post } from "../../model/post.model";
     
     const tags = getBlogPosts().pipe(map(countTags));

@@ -2,9 +2,9 @@ import type { User } from 'firebase/auth';
 import { where } from 'firebase/firestore';
 import { authState } from 'rxfire/auth';
 import { from, map, Observable, of, startWith, switchMap } from 'rxjs';
-import { auth } from './firebase.setup';
-import FirestoreService, { uniqueKey } from './firestore.service';
-import type { UserProfile } from '../model/user.model';
+import { auth } from '../base/firebase.setup';
+import FirestoreService, { uniqueKey } from '../base/firestore.service';
+import type { UserProfile } from '../../model/user.model';
 
 export const createUserStore = () => new FirestoreService('user');
 const store = createUserStore();

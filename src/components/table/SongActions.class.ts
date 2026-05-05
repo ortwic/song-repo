@@ -4,7 +4,7 @@ import { showError } from '../../store/notification.store';
 import type { Dialog } from '../../model/dialog.model';
 import type { UserSong } from '../../model/song.model';
 import type { Status } from '../../model/types';
-import type SongService from '../../service/user-song.service';
+import type SongService from '../../service/user/user-song.service';
 
 export interface SearchAction {
     label: string;

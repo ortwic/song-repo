@@ -17,8 +17,8 @@
   import Feedback from "./routes/Feedback.svelte";
   import UserPage from "./routes/UserPage.svelte";
   import NotFound from "./routes/NotFound.svelte";
-  import { currentUser } from './service/auth.service';
-  import { setupI18n } from "./service/i18n.setup";
+  import { currentUser } from './service/user/auth.service';
+  import { setupI18n } from "./service/base/i18n.setup";
 
   const usertitle = currentUser.pipe(map(autoRedirect));
   const version = import.meta.env.PACKAGE_VERSION;

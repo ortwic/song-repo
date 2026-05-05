@@ -13,8 +13,8 @@
     import { SongActions } from '../components/table/SongActions.class';
     import { buildActionMenu } from '../components/table/templates/actionMenu.helper';
     import { summaryFormatter } from '../components/table/templates/responsive.helper';
-    import SongService, { viewStoreId } from '../service/user-song.service';
-    import type { MessageFormatter } from '../service/i18n.setup';
+    import SongService, { viewStoreId } from '../service/user/user-song.service';
+    import type { MessageFormatter } from '../service/base/i18n.setup';
     import type { UserSong } from '../model/song.model';
     import type { TableView } from '../model/table-view.model';
     import { showError, showInfo } from '../store/notification.store';

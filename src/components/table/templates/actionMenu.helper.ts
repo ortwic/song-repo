@@ -1,6 +1,6 @@
 import type { CellComponent, MenuObject, MenuSeparator } from 'tabulator-tables';
 import type { UserSong } from '../../../model/song.model';
-import type { MessageFormatter } from '../../../service/i18n.setup';
+import type { MessageFormatter } from '../../../service/base/i18n.setup';
 import { SEARCH_ACTIONS, SongActions } from '../SongActions.class';
 
 export function buildActionMenu(actions: SongActions, t: MessageFormatter): Array<MenuObject<CellComponent> | MenuSeparator> {

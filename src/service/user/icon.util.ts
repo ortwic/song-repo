@@ -1,4 +1,4 @@
-import platformIcons from '../data/icons.json';
+import platformIcons from '../../data/icons.json';
 
 /**
  * Returns the Boxicons class name for a known platform.

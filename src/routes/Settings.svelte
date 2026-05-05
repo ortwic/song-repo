@@ -7,8 +7,8 @@
     import { slideFade } from '../components/ui/helper/transition.helper';
     import Expand from '../components/ui/elements/Expand.svelte';
     import Footer from '../components/ui/Footer.svelte';
-    import AuthService, { currentUser } from '../service/auth.service';
-    import UserService from '../service/user.service';
+    import AuthService, { currentUser } from '../service/user/auth.service';
+    import UserService from '../service/user/user.service';
     import { showError, showInfo } from '../store/notification.store';
     import '../styles/menu.scss';
 

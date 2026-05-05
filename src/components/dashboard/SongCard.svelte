@@ -2,7 +2,7 @@
     import { t } from 'svelte-i18n';
     import type { UserSong } from '../../model/song.model';
     import { type Status, status as statusKeys } from '../../model/types';
-    import SongService from '../../service/user-song.service';
+    import SongService from '../../service/user/user-song.service';
     import { genreColor } from '../../styles/style.helper';
     import ConfirmDialog from '../dialogs/ConfirmDialog.svelte';
     import PopupMenu from '../ui/PopupMenu.svelte';

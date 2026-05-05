@@ -1,7 +1,7 @@
 import { logEvent } from 'firebase/analytics';
 import { ArrayStore } from './array.class';
 import type { Notification, NotificationType } from '../model/notification.model';
-import { analytics } from '../service/auth.service';
+import { analytics } from '../service/user/auth.service';
 
 const defaultTimeout = 3;
 

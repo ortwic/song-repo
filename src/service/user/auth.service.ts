@@ -12,9 +12,9 @@ import {
 } from 'firebase/auth';
 import { getAnalytics, setUserId } from 'firebase/analytics';
 import { authState } from 'rxfire/auth';
-import { auth } from './firebase.setup';
-import { showInfo } from '../store/notification.store';
-import { app } from '../service/firebase.setup';
+import { auth } from '../base/firebase.setup';
+import { showInfo } from '../../store/notification.store';
+import { app } from '../base/firebase.setup';
 import UserService from './user.service';
 
 export const currentUser = authState(auth);

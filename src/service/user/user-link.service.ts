@@ -1,8 +1,8 @@
 import { auditTime, Observable, of, switchMap } from 'rxjs';
 import { orderBy, Timestamp } from 'firebase/firestore';
-import type { UserLink } from '../model/user.model';
+import type { UserLink } from '../../model/user.model';
 import { currentUser } from './auth.service';
-import FirestoreService, { uniqueKey } from './firestore.service';
+import FirestoreService, { uniqueKey } from '../base/firestore.service';
 import { resolveIcon } from './icon.util';
 
 export class UserLinkService {

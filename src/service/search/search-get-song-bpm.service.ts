@@ -1,7 +1,17 @@
-import type { ArtistResult, SongResult, BothResult } from '../model/songbpm.model';
-import { showError } from '../store/notification.store';
-import type { ApiSettings } from '../model/types';
+import type { ArtistResult, SongResult, BothResult } from '../../model/songbpm.model';
+import { showError } from '../../store/notification.store';
+import type { ApiSettings } from '../../model/types';
 import type { SearchService } from './search.service';
+
+async function tryJson<T>(resp: Response): Promise<T> {
+    const text = await resp.text();
+    if (text.startsWith('{') || text.startsWith('[')
+        && text.endsWith('}') || text.endsWith(']')) {
+        return JSON.parse(text);
+    }
+    console.error(text);
+    throw new Error('Failed to parse response. See console for details.');
+}
 
 export default class SearchSongBpmService implements SearchService {
     baseUrl: string;
@@ -15,7 +25,7 @@ export default class SearchSongBpmService implements SearchService {
     async findArtists(artist: string): Promise<ArtistResult[]> {
         const url = `${this.baseUrl}/search/?api_key=${this.apiKey}&type=artist&lookup=${artist}`;
         const data = await fetch(url)
-            .then(resp => resp.json())
+            .then(tryJson)
             .catch(error => showError(error));
         return Array.isArray(data?.search) ? data.search : [];
     }
@@ -35,7 +45,7 @@ export default class SearchSongBpmService implements SearchService {
             : `type=song&lookup=${title}`;
         const url = `${this.baseUrl}/search/?api_key=${this.apiKey}&${search}`;
         const data = await fetch(url)
-            .then(resp => resp.json())
+            .then(tryJson)
             .catch(error => showError(error));
         return Array.isArray(data?.search) ? data.search.map(toSong) : [];
     }

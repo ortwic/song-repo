@@ -2,7 +2,7 @@
     import { t } from 'svelte-i18n';
     import { slide } from 'svelte/transition';
     import { cubicOut } from 'svelte/easing';
-    import AuthService from '../../service/auth.service';
+    import AuthService from '../../service/user/auth.service';
     import { showError } from '../../store/notification.store';
     import { currentMenu } from '../../store/app.store';
     

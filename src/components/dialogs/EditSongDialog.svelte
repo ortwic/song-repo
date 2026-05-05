@@ -4,7 +4,7 @@
     import '../../styles/overrides/simple-autocomplete.scss';
     import ConfirmDialog from './ConfirmDialog.svelte';
     import SelectKey from '../ui/SelectKey.svelte';
-    import SongService from '../../service/user-song.service';
+    import SongService from '../../service/user/user-song.service';
     import type { UserSong } from '../../model/song.model';
     import { createDeferred } from '../../utils/promise.helper';
     import Expand from '../ui/elements/Expand.svelte';

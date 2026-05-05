@@ -13,7 +13,7 @@
     import EventListMenu from './EventListMenu.svelte';
     import MenuDrawer from '../ui/elements/MenuDrawer.svelte';
     import Sidebar from '../ui/Sidebar.svelte'
-    import { currentUser } from '../../service/auth.service';
+    import { currentUser } from '../../service/user/auth.service';
     import { currentMenu } from '../../store/app.store';
     import TagCloud from './TagCloud.svelte';
 

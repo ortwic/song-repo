@@ -1,7 +1,7 @@
 import { Observable, of, switchMap, from, map, auditTime, merge, BehaviorSubject } from 'rxjs';
 import { currentUser } from './auth.service';
-import FirestoreService, { uniqueKey } from './firestore.service';
-import type { UserSong } from '../model/song.model';
+import FirestoreService, { uniqueKey } from '../base/firestore.service';
+import type { UserSong } from '../../model/song.model';
 import { Timestamp, orderBy, where } from 'firebase/firestore';
 import { createUserStore } from './user.service';
 
