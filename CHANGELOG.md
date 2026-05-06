@@ -1,3 +1,10 @@
+v0.6.1 (2026-05-06)
+-------------------
+- song editing form now improved
+- advanced filtering for recent songs
+- online search bar in dashboard
+- bugfixes
+
 v0.6.0 (2026-04-30)
 -------------------
 - svelte 5 migration

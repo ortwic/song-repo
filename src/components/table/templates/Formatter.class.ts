@@ -216,13 +216,20 @@ export default class Formatter {
     }
 }
 
-export function toDate(ts: Timestamp | Date | number | undefined): Date {
-    if (typeof (ts as Timestamp)?.toDate === 'function') 
-        return (ts as Timestamp).toDate();
-    if (ts instanceof Date) 
-        return ts;
-    if (typeof ts === 'number') 
-        return new Date(ts);
+export function toDate(value: object | Date | string | undefined): Date {
+    if (typeof value === 'string') {
+        return new Date(value);
+    }
+    if (value instanceof Date) {
+        return value;
+    }
+    const ts = value as Timestamp;
+    if ('toDate' in ts && ts.toDate instanceof Function) {
+        return ts.toDate();
+    }
+    if ('seconds' in ts && ts.seconds) {
+        return DateTime.fromSeconds(ts.seconds).toJSDate();
+    }
     return new Date(0);
 }
 

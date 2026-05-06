@@ -16,12 +16,14 @@
     import { currentUser } from '../../service/user/auth.service';
     import { currentMenu } from '../../store/app.store';
     import TagCloud from './TagCloud.svelte';
+    import RecentMenu from './RecentMenu.svelte';
 
     interface Props {
         footer: string;
     }
 
     let { footer }: Props = $props();
+    const isDashboard = derived(location, (path) => path === '/');
     const isTableView = derived(location, (path) => path.startsWith('/songs'));
     const isBlogView = derived(location, (path) => path.startsWith('/blog'));
     const isEventView = derived(location, (path) => path.startsWith('/events'));
@@ -43,7 +45,10 @@
             <LoginMenu />
         {/if}
 
-        {#if $isTableView}
+        {#if $isDashboard}
+            <RecentMenu />
+            <ShareMenu showPreview={false} showQRDownload={false} />
+        {:else if $isTableView}
             <TableMenu exportTitle="{ $t('menu.table.exportTitle') }" />
             <ColumnMenu />
         {:else if $isBlogView}

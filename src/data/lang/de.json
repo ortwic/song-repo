@@ -81,7 +81,7 @@
   },
   "songs": {
     "columns": {
-      "fav": "Favorit",
+      "fav": "Favoriten",
       "progressLogs": "Anzahl",
       "progress": "Fortschritt",
       "status": "Status",
@@ -148,7 +148,6 @@
     "incl-done": "Mit Erledigten",
     "excl-done": "Ohne Erledigten",
     "add-new": "Song hinzufügen",
-    "filter": "Filter ein-/ausblenden",
     "shuffle-list": "Liste mischen",
     "hint-uri": "Share-Link von Cloud",
     "sections": {

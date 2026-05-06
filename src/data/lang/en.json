@@ -81,7 +81,7 @@
   },
   "songs": {
     "columns": {
-      "fav": "Favorite",
+      "fav": "Favorites",
       "progressLogs": "Count",
       "progress": "Progress",
       "status": "Status",
@@ -148,7 +148,6 @@
     "incl-done": "Include done",
     "excl-done": "Exclude done",
     "add-new": "Add song",
-    "filter": "Show/Hide filter",
     "shuffle-list": "Shuffle list",
     "hint-uri": "Share link from cloud",
     "sections": {

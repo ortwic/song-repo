@@ -6,6 +6,11 @@
     import { showError, showInfo } from "../../store/notification.store";
     import { onMount } from 'svelte';
 
+    let {
+        showPreview = true,
+        showQRDownload = true,
+    } = $props();
+
     const shareLink = currentProfile.pipe(
         map((p) => p.alias 
             ? `${window.location.origin}/@${p.alias}` 
@@ -66,16 +71,19 @@
 </script>
 
 <section class="menu">
+    {#if showPreview}
     <div class="row">
         <button data-close title="{ $t('profile.preview-linkhub') }" onclick={() => window.open($shareLink) }>
             <i class='bx bx-sitemap'></i> { $t('profile.preview-linkhub') }
         </button>
     </div>
+    {/if}
     <div class="row">
         <button title="{ $t('profile.share-link') }" onclick={() => copyText($shareLink)}>
             <i class='bx bx-share-alt'></i> { $t('profile.share-link') }
         </button>
     </div>
+    {#if showQRDownload}
     <div class="row">
         <a role="button" href="{qrCodeUrl}" 
             title="{ $t('profile.download-qrcode') } (@{$currentProfile.alias ?? $currentProfile.id})"
@@ -83,6 +91,7 @@
             <i class='bx bx-qr'></i> { $t('profile.download-qrcode') }
         </a>
     </div>
+    {/if}
     <p>
         <canvas id="qrcode" bind:this={qrCodeCanvas}></canvas>
     </p>

@@ -1,19 +1,14 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
     import { flip } from 'svelte/animate';
-    import { cubicOut } from 'svelte/easing';
-    import { slide } from 'svelte/transition';
     import { map } from 'rxjs';
+    import { recentFilter } from '../../service/user/recent-songs.svelte';
     import SongService from '../../service/user/user-song.service';
+    import type { UserSong } from '../../model/song.model';
     import { unfold } from '../ui/helper/transition.helper';
     import { toDate } from '../table/templates/Formatter.class';
     import { toStore } from '../../utils/rx.store';
     import SongCard from './SongCard.svelte';
-    import Switch from '../ui/elements/Switch.svelte';
-
-    const MAX = 16;
-
-    let showFilter = $state(false), limit = $state(4), showDone = $state(false);
 
     const service = new SongService();
     const recentSongStore = toStore(
@@ -26,31 +21,21 @@
         ),
         []
     );
+    const filterByFav = (song: UserSong): boolean => 
+        recentFilter.fav !== undefined ? song.fav === recentFilter.fav : true;
+    const filterByStatus = (song: UserSong): boolean => 
+        recentFilter.status[song.status];
 
-    let recentSongs = $derived($recentSongStore.filter((s) => showDone || s.status !== 'done').slice(0, limit));
+    let recentSongs = $derived($recentSongStore
+        .filter((s) => filterByFav(s) && filterByStatus(s))
+        .slice(0, recentFilter.limit)
+    );
 </script>
 
 <section class="recent-songs">
     <header class="row">
         <div class="title"><i class="bx bxs-playlist"></i> {$t('songs.recent-wip')}</div>
-        <span>
-            <Switch title={$t('songs.filter')}
-                    state={showFilter} icon="bx-filter"
-                    onToggle={() => showFilter = !showFilter} />
-        </span>
     </header>
-
-    {#if showFilter}
-        <div class="controls" transition:slide={{ duration: 200, easing: cubicOut }}>
-            <input type="range" title={limit.toString()} min="2" max={MAX} step="2" bind:value={limit} aria-label={$t('songs.recent-limit')} />
-            <span>
-                <span>{ $t(`songs.${!showDone ? 'incl-done' : 'excl-done'}`) }</span>
-                <Switch title={ $t(`songs.${!showDone ? 'incl-done' : 'excl-done'}`) }
-                    state={showDone} icon='bx-check'
-                    onToggle={() => showDone = !showDone} />
-            </span>
-        </div>
-    {/if}
 
     {#if recentSongs.length === 0}
         <p class="empty">{$t('songs.nosongs')}</p>
@@ -86,11 +71,6 @@
         align-items: center;
         gap: .6em;
         padding: .6em 0;
-
-        input[type='range'] {
-            width: 80px;
-            accent-color: var(--primary);
-        }
     }
 
     .card-grid {

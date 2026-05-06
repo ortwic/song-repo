@@ -6,7 +6,7 @@
     import TitlebarMenu from '../components/menus/TitlebarMenu.svelte';
     import type { ColumnDefinition } from '../components/table/tabulator/types';
     import { createColumnBuilder, createEditor } from '../components/table/templates/column.helper';
-    import { autoFilter, rangeFilter } from '../components/table/templates/filter.helper';
+    import { autoFilter, dateFilter, rangeFilter } from '../components/table/templates/filter.helper';
     import { groupByFormatter } from '../components/table/templates/Formatter.class';
     import Table from '../components/table/Table.svelte';
     import FileDrop from '../components/table/FileDrop.svelte';
@@ -76,8 +76,8 @@
         column(t, 4, 'uri', '200', 'string', 'url', autoFilter(), editor('input')),
         column(t, 5, 'features', '200', 'string', 'label', autoFilter(), editor('input')),
         column(t, 6, 'tags', '200', 'string', 'label', autoFilter(), editor('input'), { visible: !readonly }),
-        column(t, 7, 'learnedOn', '136', 'date', 'timestamp', autoFilter(), editor('date'), { visible: !readonly }),
-        column(t, 7, 'changedAt', '136', 'date', 'timestamp', autoFilter(), { visible: !readonly }),
+        column(t, 7, 'learnedOn', '136', 'date', 'timestamp', dateFilter(), editor('date'), { visible: !readonly }),
+        column(t, 7, 'changedAt', '136', 'date', 'timestamp', dateFilter(), { visible: !readonly }),
         { title: 'id', field: 'id', visible: false },
     ];
 

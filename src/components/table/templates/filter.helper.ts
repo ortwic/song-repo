@@ -15,6 +15,13 @@ export const autoFilter = (operator: FilterType = 'like'): Partial<ColumnDefinit
     };
 };
 
+export const dateFilter = (operator: FilterType = 'like'): Partial<ColumnDefinition> => {
+    return {
+        headerFilter: 'date',
+        headerFilterFunc: operator as FilterType,
+    };
+};
+
 export const rangeFilter = (min = 0, max = 100, step = 5): Partial<ColumnDefinition> => {
     return {
         headerFilter: minMaxFilterEditorElement,

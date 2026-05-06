@@ -5,6 +5,7 @@
     import SongService from '../../service/user/user-song.service';
     import { genreColor } from '../../styles/style.helper';
     import ConfirmDialog from '../dialogs/ConfirmDialog.svelte';
+    import TagCloud from '../ui/elements/TagCloud.svelte';
     import PopupMenu from '../ui/PopupMenu.svelte';
     import { toDate } from '../table/templates/Formatter.class';
     import { SEARCH_ACTIONS, SongActions } from '../table/SongActions.class';
@@ -16,7 +17,6 @@
     let { song = $bindable() }: Props = $props();
 
     const actions = new SongActions(new SongService());
-    const asArray = <T,>(obj: T) => (Array.isArray(obj) ? obj : [obj]);
     const signature = [song.key, song.time, song.bpm].filter(Boolean).join(' | ');
 
     let searchPopupMenu: PopupMenu = $state();
@@ -106,14 +106,14 @@
     </div>
 
     <div class="tags" title="Labels">
-        {#if song.tags?.length}
-            {#each asArray(song.tags).filter(Boolean) as tag}
-                <span class="label tag">{tag}</span>
+        {#if song.features?.length}
+            {#each song.features as tag}
+                <span class="label feature">{tag}</span>
             {/each}
         {/if}
-        {#if song.features?.length}
-            {#each asArray(song.features).filter(Boolean) as tag}
-                <span class="label feature">{tag}</span>
+        {#if song.tags?.length}
+            {#each song.tags as tag}
+                <span class="label tag">{tag}</span>
             {/each}
         {/if}
     </div>
