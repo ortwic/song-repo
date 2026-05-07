@@ -22,7 +22,7 @@
         []
     );
     const filterByFav = (song: UserSong): boolean => 
-        recentFilter.fav !== undefined ? song.fav === recentFilter.fav : true;
+        recentFilter.fav !== null ? song.fav === recentFilter.fav : true;
     const filterByStatus = (song: UserSong): boolean => 
         recentFilter.status[song.status];
 

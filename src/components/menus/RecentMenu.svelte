@@ -2,8 +2,11 @@
     import { t } from "svelte-i18n";
     import Switch from "../ui/elements/Switch.svelte";
     import { status} from "../../model/types";
-    import { MAX_LIMIT, recentFilter } from "../../service/user/recent-songs.svelte";
+    import { MAX_LIMIT, recentFilter, saveSettings } from "../../service/user/recent-songs.svelte";
 
+    $effect(() => {
+        saveSettings(recentFilter);
+    });
 </script>
 
 <section class="menu">
@@ -20,12 +23,11 @@
         <span>
             <Switch title="{$t('menu.table.filter-by')} {$t('songs.columns.fav')}"
                 bind:state={recentFilter.fav}
-                icon={recentFilter.fav === undefined ? "bx-minus" : "bx-check"}
-                options={[undefined, true, false]}
-                onToggle={(state) => {}} />
+                icon={recentFilter.fav === null ? "bx-minus" : "bx-check"}
+                options={[null, true, false]} />
             <span>&nbsp;⭐️&nbsp;
                 {$t('songs.columns.fav')}
-                {#if recentFilter.fav === undefined}
+                {#if recentFilter.fav === null}
                     ({$t('table.filter.empty')})
                 {/if}
             </span>

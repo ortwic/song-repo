@@ -31,9 +31,3 @@ export interface UserSong extends Song {
     fav?: boolean;
     tags?: string[];
 }
-
-export interface UserSongFilter {
-    limit: number;
-    status: Record<Status, boolean>;
-    fav: boolean | undefined;
-}

@@ -1,40 +1,43 @@
-import type { UserSongFilter } from '../../model/song.model';
+import { firstValueFrom } from 'rxjs';
+import type { DashboardSettings } from '../../model/settings.model';
 import type { Status } from '../../model/types';
+import { UserSettingsService } from './user-settings.service';
 
-export const MAX_LIMIT = 20;
+const recentSettings = new UserSettingsService('dashboard');
 
-export const recentFilter = $state<UserSongFilter>({
+const defaults: DashboardSettings = {
     limit: 4,
     status: {
         todo: true,
         repeat: true,
         wip: true,
         done: false,
-        archived: false
+        archived: false,
     },
-    fav: undefined
+    fav: null,
+};
+
+export const MAX_LIMIT = 20;
+export const recentFilter = $state<DashboardSettings>({ ...defaults });
+let initialized = $state(false);
+
+firstValueFrom(recentSettings.loadSettings()).then((settings) => {
+    if (settings) {
+        Object.assign(recentFilter, {
+            ...defaults,
+            ...settings,
+            status: { ...defaults.status, ...settings.status },
+        });
+    }
+    initialized = true;
 });
 
-// function setFilter(value: Partial<UserSongFilter>) {
-//     recentFilter = { ...recentFilter, ...value };
-// }
-
-// function setFavorite({ target }: Event) {
-//     const fav = (target as HTMLInputElement).checked;
-//     setFilter({ fav });
-// }
-
-// function setLimit({ target }: Event) {
-//     const limit = (target as HTMLInputElement).valueAsNumber;
-//     setFilter({ limit });
-// }
+export function saveSettings(recentFilter: DashboardSettings) {
+    if (initialized) {
+        recentSettings.saveSettings(recentFilter);
+    }
+}
 
 export function toggleStatus(status: Status) {
-    // setFilter({
-    //     status: {
-    //         ...recentFilter.status,
-    //         [status]: !recentFilter.status[status]
-    //     }
-    // });
     recentFilter.status[status] = !recentFilter.status[status];
 }
