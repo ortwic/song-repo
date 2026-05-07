@@ -39,13 +39,8 @@
         if (song.uri) {
             actions.openUri(song);
         } else {
-            await handleChangeResource();
+            await handleEditEntry();
         }
-    }
-
-    async function handleChangeResource() {
-        const uri = await actions.setUri(song);
-        song = { ...song, uri };
     }
 
     async function handleEditEntry() {
@@ -171,11 +166,6 @@
             on:click={handleEditEntry}>
             <i class="bx bx-edit"></i>
             {$t('songs.menu.edit')}
-        </button>
-        <button class="option" title="{$t('songs.menu.edit-resource"')}"
-            on:click={handleChangeResource}>
-            <i class="bx bx-link"></i>
-            {$t('songs.menu.edit-resource')}
         </button>
         <button class="option" on:click={() => deleteDialogVisible = true}>
             <i class="bx bx-trash"></i>

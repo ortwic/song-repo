@@ -2,15 +2,17 @@
     import { t } from 'svelte-i18n';
     import Autocomplete from 'simple-svelte-autocomplete/src/SimpleAutocomplete.svelte';
     import '../../styles/overrides/simple-autocomplete.scss';
-    import ConfirmDialog from './ConfirmDialog.svelte';
-    import SelectKey from '../ui/SelectKey.svelte';
     import SongService from '../../service/user/user-song.service';
+    import type { DriveFile } from '../../model/file.model';
     import type { UserSong } from '../../model/song.model';
     import { createDeferred } from '../../utils/promise.helper';
-    import Expand from '../ui/elements/Expand.svelte';
-    import TagCloud from '../ui/elements/TagCloud.svelte';
     import genres from '../../data/genres.json';
     import { redToGreenRange } from '../../styles/style.helper';
+    import ConfirmDialog from './ConfirmDialog.svelte';
+    import SelectKey from '../ui/SelectKey.svelte';
+    import Expand from '../ui/elements/Expand.svelte';
+    import TagCloud from '../ui/elements/TagCloud.svelte';
+    import CloudResource from '../storage/CloudResource.svelte';
 
     const TIME_PRESETS = ['4/4', '3/4', '6/8', '2/4', '12/8', '5/4', '7/8', '2/2'];
     const songService = new SongService();
@@ -27,6 +29,10 @@
         editSong = { features: [], tags: [], ...initial };
         visible = true;
         return deferred.promise;
+    }
+
+    function handlePick({ url }: DriveFile): void {
+        editSong.uri = url;
     }
 
     function done(confirmed: boolean): void {
@@ -102,8 +108,8 @@
                             {/snippet}
                         </Autocomplete>
                     </div>
-                </div></Expand
-            >
+                </div>
+            </Expand>
 
             <Expand open={isNew} title={$t('songs.sections.song-details')}>
                 <div class="field-grid">
@@ -188,15 +194,7 @@
             <Expand open={!isNew} title={$t('songs.sections.mydata')}>
                 <div class="field-grid">
                     <div class="group span-full">
-                        <label for="uri">
-                            {$t('songs.columns.uri')}
-                            {#if editSong.uri}
-                                <a href={editSong.uri} title={$t('songs.menu.open')} target="_blank" rel="noopener">
-                                    <i class="bx bx-link-external"></i>
-                                </a>
-                            {/if}
-                        </label>
-                        <input id="uri" type="url" bind:value={editSong.uri} placeholder="{$t('songs.hint-uri')}: https://example.com/sheet-music.pdf" />
+                        <CloudResource title={$t('songs.columns.uri')} bind:uri={editSong.uri} />
                     </div>
 
                     <div class="group span-full">

@@ -1,5 +1,5 @@
 import { Timestamp } from 'firebase/firestore';
-import { DashboardSettings } from './song.model';
+import { DashboardSettings } from './settings.model';
 
 export interface UserProfile {
     id: string;

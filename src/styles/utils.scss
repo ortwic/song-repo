@@ -87,3 +87,21 @@ input.lg {
         text-shadow: none;
     }
 }
+
+
+/* Loading spinner */
+.spinner {
+    display: block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--primselect, #dadce0);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

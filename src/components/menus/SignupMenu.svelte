@@ -1,7 +1,7 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
     import ConfirmDialog from '../dialogs/ConfirmDialog.svelte';
-    import AuthService from '../../service/user/auth.service';
+    import { authService } from '../../service/user/auth.service';
     import { lang } from '../../service/base/i18n.setup';
     import { logPageView, showError } from '../../store/notification.store';
     
@@ -13,7 +13,6 @@
     const MIN_PWD_LENGTH = 6;
     const checkedIcon = 'bx bxs-check-circle bx-sm success-text';
     const uncheckedIcon = 'bx bx-circle bx-sm';
-    const authService = new AuthService();
 
     let email = $state(import.meta.env.DEV ? 'john.doe@example.com' : '');
     let password = $state('');

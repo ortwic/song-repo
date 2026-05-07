@@ -17,7 +17,7 @@
 </script>
 
 {#if photoURL}
-<img class="avatar border" src={photoURL} style:width={size} alt={title} {title}>
+<img class="avatar border" src={photoURL} style:width={size} style:height={size} alt={title} {title}>
 {:else}
 <span class="avatar" style:width={size} style:height={size}>
     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -47,7 +47,6 @@ export const SEARCH_ACTIONS: SearchAction[] = [
 ];
 
 export class SongActions {
-    readonly resourceDialog = getContext<Dialog<string>>('resource-dialog');
     readonly editSongDialog = getContext<Dialog<UserSong>>('editsong-dialog');
 
     constructor(public service: SongService) {}
@@ -72,15 +71,6 @@ export class SongActions {
         if (editedSong) {
             await this.service.setSong(editedSong);
         }
-    }
-
-    async setUri(song: UserSong): Promise<string> {
-        const uri = await this.resourceDialog.open(song.uri);
-        if (uri !== null && song.uri !== uri) {
-            song.uri = uri;
-            await this.service.setSong(song);
-        }
-        return song.uri;
     }
 
     async toggleFavorite(song: UserSong): Promise<void> {

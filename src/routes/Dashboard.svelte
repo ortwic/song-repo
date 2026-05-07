@@ -6,11 +6,9 @@
     import SearchSongs from '../components/dashboard/SearchSongs.svelte';
     import Welcome from '../components/dashboard/Welcome.svelte';
     import TitlebarMenu from '../components/menus/TitlebarMenu.svelte';
-    import AuthService, { currentUser } from '../service/user/auth.service';
+    import { authService, currentUser } from '../service/user/auth.service';
     import { currentProfile } from '../service/user/user.service';
     import { currentMenu } from '../store/app.store';
-
-    const authService = new AuthService();
 
     async function signOut() {
         await authService.signOut();

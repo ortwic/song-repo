@@ -12,7 +12,7 @@ export function buildActionMenu(actions: SongActions, t: MessageFormatter): Arra
             label: `<i class='bx bx-link-external'></i> <b>${t('songs.menu.open')}</b>`,
             action(e, c) {
                 const song = cell(c);
-                song.uri ? void (actions.openUri(song)) : actions.setUri(song);
+                song.uri ? void (actions.openUri(song)) : actions.editSong(song);
             }
         },
         {

@@ -1,0 +1,69 @@
+<script lang="ts">
+    import { t } from 'svelte-i18n';
+    import type { DriveFile } from '../../model/file.model';
+    import { isGoogleUser } from '../../service/user/user.service';
+    import GoogleDrivePicker from './GoogleDrivePicker.svelte';
+    import { marked } from 'marked';
+
+    interface Props {
+        title?: string;
+        uri?: string;
+    }
+
+    let { title, uri = $bindable() }: Props = $props();
+
+    const handlePick = (file: DriveFile) => {
+        uri = file.url;
+    };
+</script>
+
+<div class="label">
+    <label for="uri">
+        {title}
+    </label>
+    {#if uri}
+        <a href={uri} title={$t('songs.resource.show')} target="_blank" rel="noopener">
+            <i class="bx bx-show"></i> {$t('songs.resource.show')}
+        </a>
+    {/if}
+    <GoogleDrivePicker disabled={!$isGoogleUser} onPick={handlePick} />
+    {#if !$isGoogleUser}
+        <div class="info">
+            <i class="bx bx-info-circle"></i>
+            <span>
+                {@html marked($t('songs.resource.info'))}
+            </span>
+        </div>
+    {/if}
+</div>
+<input
+    id="uri"
+    type="url"
+    title={$t('songs.hint-uri')}
+    bind:value={uri}
+    placeholder="https://example.com/files/my-sheet-music.pdf"
+/>
+
+<style lang="scss">
+    .label {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.4em;
+    }
+
+    input {
+        width: 100%;
+    }
+
+    .info {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        padding: 0.4em 1em;
+        border: 1px solid gray;
+        background-color: #8be2ff80;
+        text-align: center;
+        white-space: collapse balance;
+    }
+</style>

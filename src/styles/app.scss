@@ -169,6 +169,10 @@ input[type='submit'].primary:hover {
     background-color: var(--primdark);
 }
 
+button:disabled {
+    cursor: not-allowed;
+}
+
 button.primary:disabled,
 a[role='button'].primary:disabled,
 input[type='reset'].primary:disabled,

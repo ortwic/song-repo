@@ -91,7 +91,7 @@
       "genre": "Genre",
       "style": "Style",
       "source": "Source",
-      "uri": "Resource-Pfad",
+      "uri": "URI to resource",
       "key": "Key",
       "time": "Time",
       "bpm": "BPM",
@@ -112,7 +112,6 @@
       "search-tutorial": "Search tutorial",
       "search-lyrics": "Search lyrics",
       "search-midi-file": "Search midi file",
-      "edit-resource": "Edit resource",
       "toggle-favorite": "Toggle favorite",
       "change-status": "Change status",
       "delete": "Delete?",
@@ -124,10 +123,12 @@
       "edit": "Edit entry"
     },
     "resource": {
-      "title": "Enter resource path",
-      "caption": "Enter a uri path to any resource:",
-      "invalid-uri": "Not a valid URI:",
-      "info": "Use a cloud storage like google drive to upload your files. Then copy the url here."
+      "show": "Show",
+      "info": "**Tip**  \nYou can use any shared link from a cloud storage.  \nAlternatively, you can link your profile to enable Google Drive selection.",
+      "select": "Select file",
+      "drive-loading": "Opening Drive…",
+      "drive-error": "Unknown error opening Google Drive",
+      "select-title": "Select a file from Google Drive"
     },
     "nosongs": "No songs added.",
     "exportTitle": "My Song List",

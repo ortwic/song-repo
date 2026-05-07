@@ -1,4 +1,4 @@
-import type { User } from 'firebase/auth';
+import { GoogleAuthProvider, type User } from 'firebase/auth';
 import { where } from 'firebase/firestore';
 import { authState } from 'rxfire/auth';
 import { from, map, Observable, of, startWith, switchMap } from 'rxjs';
@@ -16,6 +16,8 @@ export const currentProfile = authState(auth).pipe(
     map(p => p || empty),
     startWith(empty)
 );
+
+export const isGoogleUser = currentProfile.pipe(map(p => p?.provider === GoogleAuthProvider.PROVIDER_ID));
 
 export default class UserService {
     getProfileByAlias(alias: string): Observable<UserProfile> {

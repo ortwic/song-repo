@@ -91,7 +91,7 @@
       "genre": "Genre",
       "style": "Style",
       "source": "Quelle",
-      "uri": "Resource path",
+      "uri": "URI zur Ressource",
       "key": "Tonart",
       "time": "Taktart",
       "bpm": "Tempo",
@@ -112,7 +112,6 @@
       "search-tutorial": "Tutorial suchen",
       "search-lyrics": "Songtexte suchen",
       "search-midi-file": "Midi-Dateien suchen",
-      "edit-resource": "Ressource ändern",
       "toggle-favorite": "Favorit umschalten",
       "change-status": "Status ändern",
       "delete": "Löschen?",
@@ -124,10 +123,12 @@
       "edit": "Eintrag bearbeiten"
     },
     "resource": {
-      "title": "Geben Sie den Ressourcenpfad ein",
-      "caption": "Geben Sie einen URI-Pfad zu einer beliebigen Ressource ein:",
-      "invalid-uri": "Kein gültiger URI:",
-      "info": "Verwenden Sie einen Cloud-Speicher wie Google Drive, um Ihre Dateien hochzuladen. \nDann kopieren Sie die URL hier."
+      "show": "Anzeigen",
+      "info": "**Tipp**  \nSie können jeden freigegebenen Link aus einem Cloud-Speicher verwenden.  \nAlternativ können Sie Ihr Profil verknüpfen, um die Google Drive-Auswahl zu ermöglichen.",
+      "select": "Datei auswählen",
+      "drive-loading": "Öffne Drive",
+      "drive-error": "Unbekannter Fehler beim Öffnen von Google Drive",
+      "select-title": "Datei aus Google Drive auswählen"
     },
     "nosongs": "Nichts hinzugefügt.",
     "exportTitle": "Meine Songliste",

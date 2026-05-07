@@ -2,6 +2,7 @@ v0.6.1 (2026-05-06)
 -------------------
 - song editing form now improved
 - advanced filtering for recent songs
+- Google Drive Picker integration
 - online search bar in dashboard
 - bugfixes
 
