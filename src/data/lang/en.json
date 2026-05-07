@@ -126,9 +126,11 @@
       "show": "Show",
       "info": "**Tip**  \nYou can use any shared link from a cloud storage.  \nAlternatively, you can link your profile to enable Google Drive selection.",
       "select": "Select file",
+      "select-cloud": "File from cloud",
       "drive-loading": "Opening Drive…",
       "drive-error": "Unknown error opening Google Drive",
-      "select-title": "Select a file from Google Drive"
+      "select-title": "Select a file from Google Drive",
+      "upload": "Upload file"
     },
     "nosongs": "No songs added.",
     "exportTitle": "My Song List",

@@ -1,260 +1,251 @@
 /**
  * GoogleDriveService
  *
- * Handles incremental OAuth for the drive.file scope and wraps the
- * Google Picker API. No changes to AuthService are required — the
- * Drive token is acquired lazily, only when the user opens the picker.
+ * Google Drive Picker and file upload.
  *
- * Prerequisites (Google Cloud Console, same GCP project as Firebase):
- *   1. Enable "Google Drive API" and "Google Picker API"
- *   2. Create an API Key  → restrict to "Google Picker API" + your domain
- *   3. Create an OAuth 2.0 Client ID (Web application)
- *      → Authorized JavaScript origins, e. g. http://localhost:5173
+ * Token management is fully external:
+ *   - setAccessToken()        called by GoogleAuthSetupService after login / refresh
+ *   - registerTokenRefresher() called by GoogleAuthSetupService in its constructor
  *
- * Note: The Google Picker API and GSI have no official npm packages —
- * dynamic script loading is the only supported integration path.
+ * Script loading (GSI / GAPI) is owned by GoogleAuthSetupService.
+ * This service calls ensureScriptsLoaded() on the setup service before
+ * opening the picker or uploading, so it stays independent of load order.
  */
 
-import type { DriveFile, DrivePickerOptions } from "../../model/file.model";
+import type { DriveFile, DrivePickerOptions } from '../../model/file.model';
 
 const API_KEY = import.meta.env.VITE_GOOGLE_API_KEY as string;
-const CLIENT_ID = import.meta.env.VITE_GOOGLE_OAUTH_CLIENT_ID as string;
 const APP_ID = import.meta.env.VITE_GOOGLE_APP_ID as string;
 
-const DRIVE_FILE_SCOPE = 'https://www.googleapis.com/auth/drive.file';
-const PICKER_API_URL   = 'https://apis.google.com/js/api.js';
-const GSI_URL          = 'https://accounts.google.com/gsi/client';
+const UPLOAD_API_URL =
+    'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name,mimeType,webContentLink,webViewLink';
 
 const DEFAULT_MIME_TYPES: string[] = [
-  'application/pdf',
-  'image/jpeg',
-  'image/png',
-  'image/gif',
-  'image/webp',
-  'audio/midi',
-  'audio/x-midi',
+    'application/pdf',
+    'image/jpeg',
+    'image/png',
+    'image/gif',
+    'image/webp',
+    'audio/midi',
+    'audio/x-midi',
 ];
 
 const DEFAULT_OPTIONS: Required<DrivePickerOptions> = {
-  mimeTypes:       DEFAULT_MIME_TYPES,
-  viewMode:        'list',
-  showFolders:     true,
-  rootFolderId:    '',
-  showSharedWithMe: true,
-  showRecent:      true,
-  title:           'Select a file from Google Drive',
-  width:           700,
-  height:          450,
+    mimeTypes: DEFAULT_MIME_TYPES,
+    viewMode: 'grid',
+    showFolders: true,
+    rootFolderId: '',
+    showSharedWithMe: true,
+    showRecent: true,
+    title: 'Select a file from Google Drive',
+    width: 700,
+    height: 450,
 };
 
-// ─── Service ──────────────────────────────────────────────────────────────────
-
-type TokenClient = {
-  requestAccessToken: (opts?: { prompt?: string }) => void;
-};
+type TokenRefresher = () => Promise<string>;
+type ScriptLoader = () => Promise<void>;
 
 export class GoogleDriveService {
-  private pickerApiLoaded = false;
-  private tokenClient: TokenClient | null = null;
-  private accessToken: string | null = null;
+    private accessToken: string | null = null;
+    private tokenRefresher: TokenRefresher | null = null;
+    private scriptLoader: ScriptLoader | null = null;
 
-  // ─── Public API ─────────────────────────────────────────────────────────────
+    // -------------------------------------------------------------------------
+    // Injected dependencies (set by GoogleAuthSetupService)
+    // -------------------------------------------------------------------------
 
-  /**
-   * Opens the Google Drive Picker and resolves with the selected file,
-   * or null if the user cancelled.
-   *
-   * Lazily loads all required Google scripts on first call.
-   */
-  async openPicker(options: DrivePickerOptions = {}): Promise<DriveFile | null> {
-    await this.ensureScriptsLoaded();
-    const token = await this.ensureAccessToken();
-    return this.showPicker(token, { ...DEFAULT_OPTIONS, ...options });
-  }
+    registerTokenRefresher(refresher: TokenRefresher): void {
+        this.tokenRefresher = refresher;
+    }
 
-  // ─── Script loading ──────────────────────────────────────────────────────────
+    /**
+     * Registers the script loader from GoogleAuthSetupService.
+     * Must be called before openPicker() or uploadFile() are used.
+     */
+    registerScriptLoader(loader: ScriptLoader): void {
+        this.scriptLoader = loader;
+    }
 
-  private async ensureScriptsLoaded(): Promise<void> {
-    await Promise.all([this.loadGapi(), this.loadGsi()]);
-  }
+    setAccessToken(token: string): void {
+        this.accessToken = token;
+        // Drive tokens expire after ~1 h; clear early to force a clean refresh.
+        setTimeout(() => {
+            this.accessToken = null;
+        }, 55 * 60 * 1000);
+    }
 
-  private loadGapi(): Promise<void> {
-    if (this.pickerApiLoaded) return Promise.resolve();
+    /**
+     * Opens the Google Drive Picker and resolves with the selected file,
+     * or null if the user cancelled.
+     */
+    async openPicker(options: DrivePickerOptions = {}): Promise<DriveFile | null> {
+        await this.ensureScriptsLoaded();
+        const token = await this.ensureAccessToken();
+        return this.showPicker(token, { ...DEFAULT_OPTIONS, ...options });
+    }
 
-    return new Promise((resolve, reject) => {
-      if (document.querySelector(`script[src="${PICKER_API_URL}"]`)) {
-        const wait = setInterval(() => {
-          if (window.gapi) {
-            clearInterval(wait);
-            this.loadPickerLibrary().then(resolve).catch(reject);
-          }
-        }, 50);
-        return;
-      }
+    private showPicker(token: string, opts: Required<DrivePickerOptions>): Promise<DriveFile | null> {
+        return new Promise((resolve) => {
+            const mimeTypes = opts.mimeTypes.join(',');
+            const viewMode =
+                opts.viewMode === 'list'
+                    ? window.google.picker.DocsViewMode.LIST
+                    : window.google.picker.DocsViewMode.GRID;
 
-      const script = document.createElement('script');
-      script.src = PICKER_API_URL;
-      script.async = true;
-      script.defer = true;
-      script.onload = () => this.loadPickerLibrary().then(resolve).catch(reject);
-      script.onerror = () => reject(new Error('Failed to load Google API script'));
-      document.head.appendChild(script);
-    });
-  }
+            const buildView = (): google.picker.DocsView =>
+                new window.google.picker.DocsView(window.google.picker.ViewId.DOCS)
+                    .setMimeTypes(mimeTypes)
+                    .setMode(viewMode)
+                    .setIncludeFolders(opts.showFolders)
+                    .setSelectFolderEnabled(false);
 
-  private loadPickerLibrary(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      window.gapi.load('picker', {
-        callback: () => {
-          this.pickerApiLoaded = true;
-          resolve();
-        },
-        onerror: () => reject(new Error('Failed to load Google Picker library')),
-      });
-    });
-  }
+            const rootView = buildView();
+            if (opts.rootFolderId) rootView.setParent(opts.rootFolderId);
 
-  private loadGsi(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      if (window.google?.accounts?.oauth2) {
-        resolve();
-        return;
-      }
-      if (document.querySelector(`script[src="${GSI_URL}"]`)) {
-        const wait = setInterval(() => {
-          if (window.google?.accounts?.oauth2) {
-            clearInterval(wait);
-            resolve();
-          }
-        }, 50);
-        return;
-      }
+            let builder = new window.google.picker.PickerBuilder()
+                .setAppId(APP_ID)
+                .setOAuthToken(token)
+                .setDeveloperKey(API_KEY)
+                .setTitle(opts.title)
+                .setSize(opts.width, opts.height)
+                .addView(rootView);
 
-      const script = document.createElement('script');
-      script.src = GSI_URL;
-      script.async = true;
-      script.defer = true;
-      script.onload = () => resolve();
-      script.onerror = () => reject(new Error('Failed to load Google Identity Services script'));
-      document.head.appendChild(script);
-    });
-  }
-
-  // ─── OAuth token ─────────────────────────────────────────────────────────────
-
-  /**
-   * Returns a valid access token for the drive.file scope.
-   * On the first call, triggers a consent popup.
-   * Subsequent calls within the token's lifetime reuse the cached token.
-   *
-   * Rejects with Error('popup_closed') when the user dismisses the consent
-   * dialog — the component can catch this and reset loading without an error.
-   */
-  private ensureAccessToken(): Promise<string> {
-    if (this.accessToken) return Promise.resolve(this.accessToken);
-
-    return new Promise((resolve, reject) => {
-      if (!this.tokenClient) {
-        this.tokenClient = window.google.accounts.oauth2.initTokenClient({
-          client_id: CLIENT_ID,
-          scope: DRIVE_FILE_SCOPE,
-          callback: (response: { access_token?: string; error?: string }) => {
-            if (response.error || !response.access_token) {
-              reject(new Error(response.error ?? 'Token request failed'));
-              return;
+            if (opts.showSharedWithMe) {
+                builder = builder.addView(
+                    new window.google.picker.DocsView(window.google.picker.ViewId.DOCS)
+                        .setMimeTypes(mimeTypes)
+                        .setMode(viewMode)
+                        .setIncludeFolders(opts.showFolders)
+                        .setSelectFolderEnabled(false)
+                        .setOwnedByMe(false),
+                );
             }
-            this.accessToken = response.access_token;
-            // Tokens expire after ~1 h — clear the cache proactively
-            setTimeout(() => { this.accessToken = null; }, 55 * 60 * 1000);
-            resolve(this.accessToken);
-          },
-          // Fired when the user closes the consent popup without granting —
-          // without this, the component stays in loading state forever.
-          error_callback: (err: { type: string }) => {
-            reject(new Error(
-              err.type === 'popup_closed' ? 'popup_closed' : `OAuth error: ${err.type}`
-            ));
-          },
+
+            if (opts.showRecent) {
+                builder = builder.addView(
+                    new window.google.picker.DocsView(window.google.picker.ViewId.RECENTLY_PICKED).setMimeTypes(
+                        mimeTypes,
+                    ),
+                );
+            }
+
+            builder
+                .setCallback((data: google.picker.ResponseObject) => {
+                    if (data[google.picker.Response.ACTION] === google.picker.Action.PICKED) {
+                        const doc = data[google.picker.Response.DOCUMENTS][0];
+                        resolve({
+                            id: doc[google.picker.Document.ID],
+                            name: doc[google.picker.Document.NAME],
+                            mimeType: doc[google.picker.Document.MIME_TYPE],
+                            url: doc[google.picker.Document.EMBEDDABLE_URL] ?? doc[google.picker.Document.URL],
+                        });
+                    } else if (data[google.picker.Response.ACTION] === google.picker.Action.CANCEL) {
+                        resolve(null);
+                    }
+                })
+                .build()
+                .setVisible(true);
         });
-      }
+    }
 
-      // prompt: '' skips the account-chooser if the user already consented
-      (this.tokenClient as TokenClient).requestAccessToken({ prompt: '' });
-    });
-  }
+    /**
+     * Uploads a local File to the user's Google Drive (drive.file scope).
+     * Returns a DriveFile on success, or null if the user cancelled the token dialog.
+     *
+     * Uses the Drive REST API multipart upload endpoint:
+     * https://developers.google.com/drive/api/guides/manage-uploads#multipart
+     */
+    async uploadFile(file: File, options: { folderId?: string; description?: string } = {}): Promise<DriveFile | null> {
+        await this.ensureScriptsLoaded();
 
-  // ─── Picker ──────────────────────────────────────────────────────────────────
-
-  private showPicker(
-    token: string,
-    opts: Required<DrivePickerOptions>,
-  ): Promise<DriveFile | null> {
-    return new Promise((resolve) => {
-      const mimeTypes = opts.mimeTypes.join(',');
-      const viewMode  = opts.viewMode === 'list'
-        ? window.google.picker.DocsViewMode.LIST
-        : window.google.picker.DocsViewMode.GRID;
-
-      const buildView = (): google.picker.DocsView => {
-        const view = new window.google.picker.DocsView(window.google.picker.ViewId.DOCS)
-          .setMimeTypes(mimeTypes)
-          .setMode(viewMode)
-          .setIncludeFolders(opts.showFolders)
-          .setSelectFolderEnabled(false); // folders navigate, never resolve as result
-
-        if (opts.rootFolderId) {
-          view.setParent(opts.rootFolderId);
+        let token: string;
+        try {
+            token = await this.ensureAccessToken();
+        } catch (e) {
+            if (e instanceof Error && e.message === 'popup_closed') return null;
+            throw e;
         }
 
-        return view;
-      };
+        const metadata: Record<string, unknown> = {
+            name: file.name,
+            mimeType: file.type,
+            ...(options.description ? { description: options.description } : {}),
+            ...(options.folderId ? { parents: [options.folderId] } : {}),
+        };
 
-      let builder = new window.google.picker.PickerBuilder()
-        .setAppId(APP_ID)
-        .setOAuthToken(token)
-        .setDeveloperKey(API_KEY)
-        .setTitle(opts.title)
-        .setSize(opts.width, opts.height)
-        .addView(buildView());
+        // Build multipart/related body
+        const boundary = `boundary_${Math.random().toString(36).slice(2)}`;
+        const delimiter = `--${boundary}`;
+        const closeDelimiter = `--${boundary}--`;
 
-      if (opts.showSharedWithMe) {
-        builder = builder.addView(
-          new window.google.picker.DocsView(window.google.picker.ViewId.DOCS)
-            .setMimeTypes(mimeTypes)
-            .setMode(viewMode)
-            .setIncludeFolders(opts.showFolders)
-            .setSelectFolderEnabled(false)
-            .setOwnedByMe(false), // "Shared with me"
-        );
-      }
+        const metadataPart =
+            `${delimiter}\r\n` +
+            `Content-Type: application/json; charset=UTF-8\r\n\r\n` +
+            `${JSON.stringify(metadata)}\r\n`;
 
-      if (opts.showRecent) {
-        builder = builder.addView(
-          new window.google.picker.DocsView(window.google.picker.ViewId.RECENTLY_PICKED)
-            .setMimeTypes(mimeTypes),
-        );
-      }
+        const fileBuffer = await file.arrayBuffer();
+        const encoder = new TextEncoder();
+        const bodyParts: Uint8Array[] = [
+            encoder.encode(metadataPart),
+            encoder.encode(`${delimiter}\r\nContent-Type: ${file.type}\r\n\r\n`),
+            new Uint8Array(fileBuffer),
+            encoder.encode(`\r\n${closeDelimiter}`),
+        ];
 
-      builder
-        .setCallback((data: google.picker.ResponseObject) => {
-          if (data[google.picker.Response.ACTION] === google.picker.Action.PICKED) {
-            const doc = data[google.picker.Response.DOCUMENTS][0];
-            resolve({
-              id:       doc[google.picker.Document.ID],
-              name:     doc[google.picker.Document.NAME],
-              mimeType: doc[google.picker.Document.MIME_TYPE],
-              url:      doc[google.picker.Document.EMBEDDABLE_URL]
-                     ?? doc[google.picker.Document.URL],
-            });
-          } else if (data[google.picker.Response.ACTION] === google.picker.Action.CANCEL) {
-            resolve(null);
-          }
-        })
-        .build()
-        .setVisible(true);
-    });
-  }
+        const totalLength = bodyParts.reduce((n, p) => n + p.byteLength, 0);
+        const body = new Uint8Array(totalLength);
+        let offset = 0;
+        for (const part of bodyParts) {
+            body.set(part, offset);
+            offset += part.byteLength;
+        }
+
+        const response = await fetch(UPLOAD_API_URL, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': `multipart/related; boundary=${boundary}`,
+                'Content-Length': String(body.byteLength),
+            },
+            body,
+        });
+
+        if (!response.ok) {
+            const err = await response.text();
+            throw new Error(`Drive upload failed (${response.status}): ${err}`);
+        }
+
+        const json = (await response.json()) as {
+            id: string;
+            name: string;
+            mimeType: string;
+            webContentLink?: string;
+            webViewLink?: string;
+        };
+
+        return {
+            id: json.id,
+            name: json.name,
+            mimeType: json.mimeType,
+            url: json.webViewLink ?? json.webContentLink ?? '',
+        };
+    }
+
+    // -------------------------------------------------------------------------
+    // Internal helpers
+    // -------------------------------------------------------------------------
+
+    private async ensureScriptsLoaded(): Promise<void> {
+        if (!this.scriptLoader) throw new Error('No script loader registered — call registerScriptLoader() first');
+        await this.scriptLoader();
+    }
+
+    private async ensureAccessToken(): Promise<string> {
+        if (this.accessToken) return this.accessToken;
+        if (!this.tokenRefresher) throw new Error('No token refresher registered');
+        return this.tokenRefresher();
+    }
 }
 
-/** Singleton — ensures the OAuth token and tokenClient survive re-renders. */
+/** Singleton — token and script state must survive re-renders. */
 export const googleDriveService = new GoogleDriveService();
