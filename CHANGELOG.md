@@ -1,3 +1,7 @@
+v0.6.2 (2026-05-08)
+-------------------
+- fixed ProgressBar UX!
+
 v0.6.1 (2026-05-06)
 -------------------
 - song editing form now improved

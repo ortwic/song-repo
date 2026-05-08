@@ -27,3 +27,24 @@ span {
     font-weight: bold;
     user-select: none;
 }
+
+.handle {
+    position: absolute;
+    top: 0;
+    width: 5%;
+    height: 100%;
+    background-color: transparent;
+    transform: translateX(-50%);
+    cursor: ew-resize;
+    touch-action: none;
+}
+
+.indicator {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 1px;
+    height: 100%;
+    background-color: gray;
+    transform: translateX(-50%);
+}

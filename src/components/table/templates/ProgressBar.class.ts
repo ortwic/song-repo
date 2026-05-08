@@ -9,23 +9,31 @@ class ProgressBar extends HTMLElement {
     _max = 100;
     readonly progressBar = document.createElement('div');
     readonly percentValue = document.createElement('span');
+    readonly handle = document.createElement('div');
+    readonly handleIndicator = document.createElement('div');
 
     constructor() {
         super();
         const shadow = this.attachShadow({ mode: 'open' });
         const styleElement = document.createElement('style');
         styleElement.innerHTML = style;
-
+        
         shadow.appendChild(styleElement);
         shadow.appendChild(this.progressBar);
         shadow.appendChild(this.percentValue);
-        
-        this.addEventListener('mousedown', this.start);
-        this.addEventListener('touchstart', this.start);
-        this.addEventListener('mousemove', this.move);
-        this.addEventListener('touchmove', this.move);
-        this.addEventListener('mouseup', this.end);
-        this.addEventListener('touchend', this.end);
+
+        this.handleIndicator.classList.add('indicator');
+        this.handle.classList.add('handle');
+        this.handle.appendChild(this.handleIndicator);
+        shadow.appendChild(this.handle);
+
+        this.handle.addEventListener('mousedown', this.start.bind(this));
+        this.handle.addEventListener('touchstart', this.start.bind(this), { passive: true });
+
+        document.addEventListener('mousemove', this.move.bind(this));
+        document.addEventListener('touchmove', this.move.bind(this), { passive: false });
+        document.addEventListener('mouseup', this.end.bind(this));
+        document.addEventListener('touchend', this.end.bind(this));
     }
 
     set value(val: number) {
@@ -64,6 +72,10 @@ class ProgressBar extends HTMLElement {
 
     private move(event: MouseEvent | TouchEvent) {
         if (this.isMouseDown) {
+            if (event instanceof TouchEvent) {
+                // prevent scroll except when handle is active
+                event.preventDefault();
+            }
             this.updateProgress(this.clientX(event));
         }
     }
@@ -109,8 +121,9 @@ class ProgressBar extends HTMLElement {
         this.progressBar.style.width = this._max - this._value + '%';
         this.progressBar.style.marginLeft = this._value + '%';
         this.percentValue.textContent = this._value + '%';
-
-        const [ gradient, color ] = redToGreenGradient(this._value);
+        this.handle.style.left = this._value + '%';
+        
+        const [gradient, color] = redToGreenGradient(this._value);
         this.style.background = gradient;
         this.style.boxShadow = `0 0 12px ${color}80`;
     }
@@ -120,6 +133,13 @@ class ProgressBar extends HTMLElement {
         const clickX = clientX - rect.left;
         const percentage = Math.round((clickX / rect.width) * this._max);
         this.setProgress(percentage);
+    }
+
+    disconnectedCallback() {
+        document.removeEventListener('mousemove', this.move);
+        document.removeEventListener('touchmove', this.move);
+        document.removeEventListener('mouseup', this.end);
+        document.removeEventListener('touchend', this.end);
     }
 }
 
