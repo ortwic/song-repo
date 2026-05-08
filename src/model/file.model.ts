@@ -3,6 +3,7 @@ export interface DriveFile {
     name: string;
     mimeType: string;
     url: string;
+    isFolder: boolean;
 }
 
 export interface DrivePickerOptions {

@@ -1,5 +1,5 @@
 import { Timestamp } from 'firebase/firestore';
-import { DashboardSettings } from './settings.model';
+import { UserSettings } from './settings.model';
 
 export interface UserProfile {
     id: string;
@@ -9,9 +9,7 @@ export interface UserProfile {
     photoURL?: string;
     alias?: string;
     about?: string;
-    settings?: {
-        dashboard?: DashboardSettings;
-    }
+    settings?: UserSettings;
     created: Date;
     deleted?: Date;
 }

@@ -1,27 +1,41 @@
-import { filter, firstValueFrom, map, Observable, take } from 'rxjs';
-import type { UserProfile } from '../../model/user.model';
+import deepmerge from 'deepmerge';
+import { filter, firstValueFrom, Observable, take, map } from 'rxjs';
+import type { UserSettings } from '../../model/settings.model';
 import UserService, { currentProfile } from './user.service';
-
-type Settings = UserProfile['settings'];
-type SettingsKey = keyof NonNullable<Settings>;
 
 const userService = new UserService();
 
 export class UserSettingsService {
-    constructor(private key: SettingsKey) {}
+    private ready: Promise<void> | null = null;
 
-    loadSettings(): Observable<Settings[SettingsKey] | null> {
+    loadSettings(): Observable<UserSettings | null> {
         return currentProfile.pipe(
-            filter(p => !!p?.id),
+            filter((p) => !!p?.id),
             take(1),
-            map(profile => profile?.id && profile.settings?.[this.key] || null)
+            map((profile) => (profile?.settings as UserSettings) ?? null),
         );
     }
 
-    async saveSettings(value: Settings[SettingsKey]): Promise<void> {
-        const profile = await firstValueFrom(currentProfile.pipe(
-            filter(p => !!p?.id)
-        ));
-        await userService.updateProfile({ id: profile.id, settings: { [this.key]: value } });
+    loadSettingsAsync(target: UserSettings, defaults: UserSettings): Promise<void> {
+        if (!this.ready) {
+            this.ready = firstValueFrom(this.loadSettings()).then((settings) => {
+                if (settings) {
+                    Object.assign(target, deepmerge(defaults, settings));
+                }
+            });
+        }
+        return this.ready;
+    }
+    
+    reset(): void {
+        this.ready = null;
+    }
+
+    async saveSettings(value: Partial<UserSettings>): Promise<void> {
+        await this.ready;
+        const profile = await firstValueFrom(currentProfile.pipe(filter((p) => !!p?.id)));
+        await userService.updateProfile({ id: profile.id, settings: { ...profile.settings, ...value } });
     }
 }
+
+export const userSettingsService = new UserSettingsService();

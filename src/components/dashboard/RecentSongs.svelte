@@ -2,7 +2,7 @@
     import { t } from 'svelte-i18n';
     import { flip } from 'svelte/animate';
     import { map } from 'rxjs';
-    import { recentFilter } from '../../service/user/recent-songs.svelte';
+    import { settings } from '../../store/user-settings.svelte';
     import SongService from '../../service/user/user-song.service';
     import type { UserSong } from '../../model/song.model';
     import { unfold } from '../ui/helper/transition.helper';
@@ -10,6 +10,7 @@
     import { toStore } from '../../utils/rx.store';
     import SongCard from './SongCard.svelte';
 
+    const recentFilter = settings.dashboard;
     const service = new SongService();
     const recentSongStore = toStore(
         service.usersongs.pipe(

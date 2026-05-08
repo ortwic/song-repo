@@ -103,17 +103,6 @@
         width: calc(100% - 1em);
     }
 
-    .grid {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        grid-gap: 1rem;
-
-        @media (max-width: 400px) {
-            grid-template-columns: 1fr;
-            grid-gap: 0.2rem;
-        }
-    }
-
     .alias-wrap {
         display: flex;
         flex-direction: column;

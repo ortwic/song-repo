@@ -127,8 +127,6 @@
       "info": "**Tip**  \nYou can use any shared link from a cloud storage.  \nAlternatively, you can link your profile to enable Google Drive selection.",
       "select": "Select file",
       "select-cloud": "File from cloud",
-      "drive-loading": "Opening Drive…",
-      "drive-error": "Unknown error opening Google Drive",
       "select-title": "Select a file from Google Drive",
       "upload": "Upload file"
     },
@@ -231,7 +229,21 @@
     "move-up": "Move up",
     "move-down": "Move down",
     "alias-available": "Alias available",
-    "remove": "Remove"
+    "remove": "Remove",
+    "drive": {
+      "loading": "Opening Drive…",
+      "error": "Unknown error opening Google Drive",
+      "select-default-folder": "Select default folder for files",
+      "default-folder": "Default folder",
+      "set-folder": "Set folder",
+      "change-folder": "Change folder",
+      "clear-folder": "Clear folder",
+      "view-mode": "View",
+      "view-list": "Listview",
+      "view-grid": "Gridview",
+      "show-folders": "Show folders",
+      "navigation": "Navigation"
+    }
   },
   "user": {
     "song-list": "Song list",

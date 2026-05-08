@@ -4,11 +4,12 @@
     import TitlebarMenu from '../components/menus/TitlebarMenu.svelte';
     import Profile from '../components/settings/Profile.svelte';
     import LinkHub from '../components/settings/LinkHub.svelte';
+    import GoogleDrive from '../components/settings/GoogleDrive.svelte';
     import { slideFade } from '../components/ui/helper/transition.helper';
     import Expand from '../components/ui/elements/Expand.svelte';
     import Footer from '../components/ui/Footer.svelte';
     import { authService, currentUser } from '../service/user/auth.service';
-    import UserService from '../service/user/user.service';
+    import UserService, { isGoogleUser } from '../service/user/user.service';
     import { showError, showInfo } from '../store/notification.store';
     import '../styles/menu.scss';
 
@@ -47,6 +48,14 @@
         <Expand title="Linkhub">
             <p>
                 <LinkHub />
+            </p>
+        </Expand>
+        {/if}
+
+        {#if $isGoogleUser}
+        <Expand title="Google Drive">
+            <p>
+                <GoogleDrive />
             </p>
         </Expand>
         {/if}

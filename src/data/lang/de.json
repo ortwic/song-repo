@@ -127,8 +127,6 @@
       "info": "**Tipp**  \nSie können jeden freigegebenen Link aus einem Cloud-Speicher verwenden.  \nAlternativ können Sie Ihr Profil verknüpfen, um die Google Drive-Auswahl zu ermöglichen.",
       "select": "Datei auswählen",
       "select-cloud": "Datei aus Cloud",
-      "drive-loading": "Öffne Drive",
-      "drive-error": "Unbekannter Fehler beim Öffnen von Google Drive",
       "select-title": "Datei aus Google Drive auswählen",
       "upload": "Datei hochladen"
     },
@@ -228,7 +226,21 @@
     "move-down": "Nach unten",
     "move-up": "Nach oben",
     "alias-available": "Alias ​​verfügbar",
-    "remove": "Entfernen"
+    "remove": "Entfernen",
+    "drive": {
+      "loading": "Öffne Drive",
+      "error": "Unbekannter Fehler beim Öffnen von Google Drive",
+      "select-default-folder": "Standardordner für Dateien wählen",
+      "default-folder": "Standardordner",
+      "set-folder": "Ordner festlegen",
+      "change-folder": "Ordner ändern",
+      "clear-folder": "Ordner löschen",
+      "view-mode": "Ansicht",
+      "view-list": "Listenansicht",
+      "view-grid": "Rasteransicht",
+      "show-folders": "Ordner anzeigen",
+      "navigation": "Navigation"
+    }
   },
   "user": {
     "song-list": "Songliste",

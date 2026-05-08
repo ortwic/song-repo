@@ -1,15 +1,18 @@
 /**
  * GoogleDriveService
  *
- * Google Drive Picker and file upload.
+ * Single responsibility: Google Drive Picker and file upload.
  *
  * Token management is fully external:
- *   - setAccessToken()        called by GoogleAuthSetupService after login / refresh
+ *   - setAccessToken()         called by GoogleAuthSetupService after login / refresh
  *   - registerTokenRefresher() called by GoogleAuthSetupService in its constructor
  *
  * Script loading (GSI / GAPI) is owned by GoogleAuthSetupService.
- * This service calls ensureScriptsLoaded() on the setup service before
- * opening the picker or uploading, so it stays independent of load order.
+ * This service calls ensureScriptsLoaded() via the registered scriptLoader.
+ *
+ * Public picker API:
+ *   - openPicker(options?)       file selection; folders navigable, not selectable
+ *   - openFolderPicker(options?) folder-only selection via ViewId.FOLDERS
  */
 
 import type { DriveFile, DrivePickerOptions } from '../../model/file.model';
@@ -20,6 +23,7 @@ const APP_ID = import.meta.env.VITE_GOOGLE_APP_ID as string;
 const UPLOAD_API_URL =
     'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name,mimeType,webContentLink,webViewLink';
 
+const FOLDER_MIME_TYPE = 'application/vnd.google-apps.folder';
 const DEFAULT_MIME_TYPES: string[] = [
     'application/pdf',
     'image/jpeg',
@@ -58,86 +62,126 @@ export class GoogleDriveService {
         this.tokenRefresher = refresher;
     }
 
-    /**
-     * Registers the script loader from GoogleAuthSetupService.
-     * Must be called before openPicker() or uploadFile() are used.
-     */
     registerScriptLoader(loader: ScriptLoader): void {
         this.scriptLoader = loader;
     }
 
     setAccessToken(token: string): void {
         this.accessToken = token;
-        // Drive tokens expire after ~1 h; clear early to force a clean refresh.
         setTimeout(() => {
             this.accessToken = null;
         }, 55 * 60 * 1000);
     }
 
+    // -------------------------------------------------------------------------
+    // Picker — file selection
+    // -------------------------------------------------------------------------
+
     /**
-     * Opens the Google Drive Picker and resolves with the selected file,
-     * or null if the user cancelled.
+     * Opens the Google Drive Picker for file selection.
+     * Folders are visible for navigation but not selectable.
+     * Resolves with the selected DriveFile, or null if cancelled.
      */
     async openPicker(options: DrivePickerOptions = {}): Promise<DriveFile | null> {
         await this.ensureScriptsLoaded();
         const token = await this.ensureAccessToken();
-        return this.showPicker(token, { ...DEFAULT_OPTIONS, ...options });
+        const opts = { ...DEFAULT_OPTIONS, ...options };
+
+        const mimeTypes = opts.mimeTypes.join(',');
+        const viewMode =
+            opts.viewMode === 'list'
+                ? window.google.picker.DocsViewMode.LIST
+                : window.google.picker.DocsViewMode.GRID;
+
+        const buildFileView = (ownedByMe?: boolean): google.picker.DocsView => {
+            const view = new window.google.picker.DocsView(window.google.picker.ViewId.DOCS)
+                .setMimeTypes(mimeTypes)
+                .setMode(viewMode)
+                .setIncludeFolders(true)
+                .setSelectFolderEnabled(false);
+            if (opts.rootFolderId) view.setParent(opts.rootFolderId);
+            if (ownedByMe !== undefined) view.setOwnedByMe(ownedByMe);
+            return view;
+        };
+
+        const views: google.picker.View[] = [buildFileView()];
+        if (opts.showSharedWithMe) views.push(buildFileView(false));
+        if (opts.showRecent) {
+            views.push(
+                new window.google.picker.DocsView(window.google.picker.ViewId.RECENTLY_PICKED)
+                    .setMimeTypes(mimeTypes),
+            );
+        }
+
+        return this.buildPickerPromise(token, views, opts.title, opts.width, opts.height);
     }
 
-    private showPicker(token: string, opts: Required<DrivePickerOptions>): Promise<DriveFile | null> {
+    // -------------------------------------------------------------------------
+    // Picker — folder selection
+    // -------------------------------------------------------------------------
+
+    /**
+     * Opens the Google Drive Picker restricted to folders only.
+     * Uses ViewId.FOLDERS — the canonical approach recommended by Google.
+     * Resolves with the selected folder as DriveFile (isFolder: true), or null if cancelled.
+     */
+    async openFolderPicker(
+        options: { title?: string; width?: number; height?: number } = {},
+    ): Promise<DriveFile | null> {
+        await this.ensureScriptsLoaded();
+        const token = await this.ensureAccessToken();
+
+        const title = options.title ?? 'Select a folder';
+        const width = options.width ?? DEFAULT_OPTIONS.width;
+        const height = options.height ?? DEFAULT_OPTIONS.height;
+
+        // ViewId.FOLDERS shows only folders and makes them selectable —
+        // the canonical Google-recommended approach for folder-only pickers.
+        const folderView = new window.google.picker.DocsView(window.google.picker.ViewId.FOLDERS)
+            .setSelectFolderEnabled(true)
+            .setMode(window.google.picker.DocsViewMode.LIST);
+
+        return this.buildPickerPromise(token, [folderView], title, width, height);
+    }
+
+    // -------------------------------------------------------------------------
+    // Picker — shared builder
+    // -------------------------------------------------------------------------
+
+    /**
+     * Generic picker builder. All view configuration is done by the caller;
+     * this method only handles PickerBuilder wiring and callback → DriveFile mapping.
+     */
+    private buildPickerPromise(
+        token: string,
+        views: google.picker.View[],
+        title: string,
+        width: number,
+        height: number,
+    ): Promise<DriveFile | null> {
         return new Promise((resolve) => {
-            const mimeTypes = opts.mimeTypes.join(',');
-            const viewMode =
-                opts.viewMode === 'list'
-                    ? window.google.picker.DocsViewMode.LIST
-                    : window.google.picker.DocsViewMode.GRID;
-
-            const buildView = (): google.picker.DocsView =>
-                new window.google.picker.DocsView(window.google.picker.ViewId.DOCS)
-                    .setMimeTypes(mimeTypes)
-                    .setMode(viewMode)
-                    .setIncludeFolders(opts.showFolders)
-                    .setSelectFolderEnabled(false);
-
-            const rootView = buildView();
-            if (opts.rootFolderId) rootView.setParent(opts.rootFolderId);
-
             let builder = new window.google.picker.PickerBuilder()
                 .setAppId(APP_ID)
                 .setOAuthToken(token)
                 .setDeveloperKey(API_KEY)
-                .setTitle(opts.title)
-                .setSize(opts.width, opts.height)
-                .addView(rootView);
+                .setTitle(title)
+                .setSize(width, height);
 
-            if (opts.showSharedWithMe) {
-                builder = builder.addView(
-                    new window.google.picker.DocsView(window.google.picker.ViewId.DOCS)
-                        .setMimeTypes(mimeTypes)
-                        .setMode(viewMode)
-                        .setIncludeFolders(opts.showFolders)
-                        .setSelectFolderEnabled(false)
-                        .setOwnedByMe(false),
-                );
-            }
-
-            if (opts.showRecent) {
-                builder = builder.addView(
-                    new window.google.picker.DocsView(window.google.picker.ViewId.RECENTLY_PICKED).setMimeTypes(
-                        mimeTypes,
-                    ),
-                );
+            for (const view of views) {
+                builder = builder.addView(view);
             }
 
             builder
                 .setCallback((data: google.picker.ResponseObject) => {
                     if (data[google.picker.Response.ACTION] === google.picker.Action.PICKED) {
                         const doc = data[google.picker.Response.DOCUMENTS][0];
+                        const mimeType = doc[google.picker.Document.MIME_TYPE];
                         resolve({
                             id: doc[google.picker.Document.ID],
                             name: doc[google.picker.Document.NAME],
-                            mimeType: doc[google.picker.Document.MIME_TYPE],
+                            mimeType,
                             url: doc[google.picker.Document.EMBEDDABLE_URL] ?? doc[google.picker.Document.URL],
+                            isFolder: mimeType === FOLDER_MIME_TYPE,
                         });
                     } else if (data[google.picker.Response.ACTION] === google.picker.Action.CANCEL) {
                         resolve(null);
@@ -155,7 +199,10 @@ export class GoogleDriveService {
      * Uses the Drive REST API multipart upload endpoint:
      * https://developers.google.com/drive/api/guides/manage-uploads#multipart
      */
-    async uploadFile(file: File, options: { folderId?: string; description?: string } = {}): Promise<DriveFile | null> {
+    async uploadFile(
+        file: File,
+        options: { folderId?: string; description?: string } = {},
+    ): Promise<DriveFile | null> {
         await this.ensureScriptsLoaded();
 
         let token: string;
@@ -228,6 +275,7 @@ export class GoogleDriveService {
             name: json.name,
             mimeType: json.mimeType,
             url: json.webViewLink ?? json.webContentLink ?? '',
+            isFolder: false,
         };
     }
 
@@ -239,7 +287,7 @@ export class GoogleDriveService {
         if (!this.scriptLoader) throw new Error('No script loader registered — call registerScriptLoader() first');
         await this.scriptLoader();
     }
-
+    
     private async ensureAccessToken(): Promise<string> {
         if (this.accessToken) return this.accessToken;
         if (!this.tokenRefresher) throw new Error('No token refresher registered');

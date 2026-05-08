@@ -1,30 +1,47 @@
 <script lang="ts">
     import { t } from "svelte-i18n";
     import Switch from "../ui/elements/Switch.svelte";
-    import { status} from "../../model/types";
-    import { MAX_LIMIT, recentFilter, saveSettings } from "../../service/user/recent-songs.svelte";
+    import { type Status, status } from "../../model/types";
+    import { MAX_SONGVIEW_LIMIT, settings, saveSettings } from "../../store/user-settings.svelte";
 
-    $effect(() => {
-        saveSettings(recentFilter);
-    });
+    const recentFilter = $state(settings.dashboard);
+
+    function updateFilter() {
+        saveSettings('dashboard', recentFilter);
+    }
+
+    function toggleStatus(s: Status) {
+        recentFilter.status[s] = !recentFilter.status[s];
+        updateFilter();
+    }
 </script>
 
 <section class="menu">
     <div class="row">
         <p class="controls">
             <label for="limit" class="icon limit-val">{recentFilter.limit}</label>
-            <input type="range" title={$t('songs.recent-limit')}
+            <input
+                type="range"
+                title={$t('songs.recent-limit')}
                 bind:value={recentFilter.limit}
-                min="2" max={MAX_LIMIT} step="2" 
-                aria-label={$t('songs.recent-limit')} />
+                min="2"
+                max={MAX_SONGVIEW_LIMIT}
+                step="2"
+                aria-label={$t('songs.recent-limit')}
+                onchange={updateFilter}
+            />
         </p>
     </div>
+
     <div class="options">
         <span>
-            <Switch title="{$t('menu.table.filter-by')} {$t('songs.columns.fav')}"
+            <Switch
+                title="{$t('menu.table.filter-by')} {$t('songs.columns.fav')}"
                 bind:state={recentFilter.fav}
                 icon={recentFilter.fav === null ? "bx-minus" : "bx-check"}
-                options={[null, true, false]} />
+                options={[null, true, false]}
+                onToggle={updateFilter}
+            />
             <span>&nbsp;⭐️&nbsp;
                 {$t('songs.columns.fav')}
                 {#if recentFilter.fav === null}
@@ -33,16 +50,19 @@
             </span>
         </span>
     </div>
+
     <div class="options">
-    {#each Object.keys(status) as s}       
-        <p>
-            <Switch title="{ $t('menu.table.filter-by') } {s}"
-                icon={recentFilter.status[s] ? "bx-check" : "bx-minus"}
-                state={recentFilter.status[s]} 
-                onToggle={() => recentFilter.status[s] = !recentFilter.status[s]} />
-            <span class="status {s}">&nbsp; {$t(`songs.status.${s}`)}</span>
-        </p>
-    {/each}
+        {#each Object.keys(status) as s}
+            <p>
+                <Switch
+                    title="{$t('menu.table.filter-by')} {s}"
+                    icon={recentFilter.status[s] ? "bx-check" : "bx-minus"}
+                    state={recentFilter.status[s]}
+                    onToggle={() => toggleStatus(s as Status)}
+                />
+                <span class="status {s}">&nbsp; {$t(`songs.status.${s}`)}</span>
+            </p>
+        {/each}
     </div>
 </section>
 
