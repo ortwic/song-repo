@@ -6,19 +6,19 @@
     import SongService from '../../service/user/user-song.service';
     import type { UserSong } from '../../model/song.model';
     import { unfold } from '../ui/helper/transition.helper';
-    import { toDate } from '../table/templates/Formatter.class';
+    import { truncateTime } from '../ui/helper/date.helper';
     import { toStore } from '../../utils/rx.store';
     import SongCard from './SongCard.svelte';
 
     const recentFilter = settings.dashboard;
     const service = new SongService();
+    const changedAtSorter = (a: UserSong, b: UserSong) => {
+        const diff = truncateTime(b?.changedAt) - truncateTime(a.changedAt);
+        return diff !== 0 ? diff : b.id.localeCompare(a.id);
+    };
     const recentSongStore = toStore(
         service.usersongs.pipe(
-            map((songs) =>
-                [...songs]
-                    .filter((s) => s.changedAt)
-                    .sort((a, b) => toDate(b.changedAt).getTime() - toDate(a.changedAt).getTime())
-            )
+            map((songs) => [...songs].sort(changedAtSorter))
         ),
         []
     );

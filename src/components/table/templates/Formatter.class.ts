@@ -1,13 +1,13 @@
 import Color from 'color';
 import { DateTime } from 'luxon';
 import { marked } from 'marked';
-import { Timestamp } from 'firebase/firestore';
 import type { CellComponent, GroupComponent } from 'tabulator-tables';
 import type { ColumnDefinition } from '../tabulator/types';
 import './ProgressBar.class';
 import { SongActions } from '../SongActions.class';
 import type { UserSong } from '../../../model/song.model';
 import { status } from '../../../model/types';
+import { toDate } from '../../ui/helper/date.helper';
 import { genreColor, redToGreenGradient, redToGreenRange } from '../../../styles/style.helper';
 
 export default class Formatter {
@@ -214,23 +214,6 @@ export default class Formatter {
             },
         }; 
     }
-}
-
-export function toDate(value: object | Date | string | undefined): Date {
-    if (typeof value === 'string') {
-        return new Date(value);
-    }
-    if (value instanceof Date) {
-        return value;
-    }
-    const ts = value as Timestamp;
-    if ('toDate' in ts && ts.toDate instanceof Function) {
-        return ts.toDate();
-    }
-    if ('seconds' in ts && ts.seconds) {
-        return DateTime.fromSeconds(ts.seconds).toJSDate();
-    }
-    return new Date(0);
 }
 
 const formatterFuncs: Partial<Record<keyof UserSong, (value: unknown) => string>> = {

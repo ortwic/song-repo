@@ -7,7 +7,7 @@
     import ConfirmDialog from '../dialogs/ConfirmDialog.svelte';
     import TagCloud from '../ui/elements/TagCloud.svelte';
     import PopupMenu from '../ui/PopupMenu.svelte';
-    import { toDate } from '../table/templates/Formatter.class';
+    import { toDate } from '../ui/helper/date.helper';
     import { SEARCH_ACTIONS, SongActions } from '../table/SongActions.class';
 
     interface Props {
