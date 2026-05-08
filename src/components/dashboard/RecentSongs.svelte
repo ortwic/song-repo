@@ -10,7 +10,6 @@
     import { toStore } from '../../utils/rx.store';
     import SongCard from './SongCard.svelte';
 
-    const recentFilter = settings.dashboard;
     const service = new SongService();
     const changedAtSorter = (a: UserSong, b: UserSong) => {
         const diff = truncateTime(b?.changedAt) - truncateTime(a.changedAt);
@@ -22,14 +21,18 @@
         ),
         []
     );
+
+    // Avoid storing a reference to settings.dashboard!
+    // assignment captures the object at init time and won't 
+    // reflect later replacements of the property.
     const filterByFav = (song: UserSong): boolean => 
-        recentFilter.fav !== null ? song.fav === recentFilter.fav : true;
+        settings.dashboard.fav !== null ? song.fav === settings.dashboard.fav : true;
     const filterByStatus = (song: UserSong): boolean => 
-        recentFilter.status[song.status];
+        settings.dashboard.status[song.status];
 
     let recentSongs = $derived($recentSongStore
         .filter((s) => filterByFav(s) && filterByStatus(s))
-        .slice(0, recentFilter.limit)
+        .slice(0, settings.dashboard.limit)
     );
 </script>
 
