@@ -1,18 +1,29 @@
-import type { Observable } from 'rxjs';
-import { QueryConstraint, orderBy, where } from 'firebase/firestore';
+// blog.service.ts
+import { map, shareReplay } from 'rxjs';
+import { orderBy, where } from 'firebase/firestore';
 import FirestoreService from '../base/firestore.service';
+import { buildIndex } from '../../utils/index-builder';
 import type { Post } from '../../model/post.model';
 
-const store = new FirestoreService('blog');
+class BlogService {
+    private store = new FirestoreService('blog');
 
-export function getBlogPosts(tag?: string): Observable<Post[]> {
-    const constraints: QueryConstraint[] = [
+    readonly posts$ = this.store.getDocuments<Post>(
         where('status', '==', 'published'),
         orderBy('publish_date', 'desc')
-    ];
-    if (tag) {
-        constraints.push(where('tags', 'array-contains', tag));
+    ).pipe(
+        shareReplay(1) // one stream only for multiple subscribers
+    );
+
+    readonly tagIndex$ = this.posts$.pipe(
+        map(posts => buildIndex(posts, p => [p.tags]))
+    );
+
+    byTag(tag: string) {
+        return this.posts$.pipe(
+            map(posts => posts.filter(p => p.tags?.includes(tag)))
+        );
     }
-    
-    return store.getDocuments<Post>(...constraints);
 }
+
+export const blogService = new BlogService();

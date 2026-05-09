@@ -3,20 +3,20 @@
     import { t } from 'svelte-i18n';
     import { derived } from 'svelte/store';
     import { link, location } from 'svelte-spa-router';
-    import NavButton from '../ui/elements/NavButton.svelte';
     import LoginMenu from './LoginMenu.svelte';
     import SignupMenu from './SignupMenu.svelte';
     import ProfileMenu from './ProfileMenu.svelte';
     import ShareMenu from './ShareMenu.svelte';
     import TableMenu from './TableMenu.svelte';
     import ColumnMenu from './ColumnMenu.svelte';
+    import RecentMenu from './RecentMenu.svelte';
+    import BlogMenu from './BlogMenu.svelte';
     import EventListMenu from './EventListMenu.svelte';
-    import MenuDrawer from '../ui/elements/MenuDrawer.svelte';
     import Sidebar from '../ui/Sidebar.svelte';
+    import MenuDrawer from '../ui/elements/MenuDrawer.svelte';
+    import NavButton from '../ui/elements/NavButton.svelte';
     import { currentUser } from '../../service/user/auth.service';
     import { currentMenu } from '../../store/app.store';
-    import TagCloud from './TagCloud.svelte';
-    import RecentMenu from './RecentMenu.svelte';
 
     interface Props {
         footer: string;
@@ -50,7 +50,7 @@
                 <TableMenu exportTitle={$t('menu.table.exportTitle')} />
                 <ColumnMenu />
             {:else if $isBlogView}
-                <TagCloud />
+                <BlogMenu />
             {:else if $isEventView}
                 <EventListMenu />
             {:else if $currentUser}

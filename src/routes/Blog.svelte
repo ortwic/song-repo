@@ -6,7 +6,7 @@
     import TitlebarMenu from "../components/menus/TitlebarMenu.svelte";
     import Image from "../components/ui/elements/Image.svelte";
     import PostDetails from "../components/ui/PostDetails.svelte";
-    import { getBlogPosts } from "../service/common/blog.service";
+    import { blogService } from "../service/common/blog.service";
     import { logPageView } from "../store/notification.store";
     import { orientation } from "../store/media.store";
 
@@ -14,7 +14,7 @@
     let posts = $state(of([]));
     
     params$.subscribe((p) => {
-        posts = getBlogPosts(p?.label);
+        posts = p?.label ? blogService.byTag(p?.label) : blogService.posts$;
         logPageView({ page: 'blog', filter: p?.label });
     });
 </script>
