@@ -31,7 +31,7 @@
     const service = new SongService(sharedUid);
     const actions = new SongActions(service);
     const actionMenu = buildActionMenu(actions, $t);
-    const songs = service.usersongs;
+    const songs = service.usersongs$;
     const column = createColumnBuilder(actions);
 
     const genreList = genres.map((v) => v.name);
@@ -136,7 +136,7 @@
             columns={columns($t)}
             data={songs}
             idField="id"
-            placeholder={$t('songs.nosongs')}
+            placeholder={$t('songs.search-empty')}
             placeholderSearch={$t('table.search')}
             persistenceID={readonly ? `ro-${viewStoreId}` : viewStoreId}
             groupHeader={groupByFormatter}

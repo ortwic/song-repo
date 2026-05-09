@@ -38,7 +38,8 @@
       "select-provider": "Suchanbieter auswählen"
     },
     "recent": {
-      "filter": "Filter"
+      "filter": "Filter",
+      "tags": "Nach Tags filtern"
     }
   },
   "start": {
@@ -136,7 +137,7 @@
       "select-title": "Datei aus Google Drive auswählen",
       "upload": "Datei hochladen"
     },
-    "nosongs": "Nichts hinzugefügt.",
+    "search-empty": "Nichts gefunden! 😥",
     "exportTitle": "Meine Songliste",
     "import": "Import starten...",
     "importDone": "{found} Songs gefunden. Gesamtzahl der Songs: {total}",
@@ -162,7 +163,9 @@
       "song-details": "Songdetails",
       "song-general": "Allgemein"
     },
-    "edit": "Bearbeite"
+    "edit": "Bearbeite",
+    "search-filter": "Filter von '{type}' nach '{value}'.",
+    "search-filter-settings": "Filtereinstellungen"
   },
   "table": {
     "groupBy": "Gruppieren nach {title}",
@@ -255,6 +258,8 @@
   },
   "common": {
     "expand": "Erweitern",
-    "collapse": "Minimieren"
+    "collapse": "Minimieren",
+    "true": "Ja",
+    "false": "Nein"
   }
 }

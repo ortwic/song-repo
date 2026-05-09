@@ -17,4 +17,8 @@ export interface DashboardSettings {
     limit: number;
     status: Record<Status, boolean>;
     fav: boolean | null;
+    tag?: {
+        type: 'feature' | 'tag';
+        value: string;
+    }
 }

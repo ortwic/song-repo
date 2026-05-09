@@ -31,10 +31,6 @@
         return deferred.promise;
     }
 
-    function handlePick({ url }: DriveFile): void {
-        editSong.uri = url;
-    }
-
     function done(confirmed: boolean): void {
         if (!confirmed) {
             deferred?.resolve(null);

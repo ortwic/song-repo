@@ -1,11 +1,22 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
+    import { onMount } from 'svelte';
+    import Autocomplete from 'simple-svelte-autocomplete/src/SimpleAutocomplete.svelte';
     import Switch from '../ui/elements/Switch.svelte';
     import { type Status, status } from '../../model/types';
+    import type { IndexEntry } from '../../utils/index-builder';
+    import SongService from '../../service/user/user-song.service';
     import { MAX_SONGVIEW_LIMIT, settings, saveSettings } from '../../store/user-settings.svelte';
     import Expand from '../ui/elements/Expand.svelte';
 
+    const songService = new SongService();
     const recentFilter = $state(settings.dashboard);
+    let tagOptions = $state<IndexEntry[]>([]);
+
+    onMount(() => {
+        const sub = songService.tagIndex$.subscribe(value => tagOptions = [...value.entries().map(([_, v]) => v)]);
+        return () => sub.unsubscribe();
+    });
 
     function updateFilter() {
         saveSettings('dashboard', recentFilter);
@@ -18,6 +29,24 @@
 </script>
 
 <section class="menu">
+    <div class="section">
+        <Autocomplete
+            inputClassName="lg"
+            dropdownClassName="menu-filter-tag-dropdown"
+            labelFieldName="value"
+            placeholder={$t('menu.recent.tags')}
+            minCharactersToSearch={0}
+            items={tagOptions}
+            showClear={true}
+            bind:selectedItem={recentFilter.tag}
+            hideArrow={true}
+        >
+            {#snippet item({ item, label })}
+                <div class="option {item.type}">{@html label} ({item.count})</div>
+            {/snippet}
+        </Autocomplete>
+    </div>
+
     <div class="options">
         <Expand bind:open={settings.dashboard.showFilter} 
             onToggle={updateFilter}
@@ -74,6 +103,19 @@
     input[type='range'] {
         width: 80px;
         accent-color: var(--primary);
+    }
+
+    :global(.menu-filter-tag-dropdown) {
+        height: 320px;
+        overflow-x: hidden;
+    }
+
+    .tag {
+        background: ivory;
+    }
+
+    .feature {
+        background: lavender;
     }
 
     .controls {

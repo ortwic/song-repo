@@ -1,8 +1,9 @@
-import { Observable, of, switchMap, from, map, auditTime, merge, BehaviorSubject } from 'rxjs';
+import { Observable, switchMap, map, auditTime, BehaviorSubject, shareReplay } from 'rxjs';
+import { Timestamp, orderBy, where } from 'firebase/firestore';
 import { currentUser } from './auth.service';
 import FirestoreService, { uniqueKey } from '../base/firestore.service';
 import type { UserSong } from '../../model/song.model';
-import { Timestamp, orderBy, where } from 'firebase/firestore';
+import { buildIndex } from '../../utils/index-builder';
 import { createUserStore } from './user.service';
 
 export const viewStoreId = 'songs.v1';
@@ -30,13 +31,23 @@ export default class SongService {
     hasUser = () => !!this.uid;
     isShared = () => !!this.sharedUid;
 
-    readonly usersongs: Observable<UserSong[]>;
+    readonly usersongs$: Observable<UserSong[]>;
+    readonly tagIndex$: Observable<ReturnType<typeof buildIndex>>;
 
     constructor(private sharedUid?: string) {
         currentUser.subscribe((user) => (this.uid = user?.uid));
-        this.usersongs = currentUser.pipe(
+        const songs$ = currentUser.pipe(
             switchMap(user => this.loadSongs(user)),
-            auditTime(990)
+            auditTime(990),
+            shareReplay(1) // one stream only for multiple subscribers
+        );
+
+        this.usersongs$ = songs$;
+        this.tagIndex$ = this.usersongs$.pipe(
+            map((songs) => new Map([
+                ...buildIndex(songs, s => [s.tags], 'tag'),
+                ...buildIndex(songs, s => [s.features], 'feature')
+            ].sort((a, b) => b[1].count - a[1].count)))
         );
     }
 

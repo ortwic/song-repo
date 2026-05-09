@@ -16,7 +16,7 @@
         return diff !== 0 ? diff : b.id.localeCompare(a.id);
     };
     const recentSongStore = toStore(
-        service.usersongs.pipe(
+        service.usersongs$.pipe(
             map((songs) => [...songs].sort(changedAtSorter))
         ),
         []
@@ -29,9 +29,13 @@
         settings.dashboard.fav !== null ? song.fav === settings.dashboard.fav : true;
     const filterByStatus = (song: UserSong): boolean => 
         settings.dashboard.status[song.status];
+    const filterByTag = (song: UserSong): boolean => 
+        !settings.dashboard.tag || (settings.dashboard.tag.type === 'tag' 
+            ? song.tags?.includes(settings.dashboard.tag.value) 
+            : song.features?.includes(settings.dashboard.tag.value));
 
     let recentSongs = $derived($recentSongStore
-        .filter((s) => filterByFav(s) && filterByStatus(s))
+        .filter((s) => filterByFav(s) && filterByStatus(s) && filterByTag(s))
         .slice(0, settings.dashboard.limit)
     );
 </script>
@@ -42,7 +46,19 @@
     </header>
 
     {#if recentSongs.length === 0}
-        <p class="empty">{$t('songs.nosongs')}</p>
+        <p class="empty">{$t('songs.search-empty')}</p>
+        <h3>{$t('songs.search-filter-settings')}</h3>
+        <ul>
+            {#if settings.dashboard.tag}
+                <li>{$t(`songs.columns.${settings.dashboard.tag.type}s`)}: {settings.dashboard.tag.value}</li>
+            {/if}
+            {#if settings.dashboard.fav !== null}
+                <li>{$t('songs.columns.fav')}: {$t(`common.${settings.dashboard.fav}`)}</li>
+            {/if}
+            {#each Object.entries(settings.dashboard.status).filter(([, v]) => v) as [status]}
+                <li>{$t('songs.columns.status')} {$t(`songs.status.${status}`)}</li>
+            {/each}
+        </ul>
     {:else}
         <div class="card-grid">
             {#each recentSongs as song (song.id)}

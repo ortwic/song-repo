@@ -1,15 +1,28 @@
-import type { ColumnDefinition, FilterType } from 'tabulator-tables';
+import { type Readable, get } from 'svelte/store';
+import type { CellComponent, ColumnDefinition, FilterType, ListEditorParams, RowRangeLookup } from 'tabulator-tables';
 
-export const autoFilter = (operator: FilterType = 'like'): Partial<ColumnDefinition> => {
+export const toRowRangeLookup = (valueStore: Readable<string[]> | string[]) => {
+    return ((cell: CellComponent, filterTerm: string) => {
+        const values = 'subscribe' in valueStore ? get(valueStore) : valueStore;
+        // return values?.filter((v) => v.toLowerCase().includes(filterTerm.toLowerCase()));
+        console.log(values, filterTerm);
+        return values;
+    }) as unknown as RowRangeLookup;
+};
+
+export const autoFilter = (
+    valuesLookup: RowRangeLookup = 'active', 
+    operator: FilterType = 'like'
+): Partial<ColumnDefinition> => {
     return {
         headerFilter: 'list',
         headerFilterParams: {
-            valuesLookup: 'active',
+            valuesLookup,
             autocomplete: true,
             clearable: true,
             allowEmpty: true,
             listOnEmpty: true,
-            freetext: true,
+            freetext: true
         },
         headerFilterFunc: operator as FilterType,
     };
