@@ -36,7 +36,7 @@
         </div>
     {/if}
 </div>
-<input
+<input class="lg"
     id="uri"
     type="url"
     title={$t('songs.hint-uri')}

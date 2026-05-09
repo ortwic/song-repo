@@ -33,7 +33,13 @@
     },
     "open": "Öffnen",
     "close": "Schließen",
-    "start": "Start"
+    "start": "Start",
+    "search": {
+      "select-provider": "Suchanbieter auswählen"
+    },
+    "recent": {
+      "filter": "Filter"
+    }
   },
   "start": {
     "loading": "Wird geladen...",
@@ -53,7 +59,7 @@
     "privacypolicy": "Datenschutz",
     "termsofuse": "Nutzungsbedingungen",
     "search": {
-      "search-with": "Suche mit",
+      "search-with": "Online-Suche mit",
       "custom": "Eigenen Songeintrag hinzufügen"
     }
   },

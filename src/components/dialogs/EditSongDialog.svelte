@@ -11,7 +11,7 @@
     import ConfirmDialog from './ConfirmDialog.svelte';
     import SelectKey from '../ui/SelectKey.svelte';
     import Expand from '../ui/elements/Expand.svelte';
-    import TagCloud from '../ui/elements/TagCloud.svelte';
+    import TagEditor from '../ui/elements/TagEditor.svelte';
     import CloudResource from '../storage/CloudResource.svelte';
 
     const TIME_PRESETS = ['4/4', '3/4', '6/8', '2/4', '12/8', '5/4', '7/8', '2/2'];
@@ -65,12 +65,12 @@
                 <div class="field-grid">
                     <div class="group">
                         <label for="title">{$t('songs.columns.title')} *</label>
-                        <input id="title" type="text" bind:value={editSong.title} required placeholder="Title" />
+                        <input class="lg" id="title" type="text" bind:value={editSong.title} required placeholder="Title" />
                     </div>
 
                     <div class="group">
                         <label for="artist">{$t('songs.columns.artist')} *</label>
-                        <input id="artist" type="text" bind:value={editSong.artist} required placeholder="Artist" />
+                        <input class="lg" id="artist" type="text" bind:value={editSong.artist} required placeholder="Artist" />
                     </div>
 
                     <div class="group">
@@ -120,7 +120,7 @@
 
                     <div class="group sm">
                         <label for="bpm">{$t('songs.columns.bpm')}</label>
-                        <input
+                        <input class="lg"
                             id="bpm"
                             type="number"
                             min="40"
@@ -159,7 +159,7 @@
                                 </span>
                             {/if}
                         </label>
-                        <input
+                        <input class="lg"
                             id="difficulty"
                             style:accent-color={difficultyColor.hex()}
                             type="range"
@@ -174,7 +174,7 @@
                         <label for="source">
                             {$t('songs.columns.source')}
                         </label>
-                        <input
+                        <input class="lg"
                             id="source"
                             type="text"
                             bind:value={editSong.source}
@@ -186,7 +186,7 @@
                         <label for="features">
                             {$t('songs.columns.features')}
                         </label>
-                        <TagCloud bind:labels={editSong.features} />
+                        <TagEditor bind:labels={editSong.features} />
                     </div>
                 </div>
             </Expand>
@@ -201,7 +201,7 @@
                         <label for="tags">
                             {$t('songs.columns.tags')}
                         </label>
-                        <TagCloud bind:labels={editSong.tags} />
+                        <TagEditor bind:labels={editSong.tags} />
                     </div>
 
                     <div class="group span-full">

@@ -5,6 +5,7 @@ import { userSettingsService } from '../service/user/user-settings.service';
 
 const defaults: UserSettings = {
     dashboard: {
+        showFilter: true,
         limit: 4,
         status: {
             todo: true,

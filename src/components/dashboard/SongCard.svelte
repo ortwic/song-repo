@@ -5,7 +5,7 @@
     import SongService from '../../service/user/user-song.service';
     import { genreColor } from '../../styles/style.helper';
     import ConfirmDialog from '../dialogs/ConfirmDialog.svelte';
-    import TagCloud from '../ui/elements/TagCloud.svelte';
+    import TagEditor from '../ui/elements/TagEditor.svelte';
     import PopupMenu from '../ui/PopupMenu.svelte';
     import { toDate } from '../ui/helper/date.helper';
     import { SEARCH_ACTIONS, SongActions } from '../table/SongActions.class';

@@ -4,38 +4,41 @@
 
     interface Props {
         open?: boolean;
+        icon?: string;
         title?: string;
         duration?: number;
         easing?: string;
-        onOpen?: () => void;
-        onClose?: () => void;
+        onToggle?: (state: boolean) => void;
         children?: import('svelte').Snippet;
     }
 
     let {
-        open = true,
+        open = $bindable(true),
+        icon = '',
         title = '',
         duration = 0.2,
         easing = 'ease',
-        onOpen,
-        onClose,
+        onToggle,
         children
     }: Props = $props();
 
     function handleToggle() {
         open = !open;
-        open ? onOpen?.() : onClose?.();
+        onToggle?.(open);
     }
 </script>
 
 <div class="card" class:open aria-expanded={open}>
-    <span class="small card-header grid">
+    <span class="small card-header grid" class:open={open}>
         <button class="clear" onclick={handleToggle}
             aria-expanded={open}
             title="{open ? $t('common.collapse') : $t('common.expand')}">
             <i class="bx bx-{open ? 'down' : 'right'}-arrow"></i>
         </button>
-        {title}
+        <span class="no-wrap">
+            {#if icon} <i class="bx {icon}"></i> {/if}
+            {title}
+        </span>
     </span>
 
     <div class="card-body" use:collapse={{ open, duration, easing }}>
@@ -47,11 +50,15 @@
     .card-header {
         cursor: pointer;
         user-select: none;
-        border-bottom: 1px solid var(--primary);
         font-weight: bold;
         display: flex;
         align-items: center;
         gap: 0.5em;
+        transition: border-bottom 0.2s ease-in-out;
+
+        &.open {
+            border-bottom: 1px solid var(--primselect);
+        }
 
         button {
             padding: 0.5em;

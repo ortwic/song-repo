@@ -33,7 +33,13 @@
       "filter-by": "Filter by"
     },
     "open": "Open",
-    "close": "Close"
+    "close": "Close",
+    "search": {
+      "select-provider": "Select search provider"
+    },
+    "recent": {
+      "filter": "Filter"
+    }
   },
   "start": {
     "loading": "Loading...",
@@ -53,7 +59,7 @@
     "privacypolicy": "Privacy policy",
     "termsofuse": "Terms of use",
     "search": {
-      "search-with": "Search with",
+      "search-with": "Online-Search with",
       "custom": "Add custom song entry"
     }
   },

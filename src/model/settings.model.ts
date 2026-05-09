@@ -13,6 +13,7 @@ export interface GoogleDriveSettings {
 }
 
 export interface DashboardSettings {
+    showFilter: boolean;
     limit: number;
     status: Record<Status, boolean>;
     fav: boolean | null;
