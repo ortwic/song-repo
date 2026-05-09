@@ -60,7 +60,7 @@
     "privacypolicy": "Datenschutz",
     "termsofuse": "Nutzungsbedingungen",
     "search": {
-      "search-with": "Online-Suche mit",
+      "placeholder": "Online-Suche nach „Songtitel [- Künstlername]“",
       "custom": "Eigenen Songeintrag hinzufügen"
     }
   },

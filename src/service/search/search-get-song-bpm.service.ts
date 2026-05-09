@@ -1,52 +1,44 @@
 import type { ArtistResult, SongResult, BothResult } from '../../model/songbpm.model';
 import { showError } from '../../store/notification.store';
-import type { ApiSettings } from '../../model/types';
-import type { SearchService } from './search.service';
+import { tryJson, type SearchService } from './search.service';
 
-async function tryJson<T>(resp: Response): Promise<T> {
-    const text = await resp.text();
-    if (text.startsWith('{') || text.startsWith('[')
-        && text.endsWith('}') || text.endsWith(']')) {
-        return JSON.parse(text);
-    }
-    console.error(text);
-    throw new Error('Failed to parse response. See console for details.');
-}
+type Response<T> = { search: T[] };
 
 export default class SearchSongBpmService implements SearchService {
-    baseUrl: string;
-    apiKey: string;
-
-    constructor(settings: ApiSettings) {
-        this.baseUrl = settings.baseUrl;
-        this.apiKey = settings.apiKey;
-    }
+    readonly baseUrl = 'https://api.getsong.co';
+    readonly apiKey = import.meta.env.VITE_SONGBPM_API_KEY;
 
     async findArtists(artist: string): Promise<ArtistResult[]> {
         const url = `${this.baseUrl}/search/?api_key=${this.apiKey}&type=artist&lookup=${artist}`;
         const data = await fetch(url)
-            .then(tryJson)
+            .then((resp) => tryJson<Response<ArtistResult>>(resp, 'search'))
             .catch(error => showError(error));
-        return Array.isArray(data?.search) ? data.search : [];
+        return Array.isArray(data) ? data : [];
     }
 
     async findSongs(title: string, artist?: string): Promise<SongResult[]> {
-        const toSong = (item: SongResult | BothResult) => {
-            return 'song_title' in item ? {
-                ...item,
-                id: item.song_id,
-                title: item.song_title,
-                uri: item.song_uri,
-            } : item;
-        };
-        
-        const search = artist 
-            ? `type=both&lookup=song:${title} artist:${artist}` 
-            : `type=song&lookup=${title}`;
-        const url = `${this.baseUrl}/search/?api_key=${this.apiKey}&${search}`;
+        return artist ? this.findBoth(title, artist) : this.findByTitleOnly(title);
+    }
+    
+    private async findBoth(title: string, artist: string): Promise<SongResult[]> {
+        const toSong = (item: BothResult) => ({
+            ...item,
+            id: item.song_id,
+            title: item.song_title,
+            uri: item.song_uri,
+        } as SongResult);
+        const url = `${this.baseUrl}/search/?api_key=${this.apiKey}&type=both&lookup=song:${title} artist:${artist}`;
         const data = await fetch(url)
-            .then(tryJson)
+            .then((resp) => tryJson<Response<BothResult>>(resp, 'search'))
             .catch(error => showError(error));
-        return Array.isArray(data?.search) ? data.search.map(toSong) : [];
+        return Array.isArray(data) ? data.map(toSong) : [];
+    }
+
+    private async findByTitleOnly(title: string): Promise<SongResult[]> {
+        const url = `${this.baseUrl}/search/?api_key=${this.apiKey}&type=song&lookup=${title}`;
+        const data = await fetch(url)
+            .then((resp) => tryJson<Response<SongResult>>(resp, 'search'))
+            .catch(error => showError(error));
+        return Array.isArray(data) ? data : [];
     }
 }

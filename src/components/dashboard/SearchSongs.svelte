@@ -1,26 +1,30 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
     import { getContext } from 'svelte';
-    import SongAutocomplete from '../ui/Autocomplete.svelte';
+    import { cubicOut } from 'svelte/easing';
+    import { slide } from 'svelte/transition';
+    import Autocomplete from '../ui/Autocomplete.svelte';
     import Image from '../ui/elements/Image.svelte';
-    import PopupMenu from '../ui/PopupMenu.svelte';
     import SongService from '../../service/user/user-song.service';
-    import { create, settingsStore } from '../../service/search/search.service';
+    import { createSearchService } from '../../service/search/search.service';
+    import { parseSearchQuery } from '../../utils/parse-search-query';
     import type { Dialog } from '../../model/dialog.model';
-    import type { SearchEngines } from '../../model/types';
     import type { SongResult } from '../../model/songbpm.model';
     import type { UserSong } from '../../model/song.model';
+    import type { SearchEngines } from '../../model/types';
     import { logAction } from '../../store/notification.store';
 
     const songService = new SongService();
     const addSongDialog = getContext<Dialog<UserSong>>('editsong-dialog');
 
     let currentSearchEngine = $state<SearchEngines>('songbpm');
-    const searchService = $derived(create(currentSearchEngine, $settingsStore[currentSearchEngine]));
+    const searchService = $derived(createSearchService(currentSearchEngine));
 
-    let popupMenu: PopupMenu;
     let autocomplete: { close: () => void };
     let searchText = $state('');
+    let showFilter = $state(false);
+
+    const parsedQuery = $derived(parseSearchQuery(searchText));
 
     function mapSongResult(song: SongResult): Partial<UserSong> {
         const mapped: Partial<UserSong> = {
@@ -51,8 +55,7 @@
 
     function handleSelect(song: SongResult | null): void {
         if (song) {
-            songService.addSong(mapSongResult(song))
-                .then(() => searchText = '');
+            songService.addSong(mapSongResult(song)).then(() => (searchText = ''));
         }
     }
 
@@ -67,157 +70,172 @@
 
 <div class="search-song">
     <div class="search-row">
-        <SongAutocomplete
+        <Autocomplete
             bind:this={autocomplete}
             bind:value={searchText}
-            searchFunction={(q) => searchService.findSongs(q)}
+            searchFunction={(q) => searchService.findSongs(parsedQuery.title, parsedQuery.artist)}
             labelField="title"
             delay={400}
             minChars={2}
-            placeholder="{$t('start.search.search-with')} {currentSearchEngine}"
+            placeholder={$t('start.search.placeholder')}
             onSelect={handleSelect}
         >
             {#snippet item({ item })}
-            <div class="result-card">
-                <a href={item.album?.uri ?? item.artist?.uri} target="_blank" tabindex="-1">
-                    <Image src={item.album?.img ?? item.artist?.img} />
-                </a>
-                <div class="result-info">
-                    <span class="result-title">{item.title}</span>
-                    <span class="result-artist">{item.artist?.name ?? ''}</span>
-                    <div class="result-meta">
-                        {#if item.tempo}
-                        <span class="label">{item.tempo} bpm</span>
-                        {/if}
-                        {#if item.key_of}
-                        <span class="label">{item.key_of}</span>
-                        {/if}
-                        {#if item.time_sig}
-                        <span class="label">{item.time_sig}</span>
-                        {/if}
+                <div class="result-card">
+                    <a href={item.album?.uri ?? item.artist?.uri} target="_blank" tabindex="-1">
+                        <Image src={item.album?.img ?? item.artist?.img} />
+                    </a>
+                    <div class="result-info">
+                        <span class="result-title">{item.title}</span>
+                        <span class="result-artist">{item.artist?.name ?? ''}</span>
+                        <div class="result-meta">
+                            {#if item.tempo}
+                                <span class="label">{item.tempo} bpm</span>
+                            {/if}
+                            {#if item.key_of}
+                                <span class="label">{item.key_of}</span>
+                            {/if}
+                            {#if item.time_sig}
+                                <span class="label">{item.time_sig}</span>
+                            {/if}
+                        </div>
                     </div>
                 </div>
-            </div>
             {/snippet}
 
             {#snippet header()}
-            <button class="custom-btn" onclick={openCustomForm}>
-                <i class="bx bx-plus-circle"></i>
-                {$t('start.search.custom')}
-            </button>
+                <button class="custom-btn" onclick={openCustomForm}>
+                    <i class="bx bx-plus-circle"></i>
+                    {$t('start.search.custom')}
+                </button>
             {/snippet}
-        </SongAutocomplete>
+        </Autocomplete>
 
         <!-- svelte-ignore a11y_interactive_supports_focus -->
         <!-- svelte-ignore a11y_click_events_have_key_events -->
-        <span class="engine-badge" role="listbox" onclick={(e) => { e.stopPropagation(); popupMenu.showPopupMenu(e); }}>
-            {currentSearchEngine}
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <path d="m6 9 6 6 6-6"/>
-            </svg>
+        <span class="toggle-filter" role="button" onclick={() => (showFilter = !showFilter)}>
+            <i class="bx bx-cog"></i>
         </span>
-
-        <PopupMenu bind:this={popupMenu}>
-            <button
-                class="option"
-                class:active={currentSearchEngine === 'songbpm'}
-                onclick={() => currentSearchEngine = 'songbpm'}
-            >GetSongbpm</button>
-            <button
-                class="option"
-                class:active={currentSearchEngine === 'audius'}
-                onclick={() => currentSearchEngine = 'audius'}
-            >Audius</button>
-        </PopupMenu>
     </div>
+
+    {#if showFilter}
+        <div class="controls" transition:slide={{ duration: 200, easing: cubicOut }}>
+            <p>
+                <label for="provider">{$t('menu.search.select-provider')}:</label>
+                <select bind:value={currentSearchEngine}>
+                    <option value="songbpm">GetSongBPM</option>
+                    <option value="audius">Audius</option>
+                </select>
+            </p>
+        </div>
+    {/if}
 </div>
 
 <style lang="scss">
-.search-song {
-    width: 100%;
-}
+    select {
+        border-width: 0 0 1px 0;
+        background-color: transparent;
+        color: var(--primary);
+        font-weight: 600;
+        outline: none;
 
-.search-row {
-    position: relative;
-    display: flex;
-    align-items: center;
-    width: 100%;
-
-    :global(.sac-input) {
-        padding-right: 7em;
-    }
-}
-
-.engine-badge {
-    position: absolute;
-    right: 0.5em;
-    display: flex;
-    align-items: center;
-    gap: 0.2em;
-    font-size: 0.78em;
-    color: var(--primselect);
-    cursor: pointer;
-    white-space: nowrap;
-    user-select: none;
-    border: 1px solid var(--primary);
-    border-radius: 2em;
-    padding: 0.15em 0.5em;
-    z-index: 1;
-
-    &:hover {
-        color: var(--text);
-    }
-}
-
-.result-card {
-    display: flex;
-    align-items: center;
-    gap: 0.75em;
-    padding: 0.45em 0.75em;
-
-    a { flex-shrink: 0; }
-}
-
-.result-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.1em;
-    min-width: 0;
-}
-
-.result-title {
-    font-weight: 600;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.result-artist {
-    font-size: 0.85em;
-    color: var(--text-muted, #666);
-}
-
-.result-meta {
-    display: flex;
-    gap: 0.3em;
-    flex-wrap: wrap;
-    margin-top: 0.15em;
-}
-
-.custom-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.45em;
-    width: 100%;
-    padding: 0.6em 0.75em;
-    border: none;
-    cursor: pointer;
-    touch-action: manipulation;
-
-    &:hover {
-        background: var(--hover, rgba(0,0,0,0.05));
+        option {
+            color: var(--text);
+        }
     }
 
-    svg { flex-shrink: 0; }
-}
+    .search-song {
+        width: 100%;
+    }
+
+    .search-row {
+        position: relative;
+        display: flex;
+        align-items: center;
+        width: 100%;
+
+        :global(.sac-input) {
+            padding-right: 7em;
+        }
+    }
+
+    .toggle-filter {
+        position: absolute;
+        top: 0;
+        right: 0;
+        color: var(--primselect);
+        cursor: pointer;
+        user-select: none;
+        padding: 0.5em;
+        z-index: 1;
+
+        &:hover {
+            color: var(--text);
+        }
+    }
+
+    .query-hint {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3em;
+        font-size: 0.8em;
+        color: var(--text-muted, #888);
+        padding: 0.2em 0.75em 0.4em;
+    }
+
+    .result-card {
+        display: flex;
+        align-items: center;
+        gap: 0.75em;
+        padding: 0.45em 0.75em;
+
+        a {
+            flex-shrink: 0;
+        }
+    }
+
+    .result-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.1em;
+        min-width: 0;
+    }
+
+    .result-title {
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .result-artist {
+        font-size: 0.85em;
+        color: var(--text-muted, #666);
+    }
+
+    .result-meta {
+        display: flex;
+        gap: 0.3em;
+        flex-wrap: wrap;
+        margin-top: 0.15em;
+    }
+
+    .custom-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.45em;
+        width: 100%;
+        padding: 0.6em 0.75em;
+        border: none;
+        cursor: pointer;
+        touch-action: manipulation;
+
+        &:hover {
+            background: var(--hover, rgba(0, 0, 0, 0.05));
+        }
+
+        svg {
+            flex-shrink: 0;
+        }
+    }
 </style>

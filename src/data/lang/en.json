@@ -60,7 +60,8 @@
     "privacypolicy": "Privacy policy",
     "termsofuse": "Terms of use",
     "search": {
-      "search-with": "Online-Search with",
+      "placeholder": "Online-Search for \"Song Title [- Artist Name]\"",
+      "powered-by": "Powered by",
       "custom": "Add custom song entry"
     }
   },

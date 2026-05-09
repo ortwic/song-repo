@@ -151,9 +151,7 @@
             {#if isLoading}
             <span class="spinner"></span>
             {:else}
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-            </svg>
+            <i class="bx bx-search"></i>
             {/if}
         </span>
 
@@ -232,7 +230,6 @@
 </div>
 
 <style>
-    /* ── Layout (funktional, nicht dekorativ) ── */
     .wrapper {
         position: relative;
         width: 100%;
@@ -245,29 +242,14 @@
         width: 100%;
     }
 
-    /* Suchicon links absolut positioniert über dem Input */
     .icon-search {
         position: absolute;
         left: 0.6em;
         display: flex;
         align-items: center;
-        color: var(--primghost);
+        color: var(--primselect);
         pointer-events: none;
         z-index: 1;
-    }
-
-    .spinner {
-        display: inline-block;
-        width: 14px;
-        height: 14px;
-        border: 2px solid var(--primghost);
-        border-top-color: var(--primary);
-        border-radius: 50%;
-        animation: spin 0.7s linear infinite;
-    }
-
-    @keyframes spin {
-        to { transform: rotate(360deg); }
     }
 
     .input {
@@ -276,9 +258,11 @@
         font-family: inherit;
         box-sizing: border-box;
         outline: none;
+        padding-left: 2.2rem;
         transition: box-shadow 0.15s;
         /* mobile: prevent iOS zoom on focus */
         font-size: max(1em, 16px);
+        border-radius: .6rem;
     }
 
     .input:focus {

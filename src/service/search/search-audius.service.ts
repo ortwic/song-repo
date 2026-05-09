@@ -1,20 +1,12 @@
 import type { ArtistResult, SongResult } from '../../model/songbpm.model';
 import { showError } from '../../store/notification.store';
-import type { ApiSettings } from '../../model/types';
-import type { SearchService } from './search.service';
+import { tryJson, type SearchService } from './search.service';
 
 const appNameQueryParam = 'app_name=ocsoft42_songrepo'; 
 
 export default class SearchAudiusService implements SearchService {
-    baseUrl: string;
-    apiKey: string;
+    readonly baseUrl = 'https://discoveryprovider.audius.co/v1';
     private artistIdMap = new Map<string, string>();
-
-    constructor(settings: ApiSettings) {
-        console.log(settings)
-        this.baseUrl = settings.baseUrl;
-        this.apiKey = settings.apiKey;
-    }
 
     async findArtists(artist: string): Promise<ArtistResult[]> {
         const url = `${this.baseUrl}/users/search?query=${artist}&${appNameQueryParam}`;
@@ -72,15 +64,15 @@ export default class SearchAudiusService implements SearchService {
             const id = this.artistIdMap.get(artist);
             const url = `${this.baseUrl}/users/${id}/tracks?query=${title}&${appNameQueryParam}`;
             const result = await fetch(url)
-                .then(resp => resp.json())
+                .then((resp) => tryJson(resp, 'data'))
                 .catch(error => showError(error));
-            return Array.isArray(result?.data) ? result.data.map(toSong) : [];
+            return Array.isArray(result) ? result.map(toSong) : [];
         }
         
         const url = `${this.baseUrl}/tracks/search?query=${title}&${appNameQueryParam}`;
         const result = await fetch(url)
-            .then(resp => resp.json())
+            .then((resp) => tryJson(resp, 'data'))
             .catch(error => showError(error));
-        return Array.isArray(result?.data) ? result.data.map(toSong) : [];
+        return Array.isArray(result) ? result.map(toSong) : [];
     }
 }
