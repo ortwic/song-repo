@@ -1,6 +1,5 @@
-import { app } from './firebase.setup';
+import { initFirestore } from './firebase.setup';
 import {
-    getFirestore,
     collection,
     query,
     doc,
@@ -36,8 +35,9 @@ export const snapshotOptions: SnapshotOptions = {
     serverTimestamps: 'none'
 };
 
+const store = initFirestore();
+
 export default class FirestoreService {
-    private db = getFirestore(app);
     private options: { idField: string; };
 
     constructor(public path: string, idField?: string) {
@@ -64,20 +64,20 @@ export default class FirestoreService {
     }
 
     private createQuery<T extends DocumentData>(...constraints: QueryConstraint[]): Query<T> {
-        const items = collection(this.db, this.path) as CollectionReference<T>;
+        const items = collection(store, this.path) as CollectionReference<T>;
         return query<T>(items, ...constraints);
     }
     
     public getDocument<T>(id: string): Observable<T | null> {
         if (id) {
-            const docRef = doc(this.db, this.path, id);
+            const docRef = doc(store, this.path, id);
             return docData(docRef, { idField: 'id' }) as Observable<T | null>;
         }
         return of(null);
     }
 
     public async getDocumentAsync<T>(id: string): Promise<T | null> {
-        const docRef = doc(this.db, this.path, id);
+        const docRef = doc(store, this.path, id);
         const snapshot = await getDoc(docRef);
         if (snapshot.exists()) {
             return snapshot.data(snapshotOptions) as T;
@@ -87,26 +87,26 @@ export default class FirestoreService {
     }
 
     public async setDocument<T extends { id: string }>(data: T, options?: SetOptions): Promise<void> {
-        const docRef = doc(this.db, this.path, data.id);
+        const docRef = doc(store, this.path, data.id);
         await setDoc(docRef, omitUndefinedFields(data), options);
     }
 
     public async setDocuments<T extends { id: string }>(array: T[], options?: SetOptions): Promise<void> {
-        const batch = writeBatch(this.db);
+        const batch = writeBatch(store);
         array.forEach((data) => {
-            const docRef = doc(this.db, this.path, data.id);
+            const docRef = doc(store, this.path, data.id);
             batch.set(docRef, omitUndefinedFields(data), options);
         });
         await batch.commit();
     }
 
     public async updateDocument(data: Partial<unknown>, id: string): Promise<void> {
-        const docRef = doc(this.db, this.path, id);
+        const docRef = doc(store, this.path, id);
         await updateDoc(docRef, data);
     }
 
     public async removeDocument(id: string): Promise<void> {
-        const docRef = doc(this.db, this.path, id);
+        const docRef = doc(store, this.path, id);
         await deleteDoc(docRef);
     }
 }

@@ -1,8 +1,8 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { connectAuthEmulator, getAuth } from 'firebase/auth';
+import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
+import { showError, showInfo } from '../../store/notification.store';
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -20,4 +20,37 @@ const firebaseConfig = {
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
 
-export const auth = getAuth(app);
+export const auth = initAuth();
+
+function initAuth() {
+    const auth = getAuth(app);
+    const host = import.meta.env.AUTH_EMULATOR_HOST;
+    if (import.meta.env.DEV && host) {
+        try {
+            connectAuthEmulator(auth, `http://${host}`, { disableWarnings: true });
+        } catch (error) {
+            showError('Unable to init auth emulator config on ' + host);
+            console.error(error);
+            return auth;
+        }
+        showInfo('Using auth emulator on ' + host);
+    }
+    return auth;
+}
+
+export function initFirestore() {
+    const store = getFirestore(app);
+    const host = import.meta.env.FIRESTORE_EMULATOR_HOST;
+    if (import.meta.env.DEV && host) {
+        try {
+            const { hostname, port } = new URL(`http://${host}`);
+            connectFirestoreEmulator(store, hostname, +port || 8080);
+        } catch (error) {
+            showError('Unable to init firestore emulator config on ' + host);
+            console.error(error);
+            return store;
+        }
+        showInfo('Using firestore emulator on ' + host);
+    }
+    return store;
+}

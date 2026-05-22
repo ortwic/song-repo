@@ -13,7 +13,7 @@ type Settings = {
 };
 
 export async function getSettings(): Promise<Settings> {
-    return await settings;
+    return (await settings) ?? {} as Settings;
 }
 
 export function getEvents(): Observable<CalendarEvent[]> {
@@ -21,7 +21,7 @@ export function getEvents(): Observable<CalendarEvent[]> {
     return combineLatest([settings, store.getDocuments<CalendarEvent>()]).pipe(
         map(([settings, events]) => {
             const today = DateTime.local();
-            const futureDate = today.plus({ months: settings.futureMonths });
+            const futureDate = today.plus({ months: settings?.futureMonths || 6 });
             return events
                 .filter((event) => {
                     const eventEnd = date(event.end);

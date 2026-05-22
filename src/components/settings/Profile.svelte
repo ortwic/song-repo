@@ -40,19 +40,24 @@
     let canSave = $derived(dirty && (aliasChanged ? $aliasStatus$ === true : true));
 
     async function saveProfile() {
-        if (!canSave) return;
-        try {
-            await userService.updateProfile({
-                id: $currentUser.uid,
-                name,
-                about,
-            });
-            if (aliasChanged) {
-                await userService.setAlias($currentUser.uid, alias);
+        if (!$currentUser) {
+            showError('Unexpected error: missing currentUser state!')
+        }
+
+        if (canSave) {
+            try {
+                await userService.updateProfile({
+                    id: $currentUser.uid,
+                    name,
+                    about,
+                });
+                if (aliasChanged) {
+                    await userService.setAlias($currentUser.uid, alias);
+                }
+                showInfo($t('settings.profile-updated'));
+            } catch (error) {
+                showError(error.message);
             }
-            showInfo($t('settings.profile-updated'));
-        } catch (error) {
-            showError(error.message);
         }
     }
 </script>

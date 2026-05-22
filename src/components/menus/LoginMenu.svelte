@@ -8,7 +8,7 @@
     
     const slideParams = { duration: 200, easing: cubicOut };
     let email = $state(import.meta.env.DEV ? 'john.doe@example.com' : '');
-    let password = $state(import.meta.env.DEV ? 'john.doe@example.com' : '');
+    let password = $state(import.meta.env.DEV ? 'password' : '');
     let loginMenu = $state(false);
 
     async function signIn(ev: MouseEvent) {

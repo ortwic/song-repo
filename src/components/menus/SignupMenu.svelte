@@ -11,7 +11,7 @@
     }
 
     const MIN_PWD_LENGTH = 6;
-    const checkedIcon = 'bx bxs-check-circle bx-sm success-text';
+    const checkedIcon = 'bx bxs-check-circle bx-sm';
     const uncheckedIcon = 'bx bx-circle bx-sm';
 
     let email = $state(import.meta.env.DEV ? 'john.doe@example.com' : '');

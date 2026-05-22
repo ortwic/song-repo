@@ -23,6 +23,8 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "dev": "vite",
+    "dev:local": "AUTH_EMULATOR_HOST=localhost:9099 FIRESTORE_EMULATOR_HOST=localhost:8080 vite",
+    "fbem": "firebase emulators:start --only auth,firestore,storage --import firestore.local --export-on-exit",
     "fix": "pnpm exec eslint --fix \"{,!(node_modules|public)/**/}*.{ts,svelte}\"",
     "format": "pnpm exec prettier --write \"{,!(node_modules|public)/**/}*.{ts,svelte}\"",
     "build": "vite build",
