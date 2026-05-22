@@ -21,4 +21,4 @@ export type Status = ObjectValues<typeof status>;
 
 export type MenuTarget = 'hidden' | 'dynamic' | 'signup';
 
-export type SearchEngines = 'audius' | 'songbpm';
+export type SearchEngines = 'musicbrainz' | 'audius' | 'discogs' | 'songbpm';

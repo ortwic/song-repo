@@ -9,15 +9,14 @@
     import { createSearchService } from '../../service/search/search.service';
     import { parseSearchQuery } from '../../utils/parse-search-query';
     import type { Dialog } from '../../model/dialog.model';
-    import type { SongResult } from '../../model/songbpm.model';
-    import type { UserSong } from '../../model/song.model';
+    import type { Song, UserSong } from '../../model/song.model';
     import type { SearchEngines } from '../../model/types';
     import { logAction } from '../../store/notification.store';
 
     const songService = new SongService();
     const addSongDialog = getContext<Dialog<UserSong>>('editsong-dialog');
 
-    let currentSearchEngine = $state<SearchEngines>('songbpm');
+    let currentSearchEngine = $state<SearchEngines>('musicbrainz');
     const searchService = $derived(createSearchService(currentSearchEngine));
 
     let autocomplete: { close: () => void };
@@ -26,36 +25,15 @@
 
     const parsedQuery = $derived(parseSearchQuery(searchText));
 
-    function mapSongResult(song: SongResult): Partial<UserSong> {
-        const mapped: Partial<UserSong> = {
-            title: song.title,
-            bpm: song.tempo,
-            key: song.key_of,
-            time: song.time_sig,
-            artist: song.artist?.name,
-            artistImg: song.artist?.img,
-            features: [],
-            tags: [],
-        };
-        if (song.album?.title && song.album?.uri) {
-            mapped.source = `[${song.album.title}](${song.album.uri})`;
-        }
-        if (song.artist?.genres?.length) {
-            mapped.genre = song.artist.genres[0];
-            if (song.artist.genres.length > 1) {
-                mapped.style = song.artist.genres.slice(1).join(', ');
-            }
-        }
-        if (song.artist?.from) {
-            mapped.features = [song.artist.from];
-        }
-        logAction({ type: 'search', song });
-        return mapped;
-    }
-
-    function handleSelect(song: SongResult | null): void {
+    async function handleSelect(song: Song | null): Promise<void> {
         if (song) {
-            songService.addSong(mapSongResult(song)).then(() => (searchText = ''));
+            logAction({ type: 'search', song });
+            await songService.addSong({
+                ...song,
+                features: [],
+                tags: [],
+            });
+            searchText = '';
         }
     }
 
@@ -73,7 +51,7 @@
         <Autocomplete
             bind:this={autocomplete}
             bind:value={searchText}
-            searchFunction={(q) => searchService.findSongs(parsedQuery.title, parsedQuery.artist)}
+            searchFunction={() => searchService.findSongs(parsedQuery.title, parsedQuery.artist)}
             labelField="title"
             delay={400}
             minChars={2}
@@ -82,22 +60,19 @@
         >
             {#snippet item({ item })}
                 <div class="result-card">
-                    <a href={item.album?.uri ?? item.artist?.uri} target="_blank" tabindex="-1">
-                        <Image src={item.album?.img ?? item.artist?.img} />
-                    </a>
+                    <Image src={item.artistImg} />
                     <div class="result-info">
                         <span class="result-title">{item.title}</span>
-                        <span class="result-artist">{item.artist?.name ?? ''}</span>
+                        <span class="result-artist">{item.artist ?? ''}</span>
                         <div class="result-meta">
-                            {#if item.tempo}
-                                <span class="label">{item.tempo} bpm</span>
-                            {/if}
-                            {#if item.key_of}
-                                <span class="label">{item.key_of}</span>
-                            {/if}
-                            {#if item.time_sig}
-                                <span class="label">{item.time_sig}</span>
-                            {/if}
+                            {#each [
+                                item.bpm ? `${item.bpm} bpm` : null,
+                                item.key,
+                                item.time,
+                                item.genre,
+                            ].filter(Boolean) as label}
+                                <span class="label">{label}</span>
+                            {/each}
                         </div>
                     </div>
                 </div>
@@ -123,8 +98,10 @@
             <p>
                 <label for="provider">{$t('menu.search.select-provider')}:</label>
                 <select bind:value={currentSearchEngine}>
-                    <option value="songbpm">GetSongBPM</option>
+                    <option value="musicbrainz">MusicBrainz</option>
+                    <option value="discogs">Discogs</option>
                     <option value="audius">Audius</option>
+                    <option value="songbpm">GetSongBPM</option>
                 </select>
             </p>
         </div>

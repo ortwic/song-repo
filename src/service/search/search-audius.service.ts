@@ -1,78 +1,75 @@
-import type { ArtistResult, SongResult } from '../../model/songbpm.model';
+import type { Artist, Song } from '../../model/song.model';
+import type { SearchService } from './search.service';
 import { showError } from '../../store/notification.store';
-import { tryJson, type SearchService } from './search.service';
 
-const appNameQueryParam = 'app_name=ocsoft42_songrepo'; 
+const APP_NAME_PARAM = 'app_name=ocsoft42_songrepo';
+const BASE_URL = 'https://discoveryprovider.audius.co/v1';
+
+function toArtist(item: AudiusUser): Artist {
+    return {
+        id: item.id,
+        name: item.name,
+        uri: item.website,
+        img: item.profile_picture?.['150x150'],
+        country: item.location ?? '',
+    };
+}
+
+function toSong(item: AudiusTrack): Song {
+    return {
+        id: item.id,
+        title: item.title,
+        artist: item.user?.name ?? '',
+        artistImg: item.user?.profile_picture?.['150x150'],
+        source: item.uri,
+        genre: item.genre,
+    };
+}
+
+interface AudiusUser {
+    id: string;
+    name: string;
+    website?: string;
+    profile_picture?: Record<string, string>;
+    location?: string;
+}
+
+interface AudiusTrack {
+    id: string;
+    title: string;
+    uri?: string;
+    genre?: string;
+    user: AudiusUser;
+}
 
 export default class SearchAudiusService implements SearchService {
-    readonly baseUrl = 'https://discoveryprovider.audius.co/v1';
-    private artistIdMap = new Map<string, string>();
+    private readonly artistIdCache = new Map<string, string>();
 
-    async findArtists(artist: string): Promise<ArtistResult[]> {
-        const url = `${this.baseUrl}/users/search?query=${artist}&${appNameQueryParam}`;
+    async findArtists(query: string): Promise<Artist[]> {
+        const url = `${BASE_URL}/users/search?query=${encodeURIComponent(query)}&${APP_NAME_PARAM}`;
         const result = await fetch(url)
-            .then(resp => resp.json())
-            .catch(error => showError(error));
+            .then((resp) => resp.json())
+            .catch(showError);
+
         if (!Array.isArray(result?.data)) {
             return [];
         }
 
-        return result.data.map(item => {
-            const artistResult: ArtistResult = {
-                id: item.id,
-                name: item.name,
-                uri: item.website,
-                img: item.profile_picture['150x150'],
-                genres: [], // Add genre logic if needed
-                from: item.location || '',
-                mbid: '', // Not available in API response
-            };
-            this.artistIdMap.set(item.name, item.id);
-            return artistResult;
+        return result.data.map((item: AudiusUser) => {
+            this.artistIdCache.set(item.name, item.id);
+            return toArtist(item);
         });
     }
 
-    async findSongs(title: string, artist?: string): Promise<SongResult[]> {
-        const toSong = (item) => {
-            const songResult: SongResult = {
-                id: item.id,
-                title: item.title,
-                uri: item.uri,
-                artist: {
-                    id: item.user.id,
-                    name: item.user.name,
-                    uri: item.website,
-                    img: item.user.profile_picture['150x150'],
-                    genres: [item.genre],
-                    from: item.user.location || '',
-                    mbid: '', // Not available in API response
-                },
-                tempo: 0, // Not provided in API response
-                time_sig: '', // Not provided in API response
-                key_of: '', // Not provided in API response
-                album: {
-                    title: '',
-                    uri: '',
-                    img: '',
-                    year: 0
-                }
-            };
-            return songResult;
-        };
+    async findSongs(title: string, artist?: string): Promise<Song[]> {
+        const url = artist && this.artistIdCache.has(artist)
+            ? `${BASE_URL}/users/${this.artistIdCache.get(artist)}/tracks?query=${encodeURIComponent(title)}&${APP_NAME_PARAM}`
+            : `${BASE_URL}/tracks/search?query=${encodeURIComponent(title)}&${APP_NAME_PARAM}`;
 
-        if (this.artistIdMap.has(artist)) {
-            const id = this.artistIdMap.get(artist);
-            const url = `${this.baseUrl}/users/${id}/tracks?query=${title}&${appNameQueryParam}`;
-            const result = await fetch(url)
-                .then((resp) => tryJson(resp, 'data'))
-                .catch(error => showError(error));
-            return Array.isArray(result) ? result.map(toSong) : [];
-        }
-        
-        const url = `${this.baseUrl}/tracks/search?query=${title}&${appNameQueryParam}`;
         const result = await fetch(url)
-            .then((resp) => tryJson(resp, 'data'))
-            .catch(error => showError(error));
-        return Array.isArray(result) ? result.map(toSong) : [];
+            .then((resp) => resp.json())
+            .catch(showError);
+
+        return Array.isArray(result?.data) ? result.data.map(toSong) : [];
     }
 }

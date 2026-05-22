@@ -1,6 +1,14 @@
 import type { Timestamp } from 'firebase/firestore';
 import type { Complete, Status } from './types';
 
+export interface Artist {
+    id: string;
+    name: string;
+    uri?: string;
+    img?: string;
+    country?: string;
+}
+
 export interface Song {
     id: string;
     title: string;

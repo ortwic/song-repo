@@ -1,11 +1,14 @@
-import type { ArtistResult, SongResult } from '../../model/songbpm.model';
+import type { Artist, Song } from '../../model/song.model';
 import type { SearchEngines } from '../../model/types';
 import SearchAudiusService from './search-audius.service';
+import SearchDiscogsService from './search-discogs.service';
+import SearchMusicBrainzService from './search-musicbrainz.service';
 import SearchSongBpmService from './search-get-song-bpm.service';
+import pkg from '../../../package.json'
 
 export interface SearchService {
-    findArtists(artist: string): Promise<ArtistResult[]>;
-    findSongs(title: string, artist?: string): Promise<SongResult[]>
+    findArtists(artist: string): Promise<Artist[]>;
+    findSongs(title: string, artist?: string): Promise<Song[]>
 }
 
 export async function tryJson<T>(resp: Response, key: keyof T): Promise<T[keyof T]> {
@@ -19,32 +22,15 @@ export async function tryJson<T>(resp: Response, key: keyof T): Promise<T[keyof 
 }
 
 export function createSearchService(engine: SearchEngines): SearchService {
-    return engine === 'songbpm' 
-        ? new SearchSongBpmService() 
-        : new SearchAudiusService();
-}
-
-export abstract class AbstractSearchService {
-    protected readonly options: RequestInit;
-
-    constructor(apiKey: string, protected baseUrl: string) { 
-        this.options = {
-            method: 'GET',
-            referrerPolicy: 'strict-origin-when-cross-origin',
-            mode: 'cors',
-            credentials: 'omit',
-            headers: {
-                Accept: 'application/json',
-                'Access-Control-Allow-Origin': '*',
-                'Content-Type': 'application/json;charset=UTF-8',
-                'User-Agent': navigator.userAgent
-            }
-        };
-        if (apiKey) {
-            this.options.headers['X-API-KEY'] = apiKey;
-        }
+    const userAgent = `song-repo/${import.meta.env.PACKAGE_VERSION} (${pkg.homepage})`;
+    switch  (engine) {
+        case 'songbpm':
+            return new SearchSongBpmService();
+        case 'audius':
+            return new SearchAudiusService();
+        case 'discogs':
+            return new SearchDiscogsService(userAgent);
+        default:
+            return new SearchMusicBrainzService(userAgent);
     }
-
-    abstract findArtists(artist: string): Promise<ArtistResult[]>;
-    abstract findSongs(title: string, artist?: string): Promise<SongResult[]>;
 }
