@@ -1,9 +1,6 @@
 <script lang='ts'>
-    import { run } from 'svelte/legacy';
-
     import { t } from 'svelte-i18n';
     import { Subject, of, switchMap, debounceTime, distinctUntilChanged } from 'rxjs';
-    import { currentUser } from '../../service/user/auth.service';
     import UserService, { currentProfile } from '../../service/user/user.service';
     import { showError, showInfo } from '../../store/notification.store';
 
@@ -18,41 +15,39 @@
         })
     );
 
+    let uid = $state('');
     let name = $state('');
     let photoUrl = $state('');
     let alias = $state('');
     let about = $state('');
 
     currentProfile.subscribe((p) => {
+        uid = p.id ?? '';
         name  = p.name  ?? '';
         photoUrl = p.photoURL ?? '';
         alias = p.alias ?? '';
         about = p.about ?? '';
     });
 
-    run(() => {
+    $effect(() => {
         aliasInput$.next(alias);
     });
     let aliasChanged = $derived(alias !== ($currentProfile.alias ?? ''));
     let dirty = $derived(name  !== ($currentProfile.name  ?? '')
             || aliasChanged
             || about !== ($currentProfile.about ?? ''));
-    let canSave = $derived(dirty && (aliasChanged ? $aliasStatus$ === true : true));
+    let canSave = $derived(uid && dirty && (aliasChanged ? $aliasStatus$ === true : true));
 
     async function saveProfile() {
-        if (!$currentUser) {
-            showError('Unexpected error: missing currentUser state!')
-        }
-
         if (canSave) {
             try {
                 await userService.updateProfile({
-                    id: $currentUser.uid,
+                    id: uid,
                     name,
                     about,
                 });
                 if (aliasChanged) {
-                    await userService.setAlias($currentUser.uid, alias);
+                    await userService.setAlias(uid, alias);
                 }
                 showInfo($t('settings.profile-updated'));
             } catch (error) {

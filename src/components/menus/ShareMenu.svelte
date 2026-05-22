@@ -2,26 +2,27 @@
     import { t } from 'svelte-i18n';
     import QRCode from 'qrcode';
     import { map } from 'rxjs';
+    import { onDestroy } from 'svelte';
     import { currentProfile } from '../../service/user/user.service';
     import { showError, showInfo } from "../../store/notification.store";
-    import { onMount } from 'svelte';
 
     let {
         showPreview = true,
         showQRDownload = true,
     } = $props();
 
-    const shareLink = currentProfile.pipe(
-        map((p) => p.alias 
-            ? `${window.location.origin}/@${p.alias}` 
-            : `${window.location.origin}/#/songs/@${p.id}`
-        )
-    );
-
+    let shareLink = $state('');
     let qrCodeUrl = $state('');
     let qrCodeCanvas: HTMLCanvasElement = $state();
 
-    onMount(() => setQRCodeUrl($shareLink));
+    const sub = currentProfile.subscribe((p) => {
+        shareLink = p.alias 
+            ? `${window.location.origin}/@${p.alias}` 
+            : `${window.location.origin}/#/songs/@${p.id}`;
+        setQRCodeUrl(shareLink);
+    });
+
+    onDestroy(() => sub?.unsubscribe());
 
     async function setQRCodeUrl(text: string) {
         function drawWhiteCircle(center: number, size: number): void {
@@ -73,13 +74,13 @@
 <section class="menu">
     {#if showPreview}
     <div class="row">
-        <button data-close title="{ $t('profile.preview-linkhub') }" onclick={() => window.open($shareLink) }>
+        <button data-close title="{ $t('profile.preview-linkhub') }" onclick={() => window.open(shareLink) }>
             <i class='bx bx-sitemap'></i> { $t('profile.preview-linkhub') }
         </button>
     </div>
     {/if}
     <div class="row">
-        <button title="{ $t('profile.share-link') }" onclick={() => copyText($shareLink)}>
+        <button title="{ $t('profile.share-link') }" onclick={() => copyText(shareLink)}>
             <i class='bx bx-share-alt'></i> { $t('profile.share-link') }
         </button>
     </div>
