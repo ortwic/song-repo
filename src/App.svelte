@@ -32,7 +32,7 @@
     '/events/:id': EventMap,
     '/blog': Blog,
     '/blog/:label': Blog,
-    '/docs/:name': Document,
+    '/docs/:id': Document,
     '/settings': Settings,
     '/feedback': Feedback,
     '/user/:alias': UserPage,

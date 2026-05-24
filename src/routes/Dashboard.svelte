@@ -44,8 +44,7 @@
     <Footer>
         <a use:link href="/docs/imprint" class="no-wrap">{ $t('start.imprint') }</a> |
         <a use:link href="/docs/privacypolicy" class="no-wrap">{ $t('start.privacypolicy') }</a> |
-        <a use:link href="/docs/termsofuse" class="no-wrap">{ $t('start.termsofuse') }</a> |
-        <a use:link href="/settings" class="no-wrap">{ $t('settings.title') }</a>
+        <a use:link href="/docs/termsofuse" class="no-wrap">{ $t('start.termsofuse') }</a>
     </Footer>
 </main>
 

@@ -2,8 +2,8 @@
     import { t } from 'svelte-i18n';
     import ConfirmDialog from '../dialogs/ConfirmDialog.svelte';
     import { authService } from '../../service/user/auth.service';
-    import { lang } from '../../service/base/i18n.setup';
     import { logPageView, showError } from '../../store/notification.store';
+    import { getPage } from '../../service/common/page.service';
     
     interface RequiredPageChecks {
         termsofuse: boolean;
@@ -91,8 +91,7 @@
 
         <ConfirmDialog title='{ $t('menu.login.read-carefully') }' 
             visible={!!page} target='signup' size='full' onClose={confirm}>
-            <object title="Embedded page '{page}'" data="/docs/{page}{lang.startsWith('de') ? '_de' : ''}.html">
-            </object>
+            <div class="body">{@html getPage(page).body}</div>
         </ConfirmDialog>
     </div>
     <div class="row">
@@ -136,9 +135,8 @@
         text-align: center;
     }
     
-    object {
-        border: 0;
-        width: 100%;
-        flex-grow: 1;
+    div.body {
+        padding: 1em;
+        overflow-y: auto;
     }
 </style>
