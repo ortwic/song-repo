@@ -1,22 +1,21 @@
 <script lang='ts'>
-    import { preventDefault } from 'svelte/legacy';
-
     import { t } from 'svelte-i18n';
     import { format } from 'fecha';
-    import FirestoreService from "../service/base/firestore.service";
+    import { stores } from '../service/base/firestore.service';
     import { showError } from '../store/notification.store';
     import TitlebarMenu from '../components/menus/TitlebarMenu.svelte';
 
-    const store = new FirestoreService('feedback');
     let sent = $state(false);
 
-    async function handleForm({ target }) {
+    async function handleForm({ target, preventDefault }) {
+        preventDefault();
+
         const data = new FormData(target);
         const json = Object.fromEntries(data.entries()) as { id: string };
         console.table(json)
         
         try {
-            await store.setDocument(json);
+            await stores.feedback.setDocument(json);
         } catch (error) {
             showError(error);
         }
@@ -64,7 +63,7 @@
     <TitlebarMenu>
         <i class="bx bx-mail-send"></i>&nbsp; { $t('feedback.submit')}
     </TitlebarMenu>
-    <form onsubmit={preventDefault(handleForm)}>
+    <form onsubmit={handleForm}>
         <div class="section">
             {#if !sent}
             <p>{ $t('feedback.note')}</p>

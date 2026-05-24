@@ -1,27 +1,19 @@
-import { combineLatest, map, startWith, type Observable } from 'rxjs';
+import { map, startWith, type Observable } from 'rxjs';
 import { DateTime } from 'luxon';
-import FirestoreService from '../base/firestore.service';
-import type { CalendarEvent, EventDate } from '../../model/event.model';
+import { stores } from '../base/firestore.service';
+import type { CalendarEvent, CalendarSettings, EventDate } from '../../model/event.model';
+import { refData } from './app.service';
 
-const store = new FirestoreService('events');
-const settings = new FirestoreService('settings').getDocumentAsync<Settings>('google');
-
-type Settings = {
-    maps: string;
-    version: 'weekly' | 'quarterly';
-    futureMonths: number;
-};
-
-export async function getSettings(): Promise<Settings> {
-    return (await settings) ?? {} as Settings;
+export function getSettings(): CalendarSettings {
+    return refData.settings.find((s) => s.id === 'google') || ({} as CalendarSettings);
 }
 
 export function getEvents(): Observable<CalendarEvent[]> {
     const date = (date: EventDate) => DateTime.fromJSDate(new Date(date.dateTime ?? date.date));
-    return combineLatest([settings, store.getDocuments<CalendarEvent>()]).pipe(
-        map(([settings, events]) => {
+    return stores.events.getDocuments<CalendarEvent>().pipe(
+        map((events) => {
             const today = DateTime.local();
-            const futureDate = today.plus({ months: settings?.futureMonths || 6 });
+            const futureDate = today.plus({ months: getSettings()?.futureMonths || 6 });
             return events
                 .filter((event) => {
                     const eventEnd = date(event.end);

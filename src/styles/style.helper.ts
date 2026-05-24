@@ -1,6 +1,6 @@
 import Color from 'color';
-import genres from '../data/genres.json';
 import colornames from '../data/colornames.json';
+import { refData } from '../service/common/app.service';
 
 const root = document.querySelector(':root');
 
@@ -9,7 +9,7 @@ export function getCssVariable(name: string): string {
 }
 
 export const genreColor = (name: string): string => {
-    const genre = genres.find((v) => v.name.toLowerCase() == name?.toLowerCase());
+    const genre = refData.genres.find((v) => v.name.toLowerCase() == name?.toLowerCase());
     return genre && colornames[genre.color.toLowerCase()] || generateColorCode(name.toLocaleLowerCase());
 };
 

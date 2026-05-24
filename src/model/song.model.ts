@@ -9,6 +9,13 @@ export interface Artist {
     country?: string;
 }
 
+export interface Genre {
+    id: string;
+    name: string;
+    color: string;
+    styles: string[];
+}
+
 export interface Song {
     id: string;
     title: string;

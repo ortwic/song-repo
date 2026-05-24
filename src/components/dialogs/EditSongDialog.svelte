@@ -3,10 +3,9 @@
     import Autocomplete from 'simple-svelte-autocomplete/src/SimpleAutocomplete.svelte';
     import '../../styles/overrides/simple-autocomplete.scss';
     import SongService from '../../service/user/user-song.service';
-    import type { DriveFile } from '../../model/file.model';
     import type { UserSong } from '../../model/song.model';
     import { createDeferred } from '../../utils/promise.helper';
-    import genres from '../../data/genres.json';
+    import { refData } from '../../service/common/app.service';
     import { redToGreenRange } from '../../styles/style.helper';
     import ConfirmDialog from './ConfirmDialog.svelte';
     import SelectKey from '../ui/SelectKey.svelte';
@@ -21,7 +20,7 @@
     let editSong: Partial<UserSong> = $state({ features: [], tags: [] });
     const isNew = $derived(editSong.id === undefined);
     const difficultyColor = $derived(redToGreenRange(100 - editSong.difficulty * 10));
-    const styles = (genre: string) => (genres.find((v) => v.name === genre) ?? genres[0]).styles;
+    const styles = (genre: string) => (refData.genres.find((v) => v.name === genre))?.styles ?? [];
     let deferred: ReturnType<typeof createDeferred<UserSong>> | null = null;
 
     export function showDialog(initial?: Partial<UserSong>): Promise<UserSong> {
@@ -76,7 +75,7 @@
                             labelFieldName="name"
                             placeholder="genre"
                             minCharactersToSearch={0}
-                            items={genres}
+                            items={refData.genres}
                             showClear={true}
                             bind:text={editSong.genre}
                             hideArrow={true}
@@ -95,7 +94,7 @@
                             placeholder="style"
                             hideArrow={true}
                             minCharactersToSearch={0}
-                            searchFunction={() => styles(editSong.genre && editSong.genre[0])}
+                            searchFunction={() => styles(editSong.genre)}
                             showClear={true}
                             bind:text={editSong.style}
                         >

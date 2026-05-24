@@ -1,14 +1,12 @@
 import { Observable, switchMap, map, auditTime, BehaviorSubject, shareReplay } from 'rxjs';
 import { Timestamp, orderBy, where } from 'firebase/firestore';
 import { currentUser } from './auth.service';
-import FirestoreService, { uniqueKey } from '../base/firestore.service';
+import { stores, uniqueKey } from '../base/firestore.service';
 import type { UserSong } from '../../model/song.model';
 import { buildIndex } from '../../utils/index-builder';
-import { createUserStore } from './user.service';
 
 export const viewStoreId = 'songs.v1';
 
-const store = createUserStore();
 const localStore = {};
 const localSubject = new BehaviorSubject<UserSong[]>([]);
 
@@ -27,42 +25,34 @@ const appendGeneratedId = (uid: string, song: UserSong, ...more: object[]): User
 };
 
 export default class SongService {
-    private uid = '';
+    private uid: string | undefined;
     hasUser = () => !!this.uid;
-    isShared = () => !!this.sharedUid;
-
+    readonly isShared: boolean;
     readonly usersongs$: Observable<UserSong[]>;
     readonly tagIndex$: Observable<ReturnType<typeof buildIndex>>;
 
-    constructor(private sharedUid?: string) {
+    constructor(sharedUid?: string) {
         currentUser.subscribe((user) => (this.uid = user?.uid));
-        const songs$ = currentUser.pipe(
-            switchMap(user => this.loadSongs(user)),
-            auditTime(990),
-            shareReplay(1) // one stream only for multiple subscribers
-        );
+        if (sharedUid) {
+            this.isShared = true;
+            this.usersongs$ = stores.usersongs(sharedUid)
+                .getDocuments(orderBy('id'), where('status', '==', 'done'));
+        } else {
+            this.usersongs$ = currentUser.pipe(
+                switchMap(user => user?.uid 
+                    ? stores.usersongs(user.uid).getDocuments<UserSong>(orderBy('id')) 
+                    : localSubject),
+                auditTime(990),
+                shareReplay(1) // one stream only for multiple subscribers
+            );
 
-        this.usersongs$ = songs$;
-        this.tagIndex$ = this.usersongs$.pipe(
-            map((songs) => new Map([
-                ...buildIndex(songs, s => [s.tags], 'tag'),
-                ...buildIndex(songs, s => [s.features], 'feature')
-            ].sort((a, b) => b[1].count - a[1].count)))
-        );
-    }
-
-    private loadSongs(user: { uid: string }): Observable<UserSong[]> {
-        if (this.sharedUid) {
-            const sharedStore = new FirestoreService(`user/${this.sharedUid}/songs`);
-            return sharedStore.getDocuments(orderBy('id'), where('status', '==', 'done'));
+            this.tagIndex$ = this.usersongs$.pipe(
+                map((songs) => new Map([
+                    ...buildIndex(songs, s => [s.tags], 'tag'),
+                    ...buildIndex(songs, s => [s.features], 'feature')
+                ].sort((a, b) => b[1].count - a[1].count)))
+            );
         }
-
-        if (user) {
-            store.path = `user/${user.uid}/songs`;
-            return store.getDocuments(orderBy('id'));
-        }
-
-        return localSubject;
     }
 
     async addSong(song: Partial<UserSong>): Promise<string> {
@@ -95,7 +85,7 @@ export default class SongService {
                 song.progressLogs.push(song.progress);
             }
             if (song.id) {
-                await store.setDocument(song, { merge: true });
+                await stores.usersongs(this.uid).setDocument(song, { merge: true });
                 return song.id;
             }
         } else if (forceLocalUpdate) {
@@ -105,7 +95,7 @@ export default class SongService {
 
     async deleteSong(song: UserSong): Promise<void> {
         if (this.uid) {
-            return store.removeDocument(song.id);
+            return stores.usersongs(this.uid).removeDocument(song.id);
         } else {
             delete localStore[song.id];
             localSubject.next(Object.values(localStore));
@@ -116,7 +106,7 @@ export default class SongService {
         if (data) {
             const songs = data.map((s) => appendGeneratedId(this.uid, s, { importedAt: new Date() }));
             if (this.uid) {
-                await store.setDocuments(songs, { merge: true });
+                await stores.usersongs(this.uid).setDocuments(songs, { merge: true });
             } else { 
                 // if user is not logged in
                 localSubject.next(songs);

@@ -1,3 +1,10 @@
+export interface CalendarSettings {
+    id: string;
+    maps: string;
+    version: 'weekly' | 'quarterly';
+    futureMonths: number;
+}
+
 export interface CalendarEvent {
     id: string;
     summary: string;

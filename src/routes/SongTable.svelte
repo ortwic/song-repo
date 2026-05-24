@@ -13,12 +13,12 @@
     import { SongActions } from '../components/table/SongActions.class';
     import { buildActionMenu } from '../components/table/templates/actionMenu.helper';
     import { summaryFormatter } from '../components/table/templates/responsive.helper';
-    import SongService, { viewStoreId } from '../service/user/user-song.service';
     import type { MessageFormatter } from '../service/base/i18n.setup';
+    import { refData } from '../service/common/app.service';
+    import SongService, { viewStoreId } from '../service/user/user-song.service';
     import type { UserSong } from '../model/song.model';
     import type { TableView } from '../model/table-view.model';
     import { showError, showInfo } from '../store/notification.store';
-    import genres from '../data/genres.json';
 
     interface Props {
         params?: { id?: string };
@@ -34,7 +34,7 @@
     const songs = service.usersongs$;
     const column = createColumnBuilder(actions);
 
-    const genreList = genres.map((v) => v.name);
+    const genreList = refData.genres.map((v) => v.name);
     const editor = createEditor(updateHandler(), readonly);
 
     // https://tabulator.info/docs/5.4/edit#editor-list

@@ -19,7 +19,7 @@
   const userService = new UserService();
   const profile$ = userService.getProfileByAlias(params.alias);
   const links$ = profile$.pipe(
-    switchMap(p => new UserLinkService(p.id).userlinks),
+    switchMap(p => new UserLinkService(p.id).userlinks$),
     startWith([] as UserLink[])
   );
 

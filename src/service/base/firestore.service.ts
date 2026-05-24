@@ -20,6 +20,8 @@ import { collectionData, docData } from 'rxfire/firestore';
 import { startWith } from 'rxjs/operators';
 import { of, type Observable } from 'rxjs';
 
+const store = initFirestore();
+
 // firestore does not like undefined values so omit them
 const omitUndefinedFields = (data: object) => {
     Object.keys(data).forEach((key) => {
@@ -35,15 +37,15 @@ export const snapshotOptions: SnapshotOptions = {
     serverTimestamps: 'none'
 };
 
-const store = initFirestore();
+export class FirestoreService {
+    private constructor(
+        private readonly path: string, 
+        private readonly options = { idField: 'id' }
+    ) {
+    }
 
-export default class FirestoreService {
-    private options: { idField: string; };
-
-    constructor(public path: string, idField?: string) {
-        if (idField) {
-            this.options = { idField };
-        }
+    static create(...pathSegments: string[]): FirestoreService {
+        return new FirestoreService(pathSegments.join('/'));
     }
 
     public getDocuments<T extends DocumentData>(...constraints: QueryConstraint[]): Observable<T[]> {
@@ -110,3 +112,16 @@ export default class FirestoreService {
         await deleteDoc(docRef);
     }
 }
+
+export const stores = {
+    blog: FirestoreService.create('blog'),
+    catalog: FirestoreService.create('songcatalog'),
+    events: FirestoreService.create('events'),
+    feedback: FirestoreService.create('feedback'),
+    genres: FirestoreService.create('genres'),
+    pages: FirestoreService.create('pages'),
+    settings: FirestoreService.create('settings'),
+    user: FirestoreService.create('user'),
+    userlinks: (id: string) => FirestoreService.create('user', id, 'links'),
+    usersongs: (id: string) => FirestoreService.create('user', id, 'songs'),
+};

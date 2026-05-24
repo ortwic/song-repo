@@ -1,14 +1,12 @@
 // blog.service.ts
 import { map, shareReplay } from 'rxjs';
 import { orderBy, where } from 'firebase/firestore';
-import FirestoreService from '../base/firestore.service';
+import { stores } from '../base/firestore.service';
 import { buildIndex } from '../../utils/index-builder';
 import type { Post } from '../../model/post.model';
 
 class BlogService {
-    private store = new FirestoreService('blog');
-
-    readonly posts$ = this.store.getDocuments<Post>(
+    readonly posts$ = stores.blog.getDocuments<Post>(
         where('status', '==', 'published'),
         orderBy('publish_date', 'desc')
     ).pipe(

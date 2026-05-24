@@ -7,8 +7,8 @@
     import { slideFade } from '../ui/helper/transition.helper';
 
     const linkService = new UserLinkService();
-    const links$ = linkService.userlinks;
-
+    const links$ = linkService.userlinks$;
+    
     let addingLink = $state(false);
     let newUrl = $state('');
     let newTitle = $state('');
