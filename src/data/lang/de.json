@@ -46,15 +46,23 @@
     "loading": "Wird geladen...",
     "hello": "Hallo",
     "anonymous": "Musiker!",
-    "intro": "Diese App wurde speziell für Musiker wie Sie entwickelt, um einen Überblick über Ihr Repertoire und Ihre Fortschritte zu behalten. Einige Funktionen dieser App:",
-    "features": {
-      "signup": "Melden Sie sich an, um Ihre eigene Songliste zu speichern",
-      "list": "Eigene Liste mit Musikstücken erstellen, die Sie beherrschen oder noch lernen möchten",
-      "track": "Übersicht über Ihre Fortschritte behalten",
-      "share": "Liste des Repertoires öffentlich teilen oder exportieren",
-      "search": "Suche mit Vervollständigung der Genres, Künstler und Titel",
-      "events": "Öffentliche events wie",
-      "blog": "HowTo's und weitere Artikel über das musizieren"
+    "eyebrow": "Dein persönliches Musikrepertoire",
+    "headline": "Blackout beim Jammen?",
+    "headline_em": "Kein Problem.",
+    "sub": "Song-Repo hilft dir, den Überblick über dein Repertoire zu behalten — auf dem Handy, am Desktop, immer dabei.",
+    "tiles": {
+        "overview": {
+            "title": "Repertoire im Griff",
+            "desc": "Alle Songs, die du kannst — oder noch lernst. Filterbar, durchsuchbar, übersichtlich."
+        },
+        "mobile": {
+            "title": "Immer dabei",
+            "desc": "Am Handy nachschlagen, am Desktop verwalten. Kein Zettel, kein Chaos."
+        },
+        "share": {
+            "title": "Teilen leicht gemacht",
+            "desc": "Dein Repertoire als Link, PDF oder öffentliche Seite — für Bandkollegen oder Veranstalter."
+        }
     },
     "imprint": "Impressum",
     "privacypolicy": "Datenschutz",

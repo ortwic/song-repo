@@ -4,7 +4,7 @@
     import RecentSongs from '../components/dashboard/RecentSongs.svelte';
     import Footer from '../components/ui/Footer.svelte';
     import SearchSongs from '../components/dashboard/SearchSongs.svelte';
-    import Welcome from '../components/dashboard/Welcome.svelte';
+    import Landing from '../components/dashboard/Landing.svelte';
     import TitlebarMenu from '../components/menus/TitlebarMenu.svelte';
     import { authService, currentUser } from '../service/user/auth.service';
     import { currentProfile } from '../service/user/user.service';
@@ -38,7 +38,7 @@
             </button>
         </div>
         {:else}
-        <Welcome />
+        <Landing />
         {/if}
     </section>
     <Footer>

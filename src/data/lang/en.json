@@ -46,15 +46,23 @@
     "loading": "Loading...",
     "hello": "Hello",
     "anonymous": "musician!",
-    "intro": "This app was specifically designed for musicians like you to keep track of your repertoire and your progress. Some features of this app:",
-    "features": {
-      "signup": "Sign up to store your own song list",
-      "list": "Create own list of songs you've mastered or want to learn",
-      "track": "Keep an overview of your progress",
-      "share": "Share or export list of your repertoire",
-      "search": "Search with autocomplete for genres, artists, and titles",
-      "events": "Public events like",
-      "blog": "How-tos and further articles about making"
+    "eyebrow": "Your personal music repertoire",
+    "headline": "Mind gap while jamming?",
+    "headline_em": "Got you.",
+    "sub": "Song-Repo helps you keep track of your repertoire — on your phone, on your desktop, always with you.",
+    "tiles": {
+        "overview": {
+            "title": "Your repertoire, organised",
+            "desc": "Every song you know — or are learning. Filtered, searchable, at a glance."
+        },
+        "mobile": {
+            "title": "Always with you",
+            "desc": "Look it up on your phone, manage it on your desktop. No paper, no chaos."
+        },
+        "share": {
+            "title": "Share your repertoire",
+            "desc": "As a link, PDF or public page — for bandmates, bookers, or just for yourself."
+        }
     },
     "imprint": "Imprint",
     "privacypolicy": "Privacy policy",
