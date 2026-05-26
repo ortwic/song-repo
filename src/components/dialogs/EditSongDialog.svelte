@@ -273,7 +273,7 @@
     .difficulty-value {
         font-weight: 600;
         margin-left: 0.4em;
-        color: var(--textghost);
+        color: var(--text-muted);
     }
     
     #notes {
@@ -283,15 +283,15 @@
         box-sizing: border-box;
 
         &:focus {
-            outline: 1px solid var(--primary);
-            border-color: var(--primary);
+            outline: 1px solid var(--accent);
+            border-color: var(--accent);
         }
     }
 
     .warn {
         padding: 0.4em 1em;
-        border: 1px solid var(--primselect);
-        background-color: var(--secondary-opaque);
+        border: 1px solid var(--surface-mid);
+        background-color: var(--highlight-t);
         text-align: center;
         white-space: nowrap;
 

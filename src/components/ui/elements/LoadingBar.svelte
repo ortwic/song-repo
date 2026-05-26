@@ -22,7 +22,7 @@ div#loader {
     text-align: center;
 
     &#loader {
-        background: linear-gradient(90deg, var(--primary), var(--primghost), var(--primary), var(--primary));
+        background: linear-gradient(90deg, var(--accent), var(--surface-light), var(--accent), var(--accent));
         background-size: 200% 200%;
         animation: gradient 2s linear infinite;
         transition: opacity 1s;

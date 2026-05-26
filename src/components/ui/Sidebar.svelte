@@ -50,7 +50,7 @@
     @use '../../styles/vars.scss';
 
     aside {
-        @include vars.fancy-w7-bg;
+        @include vars.surface-blur;
         display: flex;
         flex-direction: column;
         position: fixed;
@@ -83,7 +83,7 @@
             padding-top: 0.4em;
             font-size: small;
             text-align: center;
-            text-shadow: 1px 1px 0 gray;
+            text-shadow: var(--shadow-text);
             min-height: 2.2em;
             user-select: none;
         }

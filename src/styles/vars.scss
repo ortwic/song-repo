@@ -1,9 +1,101 @@
 $sidebar-width: 234px;
 
-@mixin fancy-w7-bg {
-    background-color: var(--primback-opaque);
-
-    // backdrop-filter can break "position: absolute | fixed"
+@mixin surface-blur {
+    background-color: var(--surface-t);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+}
+
+// ─── Theme ───────────────────────────────────────────────
+// https://coolors.co/e9e3d6-e0d7c7-bfb9aa-a71908-0b0802
+:root {
+    // Accent (Rot)
+    --accent:        #a71908;
+    --accent-t:      #a71908c0;
+    --accent-dark:   hwb(6 3% 60%);
+    --accent-dark:   hwb(6 3% 60%);
+    --accent-active: #8a1406;
+
+    // Highlight (Gelb-Grün)
+    --highlight:        #d0ff00;
+    --highlight-t:      #d0ff00c0;
+    --highlight-active: #b8e600;
+    --highlight-muted:  #a8cc00;
+
+    // Surface
+    --bg:            #ffffff;       // #f2ede4
+    --bg-t:          #ffffffc0;
+    --surface:       #e9e3d6;
+    --surface-t:     #e9e3d680;
+    --surface-light: #e0d7c7;
+    --surface-mid:   #bfb9aa;
+
+    // Borders
+    --border:       silver;        // #c0c0c0 — generische Border
+    --border-input: gray;          // #808080 — Input-Border, etwas dunkler
+
+    // Interactive
+    --hover-overlay: #ffffff60;    // Button-Hover in Menüs
+    --icon-bg:       white;        // Icon-Hintergrund in menu.scss
+
+    // Text
+    --text:          #0b0802;       //#213547
+    --text-muted:    #827560;
+
+    // Shadows
+    --shadow-text:   0px 0px 2px rgba(0, 0, 0, 0.2);
+    --shadow-sm:     1px 1px 4px #80808040;
+    --shadow-md:     2px 2px 6px #80808060;
+
+    // Semantic
+    --label:          #f0f0f0c0;
+    --error:          red;
+    --tag-bg:         #fffff0;
+    --tag-hl-bg: #e6e6fa;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        // Accent
+        --accent:        #e8442a;
+        --accent-t:      #e8442ac0;
+        --accent-dark:   #ff5540;
+        --accent-active: #ff5540;
+
+        // Highlight
+        --highlight:        #c8f000;
+        --highlight-t:      #c8f000c0;
+        --highlight-active: #d4ff1a;
+        --highlight-muted:  #a0bb00;
+
+        // Surface
+        --bg:            #161210;
+        --bg-t:          #161210c0;
+        --surface:       #1e1a14;
+        --surface-t:     #1e1a1480;
+        --surface-light: #2c2720;
+        --surface-mid:   #4a4438;
+
+        // Borders
+        --border:       #4a4440;
+        --border-input: #6a6460;
+
+        --hover-overlay: #ffffff18;
+        --icon-bg:       #2c2720;
+
+        // Text
+        --text:          #ede8df;
+        --text-muted:    #9e8f7a;
+
+        // Shadows
+        --shadow-text:   0px 0px 2px rgba(0, 0, 0, 0.6);
+        --shadow-sm:     1px 1px 4px #00000060;
+        --shadow-md:     2px 2px 6px #00000080;
+
+        // Semantic
+        --label:          #282828;
+        --error:          #ff6b6b;
+        --tag-bg:         #2a2820;
+        --tag-hl-bg: #1e1e2e;
+    }
 }

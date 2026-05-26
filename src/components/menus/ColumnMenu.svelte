@@ -122,7 +122,7 @@
             }
 
             span.active {
-                color: var(--primary);
+                color: var(--accent);
                 font-weight: 500;
             }
         }

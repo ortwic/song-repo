@@ -10,14 +10,14 @@
     transition: all 0.2s ease-in-out;
 
     &:focus {
-        outline: 1px solid var(--primary);
+        outline: 1px solid var(--accent);
     }
 }
 
 @mixin icon {
-    border: 1px solid silver;
+    border: 1px solid var(--border);
     border-radius: 1em;
-    background-color: white;
+    background-color: var(--bg);
     padding: 4px;
 }
 
@@ -37,7 +37,7 @@ i.icon {
         justify-items: center;
         align-content: center;
         align-items: center;
-        border-top: 1px solid silver;
+        border-top: 1px solid var(--border);
         width: 100%;
         white-space: nowrap;
 
@@ -64,7 +64,7 @@ i.icon {
             }
 
             &:hover {
-                background-color: #ffffffc0;
+                background-color: var(--bg-t);
             }
 
             &:disabled {
@@ -72,15 +72,15 @@ i.icon {
             }
 
             &:not(:last-child) {
-                border-right: 1px solid silver;
+                border-right: 1px solid var(--border);
             }
 
             &.warn {
                 color: black;
-                background-color: var(--secondary-opaque);
+                background-color: var(--highlight-t);
 
                 &:hover {
-                    background-color: white;
+                    background-color: var(--highlight);
                 }
 
                 span {
@@ -93,7 +93,7 @@ i.icon {
             display: block;
 
             span {
-                color: var(--primary);
+                color: var(--accent);
                 padding-top: 0.6em;
                 vertical-align: middle;
             }
@@ -106,7 +106,7 @@ i.icon {
     }
 
     div.row:last-child {
-        border-bottom: 1px solid silver;
+        border-bottom: 1px solid var(--border);
     }
 
     div.section,

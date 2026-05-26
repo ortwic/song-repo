@@ -57,7 +57,7 @@
         transition: border-bottom 0.2s ease-in-out;
 
         &.open {
-            border-bottom: 1px solid var(--primselect);
+            border-bottom: 1px solid var(--surface-mid);
         }
 
         button {

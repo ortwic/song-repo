@@ -64,7 +64,7 @@
         align-items: center;
         justify-content: center;
         gap: 0.5em;
-        color: var(--primary);
+        color: var(--accent);
     }
     
     .about {

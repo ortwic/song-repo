@@ -7,7 +7,7 @@ div.autocomplete {
             transition: color 0.2s ease-in-out;
 
             &:hover {
-                color: var(--primary);
+                color: var(--accent);
             }
         }
 
@@ -19,7 +19,7 @@ div.autocomplete {
     }
 
     div.autocomplete-list {
-        background-color: var(--primback) !important;
+        background-color: var(--surface) !important;
         max-width: 100vw;
 
         div.autocomplete-list-item {
@@ -28,7 +28,7 @@ div.autocomplete {
             &.selected,
             &:hover {
                 color: black !important;
-                background-color: var(--primselect) !important;
+                background-color: var(--surface-mid) !important;
                 transition: all 0.2s ease-in-out;
             }
         }

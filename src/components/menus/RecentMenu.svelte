@@ -102,7 +102,7 @@
 <style lang="scss">
     input[type='range'] {
         width: 80px;
-        accent-color: var(--primary);
+        accent-color: var(--accent);
     }
 
     :global(.menu-filter-tag-dropdown) {
@@ -142,7 +142,7 @@
             }
 
             span.active {
-                color: var(--primary);
+                color: var(--accent);
                 font-weight: 500;
             }
         }

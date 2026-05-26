@@ -1,10 +1,10 @@
 <script lang='ts'>
     import { t } from 'svelte-i18n';
     import QRCode from 'qrcode';
-    import { map } from 'rxjs';
     import { onDestroy } from 'svelte';
     import { currentProfile } from '../../service/user/user.service';
     import { showError, showInfo } from "../../store/notification.store";
+    import { getCssVariable } from '../../styles/style.helper';
 
     let {
         showPreview = true,
@@ -46,7 +46,7 @@
             width: 128,
             margin: 0,
             color: {
-                dark: '#000000ff',
+                dark: `${getCssVariable('--text')}`,
                 light: '#ffffff00'
             }
         });

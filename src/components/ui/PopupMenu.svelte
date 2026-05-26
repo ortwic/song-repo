@@ -91,7 +91,7 @@
             display: flex;
             flex-direction: column;
             box-shadow: 0.1em 0.1em 0.4em #00000080;
-            background: var(--primback);
+            background: var(--surface);
         }
     }
 </style>

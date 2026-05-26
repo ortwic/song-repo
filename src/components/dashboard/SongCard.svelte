@@ -123,7 +123,7 @@
         </button>
         <button
             class="clear sm max-width"
-            title={song.uri ? $t('songs.menu.open') : $t('songs.menu.edit-resource')}
+            title={song.uri ? $t('songs.menu.open') : $t('songs.menu.set-resource')}
             on:click={() => handlePrimary()}
         >
             <i class="icon bx {song.uri ? 'bx-link-external' : 'bx-unlink'}"></i>
@@ -186,8 +186,8 @@
     .song-card {
         position: relative;
         overflow: hidden;
-        background: var(--primback);
-        border: 1.5px solid var(--primghost);
+        background: var(--surface);
+        border: 1.5px solid var(--surface-light);
         border-radius: 1rem;
         padding: 1rem;
         display: flex;
@@ -195,11 +195,11 @@
         gap: 8px;
         height: 100%;
         box-sizing: border-box;
-        box-shadow: 1px 1px 4px #80808060;
+        box-shadow: var(--shadow-sm);
         transition: border-color 0.15s;
 
         &:hover {
-            border-color: silver;
+            border-color: var(--border);
         }
     }
 
@@ -211,7 +211,7 @@
         text-align: center; 
         font-size: 3.5rem;
         font-weight: 800;
-        text-shadow: 1px 1px 4px #80808040;
+        text-shadow: var(--shadow-sm);
         line-height: 1;
         opacity: 0.5;
         pointer-events: none;
@@ -268,11 +268,11 @@
         flex-wrap: wrap;
 
         .tag {
-            background: ivory;
+            background: var(--tag-bg);
         }
 
         .feature {
-            background: lavender;
+            background: var(--tag-hl-bg);
         }
     }
 

@@ -1,6 +1,8 @@
 v0.6.2 (2026-05-08)
 -------------------
 - fixed ProgressBar UX!
+- new landing page
+- support for dark-mode
 
 v0.6.1 (2026-05-06)
 -------------------

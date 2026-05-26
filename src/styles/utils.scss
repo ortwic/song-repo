@@ -7,19 +7,19 @@ input.lg {
 }
 
 .primary {
-    color: var(--primary);
+    color: var(--accent);
 }
 
-.secondary {
-    color: var(--secondary);
+.highlight {
+    color: var(--highlight);
 }
 
-.secondary:hover,
-.secondary:active {
+.highlight:hover,
+.highlight:active {
     color: var(--secactive);
 }
 
-.secondary:visited {
+.highlight:visited {
     color: var(--secghost);
 }
     
@@ -74,12 +74,12 @@ input.lg {
     }
 
     &:hover {
-        color: var(--primary);
+        color: var(--accent);
     }
 
     &.active {
         cursor: pointer;
-        color: var(--primselect);
+        color: var(--surface-mid);
         text-shadow: none;
     }
 
@@ -104,8 +104,8 @@ input.lg {
     display: block;
     width: 16px;
     height: 16px;
-    border: 2px solid var(--primselect, #dadce0);
-    border-top-color: var(--primary);
+    border: 2px solid var(--surface-mid, #dadce0);
+    border-top-color: var(--accent);
     border-radius: 50%;
     animation: spin 0.7s linear infinite;
 }

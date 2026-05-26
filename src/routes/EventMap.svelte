@@ -155,7 +155,7 @@
         }
         
         i.bx {
-            color: var(--primary);
+            color: var(--accent);
         }
     }
 </style>

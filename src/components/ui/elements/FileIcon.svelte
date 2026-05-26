@@ -28,7 +28,7 @@
   </defs>
   <path d="M19.2,6.67,12.34,0H2.74A2.77,2.77,0,0,0,.81.78,2.62,2.62,0,0,0,0,2.67V21.33a2.62,2.62,0,0,0,.81,1.89A2.77,2.77,0,0,0,2.74,24H16.46a2.77,2.77,0,0,0,1.93-.78,2.62,2.62,0,0,0,.81-1.89V20H24V9.33H19.2ZM11.66,2.16,17,7.33H11.66Zm11,8.51v8H6.17v-8Z" id="path2" />
   <text transform="matrix(0.03,0,0,0.03,-18.721974,2.0533777)" id="text1062" 
-    style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:{fontStretch};font-size:242.667px;font-family:Tahoma;-inkscape-font-specification:'Tahoma Bold';letter-spacing:-8px;white-space:pre;shape-inside:url(#rect1064);display:inline;fill:#000000;stroke:none;stroke-width:10">
+    style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:{fontStretch};font-size:242.667px;font-family:Tahoma;-inkscape-font-specification:'Tahoma Bold';letter-spacing:-8px;white-space:pre;shape-inside:url(#rect1064);display:inline;fill:#{fill};stroke:none;stroke-width:10">
     <tspan x="854.90234" y="505.912" id="tspan1147">
         <tspan class={style} style="letter-spacing:{letterSpacing}" id="tspan1145">
             {type}

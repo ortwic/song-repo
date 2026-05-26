@@ -67,7 +67,7 @@
         font-size: 0.75rem;
         letter-spacing: 0.08em;
         text-transform: uppercase;
-        color: var(--textghost);
+        color: var(--text-muted);
         margin: 0;
     }
 
@@ -82,13 +82,13 @@
         em {
             display: block;
             font-style: normal;
-            color: var(--primary);
+            color: var(--accent);
         }
     }
 
     .sub {
         font-size: 0.95rem;
-        color: var(--textghost);
+        color: var(--text-muted);
         line-height: 1.6;
         margin: 0.25rem 0 0.75rem;
         max-width: 480px;
@@ -100,7 +100,7 @@
 
     .divider {
         border: none;
-        border-top: 1px solid var(--primghost);
+        border-top: 1px solid var(--surface-light);
         margin: 2rem 0;
     }
 
@@ -111,16 +111,16 @@
     }
 
     .tile {
-        background-color: var(--primback);
-        border: 1px solid var(--primghost);
-        box-shadow: 1px 1px 4px #80808060;
+        background-color: var(--surface);
+        border: 1px solid var(--surface-light);
+        box-shadow: var(--shadow-sm);
         border-radius: 8px;
         padding: 1rem 1.1rem;
     }
 
     .tile-icon {
         font-size: 1.4rem;
-        color: var(--primary);
+        color: var(--accent);
         display: block;
         margin-bottom: 0.4rem;
     }
@@ -134,7 +134,7 @@
 
     .tile-desc {
         font-size: 0.8rem;
-        color: var(--textghost);
+        color: var(--text-muted);
         line-height: 1.5;
         margin: 0;
     }

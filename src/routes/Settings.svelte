@@ -107,7 +107,7 @@
         div {
             margin: 1rem;
             text-align: left;
-            border-color: var(--primghost);
+            border-color: var(--surface-light);
 
             legend,
             p {
@@ -128,7 +128,7 @@
         .warn {
             padding: 0.4em 1em;
             border: 1px solid gray;
-            background-color: var(--secondary);
+            background-color: var(--highlight);
             text-align: center;
             white-space: nowrap;
 

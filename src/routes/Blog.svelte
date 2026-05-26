@@ -49,10 +49,10 @@ main {
     color: var(--text);
 
     div.post {
-        border-color: silver;
+        border-color: var(--border);
         border-style: solid;
         border-width: 1px 0 1px 0;
-        color: var(--primtext);
+        color: var(--accent-text);
         padding: .4rem;
 
         .thumbnail {

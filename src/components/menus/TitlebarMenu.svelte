@@ -77,7 +77,7 @@
     }
 
     .shadow {
-        box-shadow: 2px 2px 4px #80808060;
+        box-shadow: var(--shadow-md);
         border-radius: 50%;
     }
 </style>

@@ -180,7 +180,7 @@
     }
 
     .link-item {
-        border-bottom: 1px solid var(--primghost);
+        border-bottom: 1px solid var(--surface-light);
 
         &:last-child {
             border-bottom: none;
@@ -248,7 +248,7 @@
     }
 
     .new-form {
-        border-top: 1px dashed var(--primghost);
+        border-top: 1px dashed var(--surface-light);
         margin-top: 0.5rem;
         padding-top: 0.75rem;
     }

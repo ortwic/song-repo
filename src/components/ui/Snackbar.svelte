@@ -39,11 +39,11 @@ section {
   }
 
   .info {
-    background-color: var(--primback);
+    background-color: var(--surface);
   }
 
   .warn {
-    background-color: var(--secondary);
+    background-color: var(--highlight);
   }
 
   .error {

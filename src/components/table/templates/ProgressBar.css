@@ -10,7 +10,7 @@
 div {
     position: absolute;
     height: 100%;
-    background-color: var(--primback);
+    background-color: #e9e3d6;
     opacity: .8;
 }
 
@@ -23,6 +23,7 @@ span {
     display: flex;
     justify-content: center;
     align-items: center;
+    color: black;
     font-size: 16px;
     font-weight: bold;
     user-select: none;

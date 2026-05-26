@@ -72,7 +72,9 @@
                 </NavButton>
                 <div class="row">
                     <a use:link class="warn" role="button" href="/user/ocsoft42">
-                        <span><i class="bx bxs-coffee"></i> {$t('menu.donate')}</span>
+                        <span>
+                            <i class="bx bxs-coffee"></i> {$t('menu.donate')}
+                        </span>
                     </a>
                 </div>
             {/snippet}
@@ -89,3 +91,10 @@
         </Sidebar>
     {/if}
 </MenuDrawer>
+
+<style>
+    a[role="button"] > span > i.bx.bxs-coffee {
+        color: black;
+        background-color: white;
+    }
+</style>

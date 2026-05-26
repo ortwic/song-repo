@@ -9,8 +9,11 @@ export function getCssVariable(name: string): string {
 }
 
 export const genreColor = (name: string): string => {
-    const genre = refData.genres.find((v) => v.name.toLowerCase() == name?.toLowerCase());
-    return genre && colornames[genre.color.toLowerCase()] || generateColorCode(name.toLocaleLowerCase());
+    if (name) {
+        const genre = refData.genres.find((v) => v.name.toLowerCase() == name?.toLowerCase());
+        return genre && colornames[genre.color.toLowerCase()] || generateColorCode(name.toLocaleLowerCase());
+    }
+    return 'transparent';
 };
 
 function generateColorCode(name: string) {

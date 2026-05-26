@@ -107,7 +107,7 @@
         fill: #a0a0a060;
     }
     g.key:hover > circle {
-        fill: var(--primback);
+        fill: var(--surface);
         stroke: gray;
         stroke-width: 0.2;
     }
@@ -122,11 +122,11 @@
 
     g.selectedKey > circle,
     g.selectedKey:hover > circle {
-        fill: var(--primary);
+        fill: var(--accent);
     }
     g.selectedKey > text,
     g.selectedKey:hover > text {
-        fill: var(--primback);
+        fill: var(--surface);
     }
 
     .key circle {

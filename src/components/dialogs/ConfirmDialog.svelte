@@ -79,15 +79,15 @@
 }
 
 div.dialog {
-    @include vars.fancy-w7-bg;
+    @include vars.surface-blur;
 
     min-width: 22.5em;
     max-width: 100vw;
     max-height: 100vh;
-    background-color: #FFFFFF80;
+    background-color: var(--bg-t);
 
     div.row button {
-        background-color: var(--primback-opaque);
+        background-color: var(--surface-t);
     }
 }
 

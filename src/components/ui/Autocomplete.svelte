@@ -247,7 +247,7 @@
         left: 0.6em;
         display: flex;
         align-items: center;
-        color: var(--primselect);
+        color: var(--surface-mid);
         pointer-events: none;
         z-index: 1;
     }
@@ -266,8 +266,8 @@
     }
 
     .input:focus {
-        box-shadow: 0 0 0 2px var(--primback);
-        border-color: var(--primback);
+        box-shadow: 0 0 0 2px var(--surface);
+        border-color: var(--surface);
     }
 
     .clear {
@@ -275,7 +275,7 @@
         right: 0.4em;
         display: flex;
         align-items: center;
-        color: var(--textghost);
+        color: var(--text-muted);
         touch-action: manipulation;
     }
 
@@ -294,8 +294,8 @@
         list-style: none;
         /* Farben aus globalen Vars statt hardcoded */
         color: var(--text);
-        background-color: var(--primback);
-        border: 1px solid var(--primselect);
+        background-color: var(--surface);
+        border: 1px solid var(--surface-mid);
         border-radius: 4px;
         box-shadow: 0.1em 0.1em 0.4em #00000080; /* wie PopupMenu */
         max-height: min(360px, 60svh);
@@ -313,16 +313,16 @@
     .item--active,
     .item:hover {
         color: black;
-        background-color: var(--primselect);
+        background-color: var(--surface-mid);
         transition: all 0.2s ease-in-out;
     }
 
     .header {
-        border-bottom: 1px solid var(--primselect);
+        border-bottom: 1px solid var(--surface-mid);
     }
 
     .footer {
-        border-top: 1px solid var(--primselect);
+        border-top: 1px solid var(--surface-mid);
     }
 
     .loading {

@@ -21,7 +21,7 @@
 
 <style>
     h2 {
-        color: var(--primary);
+        color: var(--accent);
     }
 
     div {

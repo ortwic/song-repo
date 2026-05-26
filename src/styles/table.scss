@@ -1,6 +1,6 @@
 @mixin collapse-arrow {
     content: '◥';
-    color: var(--primselect);
+    color: var(--surface-mid);
     transform: rotate(45deg);
     font-size: small;
     transition: transform .2s ease-in-out;    
@@ -13,11 +13,11 @@
 
 div#table.tabulator {
     div.tabulator-header {
-        background-color: var(--primback);
-        border-bottom: 1px solid silver;
+        background-color: var(--surface);
+        border-bottom: 1px solid var(--border);
         
         div.tabulator-col {
-            border-right: 1px solid silver;
+            border-right: 1px solid var(--border);
             // height: 68px;
         }
         
@@ -31,7 +31,7 @@ div#table.tabulator {
         div.tabulator-table {
             div.tabulator-group {
                 border-top: 0;
-                background-color: var(--primback);
+                background-color: var(--surface);
                 
                 // &::before {
                 //     @include collapse-arrow();
@@ -60,7 +60,7 @@ div#table.tabulator {
 
                 span.label {
                     font-weight: 500;
-                    border-color: silver;
+                    border-color: var(--border);
                 }
             }
 
@@ -69,15 +69,15 @@ div#table.tabulator {
             }
 
             div.tabulator-row:hover {
-                background-color: var(--primback);
+                background-color: var(--surface);
             }
 
             div.tabulator-row.tabulator-selected {
-                background-color: var(--primselect) !important;
+                background-color: var(--surface-mid) !important;
             }
 
             div.tabulator-row.tabulator-selected:hover {
-                background-color: var(--primghost) !important;
+                background-color: var(--surface-light) !important;
             }
 
             div.tabulator-cell {
@@ -120,7 +120,7 @@ div#table.tabulator {
                     i {
                         font-size: x-small;
                         &.bx-unlink {
-                            color: silver;
+                            color: var(--border);
                         }
                     }
                 }
@@ -185,7 +185,7 @@ div#table.tabulator {
             div.tabulator-validation-fail {
                 outline: 1px solid red;
                 border-color: red;
-                background-color: var(--primback);
+                background-color: var(--surface);
             }
 
             .image {
@@ -225,12 +225,12 @@ div#table.tabulator {
 
 div.tabulator-popup-container {
     div.tabulator-menu-item {
-        background-color: var(--primback);
+        background-color: var(--surface);
         transition: all .2s ease-in-out;    
     }
 
     div.tabulator-menu-item:hover {
-        background-color: white;
+        background-color: var(--bg);
     }
 }
 
@@ -304,4 +304,54 @@ div.tabulator-cell.status {
 i.status {
     display: inline-block;
     width: 1.6em;
+}
+
+// overriding colors
+.tabulator {
+    background-color: var(--bg) !important;
+}
+
+.tabulator-headers {
+    color: var(--text);
+    background-color: var(--surface) !important;
+}
+
+.tabulator-row {
+    overflow: hidden;
+    color: var(--text);
+}
+
+.tabulator-row.tabulator-row-even {
+    background-color: var(--surface) !important;
+}
+
+.tabulator-cell {
+    overflow: scroll;
+    align-content: center;
+}
+
+.tabulator-popup-container, 
+.tabulator-menu-item {
+    background-color: var(--surface) !important;
+}
+
+.tabulator-menu-item:hover {
+    background-color: var(--surface-light) !important;
+}
+
+.tabulator .tabulator-header .tabulator-col .tabulator-header-filter input {
+    border-color: var(--border) !important;
+}
+
+.content-preview {
+    white-space: normal !important;
+    overflow: auto !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    .tabulator-row, 
+    .tabulator-header,
+    .tabulator-cell {
+      border-color: #2b2b2b !important;
+    }
 }

@@ -112,7 +112,7 @@
     select {
         border-width: 0 0 1px 0;
         background-color: transparent;
-        color: var(--primary);
+        color: var(--accent);
         font-weight: 600;
         outline: none;
 
@@ -140,7 +140,7 @@
         position: absolute;
         top: 0;
         right: 0;
-        color: var(--primselect);
+        color: var(--surface-mid);
         cursor: pointer;
         user-select: none;
         padding: 0.5em;

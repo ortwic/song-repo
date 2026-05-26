@@ -107,6 +107,7 @@ export default class Formatter {
                         const element = cell.getElement();
                         element.style.color = Color(bgColor).isDark() ? 'white' : 'black';
                         element.style.backgroundColor = bgColor;
+                        element.style.borderRadius = '.4em';
                     }
                 } catch { /* empty */ }
                 return value;
@@ -170,8 +171,10 @@ export default class Formatter {
                 if (value) {
                     const element = cell.getElement();
                     const [ gradient ] = redToGreenGradient((10 - value) * 10, 'to left', .2);
+                    element.style.color = 'black';
                     element.style.background = gradient;
                     element.style.border = '1px solid silver';
+                    element.style.borderRadius = '.4em';
                 }
                 return value;
             },

@@ -110,6 +110,6 @@
 
     .empty {
         font-size: 14px;
-        color: var(--textghost);
+        color: var(--text-muted);
     }
 </style>
