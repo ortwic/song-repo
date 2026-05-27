@@ -8,6 +8,7 @@
     import SongService from '../../service/user/user-song.service';
     import { tableView } from '../../store/app.store';
     import { showError } from '../../store/notification.store';
+    import { exportTableToPdf } from '../table/pdf-export';
 
     interface Props {
         exportTitle?: string;
@@ -26,15 +27,11 @@
     }
 
     async function downloadPdf() {
-        if (!window['jspdf']) {
-            const { default: jsPDF } = await import('jspdf');
-            await import('jspdf-autotable');
-
-            // Tabulator expects this, see https://github.com/olifolkerd/tabulator/issues/4239
-            window['jspdf'] = { jsPDF };
+        try {
+            await exportTableToPdf($tableView?.table, exportTitle);
+        } catch (error) {
+            showError(error.message);
         }
-
-        download('pdf', { title: exportTitle });
     }
 
     function download(type: DownloadType, params?: DownloadOptions): void {

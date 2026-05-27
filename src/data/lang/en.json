@@ -271,6 +271,7 @@
     "collapse": "Collapse",
     "expand": "Expand",
     "true": "Yes",
-    "false": "No"
+    "false": "No",
+    "page": "Page"
   }
 }

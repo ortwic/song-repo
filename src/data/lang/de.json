@@ -268,6 +268,7 @@
     "expand": "Erweitern",
     "collapse": "Minimieren",
     "true": "Ja",
-    "false": "Nein"
+    "false": "Nein",
+    "page": "Seite"
   }
 }
