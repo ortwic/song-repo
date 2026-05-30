@@ -156,7 +156,7 @@ a[role='button'].primary:hover,
 input[type='reset'].primary:hover,
 input[type='submit'].primary:hover,
 input[type='file'].primary:hover::file-selector-button {
-    background-color: var(--accent-dark);
+    background-color: var(--accent-muted);
 }
 
 button:disabled {
@@ -220,7 +220,7 @@ div.titlebar {
     display: flex;
     justify-content: space-between;
     color: var(--surface);
-    background: linear-gradient(to right, var(--accent-dark) 20%, var(--accent));
+    background: linear-gradient(to right, var(--accent-muted) 20%, var(--accent));
     white-space: nowrap;
     font-weight: 500;
     font-style: italic;

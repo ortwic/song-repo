@@ -9,18 +9,15 @@ $sidebar-width: 234px;
 // ─── Theme ───────────────────────────────────────────────
 // https://coolors.co/e9e3d6-e0d7c7-bfb9aa-a71908-0b0802
 :root {
-    // Accent (Rot)
+    // Accent
     --accent:        #a71908;
     --accent-t:      #a71908c0;
-    --accent-dark:   hwb(6 3% 60%);
-    --accent-dark:   hwb(6 3% 60%);
     --accent-active: #8a1406;
+    --accent-muted:  #661108;
 
-    // Highlight (Gelb-Grün)
+    // Highlight
     --highlight:        #d0ff00;
     --highlight-t:      #d0ff00c0;
-    --highlight-active: #b8e600;
-    --highlight-muted:  #a8cc00;
 
     // Surface
     --bg:            #ffffff;       // #f2ede4
@@ -57,16 +54,14 @@ $sidebar-width: 234px;
 @media (prefers-color-scheme: dark) {
     :root {
         // Accent
-        --accent:        #e8442a;
-        --accent-t:      #e8442ac0;
-        --accent-dark:   #ff5540;
-        --accent-active: #ff5540;
-
+        --accent:        #c8f000;
+        --accent-t:      #c8f000c0;
+        --accent-active: #a0bb00;
+        --accent-muted:  hsl(71, 50%, 55%);
+        
         // Highlight
-        --highlight:        #c8f000;
-        --highlight-t:      #c8f000c0;
-        --highlight-active: #d4ff1a;
-        --highlight-muted:  #a0bb00;
+        --highlight:        #e8442a;
+        --highlight-t:      #e8442ac0;
 
         // Surface
         --bg:            #161210;
