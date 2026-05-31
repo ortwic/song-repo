@@ -6,7 +6,7 @@
     import { type Status, status } from '../../model/types';
     import type { IndexEntry } from '../../utils/index-builder';
     import SongService from '../../service/user/user-song.service';
-    import { MAX_SONGVIEW_LIMIT, settings, saveSettings } from '../../store/user-settings.svelte';
+    import { MAX_SONGVIEW_LIMIT, settings, saveSettings, MAX_SONGVIEW_DAYS } from '../../store/user-settings.svelte';
     import Expand from '../ui/elements/Expand.svelte';
 
     const songService = new SongService();
@@ -84,7 +84,23 @@
 
     <div class="row">
         <p class="controls">
-            <label for="limit" class="icon limit-val">{recentFilter.limit}</label>
+            <i class="icon bx bx-history"></i>
+            <input
+                type="range"
+                title={$t('songs.recent-days')}
+                bind:value={recentFilter.recentDays}
+                min="1"
+                max={MAX_SONGVIEW_DAYS}
+                step="1"
+                aria-label={$t('songs.recent-days')}
+                onchange={updateFilter}
+            />
+            <label for="days" class="icon limit-val">{recentFilter.recentDays}</label>
+        </p>
+    </div>
+    <div class="row">
+        <p class="controls">
+            <i class="icon bx bxs-playlist"></i>
             <input
                 type="range"
                 title={$t('songs.recent-limit')}
@@ -95,6 +111,7 @@
                 aria-label={$t('songs.recent-limit')}
                 onchange={updateFilter}
             />
+            <label for="limit" class="icon limit-val">{recentFilter.limit}</label>
         </p>
     </div>
 </section>
@@ -111,11 +128,11 @@
     }
 
     .tag {
-        background: ivory;
+        background: var(--tag-bg);
     }
 
     .feature {
-        background: lavender;
+        background: var(--tag-hl-bg);
     }
 
     .controls {

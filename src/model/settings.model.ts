@@ -14,6 +14,7 @@ export interface GoogleDriveSettings {
 
 export interface DashboardSettings {
     showFilter: boolean;
+    recentDays: number;
     limit: number;
     status: Record<Status, boolean>;
     fav: boolean | null;

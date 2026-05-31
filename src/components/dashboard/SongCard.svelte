@@ -9,6 +9,7 @@
     import PopupMenu from '../ui/PopupMenu.svelte';
     import { toDate } from '../ui/helper/date.helper';
     import { SEARCH_ACTIONS, SongActions } from '../table/SongActions.class';
+    import { settings } from '../../store/user-settings.svelte';
 
     interface Props {
         song: UserSong;
@@ -103,12 +104,12 @@
     <div class="tags" title="Labels">
         {#if song.features?.length}
             {#each song.features as tag}
-                <span class="label feature">{tag}</span>
+                <span class="label feature" class:active={tag === settings.dashboard.tag?.value}>{tag}</span>
             {/each}
         {/if}
         {#if song.tags?.length}
             {#each song.tags as tag}
-                <span class="label tag">{tag}</span>
+                <span class="label tag" class:active={tag === settings.dashboard.tag?.value}>{tag}</span>
             {/each}
         {/if}
     </div>
@@ -273,6 +274,10 @@
 
         .feature {
             background: var(--tag-hl-bg);
+        }
+
+        .active {
+            border-color: var(--accent);
         }
     }
 

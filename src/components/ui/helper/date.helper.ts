@@ -4,9 +4,13 @@ import { DateTime } from "luxon";
 type Dateable = object | Date | string | undefined;
 
 export const truncateTime = (date: Dateable, precisionMinutes = 5) => 
-    date ? Math.floor(toDate(date).getTime() / (precisionMinutes * 60_000)) : 0;
+    date ? Math.floor(toJSDate(date).getTime() / (precisionMinutes * 60_000)) : 0;
 
-export function toDate(value: Dateable): Date {
+export function toDate(value: Dateable): DateTime {
+    return DateTime.fromJSDate(toJSDate(value));
+}
+
+function toJSDate(value: Dateable): Date {
     if (value !== undefined) {
         if (typeof value === 'string') {
             return new Date(value);

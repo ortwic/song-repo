@@ -98,12 +98,6 @@
         align-self: flex-start;
     }
 
-    .divider {
-        border: none;
-        border-top: 1px solid var(--surface-light);
-        margin: 2rem 0;
-    }
-
     .tiles {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));

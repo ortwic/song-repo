@@ -6,6 +6,7 @@ import { userSettingsService } from '../service/user/user-settings.service';
 const defaults: UserSettings = {
     dashboard: {
         showFilter: true,
+        recentDays: 1,
         limit: 4,
         status: {
             todo: true,
@@ -24,6 +25,7 @@ const defaults: UserSettings = {
     },
 };
 
+export const MAX_SONGVIEW_DAYS = 30;
 export const MAX_SONGVIEW_LIMIT = 20;
 export const settings = $state<UserSettings>({ ...defaults });
 

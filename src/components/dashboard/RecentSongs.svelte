@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { DateTime } from 'luxon';
     import { t } from 'svelte-i18n';
     import { flip } from 'svelte/animate';
     import { map } from 'rxjs';
@@ -6,7 +7,7 @@
     import SongService from '../../service/user/user-song.service';
     import type { UserSong } from '../../model/song.model';
     import { unfold } from '../ui/helper/transition.helper';
-    import { truncateTime } from '../ui/helper/date.helper';
+    import { toDate, truncateTime } from '../ui/helper/date.helper';
     import { toStore } from '../../utils/rx.store';
     import SongCard from './SongCard.svelte';
 
@@ -15,7 +16,7 @@
         const diff = truncateTime(b?.changedAt) - truncateTime(a.changedAt);
         return diff !== 0 ? diff : b.id.localeCompare(a.id);
     };
-    const recentSongStore = toStore(
+    const songStore = toStore(
         service.usersongs$.pipe(
             map((songs) => [...songs].sort(changedAtSorter))
         ),
@@ -29,23 +30,40 @@
         settings.dashboard.fav !== null ? song.fav === settings.dashboard.fav : true;
     const filterByStatus = (song: UserSong): boolean => 
         settings.dashboard.status[song.status];
+    const filterByDate = (song: UserSong): boolean => 
+        song.changedAt && settings.dashboard.recentDays > -toDate(song.changedAt).diffNow('days').days;
     const filterByTag = (song: UserSong): boolean => 
         !settings.dashboard.tag || (settings.dashboard.tag.type === 'tag' 
             ? song.tags?.includes(settings.dashboard.tag.value) 
             : song.features?.includes(settings.dashboard.tag.value));
 
-    let recentSongs = $derived($recentSongStore
-        .filter((s) => filterByFav(s) && filterByStatus(s) && filterByTag(s))
+    let recentSongs = $derived($songStore
+        .filter((s) => filterByDate(s))
+        .slice(0, settings.dashboard.limit)
+    );
+    let currentSongs = $derived($songStore
+        .filter((s) => !filterByDate(s) && filterByFav(s) && filterByStatus(s) && filterByTag(s))
         .slice(0, settings.dashboard.limit)
     );
 </script>
 
 <section class="recent-songs">
     <header class="row">
-        <div class="title"><i class="bx bxs-playlist"></i> {$t('songs.recent-wip')}</div>
+        <div class="title"><i class="bx bx-history"></i> {$t('songs.recent-wip')}</div>
     </header>
 
-    {#if recentSongs.length === 0}
+    {#if recentSongs.length > 0}
+        <div class="card-grid">
+            {#each recentSongs as song (song.id)}
+                <div class="card-wrapper" animate:flip={{ duration: 150 }} transition:unfold>
+                    <SongCard {song} />
+                </div>
+            {/each}
+        </div>
+        <hr class="divider" />
+    {/if}
+
+    {#if currentSongs.length === 0}
         <p class="empty">{$t('songs.search-empty')}</p>
         <h3>{$t('songs.search-filter-settings')}</h3>
         <ul>
@@ -61,7 +79,7 @@
         </ul>
     {:else}
         <div class="card-grid">
-            {#each recentSongs as song (song.id)}
+            {#each currentSongs as song (song.id)}
                 <div class="card-wrapper" animate:flip={{ duration: 150 }} transition:unfold>
                     <SongCard {song} />
                 </div>

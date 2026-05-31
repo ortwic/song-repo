@@ -1,5 +1,4 @@
 import Color from 'color';
-import { DateTime } from 'luxon';
 import { marked } from 'marked';
 import type { CellComponent, GroupComponent } from 'tabulator-tables';
 import type { ColumnDefinition } from '../tabulator/types';
@@ -213,7 +212,7 @@ export default class Formatter {
         return {
             formatter(cell: CellComponent): string {
                 const value = cell.getValue();
-                return value ? DateTime.fromJSDate(toDate(value)).toISODate() : '';
+                return value ? toDate(value).toISODate() : '';
             },
         }; 
     }
