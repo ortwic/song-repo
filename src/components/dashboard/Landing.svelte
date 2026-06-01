@@ -24,27 +24,27 @@
 
     <hr class="divider" />
 
-    <div class="tiles">
-        <div class="tile">
+    <div class="grid-auto-fit">
+        <div class="card">
             <span class="center">
-                <i class="bx bxs-playlist tile-icon" aria-hidden="true"></i>
+                <i class="bx bxs-playlist card-icon" aria-hidden="true"></i>
             </span>
-            <p class="tile-title center">{$t('start.tiles.overview.title')}</p>
-            <p class="tile-desc">{$t('start.tiles.overview.desc')}</p>
+            <p class="card-title center">{$t('start.tiles.overview.title')}</p>
+            <p class="card-desc">{$t('start.tiles.overview.desc')}</p>
         </div>
-        <div class="tile">
+        <div class="card">
             <span class="center">
-                <i class="bx bx-mobile-alt tile-icon" aria-hidden="true"></i>
+                <i class="bx bx-mobile-alt card-icon" aria-hidden="true"></i>
             </span>
-            <p class="tile-title center">{$t('start.tiles.mobile.title')}</p>
-            <p class="tile-desc">{$t('start.tiles.mobile.desc')}</p>
+            <p class="card-title center">{$t('start.tiles.mobile.title')}</p>
+            <p class="card-desc">{$t('start.tiles.mobile.desc')}</p>
         </div>
-        <div class="tile">
+        <div class="card">
             <span class="center">
-                <i class="bx bx-share-alt tile-icon" aria-hidden="true"></i>
+                <i class="bx bx-share-alt card-icon" aria-hidden="true"></i>
             </span>
-            <p class="tile-title center">{$t('start.tiles.share.title')}</p>
-            <p class="tile-desc">{$t('start.tiles.share.desc')}</p>
+            <p class="card-title center">{$t('start.tiles.share.title')}</p>
+            <p class="card-desc">{$t('start.tiles.share.desc')}</p>
         </div>
     </div>
 </section>
@@ -61,75 +61,40 @@
         flex-direction: column;
         align-items: flex-start;
         gap: 0.5rem;
-    }
 
-    .eyebrow {
-        font-size: 0.75rem;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: var(--text-muted);
-        margin: 0;
-    }
-
-    .headline {
-        font-size: 1.8rem;
-        font-weight: 500;
-        line-height: 1.25;
-        letter-spacing: -0.2pt;
-        color: var(--text);
-        margin: 0;
-
-        em {
-            display: block;
-            font-style: normal;
-            color: var(--accent);
+        .eyebrow {
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin: 0;
         }
-    }
 
-    .sub {
-        font-size: 0.95rem;
-        color: var(--text-muted);
-        line-height: 1.6;
-        margin: 0.25rem 0 0.75rem;
-        max-width: 480px;
-    }
+        .headline {
+            font-size: 1.8rem;
+            font-weight: 500;
+            line-height: 1.25;
+            letter-spacing: -0.2pt;
+            color: var(--text);
+            margin: 0;
 
-    .cta {
-        align-self: flex-start;
-    }
+            em {
+                display: block;
+                font-style: normal;
+                color: var(--accent);
+            }
+        }
 
-    .tiles {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-        gap: 0.75rem;
-    }
+        .sub {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin: 0.25rem 0 0.75rem;
+            max-width: 480px;
+        }
 
-    .tile {
-        background-color: var(--surface);
-        border: 1px solid var(--surface-light);
-        box-shadow: var(--shadow-sm);
-        border-radius: 8px;
-        padding: 1rem 1.1rem;
-    }
-
-    .tile-icon {
-        font-size: 1.4rem;
-        color: var(--accent);
-        display: block;
-        margin-bottom: 0.4rem;
-    }
-
-    .tile-title {
-        font-size: 0.875rem;
-        font-weight: 500;
-        color: var(--text);
-        margin: 0 0 0.25rem;
-    }
-
-    .tile-desc {
-        font-size: 0.8rem;
-        color: var(--text-muted);
-        line-height: 1.5;
-        margin: 0;
+        .cta {
+            align-self: flex-start;
+        }
     }
 </style>

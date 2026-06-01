@@ -139,4 +139,8 @@
         padding: 1em;
         overflow-y: auto;
     }
+
+    .bxs-check-circle {
+        color: var(--success);
+    }
 </style>

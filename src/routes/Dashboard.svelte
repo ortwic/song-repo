@@ -3,6 +3,7 @@
     import { link } from 'svelte-spa-router';
     import RecentSongs from '../components/dashboard/RecentSongs.svelte';
     import Footer from '../components/ui/Footer.svelte';
+    import GetStarted from '../components/dashboard/GetStarted.svelte';
     import SearchSongs from '../components/dashboard/SearchSongs.svelte';
     import Landing from '../components/dashboard/Landing.svelte';
     import TitlebarMenu from '../components/menus/TitlebarMenu.svelte';
@@ -26,6 +27,9 @@
     </TitlebarMenu>
     <section>
         {#if $currentUser}
+        <p>
+            <GetStarted />
+        </p>
         <p>
             <SearchSongs />
         </p>

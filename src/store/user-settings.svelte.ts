@@ -5,6 +5,11 @@ import { userSettingsService } from '../service/user/user-settings.service';
 
 const defaults: UserSettings = {
     dashboard: {
+        setupStatus: {
+            hasSongs: false,
+            hasProfile: false,
+            hasShared: false,
+        },
         showFilter: true,
         recentDays: 1,
         limit: 4,
@@ -41,5 +46,6 @@ currentProfile.subscribe((profile) => {
 });
 
 export function saveSettings(key: keyof UserSettings, value: UserSettings[keyof UserSettings]) {
+    Object.assign(settings[key] as object, value);
     userSettingsService.saveSettings({ [key]: value });
 }

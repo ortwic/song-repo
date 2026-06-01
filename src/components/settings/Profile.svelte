@@ -57,7 +57,7 @@
     }
 </script>
 
-<div class="section grid">
+<div class="section grid-max-2">
     <label for="name">Name</label>
     <input id="name" type="text" class="input lg" bind:value={name} />
 

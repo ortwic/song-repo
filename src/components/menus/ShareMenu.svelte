@@ -51,6 +51,10 @@
             }
         });
 
+        if (!qrCodeCanvas) {
+            return;
+        }
+
         const ctx = qrCodeCanvas.getContext('2d');
         const center = qrCodeCanvas.width / 2;
         const size = qrCodeCanvas.width * 0.18;
@@ -93,7 +97,7 @@
         </a>
     </div>
     {/if}
-    <p>
+    <p class="center">
         <canvas id="qrcode" bind:this={qrCodeCanvas}></canvas>
     </p>
 </section>

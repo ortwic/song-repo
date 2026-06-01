@@ -13,6 +13,11 @@ export interface GoogleDriveSettings {
 }
 
 export interface DashboardSettings {
+    setupStatus: {
+        hasSongs: boolean;
+        hasProfile: boolean;
+        hasShared: boolean;
+    },
     showFilter: boolean;
     recentDays: number;
     limit: number;

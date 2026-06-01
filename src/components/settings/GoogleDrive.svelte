@@ -49,7 +49,7 @@
     }
 </script>
 
-<div class="section grid">
+<div class="section grid-max-2">
     <label for="default-folder">{$t('settings.drive.default-folder')}</label>
     <div class="folder-row">
         <button

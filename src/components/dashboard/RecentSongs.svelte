@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { DateTime } from 'luxon';
     import { t } from 'svelte-i18n';
     import { flip } from 'svelte/animate';
     import { map } from 'rxjs';
@@ -48,12 +47,15 @@
 </script>
 
 <section class="recent-songs">
-    <header class="row">
-        <div class="title"><i class="bx bx-history"></i> {$t('songs.recent-wip')}</div>
+    <header class="header">
+        <div class="title">
+            <i class="bx bx-history"></i>
+            {$t('songs.recent-wip')}
+        </div>
     </header>
 
     {#if recentSongs.length > 0}
-        <div class="card-grid">
+        <div id="recent-songs" class="card-grid">
             {#each recentSongs as song (song.id)}
                 <div class="card-wrapper" animate:flip={{ duration: 150 }} transition:unfold>
                     <SongCard {song} />
@@ -78,7 +80,7 @@
             {/each}
         </ul>
     {:else}
-        <div class="card-grid">
+        <div id="current-songs" class="card-grid">
             {#each currentSongs as song (song.id)}
                 <div class="card-wrapper" animate:flip={{ duration: 150 }} transition:unfold>
                     <SongCard {song} />
@@ -89,20 +91,6 @@
 </section>
 
 <style lang="scss">
-    .row {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 1rem;
-        gap: 12px;
-
-        .title {
-            font-weight: 500;
-            flex-shrink: 0;
-        }
-    }
-
     .controls {
         display: flex;
         justify-content: flex-end;

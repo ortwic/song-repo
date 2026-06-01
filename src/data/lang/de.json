@@ -51,18 +51,35 @@
     "headline_em": "Kein Problem.",
     "sub": "Song-Repo hilft dir, den Überblick über dein Repertoire zu behalten — auf dem Handy, am Desktop, immer dabei.",
     "tiles": {
-        "overview": {
-            "title": "Repertoire im Griff",
-            "desc": "Alle Songs, die du kannst — oder noch lernst. Filterbar, durchsuchbar, übersichtlich."
-        },
-        "mobile": {
-            "title": "Immer dabei",
-            "desc": "Am Handy nachschlagen, am Desktop verwalten. Kein Zettel, kein Chaos."
-        },
-        "share": {
-            "title": "Teilen leicht gemacht",
-            "desc": "Dein Repertoire als Link, PDF oder öffentliche Seite — für Bandkollegen oder Veranstalter."
-        }
+      "overview": {
+        "title": "Repertoire im Griff",
+        "desc": "Alle Songs, die du kannst — oder noch lernst. Filterbar, durchsuchbar, übersichtlich."
+      },
+      "mobile": {
+        "title": "Immer dabei",
+        "desc": "Am Handy nachschlagen, am Desktop verwalten. Kein Zettel, kein Chaos."
+      },
+      "share": {
+        "title": "Teilen leicht gemacht",
+        "desc": "Dein Repertoire als Link, PDF oder öffentliche Seite — für Bandkollegen oder Veranstalter."
+      }
+    },
+    "setup": {
+      "title": "Erste Schritte",
+      "songs": {
+        "title": "Repertoire anlegen",
+        "desc": "Füge mindestens {count} Songs hinzu, um loszulegen."
+      },
+      "profile": {
+        "title": "Profil vervollständigen",
+        "desc": "Schreib eine kurze Bio und füge mindestens einen Link hinzu."
+      },
+      "share": {
+        "title": "App teilen",
+        "desc": "Teile deinen Repertoire-Link oder QR-Code mit anderen.",
+        "dialog-title": "Teilen",
+        "dialog-hint": "Bereits geteilt? \nBestätige, um es als erledigt zu markieren."
+      }
     },
     "imprint": "Impressum",
     "privacypolicy": "Datenschutz",

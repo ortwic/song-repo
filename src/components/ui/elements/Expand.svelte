@@ -28,8 +28,8 @@
     }
 </script>
 
-<div class="card" class:open aria-expanded={open}>
-    <span class="small card-header grid" class:open={open}>
+<div class:open aria-expanded={open}>
+    <span class="small card-header grid-max-2" class:open={open}>
         <button class="clear" onclick={handleToggle}
             aria-expanded={open}
             title="{open ? $t('common.collapse') : $t('common.expand')}">
@@ -63,10 +63,5 @@
         button {
             padding: 0.5em;
         }
-    }
-
-    .grid {
-        display: grid;
-        grid-template-columns: auto 1fr;
     }
 </style>

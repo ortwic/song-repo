@@ -64,6 +64,23 @@
             "desc": "As a link, PDF or public page — for bandmates, bookers, or just for yourself."
         }
     },
+    "setup": {
+        "title": "Get started",
+        "songs": {
+            "title": "Build your repertoire",
+            "desc": "Add at least {count} songs to get started."
+        },
+        "profile": {
+            "title": "Complete your profile",
+            "desc": "Write a short bio and add at least one link."
+        },
+        "share": {
+            "title": "Share your repertoire",
+            "desc": "Share your repertoire link or QR code with others.",
+            "dialog-title": "Share",
+            "dialog-hint": "Already shared it? \nConfirm to mark as done."
+        }
+    },
     "imprint": "Imprint",
     "privacypolicy": "Privacy policy",
     "termsofuse": "Terms of use",
