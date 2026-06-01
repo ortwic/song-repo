@@ -9,6 +9,7 @@
     import { toDate, truncateTime } from '../ui/helper/date.helper';
     import { toStore } from '../../utils/rx.store';
     import SongCard from './SongCard.svelte';
+    import SongStats from './SongStats.svelte';
 
     const service = new SongService();
     const changedAtSorter = (a: UserSong, b: UserSong) => {
@@ -47,6 +48,8 @@
 </script>
 
 <section class="recent-songs">
+    <SongStats />
+    
     <header class="header">
         <div class="title">
             <i class="bx bx-history"></i>

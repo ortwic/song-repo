@@ -287,6 +287,8 @@
     "collapse": "Minimieren",
     "true": "Ja",
     "false": "Nein",
-    "page": "Seite"
+    "page": "Seite",
+    "total": "Gesamt",
+    "more": "Mehr anzeigen"
   }
 }
