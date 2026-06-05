@@ -1,6 +1,7 @@
 import type { Artist, Song } from '../../model/song.model';
 import type { SearchService } from './search.service';
 import { showError } from '../../store/notification.store';
+import { parseSearchQuery } from '../../utils/parse-search-query';
 
 const BASE_URL = 'https://api.discogs.com/database/search';
 
@@ -91,7 +92,8 @@ export default class SearchDiscogsService implements SearchService {
         return Array.isArray(data?.results) ? data.results.map(artistResultToArtist) : [];
     }
 
-    async findSongs(title: string, artist?: string): Promise<Song[]> {
+    async findSongs(searchTerm: string): Promise<Song[]> {
+        const { artist, title } = parseSearchQuery(searchTerm);
         const params = new URLSearchParams({
             type: 'master',
             release_title: title,

@@ -85,8 +85,8 @@
     "privacypolicy": "Privacy policy",
     "termsofuse": "Terms of use",
     "search": {
-      "placeholder": "Online-Search for \"Song Title [- Artist Name]\"",
-      "powered-by": "Powered by",
+      "online": "Online-Search for \"Song Title [- Artist Name]\"",
+      "catalog": "Search by title, artist or genre",
       "custom": "Add custom song entry"
     }
   },

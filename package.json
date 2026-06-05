@@ -68,6 +68,7 @@
     "eslint-plugin-svelte": "^3.17.1",
     "fecha": "^4.2.3",
     "firebase": "^9.23.0",
+    "flexsearch": "^0.8.212",
     "jsdom": "^22.1.0",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.5.30",

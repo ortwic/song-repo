@@ -101,6 +101,9 @@ importers:
       firebase:
         specifier: ^9.23.0
         version: 9.23.0
+      flexsearch:
+        specifier: ^0.8.212
+        version: 0.8.212
       jsdom:
         specifier: ^22.1.0
         version: 22.1.0
@@ -2686,6 +2689,9 @@ packages:
 
   flatted@3.2.7:
     resolution: {integrity: sha512-5nqDSxl8nn5BSNxyR3n4I6eDmbolI6WT+QqR547RwxQapgjQBmtktdP+HTBb/a/zLsbzERTONyUB5pefh5TtjQ==}
+
+  flexsearch@0.8.212:
+    resolution: {integrity: sha512-wSyJr1GUWoOOIISRu+X2IXiOcVfg9qqBRyCPRUdLMIGJqPzMo+jMRlvE83t14v1j0dRMEaBbER/adQjp6Du2pw==}
 
   for-each@0.3.3:
     resolution: {integrity: sha512-jqYfLp7mo9vIyQf8ykW2v7A+2N4QjeCeI5+Dz9XraiO1ign81wjiH7Fb9vSOWvQfNtmSa4H2RoQTrrXivdUZmw==}
@@ -7562,6 +7568,8 @@ snapshots:
       rimraf: 3.0.2
 
   flatted@3.2.7: {}
+
+  flexsearch@0.8.212: {}
 
   for-each@0.3.3:
     dependencies:

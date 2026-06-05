@@ -85,7 +85,8 @@
     "privacypolicy": "Datenschutz",
     "termsofuse": "Nutzungsbedingungen",
     "search": {
-      "placeholder": "Online-Suche nach „Songtitel [- Künstlername]“",
+      "online": "Online-Suche nach „Songtitel [- Künstlername]“",
+      "catalog": "Nach Titel, Künstler oder Genre suchen",
       "custom": "Eigenen Songeintrag hinzufügen"
     }
   },

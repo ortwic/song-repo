@@ -1,6 +1,7 @@
 import type { Artist, Song } from '../../model/song.model';
 import type { SearchService } from './search.service';
 import { showError } from '../../store/notification.store';
+import { parseSearchQuery } from '../../utils/parse-search-query';
 
 const APP_NAME_PARAM = 'app_name=ocsoft42_songrepo';
 const BASE_URL = 'https://discoveryprovider.audius.co/v1';
@@ -61,7 +62,8 @@ export default class SearchAudiusService implements SearchService {
         });
     }
 
-    async findSongs(title: string, artist?: string): Promise<Song[]> {
+    async findSongs(searchTerm: string): Promise<Song[]> {
+        const { artist, title } = parseSearchQuery(searchTerm);
         const url = artist && this.artistIdCache.has(artist)
             ? `${BASE_URL}/users/${this.artistIdCache.get(artist)}/tracks?query=${encodeURIComponent(title)}&${APP_NAME_PARAM}`
             : `${BASE_URL}/tracks/search?query=${encodeURIComponent(title)}&${APP_NAME_PARAM}`;

@@ -7,7 +7,6 @@
     import Image from '../ui/elements/Image.svelte';
     import SongService from '../../service/user/user-song.service';
     import { createSearchService } from '../../service/search/search.service';
-    import { parseSearchQuery } from '../../utils/parse-search-query';
     import type { Dialog } from '../../model/dialog.model';
     import type { Song, UserSong } from '../../model/song.model';
     import type { SearchEngines } from '../../model/types';
@@ -16,14 +15,12 @@
     const songService = new SongService();
     const addSongDialog = getContext<Dialog<UserSong>>('editsong-dialog');
 
-    let currentSearchEngine = $state<SearchEngines>('musicbrainz');
+    let currentSearchEngine = $state<SearchEngines>();
     const searchService = $derived(createSearchService(currentSearchEngine));
 
     let autocomplete: { close: () => void };
-    let searchText = $state('');
+    let searchTerm = $state('');
     let showFilter = $state(false);
-
-    const parsedQuery = $derived(parseSearchQuery(searchText));
 
     async function handleSelect(song: Song | null): Promise<void> {
         if (song) {
@@ -33,13 +30,13 @@
                 features: [],
                 tags: [],
             });
-            searchText = '';
+            searchTerm = '';
         }
     }
 
     async function openCustomForm(): Promise<void> {
         autocomplete.close();
-        const newSong = await addSongDialog.open({ title: searchText } as UserSong);
+        const newSong = await addSongDialog.open({ title: searchTerm } as UserSong);
         if (newSong !== null) {
             await songService.addSong(newSong);
         }
@@ -50,12 +47,14 @@
     <div class="search-row">
         <Autocomplete
             bind:this={autocomplete}
-            bind:value={searchText}
-            searchFunction={() => searchService.findSongs(parsedQuery.title, parsedQuery.artist)}
+            bind:value={searchTerm}
+            searchFunction={() => searchService.findSongs(searchTerm)}
             labelField="title"
             delay={400}
             minChars={2}
-            placeholder={$t('start.search.placeholder')}
+            placeholder={currentSearchEngine 
+                ? $t('start.search.online') 
+                : $t('start.search.catalog')}
             onSelect={handleSelect}
         >
             {#snippet item({ item })}
@@ -98,6 +97,7 @@
             <p>
                 <label for="provider">{$t('menu.search.select-provider')}:</label>
                 <select bind:value={currentSearchEngine}>
+                    <option value="">Song-Repo</option>
                     <option value="musicbrainz">MusicBrainz</option>
                     <option value="discogs">Discogs</option>
                     <option value="audius">Audius</option>

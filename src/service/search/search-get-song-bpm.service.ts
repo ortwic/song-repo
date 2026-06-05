@@ -2,6 +2,7 @@ import type { ArtistResult, SongResult, BothResult } from '../../model/songbpm.m
 import type { Artist, Song } from '../../model/song.model';
 import type { SearchService } from './search.service';
 import { showError } from '../../store/notification.store';
+import { parseSearchQuery } from '../../utils/parse-search-query';
 import { tryJson } from './search.service';
 
 type ApiResponse<T> = { search: T[] };
@@ -51,7 +52,8 @@ export default class SearchSongBpmService implements SearchService {
         return Array.isArray(data) ? data.map(artistResultToArtist) : [];
     }
 
-    async findSongs(title: string, artist?: string): Promise<Song[]> {
+    async findSongs(searchTerm: string): Promise<Song[]> {
+        const { artist, title } = parseSearchQuery(searchTerm);
         return artist
             ? this.findBoth(title, artist)
             : this.findByTitleOnly(title);

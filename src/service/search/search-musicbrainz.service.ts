@@ -1,6 +1,7 @@
 import type { Artist,Song } from '../../model/song.model';
 import type { SearchService } from './search.service';
 import { showError } from '../../store/notification.store';
+import { parseSearchQuery } from '../../utils/parse-search-query';
 
 interface MbArtistCredit {
     name: string;
@@ -82,7 +83,8 @@ export default class SearchMusicBrainzService implements SearchService {
             : [];
     }
 
-    async findSongs(title: string, artist?: string): Promise<Song[]> {
+    async findSongs(searchTerm: string): Promise<Song[]> {
+        const { artist, title } = parseSearchQuery(searchTerm);
         // MusicBrainz Lucene syntax: Felder explizit benennen für verlässliche Treffer
         const query = artist
             ? `recording:"${title}" AND artist:"${artist}"`
