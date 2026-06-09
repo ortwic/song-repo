@@ -34,6 +34,8 @@ export function createSearchService(engine?: SearchEngines | undefined): SearchS
         case 'musicbrainz':
             return new SearchMusicBrainzService(userAgent);
         default:
-            return new SearchCatalogService();
+            return new SearchCatalogService({
+                searchResultLimit: 20
+            });
     }
 }

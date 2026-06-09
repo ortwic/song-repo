@@ -31,7 +31,7 @@
     <div class="post">
         {#if post.images?.length}
         <div class="thumbnail">
-            <Image src={post.images[0]?.value} width={$width} height={$width} />
+            <Image src={post.images[0]?.value} size={$width} />
         </div>
         {/if}
         <PostDetails title={post.title} excerpt={post.excerpt} content={post.content}/>
@@ -52,7 +52,6 @@ main {
         border-color: var(--border);
         border-style: solid;
         border-width: 1px 0 1px 0;
-        color: var(--accent-text);
         padding: .4rem;
 
         .thumbnail {

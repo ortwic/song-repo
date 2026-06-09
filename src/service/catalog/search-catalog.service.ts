@@ -4,7 +4,7 @@ import type { SearchService } from './search.service';
 import { stores } from '../base/firestore.service';
 import { showError } from '../../store/notification.store';
 
-const SEARCH_LIMIT = 10;
+const SEARCH_LIMIT = 20;
 
 type IndexedSong = Pick<Song, 'id' | 'title' | 'artist' | 'genre' | 'style'>;
 
@@ -58,9 +58,16 @@ function deduplicateByArtist(songs: Song[]): Artist[] {
 }
 
 export default class SearchCatalogService implements SearchService {
+    private readonly limit: number;
     private catalog: Song[] = [];
     private index: FlexDocument<IndexedSong> | null = null;
     private loadPromise: Promise<void> | null = null;
+
+    constructor(options: {
+        searchResultLimit: number
+    }) {
+        this.limit = options.searchResultLimit;
+    }
 
     async findArtists(query: string): Promise<Artist[]> {
         await this.ensureLoaded();
@@ -69,7 +76,7 @@ export default class SearchCatalogService implements SearchService {
             return [];
         }
 
-        const results = this.index.search(query, { field: 'artist', limit: SEARCH_LIMIT });
+        const results = this.index.search(query, { field: 'artist', limit: this.limit });
         const matchingIds = new Set<string>(results.flatMap((r) => r.result as string[]));
         const matchingSongs = this.catalog.filter((song) => matchingIds.has(song.id));
 

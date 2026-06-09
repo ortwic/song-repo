@@ -2,11 +2,19 @@ import type { Timestamp } from 'firebase/firestore';
 import type { Complete, Status } from './types';
 
 export interface Artist {
-    id: string;
-    name: string;
-    uri?: string;
-    img?: string;
+    artistMbid: string;
+    names: string[];
+    genre?: string;
+    style?: string;
     country?: string;
+    countryCode?: string;
+    formedYear?: number;
+    gender?: string;
+    memberCount?: number;
+    label?: string;
+    website?: string;
+    thumb?: string;
+    logo?: string;
 }
 
 export interface Genre {
@@ -21,6 +29,7 @@ export interface Song {
     title: string;
     artist: string;
     artistImg?: string;
+    artistMbid?: string;
     source?: string;
     genre?: string;
     style?: string;

@@ -89,10 +89,24 @@ export default defineConfig({
                 orientation: 'any',
             },
             workbox: {
-                globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
+                globPatterns: ['**/*.{js,css,html,svg,gif,jpg,jpeg,png,webp,woff2}'],
                 globIgnores: ['**/node_modules/**/*'],
+                runtimeCaching: [{
+                    urlPattern: /^https:\/\/storage\.googleapis\.com\/song-repo\.appspot\.com/,
+                    handler: 'CacheFirst',
+                    options: {
+                        cacheName: 'song-repo-images',
+                        expiration: {
+                            maxEntries: 100,
+                            maxAgeSeconds: 60 * 60 * 24 * 90
+                        }
+                    }
+                }]
             },
-            devOptions: { enabled: true },
+            devOptions: { 
+                // true is very verbose in console
+                enabled: false
+            },
             selfDestroying: false,
         }),
     ],

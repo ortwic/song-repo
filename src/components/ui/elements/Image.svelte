@@ -1,54 +1,71 @@
-<!-- @migration-task Error while migrating Svelte code: Can't migrate code with afterUpdate. Please migrate by hand. -->
 <script lang="ts">
-  import { afterUpdate } from 'svelte';
-  let canvas: HTMLCanvasElement;
-  export let src: string;
-  export let width = 50;
-  export let height = 50;
-  
-  afterUpdate(async () => {
-    if (canvas) {
-      const img = new Image();
-      img.src = src;
-      await img.decode();
-      
-      const targetRatio = width / height;
-      const aspectRatio = img.width / img.height;
+    let {
+        src,
+        size = 50,
+        ratio = 1,
+    }: {
+        src: string;
+        size?: number;
+        ratio?: number;
+    } = $props();
 
-      if(aspectRatio > targetRatio) {
-        const newWidth = img.height * targetRatio;
-        const startX = (img.width - newWidth) / 2;
-        drawImage(img, startX, 0, newWidth, img.height); 
-      } else {
-        const newHeight = img.width / targetRatio;
-        const startY = (img.height - newHeight) / 2;
-        drawImage(img, 0, startY, img.width, newHeight); 
-      }
+    async function loadImage(src: string): Promise<HTMLImageElement | null> {
+        const img = new Image();
+        img.src = src;
+        return await new Promise<boolean>((resolve) => {
+            img.onload = () => resolve(true);
+            img.onerror = () => resolve(false);
+        }) ? img : null;
     }
-  });
 
-  function drawImage(img: CanvasImageSource, sx: number, sy: number, sw: number, sh: number): void {
-    const ctx = canvas?.getContext('2d');
-    ctx?.drawImage(img, sx, sy, sw, sh, 0, 0, width, height); 
-  }
+    function resizeable(canvas: HTMLCanvasElement, img: HTMLImageElement): { destroy: () => void } {
+        const observer = new ResizeObserver(() => renderCroppedImage(canvas, img));
+        observer.observe(canvas.parentElement!);
+        return { destroy: () => observer.disconnect() };
+    }
+
+    function renderCroppedImage(canvas: HTMLCanvasElement, img: HTMLImageElement) {
+        if (img) {
+            const ctx = canvas.getContext('2d');
+            const { sx, sy, sw, sh } = computeCrop(img, ratio);
+
+            ctx.clearRect(0, 0, size, size);
+            ctx.drawImage(img, sx, sy, sw, sh, 0, 0, size, size);   
+        }
+    }
+
+    function computeCrop(img: HTMLImageElement, ratio: number) {
+        const aspectRatio = img.width / img.height;
+        if (aspectRatio > ratio) {
+            const sw = img.height * ratio;
+            const sx = (img.width - sw) / 2;
+            return { sx, sy: 0, sw, sh: img.height };
+        } else {
+            const sh = img.width / ratio;
+            const sy = (img.height - sh) / 2;
+            return { sx: 0, sy, sw: img.width, sh };
+        }
+    }
 </script>
-  
-<div style:width="{width}px" style:height="{height}px">
-  {#if src}
-  <canvas {width} {height} bind:this={canvas} />
-  {:else}
-  <span>n/a</span>
-  {/if}
+
+<div style:width="{size}px" style:height="{size}px">
+    {#await loadImage(src)}
+        <span class="spinner"></span>        
+    {:then img} 
+        {#if img}
+            <canvas width={size} height={size} use:resizeable={img}></canvas>
+        {:else}
+            <span>n/a</span>
+        {/if}
+    {/await}
 </div>
 
-<style lang="scss">
-div {
-    color: gray;
-    border: 1px solid gray;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-}
+<style>
+    div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        border: 1px solid var(--border);
+    }
 </style>
-

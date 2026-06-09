@@ -6,7 +6,8 @@
     import Autocomplete from '../ui/Autocomplete.svelte';
     import Image from '../ui/elements/Image.svelte';
     import SongService from '../../service/user/user-song.service';
-    import { createSearchService } from '../../service/search/search.service';
+    import { buildArtistImgUrl } from '../../service/catalog/artists.util';
+    import { createSearchService } from '../../service/catalog/search.service';
     import type { Dialog } from '../../model/dialog.model';
     import type { Song, UserSong } from '../../model/song.model';
     import type { SearchEngines } from '../../model/types';
@@ -59,7 +60,7 @@
         >
             {#snippet item({ item })}
                 <div class="result-card">
-                    <Image src={item.artistImg} />
+                    <Image src={buildArtistImgUrl(item.artistMbid)} size={80} />
                     <div class="result-info">
                         <span class="result-title">{item.title}</span>
                         <span class="result-artist">{item.artist ?? ''}</span>
