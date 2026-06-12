@@ -34,7 +34,8 @@
     });
     let aliasChanged = $derived(alias !== ($currentProfile.alias ?? ''));
     let dirty = $derived(name  !== ($currentProfile.name  ?? '')
-            || aliasChanged
+            || alias !== ($currentProfile.alias ?? '')
+            || photoUrl !== ($currentProfile.photoURL ?? '')
             || about !== ($currentProfile.about ?? ''));
     let canSave = $derived(uid && dirty && (aliasChanged ? $aliasStatus$ === true : true));
 
@@ -44,11 +45,10 @@
                 await userService.updateProfile({
                     id: uid,
                     name,
+                    photoURL: photoUrl,
+                    alias,
                     about,
                 });
-                if (aliasChanged) {
-                    await userService.setAlias(uid, alias);
-                }
                 showInfo($t('settings.profile-updated'));
             } catch (error) {
                 showError(error.message);

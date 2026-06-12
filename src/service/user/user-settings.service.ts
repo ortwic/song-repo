@@ -8,14 +8,6 @@ const userService = new UserService();
 export class UserSettingsService {
     private ready: Promise<void> | null = null;
 
-    loadSettings(): Observable<UserSettings | null> {
-        return currentProfile.pipe(
-            filter((p) => !!p?.id),
-            take(1),
-            map((profile) => (profile?.settings as UserSettings) ?? null),
-        );
-    }
-
     loadSettingsAsync(target: UserSettings, defaults: UserSettings): Promise<void> {
         if (!this.ready) {
             this.ready = firstValueFrom(this.loadSettings()).then((settings) => {
@@ -26,6 +18,14 @@ export class UserSettingsService {
         }
         return this.ready;
     }
+
+    private loadSettings(): Observable<UserSettings | null> {
+        return currentProfile.pipe(
+            filter((p) => !!p?.id),
+            take(1),
+            map((profile) => (profile?.settings as UserSettings) || null),
+        );
+    }
     
     reset(): void {
         this.ready = null;
@@ -34,7 +34,8 @@ export class UserSettingsService {
     async saveSettings(value: Partial<UserSettings>): Promise<void> {
         await this.ready;
         const profile = await firstValueFrom(currentProfile.pipe(filter((p) => !!p?.id)));
-        await userService.updateProfile({ id: profile.id, settings: { ...profile.settings, ...value } });
+        const settings = { ...profile.settings, ...value };
+        await userService.updateProfile({ id: profile.id, settings });
     }
 }
 

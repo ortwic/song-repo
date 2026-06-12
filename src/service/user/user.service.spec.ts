@@ -219,7 +219,7 @@ describe('UserService', () => {
         it('writes only alias', async () => {
             mockSetDoc.mockResolvedValue(undefined);
 
-            await service.setAlias('uid-123', 'jane-doe');
+            await service.updateProfile({ id: 'uid-123', alias: 'jane-doe'});
 
             expect(mockSetDoc).toHaveBeenCalledWith(
                 expect.anything(),

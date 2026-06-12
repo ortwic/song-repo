@@ -64,11 +64,7 @@ export default class UserService {
     async updateProfile(data: Partial<UserProfile> & { id: string }): Promise<void> {
         await stores.user.setDocument(data, { merge: true });
     }
-
-    async setAlias(id: string, alias: string): Promise<void> {
-        await stores.user.setDocument({ id, alias }, { merge: true });
-    }
-
+    
     async setDeletedFlag(id: string): Promise<void> {
         await stores.user.setDocument({ id, deleted: new Date() });
     }

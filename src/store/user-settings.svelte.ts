@@ -20,6 +20,7 @@ const defaults: UserSettings = {
             done: false,
             archived: false,
         },
+        tag: null,
         fav: null,
     },
     googleDrive: {

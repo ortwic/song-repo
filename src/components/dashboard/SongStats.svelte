@@ -40,8 +40,8 @@
         return () => subs.forEach((s) => s.unsubscribe());
     });
 
-    function filterByStatus({ preventDefault }: Event, value?: Status) {
-        preventDefault();
+    function filterByStatus(ev: Event, value?: Status) {
+        ev.preventDefault();
 
         const status = Object.values(statusMap).reduce((acc, s) => {
             acc[s] = !value || s === value;
@@ -51,8 +51,8 @@
         scrollToSection('current-songs');
     }
 
-    function filterByTag({ preventDefault }: Event, e?: IndexEntry) {
-        preventDefault();
+    function filterByTag(ev: Event, e?: IndexEntry) {
+        ev.preventDefault();
 
         const tag = e && {
             type: e.type as 'tag' | 'feature', value: e.value 
@@ -68,8 +68,8 @@
         })
     }
 
-    function showAdvancedFilters(e: Event) {
-        e.preventDefault();
+    function showAdvancedFilters(ev: Event) {
+        ev.preventDefault();
         saveSettings('dashboard', { ...settings.dashboard, showFilter: true });
         currentMenu.set('dynamic');
     }
