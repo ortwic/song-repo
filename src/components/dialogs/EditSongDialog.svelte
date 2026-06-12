@@ -3,13 +3,16 @@
     import Autocomplete from 'simple-svelte-autocomplete/src/SimpleAutocomplete.svelte';
     import '../../styles/overrides/simple-autocomplete.scss';
     import SongService from '../../service/user/user-song.service';
-    import type { UserSong } from '../../model/song.model';
+    import type { Artist, Song, UserSong } from '../../model/song.model';
     import { createDeferred } from '../../utils/promise.helper';
+    import { buildArtistImgUrl } from '../../service/catalog/artists.util';
     import { refData } from '../../service/common/app.service';
+    import { logAction } from '../../store/notification.store';
     import { redToGreenRange } from '../../styles/style.helper';
     import ConfirmDialog from './ConfirmDialog.svelte';
     import SelectKey from '../ui/SelectKey.svelte';
     import Expand from '../ui/elements/Expand.svelte';
+    import Image from '../ui/elements/Image.svelte';
     import TagEditor from '../ui/elements/TagEditor.svelte';
     import CloudResource from '../storage/CloudResource.svelte';
 
@@ -28,6 +31,43 @@
         editSong = { features: [], tags: [], ...initial };
         visible = true;
         return deferred.promise;
+    }
+
+    function wordStartsWith(text: string, search: string): boolean {
+        return text.toLowerCase()
+            .split(/\s+/)
+            .some((v) => v.startsWith(search.toLowerCase()));
+    }
+
+    function setArtist(artist?: Artist): void {
+        if (artist) {
+            logAction({ type: 'search', artist });
+    
+            editSong.artistMbid = artist.artistMbid;
+            editSong.artist = artist.names[0];
+
+            if (!editSong.genre) {
+                editSong.genre = artist.genre;
+            }
+            if (!editSong.style) {
+                editSong.style = artist.style;
+            }
+            if (artist?.country) {
+                editSong.features?.push(artist.country)
+            }
+        }
+    }
+
+    function setSong(song?: Song) {
+        if (song) {
+            logAction({ type: 'search', song });
+
+            editSong = {
+                ...song,
+                ...editSong
+            }
+            editSong.features.push(...song.features ?? []);
+        }
     }
 
     function done(confirmed: boolean): void {
@@ -58,14 +98,93 @@
         <div class="dialog-body">
             <Expand open={isNew} title={$t('songs.sections.song-general')}>
                 <div class="field-grid">
-                    <div class="group">
-                        <label for="title">{$t('songs.columns.title')} *</label>
-                        <input class="lg" id="title" type="text" bind:value={editSong.title} required placeholder="Title" />
-                    </div>
 
                     <div class="group">
                         <label for="artist">{$t('songs.columns.artist')} *</label>
-                        <input class="lg" id="artist" type="text" bind:value={editSong.artist} required placeholder="Artist" />
+                        <Autocomplete 
+                            inputClassName="lg" 
+                            labelFieldName="names"
+                            placeholder={$t('songs.columns.artist')} 
+                            required={true}
+                            delay={500}
+                            minCharactersToSearch={1}
+                            searchFunction={(text) => refData.artists.filter((v) => wordStartsWith(v.names[0], text))}
+                            onChange={setArtist}
+                            bind:value={editSong.artistMbid} 
+                            showClear={true}
+                            hideArrow={true}
+                            showLoadingIndicator={true}>
+                            {#snippet item({ item, label })}
+                            <div class="result-card">
+                                <span title={item.names[0]}>
+                                    <Image src={buildArtistImgUrl(item.artistMbid)} />
+                                </span>
+                                <div class="col">
+                                    {@html label} | 
+                                    <span title="{ $t('songs.columns.country') }">{item.country ?? 'n/a'}</span>
+                                    {#if item.website}
+                                    <a title="{ $t('songs.columns.artist') }" href={item.website} target="_blank">
+                                        <i class="bx bx-external-link"></i>
+                                    </a>
+                                    {/if}
+                                    <p>
+                                        {#if item.genre}
+                                        <span class='label'>{item.genre}</span>
+                                        {/if}
+                                        {#if item.style && item.style !== item.genre}
+                                        <span class='label'>{item.style}</span>
+                                        {/if}
+                                    </p>
+                                </div>
+                            </div>
+                            {/snippet}
+                        </Autocomplete>
+                    </div>
+                    
+                    <div class="group">
+                        <label for="title">{$t('songs.columns.title')} *</label>
+                        <Autocomplete 
+                            inputClassName="lg" 
+                            labelFieldName="title"
+                            placeholder={$t('songs.columns.title')}
+                            required={true}
+                            delay={500} 
+                            minCharactersToSearch={editSong.artistMbid ? 0 : 2}
+                            searchFunction={(text) => refData.catalog.filter((v) => !editSong.artistMbid || v.artistMbid === editSong.artistMbid && wordStartsWith(v.title, text))} 
+                            onChange={setSong} 
+                            bind:text={editSong.title}
+                            clearSelection={() => setSong()} 
+                            showClear={true}
+                            hideArrow={true}
+                            showLoadingIndicator={true}>
+                            {#snippet item({ item, label })}
+                                <div class="result-card">
+                                    <span title={item.title}>
+                                        <Image src={buildArtistImgUrl(item.artistMbid)} />
+                                    </span>
+                                    <div class="col">
+                                        {@html label} | 
+                                        <span class="eyebrow" title="{ $t('songs.columns.artist') }">{item.artist}</span>
+                                        {#if item.year}
+                                        <span class="sub" title="{ $t('songs.columns.year') }">({item.year})</span>
+                                        {/if}
+                                        <p>
+                                            {#if item.genre}
+                                            <span title="{ $t('songs.columns.genre') }" class='label'>{item.genre}</span>
+                                            {/if}
+                                            {#if item.style}
+                                            <span title="{ $t('songs.columns.style') }" class='label'>{item.style}</span>
+                                            {/if}
+                                            {#if item.key || item.time || item.bpm}
+                                            <span title="{ $t('songs.columns.signature') }" class='label'>
+                                                {[item.key, item.time, item.bpm].join('|')}
+                                            </span>
+                                            {/if}
+                                        </p>
+                                    </div>
+                                </div>
+                            {/snippet}
+                        </Autocomplete>
                     </div>
 
                     <div class="group">
@@ -262,6 +381,18 @@
         display: flex;
         flex-direction: column;
         gap: 0.25em;
+    }
+
+    .result-card {
+        display: flex;
+        align-items: center;
+        gap: 0.75em;
+        padding: 0.45em 0.75em;
+        color: var(--text);
+
+        a {
+            flex-shrink: 0;
+        }
     }
 
     div.square {

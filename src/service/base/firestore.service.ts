@@ -114,6 +114,7 @@ export class FirestoreService {
 }
 
 export const stores = {
+    artists: FirestoreService.create('artists'),
     blog: FirestoreService.create('blog'),
     catalog: FirestoreService.create('songcatalog'),
     events: FirestoreService.create('events'),

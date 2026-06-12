@@ -19,7 +19,7 @@ import UserService from './user.service';
 import { googleAuthSetupService } from '../storage/google-setup.service';
 
 export const currentUser = authState(auth);
-export const analytics = getAnalytics(app);
+export const analytics = navigator?.onLine ? getAnalytics(app) : { app };
 
 const msProvider = new OAuthProvider('microsoft.com');
 msProvider.setCustomParameters({

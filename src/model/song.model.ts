@@ -30,6 +30,8 @@ export interface Song {
     artist: string;
     artistImg?: string;
     artistMbid?: string;
+    album?: string;
+    year?: string;
     source?: string;
     genre?: string;
     style?: string;
