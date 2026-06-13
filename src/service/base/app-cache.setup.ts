@@ -1,13 +1,11 @@
 import { stores, type FirestoreService } from './firestore.service';
-import type { CalendarSettings } from '../../model/event.model';
 import type { Genre } from '../../model/song.model';
 
 type Page = { id: string; title: string; body: string };
 
 const cache = {
-    genres:   [] as Genre[],
-    pages:    [] as Page[],
-    settings: [] as CalendarSettings[],
+    genres: [] as Genre[],
+    pages: [] as Page[]
 };
 
 type CacheRecord = typeof cache;

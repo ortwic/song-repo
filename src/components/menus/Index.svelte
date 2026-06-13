@@ -42,7 +42,7 @@
                     photoURL={$currentUser.photoURL}
                     displayName={$currentUser.displayName}
                 />
-            {:else}
+            {:else if !$isEventView && !$isBlogView}
                 <LoginMenu />
             {/if}
 

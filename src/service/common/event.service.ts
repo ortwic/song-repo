@@ -1,24 +1,17 @@
-import { map, startWith, type Observable } from 'rxjs';
 import { DateTime } from 'luxon';
+import { map, startWith, type Observable } from 'rxjs';
 import { stores } from '../base/firestore.service';
-import type { CalendarEvent, CalendarSettings, EventDate } from '../../model/event.model';
-import { refData } from '../base/app-cache.setup';
+import type { CalendarEvent, EventDate } from '../../model/event.model';
 
-export function getSettings(): CalendarSettings {
-    return refData.settings.find((s) => s.id === 'google') || ({} as CalendarSettings);
-}
+const today = DateTime.local();
+const next6Month = today.plus({ months: 6 });
 
 export function getEvents(): Observable<CalendarEvent[]> {
     const date = (date: EventDate) => DateTime.fromJSDate(new Date(date.dateTime ?? date.date));
     return stores.events.getDocuments<CalendarEvent>().pipe(
         map((events) => {
-            const today = DateTime.local();
-            const futureDate = today.plus({ months: getSettings()?.futureMonths || 6 });
             return events
-                .filter((event) => {
-                    const eventEnd = date(event.end);
-                    return eventEnd >= today && eventEnd <= futureDate;
-                })
+                .filter((event) => date(event.end) >= today && date(event.end) <= next6Month)
                 .sort((a, b) => date(a.end).toMillis() - date(b.end).toMillis());
         }),
         startWith([])

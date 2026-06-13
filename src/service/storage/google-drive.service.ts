@@ -17,8 +17,8 @@
 
 import type { DriveFile, DrivePickerOptions } from '../../model/file.model';
 
-const API_KEY = import.meta.env.VITE_GOOGLE_API_KEY as string;
-const APP_ID = import.meta.env.VITE_GOOGLE_APP_ID as string;
+const API_KEY = import.meta.env.VITE_GOOGLE_DRIVE_API_KEY as string;
+const APP_ID = import.meta.env.VITE_GOOGLE_DRIVE_APP_ID as string;
 
 const UPLOAD_API_URL =
     'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name,mimeType,webContentLink,webViewLink';

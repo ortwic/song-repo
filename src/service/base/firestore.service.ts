@@ -137,7 +137,6 @@ export const stores = {
     feedback: FirestoreService.create('feedback'),
     genres: FirestoreService.create('genres'),
     pages: FirestoreService.create('pages'),
-    settings: FirestoreService.create('settings'),
     user: FirestoreService.create('user'),
     userlinks: (id: string) => FirestoreService.create('user', id, 'links'),
     usersongs: (id: string) => FirestoreService.create('user', id, 'songs'),

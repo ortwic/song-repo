@@ -3,7 +3,7 @@
     import { params as params$ } from "svelte-spa-router";
     import { t } from "svelte-i18n";
     import { Loader } from '@googlemaps/js-api-loader';
-    import { getEvents, getSettings } from "../service/common/event.service";
+    import { getEvents } from "../service/common/event.service";
     import { showError } from "../store/notification.store";
     import type { CalendarEvent } from "../model/event.model";
 
@@ -12,7 +12,12 @@
     let currentInfo: google.maps.InfoWindow;
 
     const mapId = 'song-repo-map';
-    const events = getEvents();
+    const events$ = getEvents();
+    const loader = new Loader({ 
+        apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY, 
+        version: 'weekly', 
+        libraries: ["places"] 
+    });
 
     async function initMap(container: HTMLElement, events: CalendarEvent[]) {
         let index = events.length;
@@ -23,7 +28,6 @@
         };
 
         try {
-            const loader = await createLoader();
             const { AdvancedMarkerElement, PinElement } = await loader.importLibrary('marker');
             const { Map } = await loader.importLibrary('maps');
             const map = new Map(container, dachViewport);
@@ -49,11 +53,6 @@
         } catch (error) {
             showError(error);
         }
-    }
-
-    async function createLoader() {
-        const { maps: apiKey, version } = await getSettings();
-        return new Loader({ apiKey, version, libraries: ["places"] });
     }
 
     function centerViewport(map: google.maps.Map, event?: CalendarEvent) {
@@ -82,7 +81,7 @@
     }
 
     onMount(async () => {
-        getEvents().subscribe(async (events) => {
+        events$.subscribe(async (events) => {
             if (mapContainer) {
                 const map = await initMap(mapContainer, events);
                 params$.subscribe((p) => {
@@ -109,7 +108,7 @@
 <main>
     <div class="full" bind:this={mapContainer}></div>
     <div class="template">
-        {#each $events as event}
+        {#each $events$ as event}
             <div class="info" bind:this={infoContents[event.id]}>
                 <img class="icon" src="{event.place.icon}" alt="{fileName(event.place.icon)}" />
                 <p>

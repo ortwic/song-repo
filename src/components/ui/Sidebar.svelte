@@ -4,6 +4,7 @@
     import { push } from 'svelte-spa-router';
     import { slide } from 'svelte/transition';
     import { swipeable } from '@svelte-put/swipeable';
+    import { currentUser } from '../../service/user/auth.service';
     import Titlebar from './elements/Titlebar.svelte';
 
     interface Props {
@@ -30,9 +31,15 @@
     <Titlebar target="hidden">
         {title}
         {#snippet controls()}
+            {#if $currentUser}
             <button class="titlebar-button" title={$t('settings.title')} data-close onclick={() => push('/settings')}>
                 <i class="item bx bx-cog"></i>
             </button>
+            {:else}
+            <button class="titlebar-button" title={$t('start.hello')} data-close onclick={() => push('/')}>
+                <i class="item bx bx-world"></i>
+            </button>
+            {/if}
         {/snippet}
     </Titlebar>
     <section>
