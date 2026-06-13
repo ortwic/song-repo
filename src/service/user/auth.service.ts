@@ -29,13 +29,15 @@ msProvider.setCustomParameters({
 
 onAuthStateChanged(auth, async (user) => {
     if (user) {
-        setUserId(analytics, user.uid);
-        showInfo(`${user.displayName || user.email} has signed in.`);
+        if (navigator?.onLine) {
+            setUserId(analytics, user.uid);
 
-        // Ensure GSI is loaded before attempting silent refresh,
-        // avoiding the page-reload race condition.
-        await googleAuthSetupService.ensureGsiLoaded();
-        await googleAuthSetupService.refreshDriveTokenSilently(user);
+            // Ensure GSI is loaded before attempting silent refresh,
+            // avoiding the page-reload race condition.
+            await googleAuthSetupService.ensureGsiLoaded();
+            await googleAuthSetupService.refreshDriveTokenSilently(user);
+        }
+        showInfo(`${user.displayName || user.email} has signed in.`);
     }
 });
 

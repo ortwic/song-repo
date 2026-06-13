@@ -45,33 +45,40 @@ export class FirestoreService {
     }
 
     static create(...pathSegments: string[]): FirestoreService {
-        return new FirestoreService(pathSegments.join('/'));
+        const path = pathSegments.length % 2 > 0 ? pathSegments.join('/') : '';
+        return new FirestoreService(path);
     }
 
     public getDocuments<T extends DocumentData>(...constraints: QueryConstraint[]): Observable<T[]> {
-        const query = this.createQuery<T>(...constraints);
-        return collectionData<T>(query, this.options).pipe(startWith([]));
+        if (this.path) {
+            const query = this.createQuery<T>(constraints);
+            return collectionData<T>(query, this.options).pipe(startWith([]));
+        }
+        return of([]);
     }
     
     public async getDocumentsAsync<T extends DocumentData>(...constraints: QueryConstraint[]): Promise<T[]> {
-        const query = this.createQuery<T>(...constraints);
-        return getDocs<T>(query).then((snapshot) => {
-            const result: T[] = [];
-            snapshot.forEach((doc) => result.push({
-                id: doc.id,
-                ...doc.data(snapshotOptions)
-            }));
-            return result;
-        });
+        if (this.path) {
+            const query = this.createQuery<T>(constraints);
+            return getDocs<T>(query).then((snapshot) => {
+                const result: T[] = [];
+                snapshot.forEach((doc) => result.push({
+                    id: doc.id,
+                    ...doc.data(snapshotOptions)
+                }));
+                return result;
+            });
+        }
+        return [];
     }
 
-    private createQuery<T extends DocumentData>(...constraints: QueryConstraint[]): Query<T> {
+    private createQuery<T extends DocumentData>(constraints: QueryConstraint[]): Query<T> {
         const items = collection(store, this.path) as CollectionReference<T>;
         return query<T>(items, ...constraints);
     }
     
     public getDocument<T>(id: string): Observable<T | null> {
-        if (id) {
+        if (id && this.path) {
             const docRef = doc(store, this.path, id);
             return docData(docRef, { idField: 'id' }) as Observable<T | null>;
         }
@@ -79,37 +86,46 @@ export class FirestoreService {
     }
 
     public async getDocumentAsync<T>(id: string): Promise<T | null> {
-        const docRef = doc(store, this.path, id);
-        const snapshot = await getDoc(docRef);
-        if (snapshot.exists()) {
-            return snapshot.data(snapshotOptions) as T;
+        if (id && this.path) {
+            const docRef = doc(store, this.path, id);
+            const snapshot = await getDoc(docRef);
+            if (snapshot.exists()) {
+                return snapshot.data(snapshotOptions) as T;
+            }
         }
-        
         return Promise.resolve(null);
     }
 
     public async setDocument<T extends { id: string }>(data: T, options?: SetOptions): Promise<void> {
-        const docRef = doc(store, this.path, data.id);
-        await setDoc(docRef, omitUndefinedFields(data), options);
+        if (this.path && data.id) {
+            const docRef = doc(store, this.path, data.id);
+            await setDoc(docRef, omitUndefinedFields(data), options);
+        }
     }
 
     public async setDocuments<T extends { id: string }>(array: T[], options?: SetOptions): Promise<void> {
-        const batch = writeBatch(store);
-        array.forEach((data) => {
-            const docRef = doc(store, this.path, data.id);
-            batch.set(docRef, omitUndefinedFields(data), options);
-        });
-        await batch.commit();
+        if (this.path) {
+            const batch = writeBatch(store);
+            array.forEach((data) => {
+                const docRef = doc(store, this.path, data.id);
+                batch.set(docRef, omitUndefinedFields(data), options);
+            });
+            await batch.commit();
+        }
     }
 
     public async updateDocument(data: Partial<unknown>, id: string): Promise<void> {
-        const docRef = doc(store, this.path, id);
-        await updateDoc(docRef, data);
+        if (this.path && id) {
+            const docRef = doc(store, this.path, id);
+            await updateDoc(docRef, data);
+        }
     }
 
     public async removeDocument(id: string): Promise<void> {
-        const docRef = doc(store, this.path, id);
-        await deleteDoc(docRef);
+        if (this.path && id) {
+            const docRef = doc(store, this.path, id);
+            await deleteDoc(docRef);
+        }
     }
 }
 
