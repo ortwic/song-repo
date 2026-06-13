@@ -14,7 +14,7 @@
     import { buildActionMenu } from '../components/table/templates/actionMenu.helper';
     import { summaryFormatter } from '../components/table/templates/responsive.helper';
     import type { MessageFormatter } from '../service/base/i18n.setup';
-    import { refData } from '../service/common/app.service';
+    import { refData } from '../service/base/app-cache.setup';
     import SongService, { viewStoreId } from '../service/user/user-song.service';
     import type { UserSong } from '../model/song.model';
     import type { TableView } from '../model/table-view.model';

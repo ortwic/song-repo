@@ -1,5 +1,5 @@
 import { marked } from "marked";
-import { refData } from "./app.service";
+import { refData } from "../base/app-cache.setup";
 import { lang } from "../base/i18n.setup";
 
 const idPostfix = lang.startsWith('de') ? '_de' : '_en';

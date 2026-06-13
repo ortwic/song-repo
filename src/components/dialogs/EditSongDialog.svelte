@@ -6,7 +6,7 @@
     import type { Artist, Song, UserSong } from '../../model/song.model';
     import { createDeferred } from '../../utils/promise.helper';
     import { buildArtistImgUrl } from '../../service/catalog/artists.util';
-    import { refData } from '../../service/common/app.service';
+    import { refData } from '../../service/base/app-cache.setup';
     import { logAction } from '../../store/notification.store';
     import { redToGreenRange } from '../../styles/style.helper';
     import ConfirmDialog from './ConfirmDialog.svelte';

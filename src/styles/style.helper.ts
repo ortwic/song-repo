@@ -1,6 +1,6 @@
 import Color from 'color';
 import colornames from '../data/colornames.json';
-import { refData } from '../service/common/app.service';
+import { refData } from '../service/base/app-cache.setup';
 
 const root = document.querySelector(':root');
 

@@ -3,10 +3,10 @@ import './styles/app.scss';
 import './styles/utils.scss';
 import App from './App.svelte';
 import { mount } from "svelte";
-import { preloadRefData } from './service/common/app.service';
+import { initRefData } from './service/base/app-cache.setup';
 
 const app = (async () => {
-    await preloadRefData();
+    await initRefData();
     return mount(App, { 
         target: document.getElementById('app')
     });

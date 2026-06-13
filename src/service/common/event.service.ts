@@ -2,7 +2,7 @@ import { map, startWith, type Observable } from 'rxjs';
 import { DateTime } from 'luxon';
 import { stores } from '../base/firestore.service';
 import type { CalendarEvent, CalendarSettings, EventDate } from '../../model/event.model';
-import { refData } from './app.service';
+import { refData } from '../base/app-cache.setup';
 
 export function getSettings(): CalendarSettings {
     return refData.settings.find((s) => s.id === 'google') || ({} as CalendarSettings);

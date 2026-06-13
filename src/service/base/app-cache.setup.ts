@@ -1,4 +1,4 @@
-import { stores, type FirestoreService } from '../base/firestore.service';
+import { stores, type FirestoreService } from './firestore.service';
 import type { CalendarEvent, CalendarSettings } from '../../model/event.model';
 import type { Artist, Genre, Song } from '../../model/song.model';
 
@@ -14,8 +14,9 @@ const cache = {
 } as const;
 type CacheRecord = typeof cache;
 type CacheKey = keyof CacheRecord;
+type RefCache = { [K in CacheKey]: CacheRecord[K] };
 
-export async function preloadRefData(): Promise<void> {
+export async function initRefData(): Promise<void> {
     await Promise.all(
         (Object.entries(cache)).map(async ([key]) => {
             try {
@@ -32,7 +33,6 @@ export async function preloadRefData(): Promise<void> {
     );
 }
 
-type RefCache = { [K in CacheKey]: CacheRecord[K] };
 export const refData = new Proxy({} as RefCache, {
     get<K extends CacheKey>(_: RefCache, key: K): RefCache[K] {
         return cache[key];
