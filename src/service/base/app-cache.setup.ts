@@ -1,40 +1,40 @@
 import { stores, type FirestoreService } from './firestore.service';
-import type { CalendarEvent, CalendarSettings } from '../../model/event.model';
-import type { Artist, Genre, Song } from '../../model/song.model';
+import type { CalendarSettings } from '../../model/event.model';
+import type { Genre } from '../../model/song.model';
 
 type Page = { id: string; title: string; body: string };
 
 const cache = {
-    artists: [] as Artist[],
-    catalog: [] as Song[],
-    genres: [] as Genre[],
-    pages: [] as Page[],
-    events: [] as CalendarEvent[],
+    genres:   [] as Genre[],
+    pages:    [] as Page[],
     settings: [] as CalendarSettings[],
-} as const;
+};
+
 type CacheRecord = typeof cache;
 type CacheKey = keyof CacheRecord;
-type RefCache = { [K in CacheKey]: CacheRecord[K] };
 
 export async function initRefData(): Promise<void> {
     await Promise.all(
-        (Object.entries(cache)).map(async ([key]) => {
-            try {
-                if (key in stores) {    
-                    const service: FirestoreService = stores[key];
-                    cache[key] = await service.getDocumentsAsync<CacheRecord[CacheKey]>();
-                } else {
-                    console.warn(`No store for ${key}`);
-                }
-            } catch (err: unknown) {
-                console.warn(`Unable to cache ${key}`, err);
-            }
-        })
+        (Object.keys(cache) as CacheKey[])
+            .map(async (key) => (cache[key] as unknown[]) = await loadCollection(key))
     );
 }
 
-export const refData = new Proxy({} as RefCache, {
-    get<K extends CacheKey>(_: RefCache, key: K): RefCache[K] {
+async function loadCollection<K extends CacheKey>(key: K): Promise<CacheRecord[K][]> {
+    try {
+        if (key in stores) {
+            const service: FirestoreService = stores[key];
+            return await service.getDocumentsAsync<CacheRecord[K]>();
+        } else {
+            console.warn(`No store for ${key}`);
+        }
+    } catch (err: unknown) {
+        console.warn(`Unable to cache ${key}`, err);
+    }
+}
+
+export const refData = new Proxy({} as CacheRecord, {
+    get<K extends CacheKey>(_: CacheRecord, key: K): CacheRecord[K] {
         return cache[key];
     },
 });

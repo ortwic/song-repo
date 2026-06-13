@@ -2,13 +2,14 @@
     import { t } from 'svelte-i18n';
     import Autocomplete from 'simple-svelte-autocomplete/src/SimpleAutocomplete.svelte';
     import '../../styles/overrides/simple-autocomplete.scss';
-    import SongService from '../../service/user/user-song.service';
     import type { Artist, Song, UserSong } from '../../model/song.model';
-    import { createDeferred } from '../../utils/promise.helper';
     import { buildArtistImgUrl } from '../../service/catalog/artists.util';
-    import { refData } from '../../service/base/app-cache.setup';
+    import { createSearchService } from '../../service/catalog/search.service';
+    import SearchCatalogService from '../../service/catalog/search-catalog.service';
+    import SongService from '../../service/user/user-song.service';
     import { logAction } from '../../store/notification.store';
     import { redToGreenRange } from '../../styles/style.helper';
+    import { createDeferred } from '../../utils/promise.helper';
     import ConfirmDialog from './ConfirmDialog.svelte';
     import SelectKey from '../ui/SelectKey.svelte';
     import Expand from '../ui/elements/Expand.svelte';
@@ -18,12 +19,12 @@
 
     const TIME_PRESETS = ['4/4', '3/4', '6/8', '2/4', '12/8', '5/4', '7/8', '2/2'];
     const songService = new SongService();
+    const searchService = createSearchService() as SearchCatalogService;
     let form: HTMLFormElement = $state();
     let visible = $state(false);
     let editSong: Partial<UserSong> = $state({ features: [], tags: [] });
     const isNew = $derived(editSong.id === undefined);
     const difficultyColor = $derived(redToGreenRange(100 - editSong.difficulty * 10));
-    const styles = (genre: string) => (refData.genres.find((v) => v.name === genre))?.styles ?? [];
     let deferred: ReturnType<typeof createDeferred<UserSong>> | null = null;
 
     export function showDialog(initial?: Partial<UserSong>): Promise<UserSong> {
@@ -33,28 +34,17 @@
         return deferred.promise;
     }
 
-    function wordStartsWith(text: string, search: string): boolean {
-        return text.toLowerCase()
-            .split(/\s+/)
-            .some((v) => v.startsWith(search.toLowerCase()));
-    }
-
     function setArtist(artist?: Artist): void {
-        if (artist) {
-            logAction({ type: 'search', artist });
-    
-            editSong.artistMbid = artist.artistMbid;
-            editSong.artist = artist.names[0];
+        logAction({ type: 'search', artist });
 
-            if (!editSong.genre) {
-                editSong.genre = artist.genre;
-            }
-            if (!editSong.style) {
-                editSong.style = artist.style;
-            }
-            if (artist?.country) {
-                editSong.features?.push(artist.country)
-            }
+        editSong.artistMbid = artist?.artistMbid;
+        editSong.artist = artist?.names[0];
+
+        if (!editSong.artist || !editSong.genre) {
+            editSong.genre = artist?.genre;
+        }
+        if (!editSong.artist || !editSong.style) {
+            editSong.style = artist?.style;
         }
     }
 
@@ -108,9 +98,9 @@
                             required={true}
                             delay={500}
                             minCharactersToSearch={1}
-                            searchFunction={(text) => refData.artists.filter((v) => wordStartsWith(v.names[0], text))}
+                            searchFunction={(text) => searchService.findArtists(text)}
                             onChange={setArtist}
-                            bind:value={editSong.artistMbid} 
+                            bind:value={editSong.artist} 
                             showClear={true}
                             hideArrow={true}
                             showLoadingIndicator={true}>
@@ -150,7 +140,7 @@
                             required={true}
                             delay={500} 
                             minCharactersToSearch={editSong.artistMbid ? 0 : 2}
-                            searchFunction={(text) => refData.catalog.filter((v) => !editSong.artistMbid || v.artistMbid === editSong.artistMbid && wordStartsWith(v.title, text))} 
+                            searchFunction={(text) => searchService.findTitles(text, editSong.artistMbid)}
                             onChange={setSong} 
                             bind:text={editSong.title}
                             clearSelection={() => setSong()} 
@@ -194,7 +184,7 @@
                             labelFieldName="name"
                             placeholder="genre"
                             minCharactersToSearch={0}
-                            items={refData.genres}
+                            searchFunction={(text) => searchService.findGenres(text)}
                             showClear={true}
                             bind:text={editSong.genre}
                             hideArrow={true}
@@ -213,7 +203,7 @@
                             placeholder="style"
                             hideArrow={true}
                             minCharactersToSearch={0}
-                            searchFunction={() => styles(editSong.genre)}
+                            searchFunction={(text) => searchService.findStyles(text, editSong.genre)}
                             showClear={true}
                             bind:text={editSong.style}
                         >

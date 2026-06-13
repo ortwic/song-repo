@@ -10,6 +10,7 @@ export default defineConfig({
                 manualChunks: {
                     'firebase': ['firebase/app', 'firebase/auth', 'firebase/analytics'],
                     'firestore': ['firebase/firestore'],
+                    'flexsearch': ['flexsearch'],
                     'tabulator-tables': ['tabulator-tables'],
                 },
             },

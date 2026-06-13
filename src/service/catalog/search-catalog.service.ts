@@ -1,141 +1,91 @@
-import { Document as FlexDocument } from 'flexsearch';
-import type { Artist, Song } from '../../model/song.model';
-import type { SearchService } from './search.service';
+import { Index } from 'flexsearch';
+import { refData } from '../base/app-cache.setup';
 import { stores } from '../base/firestore.service';
-import { showError } from '../../store/notification.store';
+import type { Artist, Genre, Song } from '../../model/song.model';
+import type { SearchService } from './search.service';
 
-const SEARCH_LIMIT = 20;
+let lazyArtistCatalog: Artist[] = null;
+let lazySongCatalog: Song[] = null;
+let lazySongIndex: Index = null;
+let lazySongMap: Map<string, Song> = null;
 
-type IndexedSong = Pick<Song, 'id' | 'title' | 'artist' | 'genre' | 'style'>;
+function wordStartsWith(text: string, search: string): boolean {
+    return text.toLowerCase()
+        .split(/\s+/)
+        .some((v) => v.startsWith(search.toLowerCase()));
+}
 
-type IndexedField = keyof Omit<IndexedSong, 'id'>;
+function getSongIndex(songs: Song[]) {
+    if (!lazySongIndex) {
+        lazySongIndex = buildSongIndex(songs);
+        lazySongMap = new Map(songs.map((song) => [song.id, song]));
+    }
+    return { index: lazySongIndex, map: lazySongMap };
+}
 
-const FIELD_WEIGHTS: Record<IndexedField, number> = {
-    title: 9,
-    artist: 7,
-    genre: 5,
-    style: 4,
-};
-
-function buildIndex(songs: Song[]): FlexDocument<IndexedSong> {
-    const index = new FlexDocument<IndexedSong>({
-        document: {
-            id: 'id',
-            index: [
-                { field: 'title',  tokenize: 'forward', resolution: 9 },
-                { field: 'artist', tokenize: 'forward', resolution: 7 },
-                { field: 'genre',  tokenize: 'full',    resolution: 5 },
-                { field: 'style',  tokenize: 'full',    resolution: 4 },
-            ],
-        },
+function buildSongIndex(songs: Song[]): Index {
+    const index = new Index({
+        tokenize: 'forward',
     });
 
     for (const song of songs) {
-        index.add({
-            id: song.id,
-            title: song.title,
-            artist: song.artist,
-            genre: song.genre,
-            style: song.style,
-        });
+        index.add(song.id, [
+            // weight title 3x
+            ...Array(3).fill(song.title),
+            // weight artist 2x
+            ...Array(2).fill(song.artist),
+            // weight genre
+            song.genre ?? '',
+            song.style ?? '',
+        ].filter(Boolean).join(' '));
     }
 
     return index;
 }
 
-function deduplicateByArtist(songs: Song[]): Artist[] {
-    const seen = new Set<string>();
-    const artists: Artist[] = [];
-
-    for (const song of songs) {
-        if (!seen.has(song.artist)) {
-            seen.add(song.artist);
-            artists.push({ id: song.artist, name: song.artist });
-        }
-    }
-
-    return artists;
-}
-
 export default class SearchCatalogService implements SearchService {
     private readonly limit: number;
-    private catalog: Song[] = [];
-    private index: FlexDocument<IndexedSong> | null = null;
-    private loadPromise: Promise<void> | null = null;
 
-    constructor(options: {
-        searchResultLimit: number
-    }) {
+    constructor(options: { searchResultLimit: number }) {
         this.limit = options.searchResultLimit;
     }
 
-    async findArtists(query: string): Promise<Artist[]> {
-        await this.ensureLoaded();
-
-        if (!this.index) {
-            return [];
-        }
-
-        const results = this.index.search(query, { field: 'artist', limit: this.limit });
-        const matchingIds = new Set<string>(results.flatMap((r) => r.result as string[]));
-        const matchingSongs = this.catalog.filter((song) => matchingIds.has(song.id));
-
-        return deduplicateByArtist(matchingSongs);
+    async findSongs(query: string): Promise<Song[]> {
+        const songs = await this.getSongCatalog();
+        const { index, map } = getSongIndex(songs);
+        const results = index.search(query, { limit: this.limit });
+        return results.map((id: string) => map.get(id))
+            .filter((song): song is Song => Boolean(song));
     }
 
-    async findSongs(searchTerm: string): Promise<Song[]> {
-        await this.ensureLoaded();
-        return this.searchIndex(searchTerm);
+    async findArtists(text: string): Promise<Artist[]> {
+        return (await this.getArtists())
+            .filter((e) => wordStartsWith(e.names[0], text))
+            .slice(0, this.limit);
     }
 
-    private ensureLoaded(): Promise<void> {
-        if (!this.loadPromise) {
-            this.loadPromise = this.loadCatalog().catch((error) => {
-                this.loadPromise = null;
-                showError(error);
-                throw error;
-            });
-        }
-
-        return this.loadPromise;
+    private async getArtists(): Promise<Artist[]> {
+        lazyArtistCatalog ??= await stores.artists.getDocumentsAsync<Artist>();
+        return lazyArtistCatalog;
     }
 
-    private async loadCatalog(): Promise<void> {
-        this.catalog = await stores.catalog.getDocumentsAsync<Song>();
-        this.index = buildIndex(this.catalog);
+    async findTitles(text: string, artistMbid?: string): Promise<Song[]> {
+        return (await this.getSongCatalog())
+            .filter((e) => !artistMbid || e.artistMbid === artistMbid && wordStartsWith(e.title, text))
+            .slice(0, this.limit);
     }
 
-    private searchIndex(query: string): Song[] {
-        if (!this.index) {
-            return [];
-        }
-
-        const hits = [
-            ...this.searchField('title',  query),
-            ...this.searchField('artist', query),
-            ...this.searchField('genre',  query),
-            ...this.searchField('style',  query),
-        ];
-
-        // Accumulate scores — a song matching multiple fields ranks higher
-        const scores = new Map<string, number>();
-        for (const [id, score] of hits) {
-            scores.set(id, (scores.get(id) ?? 0) + score);
-        }
-
-        return [...scores.entries()]
-            .sort((a, b) => b[1] - a[1])
-            .slice(0, SEARCH_LIMIT)
-            .map(([id]) => this.catalog.find((s) => s.id === id)!);
+    private async getSongCatalog(): Promise<Song[]> {
+        lazySongCatalog ??= await stores.catalog.getDocumentsAsync<Song>();
+        return lazySongCatalog;
     }
 
-    private searchField(field: IndexedField, query: string): [string, number][] {
-        const weight = FIELD_WEIGHTS[field];
-        const results = this.index!.search(query, { field, limit: SEARCH_LIMIT * 2 });
+    async findGenres(text: string): Promise<Genre[]> {
+        return refData.genres.filter((e) => wordStartsWith(e.name, text));
+    }
 
-        // Position within results slightly downgrades score (first hit = full weight)
-        return results.flatMap((r) =>
-            (r.result as string[]).map((id, i) => [id, weight - i * 0.1] as [string, number]),
-        );
+    async findStyles(text: string, genre: string): Promise<string[]> {
+        const styles = refData.genres.find((v) => v.name === genre)?.styles ?? [];
+        return styles.filter((e) => wordStartsWith(e, text));
     }
 }
