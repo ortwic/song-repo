@@ -1,4 +1,10 @@
-export function createDeferred<T>() {
+export interface DeferredResult<T> {
+    promise: Promise<T>;
+    resolve: (value: T | PromiseLike<T>) => void;
+    reject: (reason?: unknown) => void;
+}
+
+export function createDeferred<T>(): DeferredResult<T> {
     let resolve!: (value: T) => void;
     let reject!: (reason?: unknown) => void;
 

@@ -9,7 +9,7 @@
     import SongService from '../../service/user/user-song.service';
     import { logAction } from '../../store/notification.store';
     import { redToGreenRange } from '../../styles/style.helper';
-    import { createDeferred } from '../../utils/promise.helper';
+    import { createDeferred, type DeferredResult } from '../../utils/promise.helper';
     import ConfirmDialog from './ConfirmDialog.svelte';
     import SelectKey from '../ui/SelectKey.svelte';
     import Expand from '../ui/elements/Expand.svelte';
@@ -25,7 +25,7 @@
     let editSong: Partial<UserSong> = $state({ features: [], tags: [] });
     const isNew = $derived(editSong.id === undefined);
     const difficultyColor = $derived(redToGreenRange(100 - editSong.difficulty * 10));
-    let deferred: ReturnType<typeof createDeferred<UserSong>> | null = null;
+    let deferred: DeferredResult<UserSong> = null;
 
     export function showDialog(initial?: Partial<UserSong>): Promise<UserSong> {
         deferred = createDeferred<UserSong>();
@@ -323,16 +323,6 @@
 </form>
 
 <style lang="scss">
-    .dialog-body {
-        padding: 1em;
-        display: flex;
-        flex-direction: column;
-        gap: 0.5em;
-        min-width: min(80vw, 600px);
-        height: 100%;
-        overflow-y: auto;
-    }
-
     .field-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);

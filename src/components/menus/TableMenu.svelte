@@ -2,7 +2,7 @@
     import { t } from 'svelte-i18n';
     import { getContext } from 'svelte';
     import type { DownloadOptions, DownloadType } from 'tabulator-tables';
-    import type { Dialog } from '../../model/dialog.model';
+    import { DialogKeys, type Dialog } from '../../model/dialog.model';
     import type { UserSong } from '../../model/song.model';
     import FileIcon from '../ui/elements/FileIcon.svelte';
     import SongService from '../../service/user/user-song.service';
@@ -17,7 +17,7 @@
     let { exportTitle = 'export' }: Props = $props();
 
     const service = new SongService();
-    const addSongDialog = getContext<Dialog<UserSong>>('editsong-dialog');
+    const addSongDialog = getContext<Dialog<UserSong, UserSong>>(DialogKeys.editSong);
 
     async function addSong() {
         const newSong = await addSongDialog.open();

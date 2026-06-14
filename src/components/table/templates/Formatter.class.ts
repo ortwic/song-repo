@@ -5,7 +5,7 @@ import type { ColumnDefinition } from '../tabulator/types';
 import './ProgressBar.class';
 import { SongActions } from '../SongActions.class';
 import type { UserSong } from '../../../model/song.model';
-import { status } from '../../../model/types';
+import { STATUS_KEYS } from '../../../model/types';
 import { toDate } from '../../ui/helper/date.helper';
 import { genreColor, redToGreenGradient, redToGreenRange } from '../../../styles/style.helper';
 
@@ -53,7 +53,7 @@ export default class Formatter {
                 return `<span style='display:none'>${value}</span>`;
             },
             headerFilterFuncParams: {
-                values: Object.keys(status)
+                values: STATUS_KEYS
             }
         };
     }
@@ -82,7 +82,7 @@ export default class Formatter {
                 bar.addEventListener('change', (ev: CustomEvent<number[]>) => {
                     const [newValue, oldValue] = ev.detail;
                     cell.setValue(newValue);
-                    deriveStatusFromProgress(song,newValue, oldValue);
+                    deriveStatusFromProgress(song, newValue, oldValue);
                     service.setSong(song)
                         .then(() => cell.getRow().reformat());
                 });

@@ -19,7 +19,7 @@
 </script>
 
 <svelte:head>
-   <title>{ $t('calendar.title') } | Song Repertory</title>
+   <title>{ $t('calendar.title') } | Song-Repo</title>
 </svelte:head>
 
 <main>

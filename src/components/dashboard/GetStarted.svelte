@@ -3,7 +3,7 @@
     import { push } from 'svelte-spa-router';
     import { getContext, onMount } from 'svelte';
     import { combineLatest } from 'rxjs';
-    import type { Dialog } from '../../model/dialog.model';
+    import { DialogKeys, type Dialog } from '../../model/dialog.model';
     import type { UserSong } from '../../model/song.model';
     import SongService from '../../service/user/user-song.service';
     import { UserLinkService } from '../../service/user/user-link.service';
@@ -21,7 +21,7 @@
 
     let shareDialogVisible = $state(false);
 
-    const addSongDialog = getContext<Dialog<UserSong>>('editsong-dialog');
+    const addSongDialog = getContext<Dialog<UserSong, UserSong>>(DialogKeys.editSong);
 
     async function addSong() {
         const newSong = await addSongDialog.open();

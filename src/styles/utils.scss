@@ -6,6 +6,21 @@ input.lg {
     width: 15rem;
 }
 
+a.label,
+span.label {
+    border: 1px solid var(--border);
+    background-color: var(--label);
+    box-shadow: var(--shadow-md);
+    margin: 0.4rem 0.2rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 1rem;
+    font-size: smaller;
+
+    &:hover {
+        background-color: var(--bg);
+    }
+}
+
 .primary {
     color: var(--accent);
 }
@@ -163,6 +178,16 @@ input.lg {
     }
 }
  
+.dialog-body {
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    min-width: min(80vw, 600px);
+    height: 100%;
+    overflow-y: auto;
+}
+
 a[role="button"].card,
 button.card {
     display: block;

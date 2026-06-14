@@ -1,5 +1,5 @@
 import type { Timestamp } from 'firebase/firestore';
-import type { Complete, Status } from './types';
+import type { Percent, Status } from './types';
 
 export interface Artist {
     id: string;
@@ -33,7 +33,7 @@ export interface Song {
     artistMbid?: string;
     album?: string;
     year?: string;
-    source?: string;
+    uri?: string;
     genre?: string;
     style?: string;
     mood?: string;
@@ -50,12 +50,11 @@ export interface UserSong extends Song {
     uid: string;
     status: Status;
     statusLogs?: Status[]; // unused
-    progress?: number;
-    progressLogs?: number[]; // unused
-    uri?: string;
+    progress?: Percent;
+    progressLogs?: Percent[]; // unused
+    source?: string; // should be notes
     notes?: string;
     difficulty?: number;
-    complete?: Complete; // unused
     createdAt?: Timestamp;
     changedAt?: Timestamp;
     learnedOn?: Date;

@@ -1,12 +1,11 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
     import type { UserSong } from '../../model/song.model';
-    import { type Status, status as statusKeys } from '../../model/types';
+    import { type Status, STATUS_KEYS } from '../../model/types';
     import SongService from '../../service/user/user-song.service';
     import { genreColor } from '../../styles/style.helper';
-    import ConfirmDialog from '../dialogs/ConfirmDialog.svelte';
-    import TagEditor from '../ui/elements/TagEditor.svelte';
     import PopupMenu from '../ui/PopupMenu.svelte';
+    import ProgressBar from '../ui/elements/ProgressBar.svelte';
     import { toDate } from '../ui/helper/date.helper';
     import { SEARCH_ACTIONS, SongActions } from '../table/SongActions.class';
     import { settings } from '../../store/user-settings.svelte';
@@ -17,13 +16,13 @@
 
     let { song = $bindable() }: Props = $props();
 
-    const actions = new SongActions(new SongService());
+    const songService = new SongService();
+    const actions = new SongActions(songService);
     const signature = [song.key, song.time, song.bpm].filter(Boolean).join(' | ');
 
     let searchPopupMenu: PopupMenu = $state();
     let statusPopupMenu: PopupMenu = $state();
     let morePopupMenu: PopupMenu = $state();
-    let deleteDialogVisible = $state(false);
 
     function getGenreStyles(genre: string) {
         const hex = genreColor(genre);
@@ -36,35 +35,9 @@
 
     const { gradient, genreWatermarkStyle } = getGenreStyles(song.genre);
 
-    async function handlePrimary() {
-        if (song.uri) {
-            actions.openUri(song);
-        } else {
-            await handleEditEntry();
-        }
-    }
-
-    async function handleEditEntry() {
-        await actions.editSong(song);
-    }
-
-    async function handleProgressChange(e: CustomEvent<number[]>) {
-        const [newValue, oldValue] = e.detail;
-        await actions.updateProgress(song, newValue, oldValue);
-        song = { ...song, progress: newValue };
-    }
-
     async function handleStatusChange(status: string) {
         await actions.changeStatus(song, status as Status);
         song = { ...song, status: status as Status };
-    }
-
-    function handleDelete(confirm: boolean) {
-        if (confirm) {
-            actions.delete(song);
-        }
-        deleteDialogVisible = false;
-        
     }
 </script>
 
@@ -73,11 +46,11 @@
 <article class="song-card" style={gradient ? `background: ${gradient};` : undefined}>
     <header title={toDate(song.changedAt).toLocaleString()}>
         <button class="lg clear" title="{$t(`songs.status.${song.status}`)}"
-            on:click={(e) => statusPopupMenu.showPopupMenu(e)}>
+            onclick={(e) => statusPopupMenu.showPopupMenu(e)}>
             <span class="status {song.status}"></span>
         </button>
         <button class="lg clear" title="{$t('songs.menu.toggle-favorite')}"
-            on:click={() => actions.toggleFavorite(song)}>
+            onclick={() => actions.toggleFavorite(song)}>
             <span class="fav" class:active={song.fav}></span>
         </button>
         <div class="song-info">
@@ -86,15 +59,7 @@
         </div>
     </header>
     <span class="genre-watermark" style={genreWatermarkStyle}>{song.genre}</span>
-    <div>
-        <!-- svelte-ignore a11y_no_static_element_interactions -->
-        <progress-bar
-            value="{song.progress ?? 0}"
-            max="100"
-            min="0"
-            on:change={handleProgressChange}
-        ></progress-bar>
-    </div>
+    <ProgressBar value={song.progress} disabled={true}></ProgressBar>
 
     <div class="tags">
         {#if signature}<span class="label" title="{$t('songs.columns.signature')}">{signature}</span>{/if}
@@ -118,14 +83,14 @@
         <button
             class="clear sm"
             title={$t('songs.menu.search')}
-            on:click={(e) => searchPopupMenu.showPopupMenu(e)}
+            onclick={(e) => searchPopupMenu.showPopupMenu(e)}
         >
             <i class="icon bx bx-search"></i>
         </button>
         <button
             class="clear sm max-width"
             title={song.uri ? $t('songs.menu.open') : $t('songs.menu.set-resource')}
-            on:click={() => handlePrimary()}
+            onclick={() => actions.showResource(song)}
         >
             <i class="icon bx {song.uri ? 'bx-link-external' : 'bx-unlink'}"></i>
             {song.uri ? $t('songs.menu.open') : $t('songs.menu.set-resource')}
@@ -133,7 +98,7 @@
         <button
             class="clear sm"
             title={$t('songs.menu.more')}
-            on:click={(e) => morePopupMenu.showPopupMenu(e)}
+            onclick={(e) => morePopupMenu.showPopupMenu(e)}
         >
             <i class="icon bx bx-dots-vertical-rounded"></i>
         </button>
@@ -141,7 +106,7 @@
 
     <PopupMenu bind:this={searchPopupMenu}>
         {#each SEARCH_ACTIONS as action}
-            <button class="option" on:click={() => actions.search(song, action)}>
+            <button class="option" onclick={() => actions.search(song, action)}>
                 <i class="bx {action.icon}"></i>
                 {action.label}
             </button>
@@ -149,14 +114,14 @@
     </PopupMenu>
 
     <PopupMenu bind:this={statusPopupMenu}>
-        {#each Object.keys(statusKeys) as s}
+        {#each STATUS_KEYS as status}
             <button class="option"
-                class:active={song.status === s}
-                on:click={() => handleStatusChange(s)}
+                class:active={song.status === status}
+                onclick={() => handleStatusChange(status)}
             >
-                <span class="status {s}"></span>
+                <span class="status {status}"></span>
                 <span style="margin-left: 8px">
-                    {$t(`songs.status.${s}`)}
+                    {$t(`songs.status.${status}`)}
                 </span>
             </button>
         {/each}
@@ -164,23 +129,18 @@
 
     <PopupMenu bind:this={morePopupMenu}>
         <button class="option" title="{$t('songs.menu.edit')}"
-            on:click={handleEditEntry}>
+            onclick={() => actions.editSong(song)}>
             <i class="bx bx-edit"></i>
             {$t('songs.menu.edit')}
         </button>
-        <button class="option" on:click={() => deleteDialogVisible = true}>
+        <button class="option" 
+            onclick={() => actions.delete(song, {
+                message: $t('songs.menu.delete-confirm')
+            })}>
             <i class="bx bx-trash"></i>
             {$t('songs.menu.delete')}
         </button>
     </PopupMenu>
-
-    <ConfirmDialog size="auto"
-        title={$t('songs.menu.delete')}
-        visible={deleteDialogVisible}
-        onClose={handleDelete}
-    >
-        <p class="center">{$t('songs.menu.delete-confirm')}</p>
-    </ConfirmDialog>
 </article>
 
 <style lang="scss">
@@ -208,8 +168,8 @@
         position: absolute;
         bottom: 0.4em;
         left: 0.4em;
-        min-width: 60%; 
-        text-align: center; 
+        min-width: 60%;
+        text-align: center;
         font-size: 3.5rem;
         font-weight: 800;
         text-shadow: var(--shadow-sm);

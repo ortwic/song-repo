@@ -100,6 +100,8 @@ export class FirestoreService {
         if (this.path && data.id) {
             const docRef = doc(store, this.path, data.id);
             await setDoc(docRef, omitUndefinedFields(data), options);
+        } else {
+            console.warn(`Invalid path '${this.path}' or id '${data.id}'!`)
         }
     }
 
@@ -111,6 +113,8 @@ export class FirestoreService {
                 batch.set(docRef, omitUndefinedFields(data), options);
             });
             await batch.commit();
+        } else {
+            console.warn(`Invalid path '${this.path}'!`)
         }
     }
 
@@ -118,6 +122,8 @@ export class FirestoreService {
         if (this.path && id) {
             const docRef = doc(store, this.path, id);
             await updateDoc(docRef, data);
+        } else {
+            console.warn(`Invalid path '${this.path}' or id '${id}'!`)
         }
     }
 
@@ -125,6 +131,8 @@ export class FirestoreService {
         if (this.path && id) {
             const docRef = doc(store, this.path, id);
             await deleteDoc(docRef);
+        } else {
+            console.warn(`Invalid path '${this.path}' or id '${id}'!`)
         }
     }
 }
@@ -139,5 +147,6 @@ export const stores = {
     pages: FirestoreService.create('pages'),
     user: FirestoreService.create('user'),
     userlinks: (id: string) => FirestoreService.create('user', id, 'links'),
+    usersessions: (id: string) => FirestoreService.create('user', id, 'sessions'),
     usersongs: (id: string) => FirestoreService.create('user', id, 'songs'),
 };

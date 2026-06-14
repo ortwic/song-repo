@@ -20,7 +20,7 @@
 </script>
   
 <svelte:head>
-<title>{ $t('menu.howto') } blog | Song Repertory</title>
+<title>{ $t('menu.howto') } blog | Song-Repo</title>
 </svelte:head>
 
 <main class="content">

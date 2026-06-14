@@ -8,13 +8,13 @@
     import SongService from '../../service/user/user-song.service';
     import { buildArtistImgUrl } from '../../service/catalog/artists.util';
     import { createSearchService } from '../../service/catalog/search.service';
-    import type { Dialog } from '../../model/dialog.model';
+    import { DialogKeys, type Dialog } from '../../model/dialog.model';
     import type { Song, UserSong } from '../../model/song.model';
     import type { SearchEngines } from '../../model/types';
     import { logAction } from '../../store/notification.store';
 
     const songService = new SongService();
-    const addSongDialog = getContext<Dialog<UserSong>>('editsong-dialog');
+    const addSongDialog = getContext<Dialog<UserSong, UserSong>>(DialogKeys.editSong);
 
     let currentSearchEngine = $state<SearchEngines>();
     const searchService = $derived(createSearchService(currentSearchEngine));

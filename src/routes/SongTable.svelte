@@ -126,7 +126,7 @@
 </script>
 
 <svelte:head>
-    <title>{$t('menu.repo')} | Song Repertory</title>
+    <title>{$t('menu.repo')} | Song-Repo</title>
 </svelte:head>
 
 <main>

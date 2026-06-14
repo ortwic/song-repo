@@ -1,8 +1,7 @@
 import { getContext } from 'svelte';
 import { logAction } from '../../store/notification.store';
-import { showError } from '../../store/notification.store';
-import type { Dialog } from '../../model/dialog.model';
-import type { UserSong } from '../../model/song.model';
+import { type DialogArgs, DialogKeys, type Dialog } from '../../model/dialog.model';
+import type { Song, UserSong } from '../../model/song.model';
 import type { Status } from '../../model/types';
 import type SongService from '../../service/user/user-song.service';
 
@@ -12,6 +11,9 @@ export interface SearchAction {
     resource: string;
     url: (song: UserSong) => string;
 }
+
+const DEFAULT_QUICK_DURATION_MINUTES = 10;
+const DEFAULT_QUICK_PROGRESS_DELTA = 5;
 
 export const SEARCH_ACTIONS: SearchAction[] = [
     {
@@ -47,18 +49,17 @@ export const SEARCH_ACTIONS: SearchAction[] = [
 ];
 
 export class SongActions {
-    readonly editSongDialog = getContext<Dialog<UserSong>>('editsong-dialog');
-
+    readonly editSongDialog = getContext<Dialog<UserSong, UserSong>>(DialogKeys.editSong);
+    readonly resourceDialog = getContext<Dialog<Song>>(DialogKeys.resourceViewer);
+    readonly confirmDialog = getContext<Dialog<DialogArgs, boolean>>(DialogKeys.confirmDialog);
+    
     constructor(public service: SongService) {}
 
-    openUri(song: UserSong): void {
-        if (!song.uri) return;
-        try {
-            new URL(song.uri);
-            window.open(song.uri, '_blank');
-        } catch {
-            showError(`Invalid URI: ${song.uri}`);
-        }
+    async showResource(song: UserSong): Promise<void> {
+        if (song.uri) {
+            return this.resourceDialog.open(song);
+        } 
+        return this.editSong(song);
     }
 
     search(song: UserSong, action: SearchAction): void {
@@ -109,7 +110,10 @@ export class SongActions {
         await this.service.setSong(song);
     }
 
-    async delete(song: UserSong): Promise<void> {
-        await this.service.deleteSong(song);
+    async delete(song: UserSong, args?: DialogArgs): Promise<void> {
+        const confirmed = !args || await this.confirmDialog.open(args);
+        if (confirmed === true) {
+            await this.service.deleteSong(song);
+        }
     }
 }

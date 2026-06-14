@@ -3,7 +3,7 @@
     import { onMount } from 'svelte';
     import type { DashboardSettings } from '../../model/settings.model';
     import type { IndexEntry } from '../../utils/index-builder';
-    import { type Status, status as statusMap } from '../../model/types';
+    import { type Status, STATUS_KEYS } from '../../model/types';
     import { settings, saveSettings } from '../../store/user-settings.svelte';
     import SongService from '../../service/user/user-song.service';
     import { currentMenu } from '../../store/app.store';
@@ -31,7 +31,7 @@
 
     onMount(() => {
         const subs = [
-            service.usersongs$.subscribe((songs) => stats = Object.values(statusMap).reduce((acc, s) => {
+            service.usersongs$.subscribe((songs) => stats = STATUS_KEYS.reduce((acc, s) => {
                 acc[s] = songs.filter((song) => song.status === s).length;
                 return acc;
             }, { total: songs.length } as typeof stats)),
@@ -43,7 +43,7 @@
     function filterByStatus(ev: Event, value?: Status) {
         ev.preventDefault();
 
-        const status = Object.values(statusMap).reduce((acc, s) => {
+        const status = STATUS_KEYS.reduce((acc, s) => {
             acc[s] = !value || s === value;
             return acc;
         }, {} as Record<Status, boolean>);
@@ -81,7 +81,7 @@
 
 <section class="song-stats">
     <div class="stats-row">
-        {#each Object.values(statusMap) as key}
+        {#each STATUS_KEYS as key}
             {#if stats[key]}
             <a role="button" href="#current-songs" class="label stat" onclick={(e) => filterByStatus(e, key)}>
                 <i class="bx {icons[key]}" aria-hidden="true"></i>

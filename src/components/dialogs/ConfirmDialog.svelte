@@ -48,7 +48,9 @@
             {@render header?.()} {title}
         </Titlebar>
         {@render children?.()}
-        {#if footer}{@render footer()}{:else}
+        {#if footer}
+            {@render footer()}
+        {:else}
             <div class="row">
                 <button data-target={target} onclick={confirm}>
                     { $t('dialog.confirm') }

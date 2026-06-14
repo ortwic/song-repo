@@ -4,6 +4,7 @@ import style from './ProgressBar.css?inline';
 class ProgressBar extends HTMLElement {
     isMouseDown = false;
     oldValue = 0;
+    _disabled = false;
     _value = 0;
     _min = 0;
     _max = 100;
@@ -60,14 +61,24 @@ class ProgressBar extends HTMLElement {
         return this._max;
     }
 
+    set disabled(val: boolean) {
+        this.handleDisabled(val);
+    }
+
+    get disabled(): boolean {
+        return this._disabled;
+    }
+
     static get observedAttributes() {
         return ['value', 'min', 'max'];
     }
 
     private start(event: MouseEvent | TouchEvent) {
-        this.isMouseDown = true;
-        this.oldValue = this._value;
-        this.updateProgress(this.clientX(event));
+        this.isMouseDown = !this._disabled;
+        if (this.isMouseDown) {
+            this.oldValue = this._value;
+            this.updateProgress(this.clientX(event));
+        }
     }
 
     private move(event: MouseEvent | TouchEvent) {
@@ -104,15 +115,27 @@ class ProgressBar extends HTMLElement {
 
     attributeChangedCallback(name: string, oldValue: string, newValue: string) {
         switch (name) {
-        case 'min':
-            this._min = +newValue;
-            break;
-        case 'max':
-            this._max = +newValue;
-            break;
-        case 'value':
-            this.setProgress(+newValue);
-            break;
+            case 'min':
+                this._min = +newValue;
+                break;
+            case 'max':
+                this._max = +newValue;
+                break;
+            case 'value':
+                this.setProgress(+newValue);
+                break;
+            case 'disabled':
+                this.handleDisabled(Boolean(newValue));
+                break;
+        }
+    }
+
+    handleDisabled(state: boolean) {
+        this._disabled = state;
+        if (state) {
+            this.handle.classList.remove('handle');
+        } else {
+            this.handle.classList.add('handle');
         }
     }
 

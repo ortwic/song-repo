@@ -271,21 +271,6 @@ div.titlebar {
     }
 }
 
-a.label,
-span.label {
-    border: 1px solid var(--border);
-    background-color: var(--label);
-    box-shadow: var(--shadow-md);
-    margin: 0.4rem 0.2rem;
-    padding: 0.2rem 0.6rem;
-    border-radius: 1rem;
-    font-size: smaller;
-}
-
-a.label:hover {
-    background-color: var(--bg);
-}
-
 blockquote {
     background-color: var(--surface);
     font-size: 14pt;
