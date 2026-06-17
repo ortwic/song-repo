@@ -112,6 +112,39 @@
     "qOther": "Do you have any other ideas and suggestions for the app or have you noticed serious bugs?",
     "ty": "Thank you for participating in this feedback survey."
   },
+  "sessions": {
+    "menu": {
+      "quick": "Quick session",
+      "start": "Start practicing",
+      "focus": "Add focus area"
+    },
+    "kind": {
+      "practice": "Practice",
+      "jam": "Jamsession",
+      "demo": "Demonstration",
+      "record": "Recording"
+    },
+    "dialog": {
+      "title": "Session"
+    },
+    "focus": {
+      "label": "Focus Areas",
+      "melody": "Melody",
+      "harmony": "Harmony",
+      "rhythm": "Rhythm",
+      "technique": "Technique",
+      "form": "Form",
+      "expression": "Expression",
+      "memorize": "Memorize",
+      "improv": "Improvisation",
+      "finishing": "Finishing Touches"
+    },
+    "notes": {
+      "placeholder": "Notes on this session...",
+      "label": "Notes"
+    },
+    "summary": "Summary"
+  },
   "songs": {
     "columns": {
       "fav": "Favorites",
@@ -161,7 +194,8 @@
       "select": "Select file",
       "select-cloud": "File from cloud",
       "select-title": "Select a file from Google Drive",
-      "upload": "Upload file"
+      "upload": "Upload file",
+      "blocked": "Unable to display resource!"
     },
     "search-empty": "No results found! 😥",
     "exportTitle": "My Song List",

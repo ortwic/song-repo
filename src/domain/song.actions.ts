@@ -1,9 +1,10 @@
 import { getContext } from 'svelte';
-import { logAction } from '../../store/notification.store';
-import { type DialogArgs, DialogKeys, type Dialog } from '../../model/dialog.model';
-import type { Song, UserSong } from '../../model/song.model';
-import type { Status } from '../../model/types';
-import type SongService from '../../service/user/user-song.service';
+import { logAction } from '../store/notification.store';
+import { type DialogArgs, DialogKeys, type Dialog } from '../model/dialog.model';
+import type { UserSession } from '../model/session.model';
+import type { Song, UserSong } from '../model/song.model';
+import type { Status } from '../model/types';
+import type SongService from '../service/user/user-song.service';
 
 export interface SearchAction {
     label: string;
@@ -11,9 +12,6 @@ export interface SearchAction {
     resource: string;
     url: (song: UserSong) => string;
 }
-
-const DEFAULT_QUICK_DURATION_MINUTES = 10;
-const DEFAULT_QUICK_PROGRESS_DELTA = 5;
 
 export const SEARCH_ACTIONS: SearchAction[] = [
     {
@@ -50,10 +48,12 @@ export const SEARCH_ACTIONS: SearchAction[] = [
 
 export class SongActions {
     readonly editSongDialog = getContext<Dialog<UserSong, UserSong>>(DialogKeys.editSong);
+    readonly sessionDialog = getContext<Dialog<UserSong, UserSession>>(DialogKeys.sessionTracker);
     readonly resourceDialog = getContext<Dialog<Song>>(DialogKeys.resourceViewer);
     readonly confirmDialog = getContext<Dialog<DialogArgs, boolean>>(DialogKeys.confirmDialog);
     
-    constructor(public service: SongService) {}
+    constructor(public songService: SongService) {
+    }
 
     async showResource(song: UserSong): Promise<void> {
         if (song.uri) {
@@ -70,50 +70,28 @@ export class SongActions {
     async editSong(song: UserSong): Promise<void> {
         const editedSong = await this.editSongDialog.open(song);
         if (editedSong) {
-            await this.service.setSong(editedSong);
+            await this.songService.setSong(editedSong);
         }
     }
 
     async toggleFavorite(song: UserSong): Promise<void> {
         song.fav = !song.fav;
-        await this.service.setSong(song);
+        await this.songService.setSong(song);
     }
 
     async changeStatus(song: UserSong, status: Status): Promise<void> {
         song.status = status;
-        await this.service.setSong(song);
+        await this.songService.setSong(song);
     }
 
-    deriveStatusFromProgress(song: UserSong, newValue: number, oldValue: number): boolean {
-        if (newValue > 90 && song.status !== 'done') {
-            song.status = 'done';
-            return true;
-        }
-        if (newValue < 10 && song.status !== 'archived') {
-            song.status = 'archived';
-            return true;
-        }
-        if (newValue < oldValue && song.status !== 'repeat') {
-            song.status = 'repeat';
-            return true;
-        }
-        if (newValue > oldValue && song.status !== 'wip') {
-            song.status = 'wip';
-            return true;
-        }
-        return false;
-    }
-
-    async updateProgress(song: UserSong, newValue: number, oldValue: number): Promise<void> {
-        song.progress = newValue;
-        this.deriveStatusFromProgress(song, newValue, oldValue);
-        await this.service.setSong(song);
+    async runSession(song: UserSong): Promise<UserSession> {
+        return this.sessionDialog.open(song);
     }
 
     async delete(song: UserSong, args?: DialogArgs): Promise<void> {
         const confirmed = !args || await this.confirmDialog.open(args);
         if (confirmed === true) {
-            await this.service.deleteSong(song);
+            await this.songService.deleteSong(song);
         }
     }
 }

@@ -1,3 +1,12 @@
+v0.7.0 (2026-06-18)
+-------------------
+- session tracking for each song
+- mastery scores for distinct focus areas
+- compute progress from mastery scores
+- search artists and titles from catalogs
+- fixed preview images for artists
+- use app-cache for genres and pages
+
 v0.6.2 (2026-05-08)
 -------------------
 - fixed ProgressBar UX!

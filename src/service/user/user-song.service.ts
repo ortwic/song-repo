@@ -61,6 +61,7 @@ export default class SongService {
             status: 'todo',
             progress: 0,
             progressLogs: [],
+            mastery: {},
             genre: '',
             style: '',
             key: '',

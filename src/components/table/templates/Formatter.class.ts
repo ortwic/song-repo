@@ -3,7 +3,8 @@ import { marked } from 'marked';
 import type { CellComponent, GroupComponent } from 'tabulator-tables';
 import type { ColumnDefinition } from '../tabulator/types';
 import './ProgressBar.class';
-import { SongActions } from '../SongActions.class';
+import { SongActions } from '../../../domain/song.actions';
+import { process } from '../../../domain/song.logic';
 import type { UserSong } from '../../../model/song.model';
 import { STATUS_KEYS } from '../../../model/types';
 import { toDate } from '../../ui/helper/date.helper';
@@ -59,11 +60,7 @@ export default class Formatter {
     }
 
     get progress(): Partial<ColumnDefinition> { 
-        const {
-            deriveStatusFromProgress,
-            service
-        } = this.actions;
-        
+        const { setSong } = this.actions.songService;
         const progress = (data: UserSong) => {
             if (data.progress > 0) {
                 const value = Math.floor((data.progress - 1) / 10) * 10 + 1;
@@ -82,9 +79,8 @@ export default class Formatter {
                 bar.addEventListener('change', (ev: CustomEvent<number[]>) => {
                     const [newValue, oldValue] = ev.detail;
                     cell.setValue(newValue);
-                    deriveStatusFromProgress(song, newValue, oldValue);
-                    service.setSong(song)
-                        .then(() => cell.getRow().reformat());
+                    process(song).statusFromProgress(newValue, oldValue);
+                    setSong(song).then(() => cell.getRow().reformat());
                 });
                 return bar;
             },

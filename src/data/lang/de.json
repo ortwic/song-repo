@@ -112,6 +112,39 @@
     "qOther": "Hast du noch sonstige Ideen und Vorschläge für die App oder sind dir schwerwiegende Bugs aufgefallen?",
     "ty": "Danke, dass du an dieser Feedback Befragung teil genommen hast."
   },
+  "sessions": {
+    "menu": {
+      "quick": "Quicky",
+      "start": "Übung starten",
+      "focus": "Schwerpunkt hinzufügen"
+    },
+    "kind": {
+      "practice": "Übung",
+      "jam": "Jamsession",
+      "demo": "Vorführung",
+      "record": "Aufnahme"
+    },
+    "dialog": {
+      "title": "Session"
+    },
+    "focus": {
+      "label": "Schwerpunkte",
+      "melody": "Melodie",
+      "harmony": "Harmonie",
+      "rhythm": "Rhythmus",
+      "technique": "Technik",
+      "form": "Form",
+      "expression": "Ausdruck",
+      "memorize": "Auswendig lernen",
+      "improv": "Improvisation",
+      "finishing": "Feinschliff"
+    },
+    "notes": {
+      "placeholder": "Notizen zur Session...",
+      "label": "Notizen"
+    },
+    "summary": "Zusammenfassung"
+  },
   "songs": {
     "columns": {
       "fav": "Favoriten",
@@ -161,7 +194,8 @@
       "select": "Datei auswählen",
       "select-cloud": "Datei aus Cloud",
       "select-title": "Datei aus Google Drive auswählen",
-      "upload": "Datei hochladen"
+      "upload": "Datei hochladen",
+      "blocked": "Resource kann nicht angezeigt werden!"
     },
     "search-empty": "Nichts gefunden! 😥",
     "exportTitle": "Meine Songliste",

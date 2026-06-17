@@ -1,5 +1,5 @@
 import type { Timestamp } from 'firebase/firestore';
-import type { Percent, Status } from './types';
+import type { Percent, Status, TrainingAreas } from './types';
 
 export interface Artist {
     id: string;
@@ -23,6 +23,8 @@ export interface Genre {
     name: string;
     color: string;
     styles: string[];
+    masteryTargets: TrainingAreas<number>;
+    notes: string;
 }
 
 export interface Song {
@@ -46,12 +48,12 @@ export interface Song {
     };
 }
 
-export interface UserSong extends Song {
+export interface UserSong extends Song, ComputedProgress {
     uid: string;
     status: Status;
-    statusLogs?: Status[]; // unused
     progress?: Percent;
-    progressLogs?: Percent[]; // unused
+    progressLogs?: Percent[]; // legacy / depricated
+    mastery?: TrainingAreas<Percent>;
     source?: string; // should be notes
     notes?: string;
     difficulty?: number;
@@ -60,4 +62,10 @@ export interface UserSong extends Song {
     learnedOn?: Date;
     fav?: boolean;
     tags?: string[];
+}
+
+export interface ComputedProgress {
+    statusResult?: Status;
+    progressResult?: Percent;
+    retentionScore?: number;
 }

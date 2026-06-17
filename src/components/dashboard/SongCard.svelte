@@ -1,13 +1,14 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
+    import { SEARCH_ACTIONS, SongActions } from '../../domain/song.actions';
     import type { UserSong } from '../../model/song.model';
     import { type Status, STATUS_KEYS } from '../../model/types';
+    import SessionService from '../../service/user/user-session.service';
     import SongService from '../../service/user/user-song.service';
     import { genreColor } from '../../styles/style.helper';
     import PopupMenu from '../ui/PopupMenu.svelte';
     import ProgressBar from '../ui/elements/ProgressBar.svelte';
     import { toDate } from '../ui/helper/date.helper';
-    import { SEARCH_ACTIONS, SongActions } from '../table/SongActions.class';
     import { settings } from '../../store/user-settings.svelte';
 
     interface Props {
@@ -16,8 +17,10 @@
 
     let { song = $bindable() }: Props = $props();
 
+    const QUICK_DURATION_MINUTES = 10;
     const songService = new SongService();
     const actions = new SongActions(songService);
+    const sessionService = new SessionService(songService);
     const signature = [song.key, song.time, song.bpm].filter(Boolean).join(' | ');
 
     let searchPopupMenu: PopupMenu = $state();
@@ -35,9 +38,13 @@
 
     const { gradient, genreWatermarkStyle } = getGenreStyles(song.genre);
 
+    async function startSession() {
+        const session = await actions.runSession(song);
+        await sessionService.addSession(song, session);
+    }
+
     async function handleStatusChange(status: string) {
         await actions.changeStatus(song, status as Status);
-        song = { ...song, status: status as Status };
     }
 </script>
 
@@ -57,9 +64,16 @@
             <p class="artist">{song.artist ?? '—'}</p>
             <p class="title fav" class:active={song.fav}>{song.title ?? '—'}</p>
         </div>
+        <button
+            class="clear sm"
+            title={$t('sessions.menu.quick')}
+            onclick={() => sessionService.addQuick(song, QUICK_DURATION_MINUTES)}
+        >
+            <i class="icon bx bxs-bolt"></i>
+        </button>
     </header>
     <span class="genre-watermark" style={genreWatermarkStyle}>{song.genre}</span>
-    <ProgressBar value={song.progress} disabled={true}></ProgressBar>
+    <ProgressBar value={song.progressResult ?? song.progress} disabled={!!song.progressResult}></ProgressBar>
 
     <div class="tags">
         {#if signature}<span class="label" title="{$t('songs.columns.signature')}">{signature}</span>{/if}
@@ -88,12 +102,19 @@
             <i class="icon bx bx-search"></i>
         </button>
         <button
-            class="clear sm max-width"
+            class="clear sm"
             title={song.uri ? $t('songs.menu.open') : $t('songs.menu.set-resource')}
             onclick={() => actions.showResource(song)}
         >
-            <i class="icon bx {song.uri ? 'bx-link-external' : 'bx-unlink'}"></i>
-            {song.uri ? $t('songs.menu.open') : $t('songs.menu.set-resource')}
+            <i class="icon bx {song.uri ? 'bx-file' : 'bx-unlink'}"></i>
+        </button>
+        <button
+            class="clear sm max-width"
+            title={$t('sessions.menu.start')}
+            onclick={startSession}
+        >
+            <i class="icon bx bx-play"></i>
+            <span class="no-wrap">{$t('sessions.menu.start')}</span>
         </button>
         <button
             class="clear sm"

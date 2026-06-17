@@ -2,8 +2,10 @@
     import { setContext } from 'svelte';
     import ConfirmDialog from './dialogs/ConfirmDialog.svelte';
     import EditSongDialog from './dialogs/EditSongDialog.svelte';
+    import SessionDialog from './dialogs/SessionDialog.svelte';
     import ResourceViewer from './dialogs/ResourceViewer.svelte';
     import { type DialogArgs, DialogKeys, type Dialog } from '../model/dialog.model';
+    import type { UserSession } from '../model/session.model';
     import type { Song, UserSong } from '../model/song.model';
     import { createDeferred, type DeferredResult } from '../utils/promise.helper';
 
@@ -16,6 +18,11 @@
     let editSong: EditSongDialog = $state();
     setContext<Dialog<Partial<UserSong>, UserSong>>(DialogKeys.editSong, {
         open: (args?: Partial<UserSong>) => editSong.showDialog(args)
+    });
+
+    let sessionTracker: SessionDialog = $state();
+    setContext<Dialog<UserSong, UserSession>>(DialogKeys.sessionTracker, {
+        open: (args?: UserSong) => sessionTracker.showDialog(args)
     });
 
     let resourceViewer: ResourceViewer = $state();
@@ -48,6 +55,8 @@
 </script>
 
 <EditSongDialog bind:this={editSong} />
+
+<SessionDialog bind:this={sessionTracker} />
 
 <ResourceViewer bind:this={resourceViewer} />
 

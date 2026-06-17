@@ -1,7 +1,8 @@
 import type { CellComponent, MenuObject, MenuSeparator } from 'tabulator-tables';
+import { SEARCH_ACTIONS, SongActions } from '../../../domain/song.actions';
 import type { UserSong } from '../../../model/song.model';
+import { STATUS_KEYS } from '../../../model/types';
 import type { MessageFormatter } from '../../../service/base/i18n.setup';
-import { SEARCH_ACTIONS, SongActions } from '../SongActions.class';
 
 export function buildActionMenu(actions: SongActions, t: MessageFormatter): Array<MenuObject<CellComponent> | MenuSeparator> {
     const cell = (c: CellComponent) => c.getData() as UserSong;
@@ -33,7 +34,7 @@ export function buildActionMenu(actions: SongActions, t: MessageFormatter): Arra
         },
         {
             label: `<i class='bx bx-pie-chart'></i> ${t('songs.menu.change-status')}`,
-            menu: ['todo', 'wip', 'done', 'repeat', 'archived'].map((status) => ({
+            menu: STATUS_KEYS.map((status) => ({
                 label: `<i class='status ${status}'></i> ${t(`songs.status.${status}`)}`,
                 action: async (e, c) => { await actions.changeStatus(cell(c), status); reformat(c); },
             })),

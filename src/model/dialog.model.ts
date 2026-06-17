@@ -9,6 +9,7 @@ export interface DialogArgs {
 
 export enum DialogKeys {
     editSong,
+    sessionTracker,
     resourceViewer,
     confirmDialog
 }

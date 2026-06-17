@@ -1,7 +1,7 @@
 import type { CellEditEventCallback, ColumnComponent, Editor, ListEditorParams, RowComponent, SortDirection } from 'tabulator-tables';
 import type { ColumnDefinition } from '../tabulator/types';
 import Formatter from './Formatter.class';
-import { SongActions } from '../SongActions.class';
+import { SongActions } from '../../../domain/song.actions';
 import type { MessageFormatter } from '../../../service/base/i18n.setup';
 
 type Sorter =
