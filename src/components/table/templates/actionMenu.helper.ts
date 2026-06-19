@@ -10,12 +10,14 @@ export function buildActionMenu(actions: SongActions, t: MessageFormatter): Arra
 
     return [
         {
-            label: `<i class='bx bx-link-external'></i> <b>${t('songs.menu.open')}</b>`,
-            action(e, c) {
-                const song = cell(c);
-                song.uri ? void (actions.showResource(song)) : actions.editSong(song);
-            }
+            label: `<i class='bx bx-play'></i> <b>${t('sessions.menu.start')}</b>`,
+            action: (e, c) => actions.runSession(cell(c)),
         },
+        {
+            label: `<i class='bx bxs-bolt'></i> ${t('sessions.menu.quick')}`,
+            action: (e, c) => actions.sessionService.addQuick(cell(c)),
+        },
+        { separator: true },
         {
             label: `<i class='bx bx-edit'></i> ${t('songs.menu.edit')}`,
             action: (e, c) => actions.editSong(cell(c)),

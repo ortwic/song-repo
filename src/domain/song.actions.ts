@@ -2,9 +2,12 @@ import { getContext } from 'svelte';
 import { logAction } from '../store/notification.store';
 import { type DialogArgs, DialogKeys, type Dialog } from '../model/dialog.model';
 import type { UserSession } from '../model/session.model';
+import type { UserSettings } from '../model/settings.model';
 import type { Song, UserSong } from '../model/song.model';
 import type { Status } from '../model/types';
+import type SessionService from '../service/user/user-session.service';
 import type SongService from '../service/user/user-song.service';
+import { userSettingsService } from '../service/user/user-settings.service';
 
 export interface SearchAction {
     label: string;
@@ -52,7 +55,15 @@ export class SongActions {
     readonly resourceDialog = getContext<Dialog<Song>>(DialogKeys.resourceViewer);
     readonly confirmDialog = getContext<Dialog<DialogArgs, boolean>>(DialogKeys.confirmDialog);
     
-    constructor(public songService: SongService) {
+    constructor(public songService: SongService, public sessionService: SessionService) {
+    }
+
+    async userSettings(defaults?: UserSettings): Promise<UserSettings> {
+        return userSettingsService.loadSettingsAsync({} as UserSettings, defaults ?? {
+            advanced: {},
+            dashboard: {},
+            googleDrive: {}
+        } as UserSettings);
     }
 
     async showResource(song: UserSong): Promise<void> {
@@ -85,7 +96,11 @@ export class SongActions {
     }
 
     async runSession(song: UserSong): Promise<UserSession> {
-        return this.sessionDialog.open(song);
+        const session = await this.sessionDialog.open(song);
+        if (session) {
+            await this.sessionService.addSession(song, session);
+        }
+        return session;
     }
 
     async delete(song: UserSong, args?: DialogArgs): Promise<void> {

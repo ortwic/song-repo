@@ -1,7 +1,7 @@
-import { redToGreenGradient } from '../../../styles/style.helper';
-import style from './ProgressBar.css?inline';
+import { redToGreenGradient } from '../../styles/style.helper';
+import style from './ProgressBar.component.css?inline';
 
-class ProgressBar extends HTMLElement {
+export default class ProgressBarElement extends HTMLElement {
     isMouseDown = false;
     oldValue = 0;
     _disabled = false;
@@ -167,5 +167,5 @@ class ProgressBar extends HTMLElement {
 }
 
 if(!window.customElements.get('progress-bar')) {
-    window.customElements.define('progress-bar', ProgressBar);
+    window.customElements.define('progress-bar', ProgressBarElement);
 }

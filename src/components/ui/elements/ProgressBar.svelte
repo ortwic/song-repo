@@ -1,4 +1,6 @@
 <script lang="ts">
+    import '../../web/ProgressBar.component';
+
     interface Props {
         value?: number;
         min?: number;

@@ -8,6 +8,8 @@ import { currentUser } from './auth.service';
 import { process } from '../../domain/song.logic';
 import SongService from './user-song.service';
 
+const QUICK_DURATION_MINUTES = 10;
+
 export default class SessionService {
     private uid: string | undefined;
     readonly sessions: Observable<UserSession[]>;
@@ -19,7 +21,7 @@ export default class SessionService {
         );
     }
 
-    async addQuick(song: UserSong, durationMinutes: number): Promise<void> {
+    async addQuick(song: UserSong, durationMinutes = QUICK_DURATION_MINUTES): Promise<void> {
         await this.addSession(song, {
             type: 'quick',
             songId: song.id,

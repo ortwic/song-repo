@@ -17,6 +17,7 @@
     import type { TableView } from '../model/table-view.model';
     import type { MessageFormatter } from '../service/base/i18n.setup';
     import { refData } from '../service/base/app-cache.setup';
+    import SessionService from '../service/user/user-session.service';
     import SongService, { viewStoreId } from '../service/user/user-song.service';
     import { showError, showInfo } from '../store/notification.store';
 
@@ -29,7 +30,8 @@
     const readonly = !!params.id;
     const sharedUid = params.id?.slice(1);
     const service = new SongService(sharedUid);
-    const actions = new SongActions(service);
+    const sessionService = new SessionService(service);
+    const actions = new SongActions(service, sessionService);
     const actionMenu = buildActionMenu(actions, $t);
     const songs = service.usersongs$;
     const column = createColumnBuilder(actions);

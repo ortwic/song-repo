@@ -2,12 +2,13 @@ import Color from 'color';
 import { marked } from 'marked';
 import type { CellComponent, GroupComponent } from 'tabulator-tables';
 import type { ColumnDefinition } from '../tabulator/types';
-import './ProgressBar.class';
 import { SongActions } from '../../../domain/song.actions';
 import { process } from '../../../domain/song.logic';
+import type { UserSettings } from '../../../model/settings.model';
 import type { UserSong } from '../../../model/song.model';
 import { STATUS_KEYS } from '../../../model/types';
 import { toDate } from '../../ui/helper/date.helper';
+import ProgressBarElement from '../../web/ProgressBar.component';
 import { genreColor, redToGreenGradient, redToGreenRange } from '../../../styles/style.helper';
 
 export default class Formatter {
@@ -60,7 +61,8 @@ export default class Formatter {
     }
 
     get progress(): Partial<ColumnDefinition> { 
-        const { setSong } = this.actions.songService;
+        const { songService } = this.actions;
+        const settingsAsync = this.actions.userSettings({} as UserSettings);
         const progress = (data: UserSong) => {
             if (data.progress > 0) {
                 const value = Math.floor((data.progress - 1) / 10) * 10 + 1;
@@ -72,16 +74,28 @@ export default class Formatter {
         return {
             formatter(cell: CellComponent, formatterParams: { min: number, max: number }): HTMLElement | string {
                 const song = cell.getData() as UserSong;
-                const bar = document.createElement('progress-bar');
-                bar.setAttribute('value', cell.getValue());
-                bar.setAttribute('min', `${formatterParams.min}`);
-                bar.setAttribute('max', `${formatterParams.max}`);
-                bar.addEventListener('change', (ev: CustomEvent<number[]>) => {
-                    const [newValue, oldValue] = ev.detail;
-                    cell.setValue(newValue);
-                    process(song).statusFromProgress(newValue, oldValue);
-                    setSong(song).then(() => cell.getRow().reformat());
+                const bar = document.createElement('progress-bar') as ProgressBarElement;
+                bar.value = Number(cell.getValue()) ?? 0;
+                
+                settingsAsync.then(({ advanced }) => {
+                    if (advanced.editProgressManually) {
+                        bar.min = formatterParams.min;
+                        bar.max = formatterParams.max;
+                        bar.addEventListener('change', (ev: CustomEvent<number[]>) => {
+                            const [newValue, oldValue] = ev.detail;
+                            cell.setValue(newValue);
+                            
+                            process(song).statusFromProgress(newValue, oldValue);
+                            song.progress = newValue;
+                            song.mastery = process(song).masteryFromProgress();
+                            
+                            songService.setSong(song).then(() => cell.getRow().reformat());
+                        });
+                    } else {
+                        bar.disabled = true;
+                    }
                 });
+
                 return bar;
             },
             formatterParams: {
@@ -220,9 +234,6 @@ const formatterFuncs: Partial<Record<keyof UserSong, (value: unknown) => string>
     },
     status(value) {
         return `<span class='status ${value}' title='${value}'></span>`;
-    },
-    progressLogs(value) {
-        return (value as Array<unknown>).length + '';
     },
     artistImg(value) {
         return !value ? '<span class=\'image group default\'>&nbsp;</span>'

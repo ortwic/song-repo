@@ -6,14 +6,15 @@ import UserService, { currentProfile } from './user.service';
 const userService = new UserService();
 
 export class UserSettingsService {
-    private ready: Promise<void> | null = null;
+    private ready: Promise<UserSettings> | null = null;
 
-    loadSettingsAsync(target: UserSettings, defaults: UserSettings): Promise<void> {
+    async loadSettingsAsync(target: UserSettings, defaults: UserSettings): Promise<UserSettings> {
         if (!this.ready) {
             this.ready = firstValueFrom(this.loadSettings()).then((settings) => {
                 if (settings) {
                     Object.assign(target, deepmerge(defaults, settings));
                 }
+                return settings ?? defaults;
             });
         }
         return this.ready;

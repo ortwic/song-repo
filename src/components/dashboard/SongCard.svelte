@@ -17,10 +17,9 @@
 
     let { song = $bindable() }: Props = $props();
 
-    const QUICK_DURATION_MINUTES = 10;
     const songService = new SongService();
-    const actions = new SongActions(songService);
     const sessionService = new SessionService(songService);
+    const actions = new SongActions(songService, sessionService);
     const signature = [song.key, song.time, song.bpm].filter(Boolean).join(' | ');
 
     let searchPopupMenu: PopupMenu = $state();
@@ -37,11 +36,6 @@
     }
 
     const { gradient, genreWatermarkStyle } = getGenreStyles(song.genre);
-
-    async function startSession() {
-        const session = await actions.runSession(song);
-        await sessionService.addSession(song, session);
-    }
 
     async function handleStatusChange(status: string) {
         await actions.changeStatus(song, status as Status);
@@ -67,7 +61,7 @@
         <button
             class="clear sm"
             title={$t('sessions.menu.quick')}
-            onclick={() => sessionService.addQuick(song, QUICK_DURATION_MINUTES)}
+            onclick={() => sessionService.addQuick(song)}
         >
             <i class="icon bx bxs-bolt"></i>
         </button>
@@ -111,7 +105,7 @@
         <button
             class="clear sm max-width"
             title={$t('sessions.menu.start')}
-            onclick={startSession}
+            onclick={() => actions.runSession(song)}
         >
             <i class="icon bx bx-play"></i>
             <span class="no-wrap">{$t('sessions.menu.start')}</span>
