@@ -57,11 +57,6 @@
             clickMenu: !readonly ? actionMenu : undefined,
             hozAlign: 'center',
         }),
-        column('#', -1, 'progressLogs', '50', 'array', 'length', {
-            visible: false,
-            hozAlign: 'right',
-            headerFilter: 'number',
-        }),
         column(t, 2, 'progress', '136', 'number', 'progress', rangeFilter(), editor(), { visible: !readonly }),
         column(t, 1, 'artistImg', '30', undefined, 'image'),
         column(t, 1, 'artist', '200', 'string', 'default', autoFilter(), editor('list'), { validator: 'required' }),

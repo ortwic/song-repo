@@ -4,6 +4,9 @@ import { currentProfile } from '../service/user/user.service';
 import { userSettingsService } from '../service/user/user-settings.service';
 
 const defaults: UserSettings = {
+    advanced: {
+        editProgressManually: false
+    },
     dashboard: {
         setupStatus: {
             hasSongs: false,

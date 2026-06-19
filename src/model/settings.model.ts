@@ -1,6 +1,7 @@
 import type { Status } from "./types";
 
 export interface UserSettings {
+    advanced: AdvancedSettings;
     dashboard: DashboardSettings;
     googleDrive: GoogleDriveSettings;
 }
@@ -27,4 +28,8 @@ export interface DashboardSettings {
         type: 'feature' | 'tag';
         value: string;
     } | null;
+}
+
+export interface AdvancedSettings {
+    editProgressManually: boolean;
 }

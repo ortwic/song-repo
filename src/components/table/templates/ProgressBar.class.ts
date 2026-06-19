@@ -70,7 +70,7 @@ class ProgressBar extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['value', 'min', 'max'];
+        return ['value', 'min', 'max', 'disabled'];
     }
 
     private start(event: MouseEvent | TouchEvent) {

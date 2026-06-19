@@ -24,7 +24,8 @@ const SESSIONKIND_RECORD = {
     1: 'practice',
     2: 'jam',
     3: 'demo',
-    4: 'record'
+    4: 'record',
+    5: 'import'
 } as const;
 
 export const STATUS_KEYS = Object.values(STATUS_RECORD);
@@ -36,7 +37,7 @@ export type Status = ObjectValues<typeof STATUS_RECORD>;
 export type TrainingAreas<T> = Partial<Record<TrainingFocus, T>>;
 export type TrainingFocus = ObjectValues<typeof FOCUS_RECORD>;
 
-export type SessionType = SessionKind | 'free' | 'import' | 'quick';
+export type SessionType = SessionKind | 'free' | 'quick';
 export type SessionKind = ObjectValues<typeof SESSIONKIND_RECORD>;
 
 export type MenuTarget = 'hidden' | 'dynamic' | 'signup';

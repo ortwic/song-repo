@@ -3,7 +3,8 @@ import type { SessionType, Status, TrainingAreas } from "./types";
 
 export type Intensity = number;
 
-export interface SongDiff {
+export interface SessionRecord {
+    type: SessionType;
     status?: Status;
     progress?: number;
     areas: TrainingAreas<Intensity>;
@@ -11,9 +12,8 @@ export interface SongDiff {
     notes?: string;
 }
 
-export interface UserSession extends SongDiff {
+export interface UserSession extends SessionRecord {
     id: string;
-    type: SessionType;
     title?: string;
     createdAt: Timestamp
     songId?: string;

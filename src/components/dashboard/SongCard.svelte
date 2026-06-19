@@ -73,7 +73,7 @@
         </button>
     </header>
     <span class="genre-watermark" style={genreWatermarkStyle}>{song.genre}</span>
-    <ProgressBar value={song.progressResult ?? song.progress} disabled={!!song.progressResult}></ProgressBar>
+    <ProgressBar bind:value={song.progress} disabled={!settings.advanced.editProgressManually}></ProgressBar>
 
     <div class="tags">
         {#if signature}<span class="label" title="{$t('songs.columns.signature')}">{signature}</span>{/if}

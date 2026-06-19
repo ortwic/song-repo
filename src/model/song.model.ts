@@ -48,12 +48,8 @@ export interface Song {
     };
 }
 
-export interface UserSong extends Song, ComputedProgress {
+export interface UserSong extends Song, ProgressModel {
     uid: string;
-    status: Status;
-    progress?: Percent;
-    progressLogs?: Percent[]; // legacy / depricated
-    mastery?: TrainingAreas<Percent>;
     source?: string; // should be notes
     notes?: string;
     difficulty?: number;
@@ -64,8 +60,9 @@ export interface UserSong extends Song, ComputedProgress {
     tags?: string[];
 }
 
-export interface ComputedProgress {
-    statusResult?: Status;
-    progressResult?: Percent;
+export interface ProgressModel {
+    status: Status;
+    progress?: Percent;
     retentionScore?: number;
+    mastery?: TrainingAreas<Percent>;
 }

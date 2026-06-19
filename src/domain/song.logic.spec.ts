@@ -1,7 +1,13 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import type { UserSong } from '../model/song.model';
 import { FOCUS_KEYS } from '../model/types';
-import { process, DEFAULT_MASTERY_TARGETS } from './song.logic';
+import { process, DEFAULT_MASTERY_TARGETS, MASTERY_INTERPOLATION_ORDER } from './song.logic';
+
+vi.mock('../service/base/app-cache.setup', () => ({
+    refData: {
+        genres: [],
+    },
+}));
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -25,10 +31,6 @@ function saturatedMastery(): Record<string, number> {
         return acc;
     }, {} as Record<string, number>);
 }
-
-// ---------------------------------------------------------------------------
-// statusFromProgress
-// ---------------------------------------------------------------------------
 
 describe('process(song).statusFromProgress', () => {
     it('sets status to "done" when progress exceeds 90', () => {
@@ -59,10 +61,6 @@ describe('process(song).statusFromProgress', () => {
         expect(changed).toBe(true);
     });
 });
-
-// ---------------------------------------------------------------------------
-// progressFromMastery
-// ---------------------------------------------------------------------------
 
 describe('process(song).progressFromMastery', () => {
     it('returns undefined when mastery is empty', () => {
@@ -225,9 +223,58 @@ describe('process(song).progressFromMastery', () => {
     });
 });
 
-// ---------------------------------------------------------------------------
-// suggestInitialFocus
-// ---------------------------------------------------------------------------
+describe('process(song).masteryFromProgress', () => {
+    it('returns empty object for progress 0', () => {
+        const song = makeSong({});
+        expect(process(song).masteryFromProgress()).toEqual({});
+    });
+
+    it('fills melody first as the first area in canonical order', () => {
+        const result = process(makeSong({ progress: 10 })).masteryFromProgress();
+        expect(result.melody).toBeGreaterThan(0);
+        expect(result.harmony).toBeUndefined();
+    });
+
+    it.each([
+        [50,  'mid-range'],
+        [80,  'Foundation + Execution boundary'],
+        [100, 'fully saturated'],
+    ])('round-trips for progress %i (%s)', (progress) => {
+        const mastery = process(makeSong({ progress })).masteryFromProgress();
+        const roundTrip = process(makeSong({ mastery })).progressFromMastery() ?? 0;
+        expect(Math.abs(roundTrip - progress)).toBeLessThanOrEqual(1);
+    });
+
+    it('does not fill later areas when an earlier area suffices', () => {
+        const song = makeSong({ progress: 20 });
+        // Progress 20 is achievable within Maturity alone (20%), but canonically
+        // melody comes first — so Foundation areas are filled first.
+        // Either way, improv must be absent if the target is reached earlier.
+        const result = process(song).masteryFromProgress();
+        const filledAreas = MASTERY_INTERPOLATION_ORDER.filter((k) => result[k] !== undefined);
+        const lastFilled = filledAreas.at(-1)!;
+        const indexOfLast = MASTERY_INTERPOLATION_ORDER.indexOf(lastFilled);
+        const nextArea = MASTERY_INTERPOLATION_ORDER[indexOfLast + 1];
+        if (nextArea) {
+            expect(result[nextArea]).toBeUndefined();
+        }
+    });
+
+    it('allows a fractional value on the last filled area', () => {
+        const song = makeSong({ progress: 33.33 });
+        const result = process(song).masteryFromProgress();
+        const filledValues = Object.values(result) as number[];
+        const lastValue = filledValues.at(-1)!;
+        // All areas except the last must be at their full target.
+        const allButLast = filledValues.slice(0, -1);
+        allButLast.forEach((value, index) => {
+            const area = MASTERY_INTERPOLATION_ORDER[index];
+            expect(value).toBe(DEFAULT_MASTERY_TARGETS[area]);
+        });
+        // The last value must be fractional (not rounded to an integer).
+        expect(lastValue % 1).not.toBe(0);
+    });
+});
 
 describe('process(song).suggestInitialFocus', () => {
     it('returns 3 foundation areas when progress is below 40 and mastery is absent', () => {
@@ -276,10 +323,6 @@ describe('process(song).suggestInitialFocus', () => {
     });
 });
 
-// ---------------------------------------------------------------------------
-// applyPropsFrom
-// ---------------------------------------------------------------------------
-
 describe('process(song).applyPropsFrom', () => {
     it('merges focus intensity into mastery', () => {
         const song = makeSong({ mastery: { melody: 3 } });
@@ -307,17 +350,17 @@ describe('process(song).applyPropsFrom', () => {
         expect(song.notes).toBe('new note');
     });
 
-    it('sets progressResult to 100 when all areas are at their targets', () => {
+    it('sets progress to 100 when all areas are at their targets', () => {
         // All 9 areas at target → all three groups score 1.0 → weighted = 1.0 → 100
-        const song = makeSong({ progressResult: 0, mastery: {} });
+        const song = makeSong({ progress: 0, mastery: {} });
         process(song).applyPropsFrom({ areas: { ...DEFAULT_MASTERY_TARGETS } });
-        expect(song.progressResult).toBe(100);
+        expect(song.progress).toBe(100);
     });
 
-    it('sets progressResult to 80 when only Foundation and Execution are at target', () => {
+    it('sets progress to 80 when only Foundation and Execution are at target', () => {
         // foundationScore=1.0, executionScore=1.0, maturityScore=0 (absent/optional)
         // weighted = 0.4 + 0.4 + 0 = 0.8 → 80
-        const song = makeSong({ progressResult: 0, mastery: {} });
+        const song = makeSong({ progress: 0, mastery: {} });
         process(song).applyPropsFrom({
             areas: {
                 melody:     DEFAULT_MASTERY_TARGETS['melody'],
@@ -328,13 +371,13 @@ describe('process(song).applyPropsFrom', () => {
                 expression: DEFAULT_MASTERY_TARGETS['expression'],
             },
         });
-        expect(song.progressResult).toBe(80);
+        expect(song.progress).toBe(80);
     });
 
-    it('sets progressResult to 40 when only Foundation is at target', () => {
+    it('sets progress to 40 when only Foundation is at target', () => {
         // foundationScore=1.0, executionScore=0 (mandatory, absent), maturityScore=0
         // weighted = 0.4 → 40
-        const song = makeSong({ progressResult: 0, mastery: {} });
+        const song = makeSong({ progress: 0, mastery: {} });
         process(song).applyPropsFrom({
             areas: {
                 melody:  DEFAULT_MASTERY_TARGETS['melody'],
@@ -342,24 +385,13 @@ describe('process(song).applyPropsFrom', () => {
                 rhythm:  DEFAULT_MASTERY_TARGETS['rhythm'],
             },
         });
-        expect(song.progressResult).toBe(40);
+        expect(song.progress).toBe(40);
     });
 
-    it('falls back to diff.progress when mastery is absent and no focus provided', () => {
-        const song = makeSong({ progress: 10, progressResult: 10, mastery: undefined });
-        process(song).applyPropsFrom({ progress: 35 });
-        expect(song.progressResult).toBe(35);
-    });
-
-    it('does not mutate progressResult when the derived value is unchanged', () => {
-        const song = makeSong({ progressResult: 50, mastery: undefined });
-        process(song).applyPropsFrom({ progress: 50 });
-        expect(song.progressResult).toBe(50);
-    });
 
     it('derives status to "wip" after Foundation + Execution target merge (80, below done threshold)', () => {
-        // progressResult = 80, threshold for "done" is 90 → status becomes "wip"
-        const song = makeSong({ progressResult: 0, status: 'todo', mastery: {} });
+        // progress = 80, threshold for "done" is 90 → status becomes "wip"
+        const song = makeSong({ progress: 0, status: 'todo', mastery: {} });
         process(song).applyPropsFrom({
             areas: {
                 melody:     DEFAULT_MASTERY_TARGETS['melody'],
@@ -374,7 +406,7 @@ describe('process(song).applyPropsFrom', () => {
     });
 
     it('derives status to "done" when mastery is well beyond all targets', () => {
-        const song = makeSong({ progressResult: 0, status: 'todo', mastery: {} });
+        const song = makeSong({ progress: 0, status: 'todo', mastery: {} });
         const beyondTarget = Object.fromEntries(
             FOCUS_KEYS.map((k) => [k, DEFAULT_MASTERY_TARGETS[k] * 10])
         );
@@ -382,8 +414,8 @@ describe('process(song).applyPropsFrom', () => {
         expect(song.status).toBe('done');
     });
 
-    it('derives status to "wip" after partial mastery merge increases progressResult', () => {
-        const song = makeSong({ progressResult: 0, status: 'todo', mastery: {} });
+    it('derives status to "wip" after partial mastery merge increases progress', () => {
+        const song = makeSong({ progress: 0, status: 'todo', mastery: {} });
         process(song).applyPropsFrom({
             areas: {
                 melody:  DEFAULT_MASTERY_TARGETS['melody'],

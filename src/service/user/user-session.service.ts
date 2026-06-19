@@ -33,6 +33,7 @@ export default class SessionService {
         if (session != null) {
             process(song).applyPropsFrom(session);
             session.status = song.status;
+            session.progress = song.progress;
 
             await this.service.setSong(song);
             await this.setSession(session);

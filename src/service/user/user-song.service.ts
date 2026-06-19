@@ -60,7 +60,6 @@ export default class SongService {
             fav: false,
             status: 'todo',
             progress: 0,
-            progressLogs: [],
             mastery: {},
             genre: '',
             style: '',
@@ -82,9 +81,6 @@ export default class SongService {
     async setSong(song: UserSong, forceLocalUpdate = false): Promise<string> {
         if (this.uid) {
             song.changedAt = Timestamp.now();
-            if (song.progressLogs && song.progressLogs.at(-1) !== song.progress) {
-                song.progressLogs.push(song.progress);
-            }
             if (song.id) {
                 await stores.usersongs(this.uid).setDocument(song, { merge: true });
                 return song.id;

@@ -122,7 +122,8 @@
       "practice": "Übung",
       "jam": "Jamsession",
       "demo": "Vorführung",
-      "record": "Aufnahme"
+      "record": "Aufnahme",
+      "import": "Können erfassen"
     },
     "dialog": {
       "title": "Session"
@@ -139,6 +140,7 @@
       "improv": "Improvisation",
       "finishing": "Feinschliff"
     },
+    "target-progress": "Geschätzter Fortschritt",
     "notes": {
       "placeholder": "Notizen zur Session...",
       "label": "Notizen"
@@ -148,7 +150,6 @@
   "songs": {
     "columns": {
       "fav": "Favoriten",
-      "progressLogs": "Anzahl",
       "progress": "Fortschritt",
       "status": "Status",
       "artistImg": "Bild",

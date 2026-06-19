@@ -13,7 +13,7 @@
         onChange 
     }: Props = $props();
 
-    let editRefs: Array<HTMLElement | null> = [];
+    let editRefs: Array<HTMLElement | null> = $state([]);
 
     async function add() {
         labels = [...labels, ''];

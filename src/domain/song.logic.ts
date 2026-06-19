@@ -1,4 +1,4 @@
-import type { SongDiff } from '../model/session.model';
+import type { SessionRecord } from '../model/session.model';
 import type { TrainingFocus } from '../model/types';
 import type { UserSong } from '../model/song.model';
 import { refData } from '../service/base/app-cache.setup';
@@ -44,7 +44,12 @@ const PROGRESS_MID_STAGE   = 80;
 const FOUNDATION_AREAS: TrainingFocus[] = ['melody', 'harmony', 'rhythm'];
 const EXECUTION_AREAS:  TrainingFocus[] = ['technique', 'form', 'expression'];
 const MATURITY_AREAS:   TrainingFocus[] = ['finishing', 'memorize', 'improv'];
-
+const MASTERY_INTERPOLATION_PRECISION = 32; // target / 2^32 or 6e-8
+export const MASTERY_INTERPOLATION_ORDER: TrainingFocus[] = [
+    ...FOUNDATION_AREAS,
+    ...EXECUTION_AREAS,
+    ...MATURITY_AREAS,
+];
 // ---------------------------------------------------------------------------
 
 export function process(song: UserSong) {
@@ -124,32 +129,78 @@ export function process(song: UserSong) {
         },
 
         /**
-         * Applies a session diff to a song in place.
-         * Merges focus into mastery, then recomputes progressResult.
-         * Falls back to diff.progress when mastery is absent.
+         * Inverts progressFromMastery() for import use cases where only an overall
+         * progress % is known. Fills mastery areas sequentially in canonical order,
+         * completing each area to its target before starting the next.
+         * The last required area may receive a fractional value.
+         *
+         * @param targetProgress - Estimated progress (0–100) from imported data.
          */
-        applyPropsFrom(diff: Partial<SongDiff>): void {
-            if (diff.tags) {
-                song.tags = diff.tags;
+        masteryFromProgress(): UserSong['mastery'] {
+            function setFractionalValue(area: TrainingFocus, target: number) {
+                // Binary search for the fractional value in this area that hits the target.
+                let low = 0;
+                let high = target;
+
+                for (let i = 0; i < MASTERY_INTERPOLATION_PRECISION; i++) {
+                    const mid = (low + high) / 2;
+                    result[area] = mid;
+                    const probe = process({ ...song, mastery: result } as UserSong).progressFromMastery() ?? 0;
+
+                    if (probe < song.progress) {
+                        low = mid;
+                    } else {
+                        high = mid;
+                    }
+                }
+
+                result[area] = (low + high) / 2;
             }
-            if (diff.notes) {
-                song.notes = diff.notes;
+
+            const result: UserSong['mastery'] = {};
+            if (song.progress > 0) {
+                for (const area of MASTERY_INTERPOLATION_ORDER) {
+                    const target = getFocusTarget(area);
+                    result[area] = target;
+
+                    const achieved = process({ ...song, mastery: result } as UserSong).progressFromMastery() ?? 0;
+                    if (achieved >= song.progress) {
+                        setFractionalValue(area, target);
+                        break;
+                    }
+                }
             }
-            if (diff.areas) {
+
+            return result;
+        },
+        /**
+         * Applies a session record to a song in place.
+         * Merges focus into mastery, then recomputes progressResult.
+         * Falls back to record.progress when mastery is absent.
+         */
+        applyPropsFrom(record: Partial<SessionRecord>): void {
+            const isImportMode = record.type === 'import';
+            if (record.tags) {
+                song.tags = record.tags;
+            }
+            if (record.notes) {
+                song.notes = record.notes;
+            }
+            if (record.areas) {
                 if (!song.mastery) {
                     song.mastery = {};
                 }
-                for (const [key, value] of Object.entries(diff.areas) as [TrainingFocus, number][]) {
-                    song.mastery[key] = (song.mastery[key] ?? 0) + value;
+                for (const [key, value] of Object.entries(record.areas) as [TrainingFocus, number][]) {
+                    song.mastery[key] = isImportMode ? value : (song.mastery[key] ?? 0) + value;
                 }
             }
 
-            const derivedProgress = this.progressFromMastery() ?? diff.progress;
-            const oldProgress     = song.progressResult ?? 0;
+            const derivedProgress = !isImportMode ? this.progressFromMastery() ?? record.progress : record.progress;
+            const oldProgress     = song.progress ?? 0;
             const newProgress     = derivedProgress ?? oldProgress;
 
             if (newProgress !== oldProgress) {
-                song.progressResult = newProgress;
+                song.progress = newProgress;
                 this.statusFromProgress(newProgress, oldProgress);
             }
         },
@@ -161,7 +212,7 @@ export function process(song: UserSong) {
             return suggestFromProgress(song.progress ?? 0);
         },
 
-        quickSessionFocus(deltaPerArea = 1): SongDiff['areas'] {
+        quickSessionFocus(deltaPerArea = 1): SessionRecord['areas'] {
             const suggested: TrainingFocus[] = this.suggestInitialFocus();
             return Object.fromEntries(suggested.map((key) => [key, deltaPerArea]));
         },
