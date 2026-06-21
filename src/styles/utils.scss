@@ -29,6 +29,10 @@ span.label {
     color: var(--highlight);
 }
 
+.muted {
+    color: var(--text-muted);
+}
+
 .highlight:hover,
 .highlight:active {
     color: var(--secactive);

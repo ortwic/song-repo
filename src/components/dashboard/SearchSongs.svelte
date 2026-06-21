@@ -27,10 +27,25 @@
         if (song) {
             logAction({ type: 'search', song });
             await songService.addSong({
-                ...song,
-                features: [],
+                id: song.id,
+                artist: song.artist,
+                artistImg: song.artistImg,
+                artistMbid: song.artistMbid,
+                title: song.title,
+                album: song.album,
+                genre: song.genre,
+                style: song.style,
+                mood: song.mood,
+                difficulty: song.difficulty,
+                key: song.key,
+                time: song.time,
+                bpm: song.bpm,
+                year: song.year,
+                uri: song.uri,
+                features: song.features ?? [],
                 tags: [],
-            });
+                mastery: {}
+            } as UserSong);
             searchTerm = '';
         }
     }
@@ -45,6 +60,7 @@
 </script>
 
 <div class="search-song">
+    <label for="search" class="muted">{$t('songs.addTitle')}</label>
     <div class="search-row">
         <Autocomplete
             bind:this={autocomplete}

@@ -42,6 +42,7 @@ export interface Song {
     key?: string;
     time?: string;
     bpm?: string | number;
+    difficulty?: number;
     features?: string[];
     popularity?: {
         score?: number;
@@ -52,7 +53,6 @@ export interface UserSong extends Song, ProgressModel {
     uid: string;
     source?: string; // should be notes
     notes?: string;
-    difficulty?: number;
     createdAt?: Timestamp;
     changedAt?: Timestamp;
     learnedOn?: Date;

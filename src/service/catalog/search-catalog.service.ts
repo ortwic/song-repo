@@ -10,7 +10,7 @@ let lazySongIndex: Index = null;
 let lazySongMap: Map<string, Song> = null;
 
 function wordStartsWith(text: string, search: string): boolean {
-    return text.toLowerCase()
+    return search && text?.toLowerCase()
         .split(/\s+/)
         .some((v) => v.startsWith(search.toLowerCase()));
 }
@@ -71,7 +71,7 @@ export default class SearchCatalogService implements SearchService {
 
     async findTitles(text: string, artistMbid?: string): Promise<Song[]> {
         return (await this.getSongCatalog())
-            .filter((e) => !artistMbid || e.artistMbid === artistMbid && wordStartsWith(e.title, text))
+            .filter((e) => !artistMbid || e.artistMbid === artistMbid && (!text || wordStartsWith(e.title, text)))
             .slice(0, this.limit);
     }
 
@@ -80,12 +80,12 @@ export default class SearchCatalogService implements SearchService {
         return lazySongCatalog;
     }
 
-    async findGenres(text: string): Promise<Genre[]> {
-        return refData.genres.filter((e) => wordStartsWith(e.name, text));
+    findGenres(text: string): Genre[] {
+        return refData.genres.filter((e) => !text || wordStartsWith(e.name, text));
     }
 
-    async findStyles(text: string, genre: string): Promise<string[]> {
-        const styles = refData.genres.find((v) => v.name === genre)?.styles ?? [];
-        return styles.filter((e) => wordStartsWith(e, text));
+    findStyles(text: string, genre: string): string[] {
+        const styles = refData.genres.find((v) => v.name === genre)?.styles;
+        return styles?.filter && styles.filter((e) => !text || wordStartsWith(e, text)) || [];
     }
 }

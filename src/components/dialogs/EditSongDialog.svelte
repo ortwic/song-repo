@@ -2,7 +2,7 @@
     import { t } from 'svelte-i18n';
     import Autocomplete from 'simple-svelte-autocomplete/src/SimpleAutocomplete.svelte';
     import '../../styles/overrides/simple-autocomplete.scss';
-    import type { Artist, Song, UserSong } from '../../model/song.model';
+    import type { Artist, Genre, Song, UserSong } from '../../model/song.model';
     import { buildArtistImgUrl } from '../../service/catalog/artists.util';
     import { createSearchService } from '../../service/catalog/search.service';
     import SearchCatalogService from '../../service/catalog/search-catalog.service';
@@ -25,47 +25,62 @@
     let editSong: Partial<UserSong> = $state({ features: [], tags: [] });
     const isNew = $derived(editSong.id === undefined);
     const difficultyColor = $derived(redToGreenRange(100 - editSong.difficulty * 10));
-    let deferred: DeferredResult<UserSong> = null;
+    let result: DeferredResult<UserSong> = null;
 
     export function showDialog(initial?: Partial<UserSong>): Promise<UserSong> {
-        deferred = createDeferred<UserSong>();
+        result = createDeferred<UserSong>();
         editSong = { features: [], tags: [], ...initial };
         visible = true;
-        return deferred.promise;
+        return result.promise;
     }
 
-    function setArtist(artist?: Artist): void {
-        logAction({ type: 'search', artist });
+    function setArtist(artist?: Artist | null): void {
+        if (artist !== undefined) {
+            logAction({ type: 'search', artist });
 
-        editSong.artistMbid = artist?.artistMbid;
-        editSong.artist = artist?.names[0];
+            editSong.artistMbid = artist?.artistMbid;
+            editSong.artist = artist?.names[0];
 
-        if (!editSong.artist || !editSong.genre) {
-            editSong.genre = artist?.genre;
-        }
-        if (!editSong.artist || !editSong.style) {
-            editSong.style = artist?.style;
+            if (!editSong.artist || !editSong.genre) {
+                editSong.genre = artist?.genre;
+            }
+            if (!editSong.artist || !editSong.style) {
+                editSong.style = artist?.style;
+            }
         }
     }
 
-    function setSong(song?: Song) {
-        if (song) {
+    function setSong(song?: Song | null) {
+        if (song !== undefined) {
             logAction({ type: 'search', song });
 
             editSong = {
-                ...song,
+                ...(song ?? {}),
                 ...editSong
             }
-            editSong.features.push(...song.features ?? []);
+            editSong.features.push(...song?.features ?? []);
+        }
+    }
+
+    function setGenre(genre?: Genre | null) {
+        if (genre !== undefined && editSong.genre !== genre?.name) {
+            editSong.genre = genre?.name;
+            editSong.style = '';
+        }
+    }
+
+    function setStyle(style?: string | null) {
+        if (style !== undefined) {
+            editSong.style = style ?? '';
         }
     }
 
     function done(confirmed: boolean): void {
         if (!confirmed) {
-            deferred?.resolve(null);
+            result?.resolve(null);
             reset();
         } else if (form.checkValidity()) {
-            deferred?.resolve(editSong as UserSong);
+            result?.resolve(editSong as UserSong);
             reset();
         }
     }
@@ -88,7 +103,6 @@
         <div class="dialog-body">
             <Expand open={isNew} title={$t('songs.sections.song-general')}>
                 <div class="field-grid">
-
                     <div class="group">
                         <label for="artist">{$t('songs.columns.artist')} *</label>
                         <Autocomplete 
@@ -97,10 +111,11 @@
                             placeholder={$t('songs.columns.artist')} 
                             required={true}
                             delay={500}
+                            text={editSong.artist} 
                             minCharactersToSearch={1}
                             searchFunction={(text) => searchService.findArtists(text)}
                             onChange={setArtist}
-                            bind:value={editSong.artist} 
+                            clearSelection={() => setArtist(null)} 
                             showClear={true}
                             hideArrow={true}
                             showLoadingIndicator={true}>
@@ -133,17 +148,18 @@
                     
                     <div class="group">
                         <label for="title">{$t('songs.columns.title')} *</label>
+                        {#key editSong.artistMbid}
                         <Autocomplete 
                             inputClassName="lg" 
                             labelFieldName="title"
                             placeholder={$t('songs.columns.title')}
                             required={true}
                             delay={500} 
-                            minCharactersToSearch={editSong.artistMbid ? 0 : 2}
+                            text={editSong.title}
+                            minCharactersToSearch={0}
                             searchFunction={(text) => searchService.findTitles(text, editSong.artistMbid)}
                             onChange={setSong} 
-                            bind:text={editSong.title}
-                            clearSelection={() => setSong()} 
+                            clearSelection={() => setSong(null)} 
                             showClear={true}
                             hideArrow={true}
                             showLoadingIndicator={true}>
@@ -175,6 +191,7 @@
                                 </div>
                             {/snippet}
                         </Autocomplete>
+                        {/key}
                     </div>
 
                     <div class="group">
@@ -184,9 +201,11 @@
                             labelFieldName="name"
                             placeholder="genre"
                             minCharactersToSearch={0}
+                            text={editSong.genre}
                             searchFunction={(text) => searchService.findGenres(text)}
+                            onChange={setGenre}
+                            clearSelection={() => setGenre(null)}
                             showClear={true}
-                            bind:text={editSong.genre}
                             hideArrow={true}
                         >
                             {#snippet item({ item, label })}
@@ -198,19 +217,23 @@
 
                     <div class="group">
                         <label for="style">{$t('songs.columns.style')}</label>
+                        {#key editSong.genre}
                         <Autocomplete
                             inputClassName="lg"
                             placeholder="style"
-                            hideArrow={true}
+                            text={editSong.style}
                             minCharactersToSearch={0}
                             searchFunction={(text) => searchService.findStyles(text, editSong.genre)}
+                            onChange={setStyle}
+                            clearSelection={() => setStyle(null)}
                             showClear={true}
-                            bind:text={editSong.style}
+                            hideArrow={true}
                         >
                             {#snippet item({ item, label })}
                                 <span class="option">{@html label}</span>
                             {/snippet}
                         </Autocomplete>
+                        {/key}
                     </div>
                 </div>
             </Expand>
