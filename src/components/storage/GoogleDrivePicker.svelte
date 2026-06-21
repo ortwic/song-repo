@@ -91,7 +91,7 @@
     </span>
 </button>
 
-<input bind:this={fileInput} type="file" class="clear" accept={uploadMimeTypes} onchange={handleFileSelected} />
+<input bind:this={fileInput} {disabled} type="file" class="clear" accept={uploadMimeTypes} onchange={handleFileSelected} />
 
 <button
     class="clear gdrive-btn upload-btn"

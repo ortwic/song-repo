@@ -31,7 +31,7 @@
         <div class="info">
             <i class="bx bx-info-circle"></i>
             <span>
-                {@html marked($t('songs.resource.info'))}
+                {@html marked($t('songs.resource.info'), { mangle: false, headerIds: false })}
             </span>
         </div>
     {/if}

@@ -19,6 +19,26 @@ body {
     padding: 0;
     color: var(--text);
     overflow: hidden;
+    min-height: 100dvh;
+}
+
+body::before {
+    content: 'Song-Repo . . .';
+    position: fixed;
+    padding-top: 70vh;
+    font-size: 2rem;
+    font-style: italic;
+    font-weight: bold;
+    text-align: center;
+
+    inset: 0;
+    background: url('logo.svg') center / 40vh no-repeat;
+    transition: opacity 0.4s ease-out;
+    pointer-events: none;
+}
+
+body.app-ready::before {
+    opacity: 0;
 }
 
 main {
@@ -164,13 +184,15 @@ input[type='file'].primary:hover::file-selector-button {
     background-color: var(--accent-muted);
 }
 
-button.primary:disabled,
-a[role='button'].primary:disabled,
-input[type='reset'].primary:disabled,
-input[type='submit'].primary:disabled,
-input[type='file'].primary:disabled::file-selector-button {
+button:disabled,
+a[role='button']:disabled,
+input[type='reset']:disabled,
+input[type='submit']:disabled,
+input[type='file']:disabled::file-selector-button {
     color: var(--text-muted);
     background-color: var(--surface-light);
+    box-shadow: unset;
+    cursor: not-allowed;
 }
 
 button:hover,
@@ -179,10 +201,6 @@ input[type='reset']:hover,
 input[type='submit']:hover,
 input[type='file']:hover::file-selector-button {
     background-color: var(--surface-light);
-}
-
-button:disabled {
-    cursor: not-allowed;
 }
 
 button.clear,
