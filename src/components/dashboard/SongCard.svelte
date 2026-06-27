@@ -9,7 +9,7 @@
     import { genreColor } from '../../styles/style.helper';
     import PopupMenu from '../ui/PopupMenu.svelte';
     import ProgressBar from '../ui/elements/ProgressBar.svelte';
-    import { toDate } from '../ui/helper/date.helper';
+    import { toDate } from '../../utils/date.helper';
     import { settings } from '../../store/user-settings.svelte';
 
     interface Props {

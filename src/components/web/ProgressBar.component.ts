@@ -6,12 +6,13 @@ export default class ProgressBarElement extends HTMLElement {
     oldValue = 0;
     _disabled = false;
     _value = 0;
+    _delta = 0;
     _min = 0;
     _max = 100;
     readonly progressBar = document.createElement('div');
+    readonly deltaBar = document.createElement('div');
     readonly percentValue = document.createElement('span');
-    readonly handle = document.createElement('div');
-    readonly handleIndicator = document.createElement('div');
+    readonly progressHandle = document.createElement('div');
 
     constructor() {
         super();
@@ -21,15 +22,15 @@ export default class ProgressBarElement extends HTMLElement {
         
         shadow.appendChild(styleElement);
         shadow.appendChild(this.progressBar);
+        shadow.appendChild(this.deltaBar);
         shadow.appendChild(this.percentValue);
+        shadow.appendChild(this.progressHandle);
+        
+        this.deltaBar.classList.add('delta');
+        this.progressHandle.classList.add('handle');
 
-        this.handleIndicator.classList.add('indicator');
-        this.handle.classList.add('handle');
-        this.handle.appendChild(this.handleIndicator);
-        shadow.appendChild(this.handle);
-
-        this.handle.addEventListener('mousedown', this.start.bind(this));
-        this.handle.addEventListener('touchstart', this.start.bind(this), { passive: true });
+        this.progressHandle.addEventListener('mousedown', this.start.bind(this));
+        this.progressHandle.addEventListener('touchstart', this.start.bind(this), { passive: true });
 
         document.addEventListener('mousemove', this.move.bind(this));
         document.addEventListener('touchmove', this.move.bind(this), { passive: false });
@@ -38,11 +39,21 @@ export default class ProgressBarElement extends HTMLElement {
     }
 
     set value(val: number) {
-        this.setProgress(val);
+        this.drawProgress(val);
+        this.drawDiff();
     }
 
     get value(): number {
         return this._value;
+    }
+
+    set delta(val: number) {
+        this._delta = val;
+        this.drawDiff();
+    }
+
+    get delta(): number {
+        return this._delta;
     }
 
     set min(val: number) {
@@ -70,7 +81,7 @@ export default class ProgressBarElement extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['value', 'min', 'max', 'disabled'];
+        return ['value', 'delta', 'min', 'max', 'disabled'];
     }
 
     private start(event: MouseEvent | TouchEvent) {
@@ -122,7 +133,12 @@ export default class ProgressBarElement extends HTMLElement {
                 this._max = +newValue;
                 break;
             case 'value':
-                this.setProgress(+newValue);
+                this.drawProgress(+newValue);
+                this.drawDiff();
+                break;
+            case 'delta':
+                this._delta = +newValue;
+                this.drawDiff();
                 break;
             case 'disabled':
                 this.handleDisabled(Boolean(newValue));
@@ -133,29 +149,47 @@ export default class ProgressBarElement extends HTMLElement {
     handleDisabled(state: boolean) {
         this._disabled = state;
         if (state) {
-            this.handle.classList.remove('handle');
+            this.progressHandle.classList.remove('handle');
         } else {
-            this.handle.classList.add('handle');
+            this.progressHandle.classList.add('handle');
         }
     }
 
-    setProgress(value: number) {
+    drawProgress(value: number) {
         this._value = value < this._min ? this._min : value > this._max ? this._max : value;
         this.progressBar.style.width = this._max - this._value + '%';
         this.progressBar.style.marginLeft = this._value + '%';
-        this.percentValue.textContent = this._value + '%';
-        this.handle.style.left = this._value + '%';
-        
+        this.progressHandle.style.left = this._value + '%';
+        this.drawLabel();
+
         const [gradient, color] = redToGreenGradient(this._value);
         this.style.background = gradient;
         this.style.boxShadow = `0 0 12px ${color}80`;
+    }
+
+    drawDiff() {
+        const rawLeft = this._value + this._delta;
+        const clampedLeft = Math.max(0, Math.min(rawLeft, this._max));
+        const clampedRight = Math.max(0, Math.min(this._value, this._max));
+        const width = clampedRight - clampedLeft;
+        this.drawLabel();
+
+        this.deltaBar.style.left = clampedLeft + '%';
+        this.deltaBar.style.width = width + '%';
+    }
+
+    drawLabel() {
+        const label = Math.max(0, this._value + this._delta);
+        this.percentValue.textContent = label.toFixed(0) + '%';
+        this.title = `Δ ${this._delta} / Σ ${this._value}`;
     }
 
     updateProgress(clientX: number): void {
         const rect = this.getBoundingClientRect();
         const clickX = clientX - rect.left;
         const percentage = Math.round((clickX / rect.width) * this._max);
-        this.setProgress(percentage);
+        this.drawProgress(percentage);
+        this.drawDiff();
     }
 
     disconnectedCallback() {

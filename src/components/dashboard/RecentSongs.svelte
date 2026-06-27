@@ -6,7 +6,7 @@
     import SongService from '../../service/user/user-song.service';
     import type { UserSong } from '../../model/song.model';
     import { unfold } from '../ui/helper/transition.helper';
-    import { toDate, truncateTime } from '../ui/helper/date.helper';
+    import { toDate, truncateTime } from '../../utils/date.helper';
     import { toStore } from '../../utils/rx.store';
     import SongCard from './SongCard.svelte';
     import SongStats from './SongStats.svelte';

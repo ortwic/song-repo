@@ -7,7 +7,7 @@ import { createSongEntity } from '../../../domain/song.logic';
 import type { UserSettings } from '../../../model/settings.model';
 import type { UserSong } from '../../../model/song.model';
 import { STATUS_KEYS } from '../../../model/types';
-import { toDate } from '../../ui/helper/date.helper';
+import { toDate } from '../../../utils/date.helper';
 import ProgressBarElement from '../../web/ProgressBar.component';
 import { genreColor, redToGreenGradient, redToGreenRange } from '../../../styles/style.helper';
 
