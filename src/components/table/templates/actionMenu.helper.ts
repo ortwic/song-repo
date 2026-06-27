@@ -35,7 +35,7 @@ export function buildActionMenu(actions: SongActions, t: MessageFormatter): Arra
             action: async (e, c) => { await actions.toggleFavorite(cell(c)); reformat(c); },
         },
         {
-            label: `<i class='bx bx-pie-chart'></i> ${t('songs.menu.change-status')}`,
+            label: `<i class='bx bx-pie-chart'></i> ${t('songs.menu.status-override')}`,
             menu: STATUS_KEYS.map((status) => ({
                 label: `<i class='status ${status}'></i> ${t(`songs.status.${status}`)}`,
                 action: async (e, c) => { await actions.changeStatus(cell(c), status); reformat(c); },

@@ -3,14 +3,14 @@
     import { SEARCH_ACTIONS, SongActions } from '../../domain/song.actions';
     import { createSongEntity } from '../../domain/song.entity';
     import type { UserSong } from '../../model/song.model';
-    import { type Status, STATUS_KEYS } from '../../model/types';
+    import { lang } from '../../service/base/i18n.setup';
     import SessionService from '../../service/user/user-session.service';
     import SongService from '../../service/user/user-song.service';
+    import { settings } from '../../store/user-settings.svelte';
     import { genreColor } from '../../styles/style.helper';
+    import { toDate } from '../../utils/date.helper';
     import PopupMenu from '../ui/PopupMenu.svelte';
     import ProgressBar from '../ui/elements/ProgressBar.svelte';
-    import { toDate } from '../../utils/date.helper';
-    import { settings } from '../../store/user-settings.svelte';
 
     interface Props {
         song: UserSong;
@@ -23,9 +23,10 @@
     const actions = new SongActions(songService, sessionService);
     const signature = [song.key, song.time, song.bpm].filter(Boolean).join(' | ');
     const songEntity = $derived(createSongEntity(song, settings.advanced));
+    const status = $derived(songEntity.resolvedStatus());
+    const lastChangeAgo = $derived(toDate(song.changedAt).toRelative({ locale: lang }));
 
     let searchPopupMenu: PopupMenu = $state();
-    let statusPopupMenu: PopupMenu = $state();
     let morePopupMenu: PopupMenu = $state();
 
     function getGenreStyles(genre: string) {
@@ -38,20 +39,13 @@
     }
 
     const { gradient, genreWatermarkStyle } = getGenreStyles(song.genre);
-
-    async function handleStatusChange(status: string) {
-        await actions.changeStatus(song, status as Status);
-    }
 </script>
 
 <!-- Inline-Arrow onclick={() => { ... }} not working properly -->
 <!-- svelte-ignore event_directive_deprecated -->
 <article class="song-card" style={gradient ? `background: ${gradient};` : undefined}>
-    <header title={toDate(song.changedAt).toLocaleString()}>
-        <button class="lg clear" title="{$t(`songs.status.${song.status}`)}"
-            onclick={(e) => statusPopupMenu.showPopupMenu(e)}>
-            <span class="status {song.status}"></span>
-        </button>
+    <header>
+        <div class="status {status}" class:forced={song.status}></div>
         <button class="lg clear" title="{$t('songs.menu.toggle-favorite')}"
             onclick={() => actions.toggleFavorite(song)}>
             <span class="fav" class:active={song.fav}></span>
@@ -68,12 +62,16 @@
             <i class="icon bx bxs-bolt"></i>
         </button>
     </header>
+    <div class="meta muted">
+        <span>
+            {$t('songs.played-times', { values: { count: song.touchCount ?? 0 } })}
+        </span>
+        <span class="no-wrap" title={toDate(song.changedAt).toLocaleString()}>
+            {lastChangeAgo}
+        </span>
+    </div>
     <span class="genre-watermark" style={genreWatermarkStyle}>{song.genre}</span>
-    <ProgressBar 
-        bind:value={song.progress} 
-        delta={songEntity.retentionDelta()} 
-        disabled={!settings.advanced.editProgressManually}
-    ></ProgressBar>
+    <ProgressBar bind:value={song.progress} delta={songEntity.retentionDelta()} disabled={true}></ProgressBar>
 
     <div class="tags">
         {#if signature}<span class="label" title="{$t('songs.columns.signature')}">{signature}</span>{/if}
@@ -94,35 +92,37 @@
     </div>
 
     <footer>
-        <button
-            class="clear sm"
-            title={$t('songs.menu.search')}
-            onclick={(e) => searchPopupMenu.showPopupMenu(e)}
-        >
-            <i class="icon bx bx-search"></i>
-        </button>
-        <button
-            class="clear sm"
-            title={song.uri ? $t('songs.menu.open') : $t('songs.menu.set-resource')}
-            onclick={() => actions.showResource(song)}
-        >
-            <i class="icon bx {song.uri ? 'bx-file' : 'bx-unlink'}"></i>
-        </button>
-        <button
-            class="clear sm max-width"
-            title={$t('sessions.menu.start')}
-            onclick={() => actions.runSession(songEntity)}
-        >
-            <i class="icon bx bx-play"></i>
-            <span class="no-wrap">{$t('sessions.menu.start')}</span>
-        </button>
-        <button
-            class="clear sm"
-            title={$t('songs.menu.more')}
-            onclick={(e) => morePopupMenu.showPopupMenu(e)}
-        >
-            <i class="icon bx bx-dots-vertical-rounded"></i>
-        </button>
+        <div class="actions">    
+            <button
+                class="clear sm"
+                title={$t('songs.menu.search')}
+                onclick={(e) => searchPopupMenu.showPopupMenu(e)}
+            >
+                <i class="icon bx bx-search"></i>
+            </button>
+            <button
+                class="clear sm"
+                title={song.uri ? $t('songs.menu.open') : $t('songs.menu.set-resource')}
+                onclick={() => actions.showResource(song)}
+            >
+                <i class="icon bx {song.uri ? 'bx-file' : 'bx-unlink'}"></i>
+            </button>
+            <button
+                class="clear sm max-width"
+                title={$t('sessions.menu.start')}
+                onclick={() => actions.runSession(songEntity)}
+            >
+                <i class="icon bx bx-play"></i>
+                <span class="no-wrap">{$t('sessions.menu.start')}</span>
+            </button>
+            <button
+                class="clear sm"
+                title={$t('songs.menu.more')}
+                onclick={(e) => morePopupMenu.showPopupMenu(e)}
+            >
+                <i class="icon bx bx-dots-vertical-rounded"></i>
+            </button>
+        </div>
     </footer>
 
     <PopupMenu bind:this={searchPopupMenu}>
@@ -130,20 +130,6 @@
             <button class="option" onclick={() => actions.search(song, action)}>
                 <i class="bx {action.icon}"></i>
                 {action.label}
-            </button>
-        {/each}
-    </PopupMenu>
-
-    <PopupMenu bind:this={statusPopupMenu}>
-        {#each STATUS_KEYS as status}
-            <button class="option"
-                class:active={song.status === status}
-                onclick={() => handleStatusChange(status)}
-            >
-                <span class="status {status}"></span>
-                <span style="margin-left: 8px">
-                    {$t(`songs.status.${status}`)}
-                </span>
             </button>
         {/each}
     </PopupMenu>
@@ -182,6 +168,10 @@
 
         &:hover {
             border-color: var(--border);
+        }
+
+        .status {
+            padding-top: .4rem;
         }
     }
 
@@ -241,6 +231,13 @@
         }
     }
 
+    .meta {
+        text-indent: .4rem;
+        display: flex;
+        justify-content: space-between;
+        font-size: small;
+    }
+
     .lg {
         font-size: 14pt;
     }
@@ -263,17 +260,20 @@
     }
 
     footer {
-        display: flex;
-        align-items: center;
         margin-top: auto;
-        padding-top: 8px;
+        
+        .actions {
+            display: flex;
+            align-items: center;
+            padding-top: 8px;
 
-        .max-width {
-            flex: 1;
-        }
+            .max-width {
+                flex: 1;
+            }
 
-        button {
-            padding: 0 4px;
+            button {
+                padding: 0 4px;
+            }
         }
     }
 

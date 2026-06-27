@@ -3,6 +3,7 @@ import { Timestamp } from 'firebase/firestore';
 import type { SongParams } from '../model/settings.model';
 import type { UserSong } from '../model/song.model';
 import { FOCUS_KEYS } from '../model/types';
+import { DEFAULT_USER_SETTINGS } from '../service/user/default-settings';
 import { createSongEntity, DEFAULT_MASTERY_TARGETS, MASTERY_INTERPOLATION_ORDER, SongEntity } from './song.entity';
 
 vi.mock('../service/base/app-cache.setup', () => ({
@@ -11,12 +12,8 @@ vi.mock('../service/base/app-cache.setup', () => ({
     },
 }));
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
 const defaultSongParams: SongParams = {
-    quickSessionDeltaPerArea:    1,
+    ...DEFAULT_USER_SETTINGS.advanced,
     retentionHalfLifeDays:      14,
     retentionSessionBoostFactor: 0.8,
     retentionGracePeriodDays:    0,
@@ -27,7 +24,6 @@ function makeSongEntity(overrides: Partial<UserSong> = {}, params = defaultSongP
         id: 'test-song',
         title: 'Test Song',
         artist: 'Test Artist',
-        status: 'todo',
         progress: 0,
         mastery: {},
         ...overrides,
@@ -40,36 +36,6 @@ function saturatedMastery(): Record<string, number> {
         return acc;
     }, {} as Record<string, number>);
 }
-
-describe('createSongEntity(song).statusFromProgress', () => {
-    it('sets status to "done" when progress exceeds 90', () => {
-        const song = makeSongEntity({ status: 'wip', progress: 80 });
-        const changed = song.statusFromProgress(95, 80);
-        expect(song.status).toBe('done');
-        expect(changed).toBe(true);
-    });
-
-    it('sets status to "archived" when progress drops below 10', () => {
-        const song = makeSongEntity({ status: 'wip', progress: 15 });
-        const changed = song.statusFromProgress(5, 15);
-        expect(song.status).toBe('archived');
-        expect(changed).toBe(true);
-    });
-
-    it('sets status to "repeat" when progress decreases in the mid range', () => {
-        const song = makeSongEntity({ status: 'wip', progress: 60 });
-        const changed = song.statusFromProgress(50, 60);
-        expect(song.status).toBe('repeat');
-        expect(changed).toBe(true);
-    });
-
-    it('sets status to "wip" when progress increases in the mid range', () => {
-        const song = makeSongEntity({ status: 'todo', progress: 20 });
-        const changed = song.statusFromProgress(30, 20);
-        expect(song.status).toBe('wip');
-        expect(changed).toBe(true);
-    });
-});
 
 describe('createSongEntity(song).progressFromMastery', () => {
     it('returns undefined when mastery is empty', () => {
@@ -332,8 +298,10 @@ describe('createSongEntity(song).suggestInitialFocus', () => {
     });
 });
 
-describe('retention decay', () => {
+describe('retention decay & derivedStatus', () => {
     const now = new Date('2025-06-01');
+    const daysAgo = (days: number) => 
+        new Date(now.getTime() - days * 24 * 60 * 60 * 1000);
 
     beforeEach(() => {
         vi.useFakeTimers();
@@ -345,8 +313,6 @@ describe('retention decay', () => {
     });
 
     describe('createSongEntity(song).retentionFactor', () => {
-        const daysAgo = (days: number) =>
-            new Date(now.getTime() - days * 24 * 60 * 60 * 1000);
 
         it('returns 1.0 when played today (0 days elapsed)', () => {
             const song = makeSongEntity({ });
@@ -421,6 +387,54 @@ describe('retention decay', () => {
             const delta = song.retentionDelta();
             expect(delta).toBeLessThanOrEqual(0);
             expect(delta).toBeGreaterThan(-100);
+        });
+    });
+
+    describe('createSongEntity(song).derivedStatus', () => {
+        it('returns "todo" for a new song with no progress and no decay', () => {
+            const entity = makeSongEntity({ progress: 0 });
+            expect(entity.resolvedStatus()).toBe('todo');
+        });
+
+        it('returns "wip" when progress is in mid range and no significant decay', () => {
+            const entity = makeSongEntity({ progress: 50, changedAt: Timestamp.now() });
+            expect(entity.resolvedStatus()).toBe('wip');
+        });
+
+        it('returns "done" when progress exceeds the done threshold', () => {
+            const entity = makeSongEntity({ progress: 95, changedAt: Timestamp.now() });
+            expect(entity.resolvedStatus()).toBe('done');
+        });
+
+        it('returns "repeat" when decay exceeds repeat threshold and progress is mid range', () => {
+            // Song not touched for long enough to generate significant decay
+            const entity = makeSongEntity({
+                progress: 60,
+                touchCount: 10,
+                lastRetention: 1.0,
+                changedAt: Timestamp.fromDate(daysAgo(30)),
+            });
+            expect(entity.resolvedStatus()).toBe('repeat');
+        });
+
+        it('returns "wip" when progress is below archived threshold', () => {
+            const entity = makeSongEntity({
+                progress: 8,
+                touchCount: 1,
+                lastRetention: 1.0,
+                changedAt: Timestamp.fromDate(daysAgo(30)),
+            });
+            expect(entity.resolvedStatus()).toBe('wip');
+        });
+
+        it('returns "archived" when decay would push effective progress below archived threshold', () => {
+            const entity = makeSongEntity({
+                progress: 12,
+                touchCount: 1,
+                lastRetention: 1.0,
+                changedAt: Timestamp.fromDate(daysAgo(30)),
+            });
+            expect(entity.resolvedStatus()).toBe('archived');
         });
     });
 });

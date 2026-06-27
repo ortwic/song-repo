@@ -3,6 +3,8 @@ v0.7.0 (2026-06-18)
 - session tracking for each song
 - mastery scores for distinct focus areas
 - compute progress from mastery scores
+- retention decay following Ebbinghaus' forgetting curve
+- derive status from retention decay and progress
 - search artists and titles from catalogs
 - fixed preview images for artists
 - use app-cache for genres and pages

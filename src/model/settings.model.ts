@@ -36,6 +36,10 @@ export interface AdvancedSettings extends SongParams {
 
 export interface SongParams {
     quickSessionDeltaPerArea: number;
+    suggestedMasteryFocusCount: number;
+    progressDoneThreshold: number;
+    progressArchivedThreshold: number;
+    progressRepeatThreshold: number;
     /**
      * Base stability for a song touched exactly once.
      * Higher values = flatter decay curve overall.

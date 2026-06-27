@@ -34,7 +34,7 @@ export default class SessionService {
     async addSession(entity: SongEntity, session: Partial<UserSession>) {
         if (session != null) {
             this.updateSong(entity, session);
-            session.status = entity.status;
+            session.status = entity.resolvedStatus();
             session.progress = entity.progress;
 
             await this.service.setSong(entity);
@@ -64,7 +64,6 @@ export default class SessionService {
         const newProgress     = derivedProgress ?? oldProgress;
         if (newProgress !== oldProgress) {
             entity.progress = newProgress;
-            entity.statusFromProgress(newProgress, oldProgress);
         }
 
         entity.touchCount = (entity.touchCount ?? 0) + 1;

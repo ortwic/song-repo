@@ -5,7 +5,6 @@ const store = new ArrayStore<object>();
 const demo = {
     id: 'abc',
     uid: 'xyz',
-    status: 'todo',
     title: 'example',
     artist: 'demo',
     genre: 'generic',

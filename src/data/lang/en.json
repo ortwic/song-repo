@@ -182,7 +182,7 @@
       "search-lyrics": "Search lyrics",
       "search-midi-file": "Search midi file",
       "toggle-favorite": "Toggle favorite",
-      "change-status": "Change status",
+      "status-override": "Override status",
       "delete": "Delete?",
       "yes": "Yes",
       "no": "No",
@@ -204,7 +204,7 @@
     "exportTitle": "My Song List",
     "import": "Start importing...",
     "importDone": "Found {found} songs. Total songs: {total}",
-    "addTitle": "Add new song",
+    "addTitle": "Add new song from catalog",
     "noPersist": "You are not signed in, so data won't be persisted after leaving the app!",
     "hint-markdown": "markdown supported e.g.",
     "status": {
@@ -229,7 +229,8 @@
     },
     "edit": "Edit",
     "search-filter": "Filter for  '{type}' like '{value}'.",
-    "search-filter-settings": "Filter settings"
+    "search-filter-settings": "Filter settings",
+    "played-times": "Played {count}x"
   },
   "table": {
     "groupBy": "Group by {title}",

@@ -182,7 +182,7 @@
       "search-lyrics": "Songtexte suchen",
       "search-midi-file": "Midi-Dateien suchen",
       "toggle-favorite": "Favorit umschalten",
-      "change-status": "Status ändern",
+      "status-override": "Status überschreiben",
       "delete": "Löschen?",
       "yes": "Ja",
       "no": "Nein",
@@ -204,7 +204,7 @@
     "exportTitle": "Meine Songliste",
     "import": "Import starten...",
     "importDone": "{found} Songs gefunden. Gesamtzahl der Songs: {total}",
-    "addTitle": "Neuen Song hinzufügen",
+    "addTitle": "Neuen Song vom Katalog hinzufügen",
     "noPersist": "Sie sind nicht angemeldet, daher bleiben die Daten nach dem Verlassen der App nicht erhalten!",
     "hint-markdown": "Markdown unterstützt z.B.",
     "status": {
@@ -229,7 +229,8 @@
     },
     "edit": "Bearbeite",
     "search-filter": "Filter von '{type}' nach '{value}'.",
-    "search-filter-settings": "Filtereinstellungen"
+    "search-filter-settings": "Filtereinstellungen",
+    "played-times": "{count}x gespielt"
   },
   "table": {
     "groupBy": "Gruppieren nach {title}",

@@ -2,7 +2,7 @@ import { DateTime } from 'luxon';
 import type { SessionRecord } from '../model/session.model';
 import type { SongParams } from '../model/settings.model';
 import type { UserSong } from '../model/song.model';
-import type { TrainingFocus } from '../model/types';
+import type { Status, TrainingFocus } from '../model/types';
 import { refData } from '../service/base/app-cache.setup';
 import { type DateLike, toDate } from '../utils/date.helper';
 import { defineMethods } from '../utils/object.helper';
@@ -29,13 +29,6 @@ const MASTERY_SOFT_CAP_LOG_FACTOR = 1;
 const MASTERY_WEIGHT_FOUNDATION = 0.4;
 const MASTERY_WEIGHT_EXECUTION  = 0.4;
 const MASTERY_WEIGHT_MATURITY   = 0.2;
-
-// Number of focus areas to pre-select when opening a session dialog.
-const SUGGESTED_FOCUS_COUNT = 3;
-
-// Progress thresholds for status derivation.
-const PROGRESS_THRESHOLD_DONE     = 90;
-const PROGRESS_THRESHOLD_ARCHIVED = 10;
 
 // Progress thresholds for initial focus suggestion.
 const PROGRESS_EARLY_STAGE = 40;
@@ -176,6 +169,23 @@ export function createSongEntity(song: UserSong, config: SongParams) {
         return Math.round(boostedFactor * retentionFactor(changedAt, touchCount) * 100) - 100;
     }
 
+    function derivedStatus(progress: number): Status {
+        const retention = -retentionDelta();
+        if (progress > config.progressArchivedThreshold && retention > config.progressRepeatThreshold) {
+            if (Math.max(progress - retention, 0) < config.progressArchivedThreshold) {
+                return 'archived';
+            }
+            return 'repeat';
+        }
+        if (progress > config.progressDoneThreshold) {
+            return 'done';
+        }
+        if (progress > 0) {
+            return 'wip';
+        }
+        return 'todo';
+    }
+
     function suggestInitialFocus(): TrainingFocus[] {
         if (song.mastery && Object.keys(song.mastery).length > 0) {
             return suggestFromMasteryGaps();
@@ -183,14 +193,14 @@ export function createSongEntity(song: UserSong, config: SongParams) {
         return suggestFromProgress(song.progress ?? 0);
     }
 
-    function suggestFromMasteryGaps(count = SUGGESTED_FOCUS_COUNT): TrainingFocus[] {
+    function suggestFromMasteryGaps(): TrainingFocus[] {
         const belowTarget = (k: TrainingFocus) => (song.mastery[k] ?? 0) < getFocusTarget(k);
         const allAreas: TrainingFocus[] = [
             ...FOUNDATION_AREAS.filter(belowTarget),
             ...EXECUTION_AREAS.filter(belowTarget),
             ...MATURITY_AREAS,
         ];
-        return allAreas.slice(0, count);
+        return allAreas.slice(0, config.suggestedMasteryFocusCount);
     }
 
     function suggestFromProgress(progress: number): TrainingFocus[] {
@@ -205,29 +215,11 @@ export function createSongEntity(song: UserSong, config: SongParams) {
 
     return defineMethods(song, {
         getFocusTarget,
-        statusFromProgress(newValue: number, oldValue: number): boolean {
-            if (newValue > PROGRESS_THRESHOLD_DONE) {
-                song.status = 'done';
-                return true;
-            }
-            if (newValue < oldValue && newValue < PROGRESS_THRESHOLD_ARCHIVED) {
-                song.status = 'archived';
-                return true;
-            }
-            if (newValue < oldValue && song.status !== 'repeat') {
-                song.status = 'repeat';
-                return true;
-            }
-            if (newValue > oldValue && song.status !== 'wip') {
-                song.status = 'wip';
-                return true;
-            }
-            return false;
-        },
         progressFromMastery,
         masteryFromProgress,
         retentionFactor,
         retentionDelta,
+        resolvedStatus: () => song.status || derivedStatus(song.progress ?? 0),
         suggestInitialFocus,
         quickSessionFocus(): SessionRecord['areas'] {
             const delta = config.quickSessionDeltaPerArea;

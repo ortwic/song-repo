@@ -181,7 +181,6 @@
                 <span>{formatElapsed(elapsedSeconds)}</span> –
             {/if}
             {songEntity?.title ?? $t('sessions.dialog.title')}
-            <span>({previewProgress ?? songEntity.progress ?? 0}%)</span>
         </span>
     {/snippet}
 
@@ -201,7 +200,7 @@
                 <label for="touchCount">
                     &Sigma; {$t('songs.columns.touch-count')}
                 </label>
-                <input class="input" type="number" disabled={!isImportMode} bind:value={songEntity.touchCount} />
+                <input class="input" type="number" min="1" disabled={!isImportMode} bind:value={songEntity.touchCount} />
                 <i class="item bx bx-info-circle" title={$t('sessions.touch-count-info')}
                     class:primary={isImportMode}>
                 </i>

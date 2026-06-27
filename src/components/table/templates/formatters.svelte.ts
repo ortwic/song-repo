@@ -12,6 +12,8 @@ import ProgressBar from '../../ui/elements/ProgressBar.svelte';
 import { genreColor, redToGreenGradient, redToGreenRange } from '../../../styles/style.helper';
 
 export function formatFactory(actions: SongActions) {
+    const { songService } = actions;
+    const settingsAsync = actions.userSettings();
     const formatterTemplates = {
         get favorite(): Partial<ColumnDefinition> {
             return {
@@ -40,13 +42,19 @@ export function formatFactory(actions: SongActions) {
         get status(): Partial<ColumnDefinition> {
             return {
                 formatter(cell: CellComponent): HTMLElement | string {
-                    const value = cell.getValue().toString();
+                    const song = cell.getData() as UserSong;
+                    const value = cell.getValue();
                     const element = cell.getElement();
-                    element.title = value;
-                    element.classList.add('status', value);
-                    if (cell.getData()['uri']) {
-                        element.classList.add('resource', value);
-                    }
+
+                    settingsAsync.then(({ advanced }) => {
+                        const entity = createSongEntity(song, advanced);
+                        const status = entity.resolvedStatus();
+                        element.title = status;
+                        element.classList.add('status', status);
+                        if (value) {
+                            element.classList.add('forced');
+                        }
+                    });
                     return `<span style='display:none'>${value}</span>`;
                 },
                 headerFilterFuncParams: {
@@ -56,8 +64,6 @@ export function formatFactory(actions: SongActions) {
         },
 
         get progress(): Partial<ColumnDefinition> {
-            const { songService } = actions;
-            const settingsAsync = actions.userSettings();
             const progress = (data: UserSong) => {
                 if (data.progress > 0) {
                     const value = Math.floor((data.progress - 1) / 10) * 10 + 1;
@@ -68,8 +74,8 @@ export function formatFactory(actions: SongActions) {
 
             return {
                 formatter(cell: CellComponent, formatterParams: { min: number, max: number }): HTMLElement {
-                    const container = document.createElement('div');
                     const song = cell.getData() as UserSong;
+                    const container = document.createElement('div');
 
                     const props = $state({
                         value: Number(cell.getValue()) ?? 0,
@@ -87,10 +93,9 @@ export function formatFactory(actions: SongActions) {
                         props.delta = entity.retentionDelta();
 
                         if (advanced.editProgressManually) {
-                            props.onChange = (newValue: number, oldValue: number) => {
-                                cell.setValue(newValue);
-                                entity.statusFromProgress(newValue, oldValue);
-                                song.progress = newValue;
+                            props.onChange = (value: number) => {
+                                cell.setValue(value);
+                                song.progress = value;
                                 song.mastery = entity.masteryFromProgress();
                                 songService.setSong(song).then(() => cell.getRow().reformat());
                             };
