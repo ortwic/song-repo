@@ -63,6 +63,7 @@ export interface UserSong extends Song, ProgressModel {
 export interface ProgressModel {
     status: Status;
     progress?: Percent;
-    retentionScore?: number;
+    touchCount?: number;
+    lastRetention?: number;
     mastery?: TrainingAreas<Percent>;
 }

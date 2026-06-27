@@ -9,6 +9,9 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
     advanced: {
         editProgressManually: false,
         quickSessionDeltaPerArea: 1,
+        retentionHalfLifeDays: 10,
+        retentionSessionBoostFactor: 0.8,
+        retentionGracePeriodDays: 0,
     },
     dashboard: {
         setupStatus: {

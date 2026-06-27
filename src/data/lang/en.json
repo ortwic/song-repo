@@ -143,9 +143,10 @@
     "target-progress": "Estimated progress",
     "notes": {
       "placeholder": "Notes on this session...",
-      "label": "Notes"
+      "label": "Notes & Labels"
     },
-    "summary": "Summary"
+    "summary": "Summary",
+    "touch-count-info": "How often did you practice this piece?"
   },
   "songs": {
     "columns": {
@@ -170,7 +171,8 @@
       "country": "Country",
       "year": "Year",
       "signature": "Signature",
-      "notes": "Notes"
+      "notes": "Notes",
+      "touch-count": "Total runs"
     },
     "menu": {
       "open": "Open resource",

@@ -1,8 +1,9 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { Timestamp } from 'firebase/firestore';
 import type { SongParams } from '../model/settings.model';
 import type { UserSong } from '../model/song.model';
 import { FOCUS_KEYS } from '../model/types';
-import { createSongEntity, DEFAULT_MASTERY_TARGETS, MASTERY_INTERPOLATION_ORDER, SongEntity } from './song.logic';
+import { createSongEntity, DEFAULT_MASTERY_TARGETS, MASTERY_INTERPOLATION_ORDER, SongEntity } from './song.entity';
 
 vi.mock('../service/base/app-cache.setup', () => ({
     refData: {
@@ -15,7 +16,10 @@ vi.mock('../service/base/app-cache.setup', () => ({
 // ---------------------------------------------------------------------------
 
 const defaultSongParams: SongParams = {
-    quickSessionDeltaPerArea:    1
+    quickSessionDeltaPerArea:    1,
+    retentionHalfLifeDays:      14,
+    retentionSessionBoostFactor: 0.8,
+    retentionGracePeriodDays:    0,
 };
 
 function makeSongEntity(overrides: Partial<UserSong> = {}, params = defaultSongParams): SongEntity {
@@ -325,5 +329,98 @@ describe('createSongEntity(song).suggestInitialFocus', () => {
         const song = makeSongEntity({ progress: 30, mastery: {} });
         const focus = song.suggestInitialFocus();
         expect(focus).toEqual(expect.arrayContaining(['melody', 'harmony', 'rhythm']));
+    });
+});
+
+describe('retention decay', () => {
+    const now = new Date('2025-06-01');
+
+    beforeEach(() => {
+        vi.useFakeTimers();
+        vi.setSystemTime(now);
+    });
+
+    afterEach(() => {
+        vi.useRealTimers();
+    });
+
+    describe('createSongEntity(song).retentionFactor', () => {
+        const daysAgo = (days: number) =>
+            new Date(now.getTime() - days * 24 * 60 * 60 * 1000);
+
+        it('returns 1.0 when played today (0 days elapsed)', () => {
+            const song = makeSongEntity({ });
+            expect(song.retentionFactor(daysAgo(0))).toBeCloseTo(1.0, 2);
+        });
+
+        it.each([
+            // [touchCount, daysAgo, expectedAbove, expectedBelow, description]
+            [1, defaultSongParams.retentionHalfLifeDays, 0.499, 0.501, 'half-life boundary: ~50% after 7 days'],
+            [1,    60, 0.00, 0.10, 'strong decay after 60 days, touched once'],
+            [10,   30, 0.60, 0.65, 'moderate decay after 30 days, touched 10×'],
+            [100,  30, 0.85, 0.90, 'slow decay after 30 days, touched 100×'],
+            [1000, 30, 0.95, 1.00, 'negligible decay after 30 days, touched 1000×'],
+        ] as const)(
+            'touchCount=%i, %i days ago: %s',
+            (touchCount, days, expectedAbove, expectedBelow, _) => {
+                const song = makeSongEntity();
+                const factor = song.retentionFactor(daysAgo(days), touchCount);
+                expect(factor).toBeGreaterThan(expectedAbove);
+                expect(factor).toBeLessThan(expectedBelow);
+            }
+        );
+
+        it('never returns negative values even after extreme elapsed time', () => {
+            const song = makeSongEntity({ });
+            expect(song.retentionFactor(daysAgo(9999))).toBeGreaterThanOrEqual(0);
+        });
+
+        it.each([
+            [3,  0.8, 'retentionGracePeriodDays=7, 3 days elapsed: within grace'],
+            [5,  0.8, 'retentionGracePeriodDays=7, 5 days elapsed: within grace'],
+            [7,  0.8, 'retentionGracePeriodDays=7, exactly at boundary'],
+        ] as const)(
+            '%i days elapsed with grace period 7: %s',
+            (days, expectedFactor, _) => {
+                const params = { ...defaultSongParams, retentionGracePeriodDays: 7 };
+                const song = makeSongEntity({ }, params);
+                expect(song.retentionFactor(daysAgo(days))).toBeGreaterThanOrEqual(expectedFactor);
+            }
+        );
+
+        it('decays normally once grace period has expired (30 days, grace 7)', () => {
+            const params = { ...defaultSongParams, retentionGracePeriodDays: 7 };
+            const song = makeSongEntity({ }, params);
+            expect(song.retentionFactor(daysAgo(30))).toBeLessThan(0.5);
+        });
+    });
+
+    describe('createSongEntity(song).retentionDelta', () => {
+        const daysAgo = (days: number) =>
+            Timestamp.fromDate(new Date(now.getTime() - days * 24 * 60 * 60 * 1000));
+
+        it('returns 0 when played today with full lastRetention', () => {
+            const song = makeSongEntity({ touchCount: 1, changedAt: daysAgo(0), lastRetention: 1.0 });
+            expect(song.retentionDelta({ touchCount: 1, changedAt: daysAgo(0) })).toBe(0);
+        });
+
+        it('returns value <= 0, never positive', () => {
+            const song = makeSongEntity({ touchCount: 3, changedAt: daysAgo(14), lastRetention: 0.5 });
+            expect(song.retentionDelta()).toBeLessThanOrEqual(0);
+        });
+
+        it('returns -100 when fully decayed (lastRetention 1.0, extreme elapsed time)', () => {
+            const song = makeSongEntity({ touchCount: 1, changedAt: daysAgo(9999), lastRetention: 1.0 });
+            expect(song.retentionDelta()).toBe(-100);
+        });
+        
+        it('returns partial decay when lastRetention is 0 (boost still applies)', () => {
+            // boostedFactor = 0 + 0.8 * (1 - 0) = 0.8 → not zero
+            // delta is negative but not -100
+            const song = makeSongEntity({ touchCount: 5, changedAt: daysAgo(30), lastRetention: 0 });
+            const delta = song.retentionDelta();
+            expect(delta).toBeLessThanOrEqual(0);
+            expect(delta).toBeGreaterThan(-100);
+        });
     });
 });

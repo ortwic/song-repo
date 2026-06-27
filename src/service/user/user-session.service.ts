@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 import { orderBy, Timestamp } from 'firebase/firestore';
 import { Observable, switchMap } from 'rxjs';
-import type { SongEntity } from '../../domain/song.logic';
+import type { SongEntity } from '../../domain/song.entity';
 import type { TrainingFocus } from '../../model/types';
 import type { UserSession } from '../../model/session.model';
 import { stores } from '../base/firestore.service';
@@ -66,6 +66,9 @@ export default class SessionService {
             entity.progress = newProgress;
             entity.statusFromProgress(newProgress, oldProgress);
         }
+
+        entity.touchCount = (entity.touchCount ?? 0) + 1;
+        entity.lastRetention = entity.retentionFactor(entity.changedAt);
     }
 
     private async setSession(session: Partial<Omit<UserSession, 'id' | 'createdAt'>>): Promise<void> {

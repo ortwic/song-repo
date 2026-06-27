@@ -3,8 +3,7 @@ import { marked } from 'marked';
 import type { CellComponent, GroupComponent } from 'tabulator-tables';
 import type { ColumnDefinition } from '../tabulator/types';
 import { SongActions } from '../../../domain/song.actions';
-import { createSongEntity } from '../../../domain/song.logic';
-import type { UserSettings } from '../../../model/settings.model';
+import { createSongEntity } from '../../../domain/song.entity';
 import type { UserSong } from '../../../model/song.model';
 import { STATUS_KEYS } from '../../../model/types';
 import { toDate } from '../../../utils/date.helper';
@@ -79,6 +78,7 @@ export default class Formatter {
                 
                 settingsAsync.then(({ advanced }) => {
                     const entity = createSongEntity(song, advanced);
+                    bar.delta = entity.retentionDelta();
 
                     if (advanced.editProgressManually) {
                         bar.min = formatterParams.min;

@@ -3,12 +3,13 @@
     import { getContext } from 'svelte';
     import { cubicOut } from 'svelte/easing';
     import { slide } from 'svelte/transition';
+    import { Timestamp } from 'firebase/firestore';
     import { SEARCH_ACTIONS } from '../../domain/song.actions';
-    import type { SongEntity } from '../../domain/song.logic';
+    import type { SongEntity } from '../../domain/song.entity';
     import { DialogKeys, type Dialog } from '../../model/dialog.model';
     import type { TrainingFocus, SessionKind, TrainingAreas } from '../../model/types';
     import type { Intensity, UserSession } from '../../model/session.model';
-    import type { Song, UserSong } from '../../model/song.model';
+    import type { Song } from '../../model/song.model';
     import { FOCUS_KEYS, SESSIONKIND_KEYS } from '../../model/types';
     import { createDeferred, type DeferredResult } from '../../utils/promise.helper';
     import ConfirmDialog from './ConfirmDialog.svelte';
@@ -68,6 +69,11 @@
             return songEntity.progressFromMastery(mergedMastery);
         }
     });
+    const delta = $derived(songEntity.retentionDelta({
+        changedAt: Timestamp.now(),
+        touchCount: (songEntity.touchCount ?? 0) + 1,
+        lastRetention: songEntity.retentionFactor(songEntity.changedAt, songEntity.touchCount)
+    }));
 
     export function showDialog(model: SongEntity): Promise<UserSession> {
         songEntity = model;
@@ -191,6 +197,15 @@
                     <i class="item bx bx-file"></i>
                 </button>
             {/if}
+            <span class="no-wrap" style="padding: 0 1rem">
+                <label for="touchCount">
+                    &Sigma; {$t('songs.columns.touch-count')}
+                </label>
+                <input class="input" type="number" disabled={!isImportMode} bind:value={songEntity.touchCount} />
+                <i class="item bx bx-info-circle" title={$t('sessions.touch-count-info')}
+                    class:primary={isImportMode}>
+                </i>
+            </span>
             <!-- svelte-ignore a11y_missing_attribute -->
             <!-- svelte-ignore a11y_click_events_have_key_events -->
             <a role="button" class="label clear sm" title={$t(`sessions.kind.${selectedKind}`)} tabindex="0"
@@ -213,12 +228,23 @@
             <label for="progress">
                 {$t('sessions.target-progress')}
             </label>
-            <ProgressBar bind:value={songEntity.progress} onChange={updateFocusFromProgress} />
+            <ProgressBar 
+                bind:value={songEntity.progress} 
+                delta={delta} 
+                onChange={updateFocusFromProgress} 
+            />
             {:else}
             <label for="progress">
                 {$t('songs.columns.progress')}
             </label>
-            <ProgressBar value={previewProgress} disabled={true} />
+            <ProgressBar 
+                initialValue={songEntity.progress} 
+                initialDelta={songEntity.retentionDelta()}
+                value={previewProgress} 
+                animationDurationMs={1000}
+                delta={delta} 
+                disabled={true} 
+            />
             {/if}
         </div>
 
@@ -316,6 +342,18 @@
     .dialog-body {
         gap: 1rem;
         overflow-x: hidden;
+    }
+
+    input[type="number"] {
+        margin: 0 0.4rem;
+        width: 4rem;
+        text-align: right;
+        border-width: 0 0 1px 0;
+        background-color: transparent;
+
+        &:disabled {
+            color: var(--text-muted);
+        }
     }
 
     .focus-list {

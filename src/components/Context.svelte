@@ -4,7 +4,7 @@
     import EditSongDialog from './dialogs/EditSongDialog.svelte';
     import SessionDialog from './dialogs/SessionDialog.svelte';
     import ResourceViewer from './dialogs/ResourceViewer.svelte';
-    import type { SongEntity } from '../domain/song.logic';
+    import type { SongEntity } from '../domain/song.entity';
     import { type DialogArgs, DialogKeys, type Dialog } from '../model/dialog.model';
     import type { UserSession } from '../model/session.model';
     import type { Song, UserSong } from '../model/song.model';

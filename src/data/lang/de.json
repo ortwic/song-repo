@@ -143,9 +143,10 @@
     "target-progress": "Geschätzter Fortschritt",
     "notes": {
       "placeholder": "Notizen zur Session...",
-      "label": "Notizen"
+      "label": "Notizen & Labels"
     },
-    "summary": "Zusammenfassung"
+    "summary": "Zusammenfassung",
+    "touch-count-info": "Wie oft hast Du dieses Stück geübt?"
   },
   "songs": {
     "columns": {
@@ -170,7 +171,8 @@
       "country": "Land",
       "year": "Jahr",
       "signature": "Tonangaben",
-      "notes": "Notizen"
+      "notes": "Notizen",
+      "touch-count": "Gesamtläufe"
     },
     "menu": {
       "open": "Öffne Ressource",

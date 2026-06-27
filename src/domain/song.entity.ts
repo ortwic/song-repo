@@ -1,8 +1,10 @@
+import { DateTime } from 'luxon';
 import type { SessionRecord } from '../model/session.model';
 import type { SongParams } from '../model/settings.model';
 import type { UserSong } from '../model/song.model';
 import type { TrainingFocus } from '../model/types';
 import { refData } from '../service/base/app-cache.setup';
+import { type DateLike, toDate } from '../utils/date.helper';
 import { defineMethods } from '../utils/object.helper';
 
 // Maximum accumulated intensity per focus area across all sessions.
@@ -89,6 +91,14 @@ export function createSongEntity(song: UserSong, config: SongParams) {
         }
     }
 
+    /**
+     * Inverts progressFromMastery() for import use cases where only an overall
+     * progress % is known. Fills mastery areas sequentially in canonical order,
+     * completing each area to its target before starting the next.
+     * The last required area may receive a fractional value.
+     *
+     * @param targetProgress - Estimated progress (0–100) from imported data.
+     */
     function masteryFromProgress(): UserSong['mastery'] {
         function setFractionalValue(area: TrainingFocus, target: number) {
             // Binary search for the fractional value in this area that hits the target.
@@ -127,6 +137,45 @@ export function createSongEntity(song: UserSong, config: SongParams) {
         return result;
     }
 
+    /**
+     * Computes the raw exponential decay factor based on elapsed time and touch history.
+     * 
+     * Formula from Ebbinghaus' forgetting curve:  e^(-t / S)
+     * where R is retention, t is elapsed time, and S is stability.
+     * 
+     * Note: Stability uses sqrt instead of log for better UX.
+     * @returns a value in [0, 1] where 1 = no decay, 0 = fully forgotten.
+     */
+    function retentionFactor(changedAt: DateLike, touchCount = 1): number {
+        const elapsed = DateTime.now().diff(toDate(changedAt), 'days').days;
+        if (elapsed > config.retentionGracePeriodDays) {
+            // Propably more realistic but retentionHalfLifeDays not applicable
+            // const stability = config.retentionHalfLifeDays * Math.log(1 + touchCount);
+
+            const stability = (config.retentionHalfLifeDays / Math.LN2) * Math.sqrt(touchCount);
+            const factor = Math.exp(-elapsed / stability);
+            return Math.max(factor, 0);
+        }
+        return 1.0;
+    }
+    
+    /**
+     * Returns the effective progress delta caused by retention decay.
+     * Always ≤ 0 — represents how many progress points to subtract from song.progress.
+     *
+     * The starting point of the decay curve is boosted toward 1.0 based on
+     * lastRetention and sessionBoostFactor, so a recently played song never
+     * drops immediately to its pre-session retention level.
+     * @returns The retention delta.
+     */
+    function retentionDelta(fromPreview?: Pick<UserSong, 'changedAt' | 'touchCount' | 'lastRetention'>): number {
+        const changedAt = fromPreview?.changedAt ?? song.changedAt;
+        const touchCount = fromPreview?.touchCount ?? song.touchCount;
+        const lastRetention = fromPreview?.lastRetention ?? song.lastRetention ?? 1.0;
+        const boostedFactor = lastRetention + config.retentionSessionBoostFactor * (1.0 - lastRetention);
+        return Math.round(boostedFactor * retentionFactor(changedAt, touchCount) * 100) - 100;
+    }
+
     function suggestInitialFocus(): TrainingFocus[] {
         if (song.mastery && Object.keys(song.mastery).length > 0) {
             return suggestFromMasteryGaps();
@@ -156,7 +205,6 @@ export function createSongEntity(song: UserSong, config: SongParams) {
 
     return defineMethods(song, {
         getFocusTarget,
-
         statusFromProgress(newValue: number, oldValue: number): boolean {
             if (newValue > PROGRESS_THRESHOLD_DONE) {
                 song.status = 'done';
@@ -176,21 +224,11 @@ export function createSongEntity(song: UserSong, config: SongParams) {
             }
             return false;
         },
-
         progressFromMastery,
-
-        /**
-         * Inverts progressFromMastery() for import use cases where only an overall
-         * progress % is known. Fills mastery areas sequentially in canonical order,
-         * completing each area to its target before starting the next.
-         * The last required area may receive a fractional value.
-         *
-         * @param targetProgress - Estimated progress (0–100) from imported data.
-         */
         masteryFromProgress,
-
+        retentionFactor,
+        retentionDelta,
         suggestInitialFocus,
-
         quickSessionFocus(): SessionRecord['areas'] {
             const delta = config.quickSessionDeltaPerArea;
             return Object.fromEntries(suggestInitialFocus().map((key) => [key, delta]));

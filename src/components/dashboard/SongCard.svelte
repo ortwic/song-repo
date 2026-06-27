@@ -1,7 +1,7 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
     import { SEARCH_ACTIONS, SongActions } from '../../domain/song.actions';
-    import { createSongEntity } from '../../domain/song.logic';
+    import { createSongEntity } from '../../domain/song.entity';
     import type { UserSong } from '../../model/song.model';
     import { type Status, STATUS_KEYS } from '../../model/types';
     import SessionService from '../../service/user/user-session.service';
@@ -69,7 +69,11 @@
         </button>
     </header>
     <span class="genre-watermark" style={genreWatermarkStyle}>{song.genre}</span>
-    <ProgressBar bind:value={song.progress} disabled={!settings.advanced.editProgressManually}></ProgressBar>
+    <ProgressBar 
+        bind:value={song.progress} 
+        delta={songEntity.retentionDelta()} 
+        disabled={!settings.advanced.editProgressManually}
+    ></ProgressBar>
 
     <div class="tags">
         {#if signature}<span class="label" title="{$t('songs.columns.signature')}">{signature}</span>{/if}

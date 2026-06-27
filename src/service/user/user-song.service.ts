@@ -60,6 +60,7 @@ export default class SongService {
             fav: false,
             status: 'todo',
             progress: 0,
+            touchCount: 0,
             mastery: {},
             genre: '',
             style: '',

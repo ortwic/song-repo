@@ -3,7 +3,7 @@ import { logAction } from '../store/notification.store';
 import { type DialogArgs, DialogKeys, type Dialog } from '../model/dialog.model';
 import type { UserSession } from '../model/session.model';
 import type { UserSettings } from '../model/settings.model';
-import type { SongEntity } from './song.logic';
+import type { SongEntity } from './song.entity';
 import type { Song, UserSong } from '../model/song.model';
 import type { Status } from '../model/types';
 import type SessionService from '../service/user/user-session.service';
