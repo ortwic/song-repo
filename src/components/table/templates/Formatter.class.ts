@@ -3,7 +3,7 @@ import { marked } from 'marked';
 import type { CellComponent, GroupComponent } from 'tabulator-tables';
 import type { ColumnDefinition } from '../tabulator/types';
 import { SongActions } from '../../../domain/song.actions';
-import { process } from '../../../domain/song.logic';
+import { createSongEntity } from '../../../domain/song.logic';
 import type { UserSettings } from '../../../model/settings.model';
 import type { UserSong } from '../../../model/song.model';
 import { STATUS_KEYS } from '../../../model/types';
@@ -62,7 +62,7 @@ export default class Formatter {
 
     get progress(): Partial<ColumnDefinition> { 
         const { songService } = this.actions;
-        const settingsAsync = this.actions.userSettings({} as UserSettings);
+        const settingsAsync = this.actions.userSettings();
         const progress = (data: UserSong) => {
             if (data.progress > 0) {
                 const value = Math.floor((data.progress - 1) / 10) * 10 + 1;
@@ -78,6 +78,8 @@ export default class Formatter {
                 bar.value = Number(cell.getValue()) ?? 0;
                 
                 settingsAsync.then(({ advanced }) => {
+                    const entity = createSongEntity(song, advanced);
+
                     if (advanced.editProgressManually) {
                         bar.min = formatterParams.min;
                         bar.max = formatterParams.max;
@@ -85,9 +87,9 @@ export default class Formatter {
                             const [newValue, oldValue] = ev.detail;
                             cell.setValue(newValue);
                             
-                            process(song).statusFromProgress(newValue, oldValue);
+                            entity.statusFromProgress(newValue, oldValue);
                             song.progress = newValue;
-                            song.mastery = process(song).masteryFromProgress();
+                            song.mastery = entity.masteryFromProgress();
                             
                             songService.setSong(song).then(() => cell.getRow().reformat());
                         });

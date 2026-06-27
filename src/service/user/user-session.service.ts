@@ -1,12 +1,12 @@
 import { DateTime } from 'luxon';
 import { orderBy, Timestamp } from 'firebase/firestore';
 import { Observable, switchMap } from 'rxjs';
-import { stores } from '../base/firestore.service';
+import type { SongEntity } from '../../domain/song.logic';
+import type { TrainingFocus } from '../../model/types';
 import type { UserSession } from '../../model/session.model';
-import type { UserSong } from '../../model/song.model';
+import { stores } from '../base/firestore.service';
 import { currentUser } from './auth.service';
-import { process } from '../../domain/song.logic';
-import SongService from './user-song.service';
+import type SongService from './user-song.service';
 
 const QUICK_DURATION_MINUTES = 10;
 
@@ -21,24 +21,50 @@ export default class SessionService {
         );
     }
 
-    async addQuick(song: UserSong, durationMinutes = QUICK_DURATION_MINUTES): Promise<void> {
-        await this.addSession(song, {
+    async addQuick(entity: SongEntity, durationMinutes = QUICK_DURATION_MINUTES): Promise<void> {
+        await this.addSession(entity, {
             type: 'quick',
-            songId: song.id,
-            title: song.title,
+            songId: entity.id,
+            title: entity.title,
             durationMinutes: durationMinutes,
-            areas: process(song).quickSessionFocus(),
+            areas: entity.quickSessionFocus(),
         });
     }
 
-    async addSession(song: UserSong, session: Partial<UserSession>) {
+    async addSession(entity: SongEntity, session: Partial<UserSession>) {
         if (session != null) {
-            process(song).applyPropsFrom(session);
-            session.status = song.status;
-            session.progress = song.progress;
+            this.updateSong(entity, session);
+            session.status = entity.status;
+            session.progress = entity.progress;
 
-            await this.service.setSong(song);
+            await this.service.setSong(entity);
             await this.setSession(session);
+        }
+    }
+
+    private updateSong(entity: SongEntity, session: Partial<UserSession>): void {
+        const isImportMode = session.type === 'import';
+        if (session.tags) {
+            entity.tags = session.tags;
+        }
+        if (session.notes) {
+            entity.notes = session.notes;
+        }
+        if (session.areas) {
+            if (!entity.mastery) {
+                entity.mastery = {};
+            }
+            for (const [key, value] of Object.entries(session.areas) as [TrainingFocus, number][]) {
+                entity.mastery[key] = isImportMode ? value : (entity.mastery[key] ?? 0) + value;
+            }
+        }
+
+        const derivedProgress = !isImportMode ? entity.progressFromMastery() ?? session.progress : session.progress;
+        const oldProgress     = entity.progress ?? 0;
+        const newProgress     = derivedProgress ?? oldProgress;
+        if (newProgress !== oldProgress) {
+            entity.progress = newProgress;
+            entity.statusFromProgress(newProgress, oldProgress);
         }
     }
 

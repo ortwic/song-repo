@@ -5,22 +5,50 @@ import UserService, { currentProfile } from './user.service';
 
 const userService = new UserService();
 
+export const DEFAULT_USER_SETTINGS: UserSettings = {
+    advanced: {
+        editProgressManually: false,
+        quickSessionDeltaPerArea: 1,
+    },
+    dashboard: {
+        setupStatus: {
+            hasSongs: false,
+            hasProfile: false,
+            hasShared: false,
+        },
+        showFilter: true,
+        recentDays: 1,
+        limit: 4,
+        status: {
+            todo: true,
+            repeat: true,
+            wip: true,
+            done: false,
+            archived: false,
+        },
+        tag: null,
+        fav: null,
+    },
+    googleDrive: {
+        rootFolderId: '',
+        rootFolderName: '',
+        showFolders: true,
+        viewMode: 'grid',
+    },
+} as const;
+
 export class UserSettingsService {
     private ready: Promise<UserSettings> | null = null;
 
-    async loadSettingsAsync(target: UserSettings, defaults: UserSettings): Promise<UserSettings> {
+    async loadSettings(defaults = DEFAULT_USER_SETTINGS): Promise<UserSettings> {
         if (!this.ready) {
-            this.ready = firstValueFrom(this.loadSettings()).then((settings) => {
-                if (settings) {
-                    Object.assign(target, deepmerge(defaults, settings));
-                }
-                return settings ?? defaults;
-            });
+            this.ready = firstValueFrom(this.fetchSettings())
+                .then((stored) => deepmerge(defaults, stored ?? {}));
         }
         return this.ready;
     }
 
-    private loadSettings(): Observable<UserSettings | null> {
+    private fetchSettings(): Observable<UserSettings | null> {
         return currentProfile.pipe(
             filter((p) => !!p?.id),
             take(1),

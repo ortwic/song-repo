@@ -4,6 +4,7 @@
     import EditSongDialog from './dialogs/EditSongDialog.svelte';
     import SessionDialog from './dialogs/SessionDialog.svelte';
     import ResourceViewer from './dialogs/ResourceViewer.svelte';
+    import type { SongEntity } from '../domain/song.logic';
     import { type DialogArgs, DialogKeys, type Dialog } from '../model/dialog.model';
     import type { UserSession } from '../model/session.model';
     import type { Song, UserSong } from '../model/song.model';
@@ -21,8 +22,8 @@
     });
 
     let sessionTracker: SessionDialog = $state();
-    setContext<Dialog<UserSong, UserSession>>(DialogKeys.sessionTracker, {
-        open: (args?: UserSong) => sessionTracker.showDialog(args)
+    setContext<Dialog<SongEntity, UserSession>>(DialogKeys.sessionTracker, {
+        open: (args?: SongEntity) => sessionTracker.showDialog(args)
     });
 
     let resourceViewer: ResourceViewer = $state();

@@ -1,51 +1,18 @@
-import deepmerge from 'deepmerge';
 import type { UserSettings } from '../model/settings.model';
 import { currentProfile } from '../service/user/user.service';
-import { userSettingsService } from '../service/user/user-settings.service';
-
-const defaults: UserSettings = {
-    advanced: {
-        editProgressManually: false
-    },
-    dashboard: {
-        setupStatus: {
-            hasSongs: false,
-            hasProfile: false,
-            hasShared: false,
-        },
-        showFilter: true,
-        recentDays: 1,
-        limit: 4,
-        status: {
-            todo: true,
-            repeat: true,
-            wip: true,
-            done: false,
-            archived: false,
-        },
-        tag: null,
-        fav: null,
-    },
-    googleDrive: {
-        rootFolderId: '',
-        rootFolderName: '',
-        showFolders: true,
-        viewMode: 'grid',
-    },
-};
+import { DEFAULT_USER_SETTINGS, userSettingsService } from '../service/user/user-settings.service';
 
 export const MAX_SONGVIEW_DAYS = 30;
 export const MAX_SONGVIEW_LIMIT = 20;
-export const settings = $state<UserSettings>({ ...defaults });
+export const settings = $state<UserSettings>({ ...DEFAULT_USER_SETTINGS });
 
 let previousId: string | null = null;
 
-currentProfile.subscribe((profile) => {
+currentProfile.subscribe(async (profile) => {
     if (profile?.id && profile.id !== previousId) {
         previousId = profile.id;
         userSettingsService.reset();
-        Object.assign(settings, deepmerge(defaults, {}));
-        userSettingsService.loadSettingsAsync(settings, defaults);
+        Object.assign(settings, await userSettingsService.loadSettings(DEFAULT_USER_SETTINGS));
     }
 });
 

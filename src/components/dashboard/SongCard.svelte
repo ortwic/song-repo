@@ -1,6 +1,7 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
     import { SEARCH_ACTIONS, SongActions } from '../../domain/song.actions';
+    import { createSongEntity } from '../../domain/song.logic';
     import type { UserSong } from '../../model/song.model';
     import { type Status, STATUS_KEYS } from '../../model/types';
     import SessionService from '../../service/user/user-session.service';
@@ -21,6 +22,7 @@
     const sessionService = new SessionService(songService);
     const actions = new SongActions(songService, sessionService);
     const signature = [song.key, song.time, song.bpm].filter(Boolean).join(' | ');
+    const songEntity = $derived(createSongEntity(song, settings.advanced));
 
     let searchPopupMenu: PopupMenu = $state();
     let statusPopupMenu: PopupMenu = $state();
@@ -61,7 +63,7 @@
         <button
             class="clear sm"
             title={$t('sessions.menu.quick')}
-            onclick={() => sessionService.addQuick(song)}
+            onclick={() => sessionService.addQuick(songEntity)}
         >
             <i class="icon bx bxs-bolt"></i>
         </button>
@@ -105,7 +107,7 @@
         <button
             class="clear sm max-width"
             title={$t('sessions.menu.start')}
-            onclick={() => actions.runSession(song)}
+            onclick={() => actions.runSession(songEntity)}
         >
             <i class="icon bx bx-play"></i>
             <span class="no-wrap">{$t('sessions.menu.start')}</span>

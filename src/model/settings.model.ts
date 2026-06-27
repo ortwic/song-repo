@@ -30,6 +30,10 @@ export interface DashboardSettings {
     } | null;
 }
 
-export interface AdvancedSettings {
+export interface AdvancedSettings extends SongParams {
     editProgressManually: boolean;
+}
+
+export interface SongParams {
+    quickSessionDeltaPerArea: number;
 }

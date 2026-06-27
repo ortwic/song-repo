@@ -3,6 +3,7 @@ import { logAction } from '../store/notification.store';
 import { type DialogArgs, DialogKeys, type Dialog } from '../model/dialog.model';
 import type { UserSession } from '../model/session.model';
 import type { UserSettings } from '../model/settings.model';
+import type { SongEntity } from './song.logic';
 import type { Song, UserSong } from '../model/song.model';
 import type { Status } from '../model/types';
 import type SessionService from '../service/user/user-session.service';
@@ -51,19 +52,15 @@ export const SEARCH_ACTIONS: SearchAction[] = [
 
 export class SongActions {
     readonly editSongDialog = getContext<Dialog<UserSong, UserSong>>(DialogKeys.editSong);
-    readonly sessionDialog = getContext<Dialog<UserSong, UserSession>>(DialogKeys.sessionTracker);
+    readonly sessionDialog = getContext<Dialog<SongEntity, UserSession>>(DialogKeys.sessionTracker);
     readonly resourceDialog = getContext<Dialog<Song>>(DialogKeys.resourceViewer);
     readonly confirmDialog = getContext<Dialog<DialogArgs, boolean>>(DialogKeys.confirmDialog);
     
     constructor(public songService: SongService, public sessionService: SessionService) {
     }
 
-    async userSettings(defaults?: UserSettings): Promise<UserSettings> {
-        return userSettingsService.loadSettingsAsync({} as UserSettings, defaults ?? {
-            advanced: {},
-            dashboard: {},
-            googleDrive: {}
-        } as UserSettings);
+    async userSettings(): Promise<UserSettings> {
+        return userSettingsService.loadSettings();
     }
 
     async showResource(song: UserSong): Promise<void> {
@@ -95,10 +92,10 @@ export class SongActions {
         await this.songService.setSong(song);
     }
 
-    async runSession(song: UserSong): Promise<UserSession> {
-        const session = await this.sessionDialog.open(song);
+    async runSession(entity: SongEntity): Promise<UserSession> {
+        const session = await this.sessionDialog.open(entity);
         if (session) {
-            await this.sessionService.addSession(song, session);
+            await this.sessionService.addSession(entity, session);
         }
         return session;
     }

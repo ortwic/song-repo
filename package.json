@@ -34,7 +34,7 @@
     "preview": "vite preview",
     "mobile": "ngrok http 5173",
     "check": "svelte-check --tsconfig ./tsconfig.json",
-    "test:unit": "vitest"
+    "spec": "vitest spec"
   },
   "devDependencies": {
     "@googlemaps/js-api-loader": "^1.16.6",

@@ -3,16 +3,16 @@
     import { getContext } from 'svelte';
     import { cubicOut } from 'svelte/easing';
     import { slide } from 'svelte/transition';
+    import { SEARCH_ACTIONS } from '../../domain/song.actions';
+    import type { SongEntity } from '../../domain/song.logic';
     import { DialogKeys, type Dialog } from '../../model/dialog.model';
     import type { TrainingFocus, SessionKind, TrainingAreas } from '../../model/types';
     import type { Intensity, UserSession } from '../../model/session.model';
     import type { Song, UserSong } from '../../model/song.model';
     import { FOCUS_KEYS, SESSIONKIND_KEYS } from '../../model/types';
     import { createDeferred, type DeferredResult } from '../../utils/promise.helper';
-    import { SEARCH_ACTIONS } from '../../domain/song.actions';
-    import { process } from '../../domain/song.logic';
-    import PopupMenu from '../ui/PopupMenu.svelte';
     import ConfirmDialog from './ConfirmDialog.svelte';
+    import PopupMenu from '../ui/PopupMenu.svelte';
     import Expand from '../ui/elements/Expand.svelte';
     import TagEditor from '../ui/elements/TagEditor.svelte';
     import ProgressBar from '../ui/elements/ProgressBar.svelte';
@@ -40,7 +40,7 @@
     };
 
     let visible = $state(false);
-    let song = $state<UserSong | null>(null);
+    let songEntity = $state<SongEntity | null>(null);
     let session = $state({} as UserSession);
     let selectedKind = $state<SessionKind>('practice');
     let activeFocus = $state<Map<TrainingFocus, Intensity>>(new Map());
@@ -58,26 +58,26 @@
     const isImportMode = $derived(selectedKind === 'import');
     const availableFocusKeys = $derived(FOCUS_KEYS.filter((key) => !activeFocus.has(key)));
     const previewProgress = $derived.by(() => {
-        if (song) {
-            const mergedMastery = { ...song.mastery };
+        if (songEntity) {
+            const mergedMastery = { ...songEntity.mastery };
             for (const [key, value] of activeFocus) {
                 mergedMastery[key] = isImportMode
                     ? value
                     : (mergedMastery[key] ?? 0) + value;
             }
-            return process({ ...song, mastery: mergedMastery }).progressFromMastery();
+            return songEntity.progressFromMastery(mergedMastery);
         }
     });
 
-    export function showDialog(targetSong: UserSong): Promise<UserSession> {
-        song = targetSong;
-        session.songId = targetSong.id;
-        session.title = targetSong.title;
-        session.tags = targetSong.tags ?? [];
-        session.notes = targetSong.notes ?? '';
+    export function showDialog(model: SongEntity): Promise<UserSession> {
+        songEntity = model;
+        session.songId = model.id;
+        session.title = model.title;
+        session.tags = model.tags ?? [];
+        session.notes = model.notes ?? '';
         elapsedSeconds = 0;
         
-        const manualProgressMode = targetSong.progress && !Object.keys(targetSong.mastery ?? {}).length;
+        const manualProgressMode = model.progress && !Object.keys(model.mastery ?? {}).length;
         setSessionKind(manualProgressMode ? 'import' : 'practice');
 
         visible = true;
@@ -96,12 +96,12 @@
     }
 
     function initFocusFromSuggestion(): void {
-        const suggested = process(song).suggestInitialFocus();
+        const suggested = songEntity.suggestInitialFocus();
         activeFocus = new Map(suggested.map((key) => [key, INIT_FOCUS_VALUE]));
     }
 
     function initFocusFromProgress(): void {
-        const mastery = process(song).masteryFromProgress();
+        const mastery = songEntity.masteryFromProgress();
         activeFocus = new Map(
             (Object.entries(mastery) as [TrainingFocus, number][]).map(([key, value]) => [key, value])
         );
@@ -109,7 +109,7 @@
 
     function updateFocusFromProgress(progress: number): void {
         // bind:value updates progress one cycle late
-        song.progress = progress;
+        songEntity.progress = progress;
         initFocusFromProgress();
     }
 
@@ -128,14 +128,14 @@
         next.delete(key);
         activeFocus = next;
         if (isImportMode) {
-            song.mastery[key] = 0;
-            song.progress = previewProgress;
+            songEntity.mastery[key] = 0;
+            songEntity.progress = previewProgress;
         }
     }
 
     function sumFocusValue(key: TrainingFocus, value: Intensity) {
-        if (!isImportMode && song.mastery && song.mastery[key]) {
-            return Math.ceil(song.mastery[key] + value);
+        if (!isImportMode && songEntity.mastery && songEntity.mastery[key]) {
+            return Math.ceil(songEntity.mastery[key] + value);
         }
         return Math.ceil(value);
     }
@@ -143,20 +143,20 @@
     function setFocusValue(key: TrainingFocus, value: Intensity): void {
         activeFocus = new Map(activeFocus).set(key, value);
         if (isImportMode) {
-            song.progress = previewProgress;
+            songEntity.progress = previewProgress;
         }
     }
 
     function done(confirmed: boolean): void {
         clearInterval(+intervalId);
-        if (!confirmed || !song) {
+        if (!confirmed || !songEntity) {
             sessionResult?.resolve(null);
         } else {
             session.type = selectedKind;
             session.areas = activeFocus.size > 0 ? Object.fromEntries(activeFocus) : undefined;
 
             if (isImportMode) {
-                session.progress = song.progress;
+                session.progress = songEntity.progress;
             } else {
                 session.durationMinutes = Math.max(1, Math.round(elapsedSeconds / 60));
             }
@@ -174,8 +174,8 @@
             {#if !isImportMode}
                 <span>{formatElapsed(elapsedSeconds)}</span> –
             {/if}
-            {song?.title ?? $t('sessions.dialog.title')}
-            <span>({previewProgress ?? song.progress ?? 0}%)</span>
+            {songEntity?.title ?? $t('sessions.dialog.title')}
+            <span>({previewProgress ?? songEntity.progress ?? 0}%)</span>
         </span>
     {/snippet}
 
@@ -185,9 +185,9 @@
                 onclick={(e) => searchPopupMenu?.showPopupMenu(e)}>
                 <i class="item bx bx-search"></i>
             </button>
-            {#if song?.uri}
+            {#if songEntity?.uri}
                 <button class="clear" title={$t('songs.resource.show')}
-                    onclick={() => resourceDialog.open(song)}>
+                    onclick={() => resourceDialog.open(songEntity)}>
                     <i class="item bx bx-file"></i>
                 </button>
             {/if}
@@ -202,7 +202,7 @@
                 <button class="clear" title={$t('settings.add')}
                     disabled={!availableFocusKeys.length}
                     onclick={(e) => addFocusPopupMenu?.showPopupMenu(e)}>
-                    <i class="item bx bx-plus"></i>
+                    <i class="item bx bx-plus-circle"></i>
                     {$t('sessions.menu.focus')}
                 </button>
             </span>
@@ -213,7 +213,7 @@
             <label for="progress">
                 {$t('sessions.target-progress')}
             </label>
-            <ProgressBar bind:value={song.progress} onChange={updateFocusFromProgress} />
+            <ProgressBar bind:value={songEntity.progress} onChange={updateFocusFromProgress} />
             {:else}
             <label for="progress">
                 {$t('songs.columns.progress')}
@@ -229,18 +229,20 @@
                         <i class="item bx {FOCUS_AREA_ICON[key]}"></i>
                         {$t(`sessions.focus.${key}`)}
                     </span>
-                    <input in:slide={slideParams} out:slide={slideParams}
-                        title="{sumFocusValue(key, value)}/{process(song).getFocusTarget(key)}"
-                        type="range"
-                        min={MIN_FOCUS_VALUE}
-                        max={isImportMode
-                            ? process(song).getFocusTarget(key)
-                            : MAX_FOCUS_VALUE}
-                        value={value}
-                        oninput={(e) => setFocusValue(key, Number(e.currentTarget.value))}
-                    />
-                    <span class="no-wrap" in:slide={slideParams} out:slide={slideParams}>
-                        {sumFocusValue(key, value)}
+                    <span class="range" in:slide={slideParams} out:slide={slideParams}>
+                        <input
+                            title="{sumFocusValue(key, value)}/{songEntity.getFocusTarget(key)}"
+                            type="range"
+                            min={MIN_FOCUS_VALUE}
+                            max={isImportMode
+                                ? songEntity.getFocusTarget(key)
+                                : MAX_FOCUS_VALUE}
+                            value={value}
+                            oninput={(e) => setFocusValue(key, Number(e.currentTarget.value))}
+                        />
+                        <span class="no-wrap">
+                            {sumFocusValue(key, value)}
+                        </span>
                     </span>
                     <button in:slide={slideParams} out:slide={slideParams}
                         class="clear" title={$t('settings.remove')}
@@ -275,7 +277,7 @@
 
 <PopupMenu bind:this={searchPopupMenu}>
     {#each SEARCH_ACTIONS as action}
-        <button class="option" onclick={() => song && window.open(action.url(song), '_blank')}>
+        <button class="option" onclick={() => songEntity && window.open(action.url(songEntity), '_blank')}>
             <i class="bx {action.icon}"></i>
             {action.label}
         </button>
@@ -318,9 +320,15 @@
 
     .focus-list {
         display: grid;
-        grid-template-columns: 1fr 2fr 1.4rem 1.4rem;
-        gap: 8px;
+        grid-template-columns: 1fr 2fr 1.4rem;
+        gap: .4rem;
         padding: .4rem 0;
+
+        .range {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: .4rem;
+        }
     }
 
     textarea {
