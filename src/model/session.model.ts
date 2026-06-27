@@ -7,6 +7,7 @@ export interface SessionRecord {
     type: SessionType;
     status?: Status;
     progress?: number;
+    touchCount?: number;
     areas: TrainingAreas<Intensity>;
     tags?: string[];
     notes?: string;

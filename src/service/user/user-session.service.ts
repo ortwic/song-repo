@@ -26,6 +26,7 @@ export default class SessionService {
             type: 'quick',
             songId: entity.id,
             title: entity.title,
+            touchCount: entity.touchCount,
             durationMinutes: durationMinutes,
             areas: entity.quickSessionFocus(),
         });
@@ -66,7 +67,7 @@ export default class SessionService {
             entity.progress = newProgress;
         }
 
-        entity.touchCount = (entity.touchCount ?? 0) + 1;
+        entity.touchCount = (session.touchCount ?? 0) + 1;
         entity.lastRetention = entity.retentionFactor(entity.changedAt);
     }
 

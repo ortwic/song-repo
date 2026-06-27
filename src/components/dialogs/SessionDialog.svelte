@@ -79,6 +79,7 @@
         songEntity = model;
         session.songId = model.id;
         session.title = model.title;
+        session.touchCount = model.touchCount;
         session.tags = model.tags ?? [];
         session.notes = model.notes ?? '';
         elapsedSeconds = 0;
@@ -200,7 +201,7 @@
                 <label for="touchCount">
                     &Sigma; {$t('songs.columns.touch-count')}
                 </label>
-                <input class="input" type="number" min="1" disabled={!isImportMode} bind:value={songEntity.touchCount} />
+                <input class="input" type="number" min="1" disabled={!isImportMode} bind:value={session.touchCount} />
                 <i class="item bx bx-info-circle" title={$t('sessions.touch-count-info')}
                     class:primary={isImportMode}>
                 </i>
