@@ -7,7 +7,7 @@
     import type { ColumnDefinition } from '../components/table/tabulator/types';
     import { createColumnBuilder, createEditor } from '../components/table/templates/column.helper';
     import { autoFilter, dateFilter, rangeFilter } from '../components/table/templates/filter.helper';
-    import { groupByFormatter } from '../components/table/templates/Formatter.class';
+    import { formatFactory, groupByFormatter } from '../components/table/templates/formatters.svelte';
     import Table from '../components/table/Table.svelte';
     import FileDrop from '../components/table/FileDrop.svelte';
     import { buildActionMenu } from '../components/table/templates/actionMenu.helper';
@@ -34,7 +34,8 @@
     const actions = new SongActions(service, sessionService);
     const actionMenu = buildActionMenu(actions, $t);
     const songs = service.usersongs$;
-    const column = createColumnBuilder(actions);
+    const column = createColumnBuilder();
+    const format = formatFactory(actions);
 
     const genreList = refData.genres.map((v) => v.name);
     const editor = createEditor(updateHandler(), readonly);
@@ -49,32 +50,32 @@
             responsive: 0,
             visible: false,
         },
-        column('Σ', 0, '__summary', undefined, 'string', 'default', summaryFormatter(readonly), {
+        column('Σ', 0, '__summary', undefined, 'string', summaryFormatter(readonly), {
             visible: false,
             clickMenu: !readonly ? actionMenu : undefined,
         }),
-        column('✮', -1, 'fav', '50', undefined, 'favorite', editor()),
-        column(t, -1, 'status', '50', 'string', 'status', autoFilter(), editor(), {
+        column('✮', -1, 'fav', '50', undefined, format('favorite'), editor()),
+        column(t, -1, 'status', '50', 'string', format('status'), autoFilter(), editor(), {
             visible: !readonly,
             clickMenu: !readonly ? actionMenu : undefined,
             hozAlign: 'center',
         }),
-        column(t, 2, 'progress', '136', 'number', 'progress', rangeFilter(), editor(), { visible: !readonly }),
-        column(t, 1, 'artistImg', '30', undefined, 'image'),
-        column(t, 1, 'artist', '200', 'string', 'default', autoFilter(), editor('list'), { validator: 'required' }),
-        column(t, 1, 'title', '200', 'string', 'default', autoFilter(), editor('input'), { validator: 'required' }),
-        column(t, 2, 'genre', '136', 'string', 'genre', autoFilter(), editor('list', genreList)),
-        column(t, 2, 'style', '136', 'string', 'default', autoFilter(), editor('list')),
-        column(t, 3, 'key', '80', 'string', 'default', autoFilter(), editor('input')),
-        column(t, 3, 'time', '80', 'string', 'default', autoFilter(), editor('input')),
-        column(t, 3, 'bpm', '80', 'string', 'default', autoFilter(), editor('input')),
-        column(t, 3, 'difficulty', '50', 'number', 'difficulty', editor('number')),
-        column(t, 4, 'source', '200', 'string', 'marked', autoFilter(), editor('input'), { visible: !readonly }),
-        column(t, 4, 'uri', '200', 'string', 'url', autoFilter(), editor('input')),
-        column(t, 5, 'features', '200', 'string', 'label', autoFilter(), editor('input')),
-        column(t, 6, 'tags', '200', 'string', 'label', autoFilter(), editor('input'), { visible: !readonly }),
-        column(t, 7, 'learnedOn', '136', 'date', 'timestamp', dateFilter(), editor('date'), { visible: !readonly }),
-        column(t, 7, 'changedAt', '136', 'date', 'timestamp', dateFilter(), { visible: !readonly }),
+        column(t, 2, 'progress', '136', 'number', format('progress'), rangeFilter(), editor(), { visible: !readonly }),
+        column(t, 1, 'artistImg', '30', undefined, format('image')),
+        column(t, 1, 'artist', '200', 'string', autoFilter(), editor('list'), { validator: 'required' }),
+        column(t, 1, 'title', '200', 'string', autoFilter(), editor('input'), { validator: 'required' }),
+        column(t, 2, 'genre', '136', 'string', format('genre'), autoFilter(), editor('list', genreList)),
+        column(t, 2, 'style', '136', 'string', autoFilter(), editor('list')),
+        column(t, 3, 'key', '80', 'string', autoFilter(), editor('input')),
+        column(t, 3, 'time', '80', 'string', autoFilter(), editor('input')),
+        column(t, 3, 'bpm', '80', 'string', autoFilter(), editor('input')),
+        column(t, 3, 'difficulty', '50', 'number', format('difficulty'), editor('number')),
+        column(t, 4, 'source', '200', 'string', format('marked'), autoFilter(), editor('input'), { visible: !readonly }),
+        column(t, 4, 'uri', '200', 'string', format('url'), autoFilter(), editor('input')),
+        column(t, 5, 'features', '200', 'string', format('label'), autoFilter(), editor('input')),
+        column(t, 6, 'tags', '200', 'string', format('label'), autoFilter(), editor('input'), { visible: !readonly }),
+        column(t, 7, 'learnedOn', '136', 'date', format('timestamp'), dateFilter(), editor('date'), { visible: !readonly }),
+        column(t, 7, 'changedAt', '136', 'date', format('timestamp'), dateFilter(), { visible: !readonly }),
         { title: 'id', field: 'id', visible: false },
     ];
 

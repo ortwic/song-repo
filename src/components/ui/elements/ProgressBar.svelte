@@ -1,7 +1,7 @@
 <script lang="ts">
     import { Tween } from 'svelte/motion';
     import { cubicOut } from 'svelte/easing';
-    import '../../web/ProgressBar.component';
+    import '../../wc/ProgressBar.component';
 
     interface Props {
         value?: number;

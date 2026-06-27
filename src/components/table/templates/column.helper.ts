@@ -1,7 +1,5 @@
 import type { CellEditEventCallback, ColumnComponent, Editor, ListEditorParams, RowComponent, SortDirection } from 'tabulator-tables';
 import type { ColumnDefinition } from '../tabulator/types';
-import Formatter from './Formatter.class';
-import { SongActions } from '../../../domain/song.actions';
 import type { MessageFormatter } from '../../../service/base/i18n.setup';
 
 type Sorter =
@@ -25,15 +23,13 @@ type Sorter =
         sorterParams: NonNullable<unknown>,
     ) => number);
 
-export function createColumnBuilder(actions: SongActions) {
-    const formatter = new Formatter(actions);
+export function createColumnBuilder() {
     return (
         t: string | MessageFormatter,
         responsive: number,
         field: string,
         width: string,
         sorter: Sorter,
-        formatKey: keyof Formatter,
         ...more: Partial<ColumnDefinition>[]
     ): ColumnDefinition => {
         const title = typeof t === 'string' ? t : t(`songs.columns.${field}`);
@@ -47,7 +43,6 @@ export function createColumnBuilder(actions: SongActions) {
                 resizable: true,
                 headerMenu: [],
             },
-            formatter[formatKey],
             ...more
         );
     };
