@@ -31,7 +31,6 @@ const omitUndefinedFields = (data: object) => {
     });
     return data;
 };
-export const uniqueKey = (...array: string[]) => array.join('').trim().replaceAll(/\W/g, '');
 
 export const snapshotOptions: SnapshotOptions = {
     serverTimestamps: 'none'

@@ -3,8 +3,9 @@ import { where } from 'firebase/firestore';
 import { authState } from 'rxfire/auth';
 import { from, map, Observable, of, startWith, switchMap } from 'rxjs';
 import { auth } from '../base/firebase.setup';
-import { stores, uniqueKey } from '../base/firestore.service';
+import { stores } from '../base/firestore.service';
 import type { UserProfile } from '../../model/user.model';
+import { docId } from '../../utils/object.helper';
 
 const empty = { alias: '' } as UserProfile;
 
@@ -48,7 +49,7 @@ export default class UserService {
     }
 
     private async resolveUniqueAlias(user: User): Promise<string> {
-        const alias = uniqueKey(user.displayName ?? user.email.split('@')[0]);
+        const alias = docId(user.displayName ?? user.email.split('@')[0]);
         const docs = await stores.user.getDocumentsAsync<UserProfile>(where('alias', '>=', alias), where('alias', '<', alias + '\uf8ff'));
         const existing = new Set(docs.map(d => d.alias));
 

@@ -2,8 +2,9 @@ import { auditTime, Observable, of, switchMap, tap } from 'rxjs';
 import { orderBy, Timestamp } from 'firebase/firestore';
 import type { UserLink } from '../../model/user.model';
 import { currentUser } from './auth.service';
-import { stores, uniqueKey } from '../base/firestore.service';
+import { stores } from '../base/firestore.service';
 import { resolveIcon } from './icon.util';
+import { docId } from '../../utils/object.helper';
 
 export class UserLinkService {
     private uid: string | undefined;
@@ -26,7 +27,7 @@ export class UserLinkService {
 
     async addLink(url: string, title?: string, order?: number): Promise<string> {
         return this.setLink({
-            id: uniqueKey(url),
+            id: docId(url),
             url,
             title,
             icon: resolveIcon(url),

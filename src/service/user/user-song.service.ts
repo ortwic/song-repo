@@ -1,9 +1,10 @@
 import { Observable, switchMap, map, auditTime, BehaviorSubject, shareReplay } from 'rxjs';
 import { Timestamp, orderBy, where } from 'firebase/firestore';
 import { currentUser } from './auth.service';
-import { stores, uniqueKey } from '../base/firestore.service';
+import { stores } from '../base/firestore.service';
 import type { UserSong } from '../../model/song.model';
 import { buildIndex } from '../../utils/index-builder';
+import { docId } from '../../utils/object.helper';
 
 export const viewStoreId = 'songs.v1';
 
@@ -16,7 +17,7 @@ const appendGeneratedId = (uid: string, song: UserSong, ...more: object[]): User
             song,
             {
                 uid,
-                id: uniqueKey(song.artist ?? 'n/a', song.title),
+                id: docId(song.artist ?? 'n/a', song.title),
             },
             ...more
         )

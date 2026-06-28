@@ -5,6 +5,7 @@
     import SongService from '../../service/user/user-song.service';
     import { createSongEntity } from '../../domain/song.entity';
     import { showInfo } from '../../store/notification.store';
+    import { firstValueFrom } from 'rxjs';
 
     function updateSettings() {
         saveSettings('advanced', settings.advanced);
@@ -22,16 +23,15 @@
         updateSettings();
     }
 
-    function migrateLegacyProgress() {
+    async function migrateLegacyProgress() {
         const service = new SongService();
-        service.usersongs$.subscribe(async (songs) => {
-            await Promise.all(songs
-                .map(song => createSongEntity(song, settings.advanced).migrateLegacyProgress())
-                .filter(Boolean)
-                .map(song => service.setSong(song))
-            );
-            showInfo('✔ ' + $t('settings.advanced.migrate-button'));
-        });
+        const songs = await firstValueFrom(service.usersongs$);
+        await Promise.all(songs
+            .map(song => createSongEntity(song, settings.advanced).migrateLegacyProgress())
+            .filter(Boolean)
+            .map(song => service.setSong(song))
+        );
+        showInfo('✔ ' + $t('settings.advanced.migrate-button'));
     }
 </script>
 
