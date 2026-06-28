@@ -177,6 +177,7 @@
     "menu": {
       "open": "Open resource",
       "search": "Search for resources",
+      "search-musescore": "Search on Musescore",
       "search-sheet-music": "Search sheet music",
       "search-tutorial": "Search tutorial",
       "search-lyrics": "Search lyrics",

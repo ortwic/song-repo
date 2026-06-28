@@ -7,7 +7,7 @@
     import type { UserSong } from '../../model/song.model';
     import { unfold } from '../ui/helper/transition.helper';
     import { toDate, truncateTime } from '../../utils/date.helper';
-    import { toStore } from '../../utils/rx.store';
+    import { toStore } from '../../interop/rx.store';
     import SongCard from './SongCard.svelte';
     import SongStats from './SongStats.svelte';
 

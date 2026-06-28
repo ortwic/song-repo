@@ -18,7 +18,6 @@
     import NotFound from './routes/NotFound.svelte';
     import { currentUser } from './service/user/auth.service';
     import { setupI18n } from './service/base/i18n.setup';
-    import { showError } from './store/notification.store';
 
     const usertitle = currentUser.pipe(map(autoRedirect));
     const version = import.meta.env.PACKAGE_VERSION;
@@ -40,11 +39,7 @@
         '*': NotFound,
     };
 
-    onMount(async () => {
-        await setupI18n()
-            .catch(err => showError(`Error loading translations: ${err}`));
-        setAppReady();
-
+    onMount(() => {
         if (window.innerWidth <= 600) {
             const metaTag = document.createElement('meta');
             metaTag.name = 'viewport';
@@ -72,6 +67,9 @@
     <title>{$usertitle || 'Loading...'}</title>
 </svelte:head>
 
+{#await setupI18n().then(setAppReady)}
+    &nbsp;
+{:then} 
 <Context>
     <Menu footer="Version {version}" />
 
@@ -79,3 +77,9 @@
 
     <Snackbar />
 </Context>
+{:catch error}
+  <p>
+    Error while loading translations: <br />
+    { error }
+  </p>
+{/await}
