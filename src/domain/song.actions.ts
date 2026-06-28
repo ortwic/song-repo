@@ -83,7 +83,7 @@ export class SongActions {
 
     async changeStatus(song: UserSong, status: Status): Promise<void> {
         song.status = status;
-        await this.songService.setSong(song);
+        await this.songService.updateSong(song);
     }
 
     async runSession(entity: SongEntity): Promise<UserSession> {

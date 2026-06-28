@@ -36,7 +36,7 @@ export default class SessionService {
             session.status = entity.resolvedStatus();
             session.progress = entity.progress;
 
-            await this.service.setSong(entity);
+            await this.service.updateSong(entity);
             await this.setSession(session);
         }
     }

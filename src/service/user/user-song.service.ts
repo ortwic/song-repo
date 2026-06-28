@@ -78,9 +78,13 @@ export default class SongService {
         return this.setSong(newSong, true);
     }
 
+    async updateSong(song: UserSong): Promise<string> {
+        song.changedAt = Timestamp.now();
+        return this.setSong(song);
+    }
+
     async setSong(song: UserSong, forceLocalUpdate = false): Promise<string> {
         if (this.uid) {
-            song.changedAt = Timestamp.now();
             if (song.id) {
                 await stores.usersongs(this.uid).setDocument(song, { merge: true });
                 return song.id;

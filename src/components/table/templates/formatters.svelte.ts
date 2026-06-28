@@ -97,7 +97,7 @@ export function formatFactory(songService: SongService, settings: AdvancedSettin
                             cell.setValue(value);
                             song.progress = value;
                             song.mastery = entity.masteryFromProgress();
-                            songService.setSong(song).then(() => cell.getRow().reformat());
+                            songService.updateSong(song).then(() => cell.getRow().reformat());
                         };
                     } else {
                         props.disabled = true;
