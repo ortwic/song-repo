@@ -4,6 +4,7 @@
     import TitlebarMenu from '../components/menus/TitlebarMenu.svelte';
     import Profile from '../components/settings/Profile.svelte';
     import LinkHub from '../components/settings/LinkHub.svelte';
+    import Advanced from '../components/settings/Advanced.svelte';
     import GoogleDrive from '../components/settings/GoogleDrive.svelte';
     import { slideFade } from '../components/ui/helper/transition.helper';
     import Expand from '../components/ui/elements/Expand.svelte';
@@ -39,13 +40,13 @@
     </TitlebarMenu>
     <section>
         {#if $currentUser}
-        <Expand title={$t('settings.profile')}>
+        <Expand title={$t('settings.sections.profile')}>
             <p>
                 <Profile />
             </p>
         </Expand>
 
-        <Expand title="Linkhub">
+        <Expand title={$t('settings.sections.linkhub')}>
             <p>
                 <LinkHub />
             </p>
@@ -60,7 +61,7 @@
         </Expand>
         {/if}
 
-        <Expand title={$t('settings.view')}>
+        <Expand title={$t('settings.sections.view')}>
             <p>{$t('settings.reset-text')}</p>
             <div class="right">
                 <button class="default" onclick={resetViews}>{$t('settings.reset-cookies')}</button>
@@ -68,7 +69,13 @@
         </Expand>
 
         {#if $currentUser}
-            <Expand open={false} title={$t('settings.danger-zone')}>
+            <Expand open={false} title={$t('settings.sections.advanced')}>
+                <p>
+                    <Advanced />
+                </p>
+            </Expand>
+            
+            <Expand open={false} title={$t('settings.sections.danger-zone')}>
                 <div class="section danger-text">
                     <span>
                         <input id="delete" type="checkbox" bind:checked={confirmDelete} />

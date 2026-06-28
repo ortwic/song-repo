@@ -93,7 +93,7 @@
         <li class="link-item" animate:flip={{ duration: 150 }}>
             {#if editingId === link.id}
                 <div class="link-form" in:slideFade={{ duration: 150 }}>
-                    <input class="input" type="text" placeholder={$t('settings.linktree.title')} bind:value={editTitle} />
+                    <input class="input" type="text" placeholder={$t('settings.linkhub.title')} bind:value={editTitle} />
                     <input class="input" type="url"  placeholder="URL*" bind:value={editUrl} />
                     <div class="form-actions">
                         <button class="sm clear" onclick={() => saveEdit(link)}>
@@ -146,13 +146,13 @@
 </ul>
 {:else}
     <div class="section empty-hint">
-        <span>{$t('settings.linktree.empty')}</span>
+        <span>{$t('settings.linkhub.empty')}</span>
     </div>
 {/if}
 
 {#if addingLink}
     <div class="link-form new-form" in:slideFade={{ duration: 150 }}>
-        <input class="input" type="text" placeholder={$t('settings.linktree.title')} bind:value={newTitle} />
+        <input class="input" type="text" placeholder={$t('settings.linkhub.title')} bind:value={newTitle} />
         <input class="input" type="url"  placeholder="URL *"    bind:value={newUrl} />
         <div class="form-actions">
             <button class="primary clear" onclick={addLink} disabled={!newUrl.trim()}>

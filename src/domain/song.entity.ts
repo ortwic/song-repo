@@ -213,6 +213,19 @@ export function createSongEntity(song: UserSong, config: SongParams) {
         return ['finishing', 'memorize', 'expression'];
     }
 
+    function migrateLegacyProgress(): UserSong | undefined {
+        const copy = { ...song };
+        if (copy.mastery === undefined || copy.mastery === null) {
+            copy.mastery = masteryFromProgress();
+            copy.touchCount = Object.entries(copy.mastery ?? {}).reduce((acc, [key, value]) => acc + Math.round(value), 0);
+            if (copy.fav) {
+                copy.touchCount *= 3;
+            }
+            return copy;
+        }
+        return undefined;
+    }
+
     return defineMethods(song, {
         getFocusTarget,
         progressFromMastery,
@@ -220,6 +233,7 @@ export function createSongEntity(song: UserSong, config: SongParams) {
         retentionFactor,
         retentionDelta,
         resolvedStatus: () => song.status || derivedStatus(song.progress ?? 0),
+        migrateLegacyProgress,
         suggestInitialFocus,
         quickSessionFocus(): SessionRecord['areas'] {
             const delta = config.quickSessionDeltaPerArea;

@@ -276,7 +276,6 @@
   },
   "settings": {
     "title": "Einstellungen",
-    "view": "Ansicht",
     "alias": "Alias",
     "alias-exists": "Alias existiert bereits",
     "reset-views": "Ansichten zurücksetzen",
@@ -287,11 +286,9 @@
     "delete-profile": "Profil löschen",
     "delete-advice": "Sie sollten Ihre Daten vor dem Löschen exportieren.",
     "delete-done": "Ihr Konto wurde erfolgreich gelöscht!",
-    "profile": "Profil",
     "profile-updated": "Profil aktualisiert",
     "update-profile": "Speichern",
-    "danger-zone": "Gefahrenzone",
-    "linktree": {
+    "linkhub": {
       "empty": "Noch keine Links vorhanden.",
       "title": "Titel"
     },
@@ -304,6 +301,27 @@
     "move-up": "Nach oben",
     "alias-available": "Alias ​​verfügbar",
     "remove": "Entfernen",
+    "sections": {
+      "profile": "Profil",
+      "advanced": "Erweiterte Einstellungen (Vorsicht!)",
+      "danger-zone": "Gefahrenzone",
+      "view": "Ansicht",
+      "linkhub": "Eigene Liste von Links verwalten"
+    },
+    "advanced": {
+        "edit-progress-manually":          "Fortschritt manuell überschreiben",
+        "quick-session-delta-per-area":    "Fortschrittsinkrement pro Schwerpunkt (Schnellsession)",
+        "quick-session-duration-minutes":  "Dauer der Schnellsession (Minuten)",
+        "progress-archived-threshold":     "Ab wann gilt ein Stück als archiviert? (%)",
+        "progress-done-threshold":         "Ab wann gilt ein Stück als fertig? (%)",
+        "progress-repeat-threshold":       "Ab wie viel % Vergessen wird \"Wiederholen\" ausgelöst?",
+        "retention-half-life-days":        "Nach wie vielen Tagen ist die Hälfte vergessen?",
+        "retention-session-boost-factor":  "Wie hoch startet die Vergessenskurve nach einer Session?",
+        "retention-grace-period-days":     "Ab wann setzt die Vergessenskurve ein? (Tage)",
+        "suggested-mastery-focus-count":   "Anzahl vorgeschlagener Schwerpunkte",
+        "migrate-legacy-progress":         "Alte Fortschrittsdaten in Mastery interpolieren",
+        "migrate-button":                  "Fortschritt interpolieren"
+    },
     "drive": {
       "loading": "Öffne Drive",
       "error": "Unbekannter Fehler beim Öffnen von Google Drive",

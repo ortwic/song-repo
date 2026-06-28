@@ -279,7 +279,6 @@
   },
   "settings": {
     "title": "Settings",
-    "view": "View",
     "alias": "alias",
     "alias-exists": "Alias already exists",
     "reset-views": "Reset views",
@@ -290,11 +289,9 @@
     "delete-profile": "Delete profile",
     "delete-advice": "You should export your data before deletion.",
     "delete-done": "Your account was deleted successfully!",
-    "profile": "Profile",
     "profile-updated": "Profile updated",
     "update-profile": "Save",
-    "danger-zone": "Danger Zone",
-    "linktree": {
+    "linkhub": {
       "empty": "No links available yet.",
       "title": "Title"
     },
@@ -307,6 +304,27 @@
     "move-down": "Move down",
     "alias-available": "Alias available",
     "remove": "Remove",
+    "sections": {
+      "advanced": "Advanced settings (caution!)",
+      "profile": "Profile",
+      "danger-zone": "Danger Zone",
+      "view": "View",
+      "linkhub": "Manage your custom link list"
+    },
+    "advanced": {
+        "edit-progress-manually":          "Override progress manually",
+        "quick-session-delta-per-area":    "Progress increment per focus area (quick session)",
+        "quick-session-duration-minutes":  "Quick session duration (minutes)",
+        "progress-archived-threshold":     "When is a piece considered archived? (%)",
+        "progress-done-threshold":         "When is a piece considered finished? (%)",
+        "progress-repeat-threshold":       "How much forgetting triggers \"Repeat\"? (%)",
+        "retention-half-life-days":        "After how many days is half of it forgotten?",
+        "retention-session-boost-factor":  "How high does the forgetting curve start after a session?",
+        "retention-grace-period-days":     "When does the forgetting curve kick in? (days)",
+        "suggested-mastery-focus-count":   "Number of suggested focus areas",
+        "migrate-legacy-progress":         "Interpolate legacy progress data to mastery",
+        "migrate-button":                  "Interpolate progress"
+    },
     "drive": {
       "loading": "Opening Drive…",
       "error": "Unknown error opening Google Drive",
