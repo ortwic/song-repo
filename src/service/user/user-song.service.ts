@@ -17,7 +17,6 @@ const appendGeneratedId = (uid: string, song: UserSong, ...more: object[]): User
             {
                 uid,
                 id: uniqueKey(song.artist ?? 'n/a', song.title),
-                createdAt: Timestamp.now(),
             },
             ...more
         )
@@ -68,6 +67,7 @@ export default class SongService {
             bpm: '',
             features: [],
             learnedOn: '',
+            createdAt: Timestamp.now(),
             ...song
         } as UserSong);
 
@@ -101,7 +101,7 @@ export default class SongService {
 
     async importSongs(data: UserSong[]): Promise<UserSong[]> {
         if (data) {
-            const songs = data.map((s) => appendGeneratedId(this.uid, s, { importedAt: new Date() }));
+            const songs = data.map((s) => appendGeneratedId(this.uid, s, { importedAt: Timestamp.now() }));
             if (this.uid) {
                 await stores.usersongs(this.uid).setDocuments(songs, { merge: true });
             } else { 

@@ -8,7 +8,6 @@
     "event-calendar": "Public event calendar",
     "events-empty": "No events found!",
     "donate": "Donate Song-Repo",
-    "masterdata": "Master data",
     "login": {
       "login": "Login",
       "email": "Email",
@@ -129,7 +128,6 @@
       "title": "Session"
     },
     "focus": {
-      "label": "Focus Areas",
       "melody": "Melody",
       "harmony": "Harmony",
       "rhythm": "Rhythm",
@@ -146,20 +144,23 @@
       "label": "Notes & Labels"
     },
     "summary": "Summary",
-    "touch-count-info": "How often did you practice this piece?"
+    "total-runs": "Total runs",
+    "total-runs-info": "How often did you practice this piece?"
   },
   "songs": {
     "columns": {
+      "__summary": "Σ",
       "fav": "Favorites",
       "progress": "Progress",
       "status": "Status",
+      "touchCount": "Σ",
       "artistImg": "Image",
       "artist": "Artist",
       "title": "Title",
       "genre": "Genre",
       "style": "Style",
       "source": "Source",
-      "uri": "URI to resource",
+      "uri": "URI",
       "key": "Key",
       "time": "Time",
       "bpm": "BPM",
@@ -168,11 +169,12 @@
       "tags": "Labels",
       "learnedOn": "Learned",
       "changedAt": "Last changed",
+      "createdAt": "Created",
       "country": "Country",
       "year": "Year",
       "signature": "Signature",
-      "notes": "Notes",
-      "touch-count": "Total runs"
+      "mastery": "Focus Areas",
+      "notes": "Notes"
     },
     "menu": {
       "open": "Open resource",

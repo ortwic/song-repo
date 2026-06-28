@@ -7,6 +7,7 @@
         type GroupComponent,
         type Options,
         Tabulator,
+        AccessorModule,
         ClipboardModule,
         DownloadModule,
         EditModule,
@@ -42,6 +43,7 @@
     window['luxon'] = luxon;
 
     Tabulator.registerModule([
+        AccessorModule,
         ClipboardModule,
         DownloadModule,
         EditModule,

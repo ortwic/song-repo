@@ -1,6 +1,7 @@
+import { t } from 'svelte-i18n';
+import { get } from 'svelte/store';
 import type { CellEditEventCallback, ColumnComponent, Editor, ListEditorParams, RowComponent, SortDirection } from 'tabulator-tables';
 import type { ColumnDefinition } from '../tabulator/types';
-import type { MessageFormatter } from '../../../service/base/i18n.setup';
 
 type Sorter =
     | undefined
@@ -25,14 +26,13 @@ type Sorter =
 
 export function createColumnBuilder() {
     return (
-        t: string | MessageFormatter,
         responsive: number,
         field: string,
         width: string,
         sorter: Sorter,
         ...more: Partial<ColumnDefinition>[]
     ): ColumnDefinition => {
-        const title = typeof t === 'string' ? t : t(`songs.columns.${field}`);
+        const title = get(t)(`songs.columns.${field}`);
         return Object.assign(
             {
                 title,

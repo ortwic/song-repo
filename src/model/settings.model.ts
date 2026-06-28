@@ -36,6 +36,7 @@ export interface AdvancedSettings extends SongParams {
 
 export interface SongParams {
     quickSessionDeltaPerArea: number;
+    quickSessionDurationMinutes: number;
     suggestedMasteryFocusCount: number;
     progressDoneThreshold: number;
     progressArchivedThreshold: number;

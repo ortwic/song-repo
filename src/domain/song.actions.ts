@@ -2,13 +2,11 @@ import { getContext } from 'svelte';
 import { logAction } from '../store/notification.store';
 import { type DialogArgs, DialogKeys, type Dialog } from '../model/dialog.model';
 import type { UserSession } from '../model/session.model';
-import type { UserSettings } from '../model/settings.model';
 import type { SongEntity } from './song.entity';
 import type { Song, UserSong } from '../model/song.model';
 import type { Status } from '../model/types';
 import type SessionService from '../service/user/user-session.service';
 import type SongService from '../service/user/user-song.service';
-import { userSettingsService } from '../service/user/user-settings.service';
 
 export interface SearchAction {
     label: string;
@@ -56,11 +54,7 @@ export class SongActions {
     readonly resourceDialog = getContext<Dialog<Song>>(DialogKeys.resourceViewer);
     readonly confirmDialog = getContext<Dialog<DialogArgs, boolean>>(DialogKeys.confirmDialog);
     
-    constructor(public songService: SongService, public sessionService: SessionService) {
-    }
-
-    async userSettings(): Promise<UserSettings> {
-        return userSettingsService.loadSettings();
+    constructor(private songService: SongService, private sessionService: SessionService) {
     }
 
     async showResource(song: UserSong): Promise<void> {
@@ -98,6 +92,10 @@ export class SongActions {
             await this.sessionService.addSession(entity, session);
         }
         return session;
+    }
+
+    async quickSession(entity: SongEntity, durationMinutes: number): Promise<void> {
+        return this.sessionService.addQuick(entity, durationMinutes);
     }
 
     async delete(song: UserSong, args?: DialogArgs): Promise<void> {

@@ -55,6 +55,7 @@ export interface UserSong extends Song, ProgressModel {
     notes?: string;
     createdAt?: Timestamp;
     changedAt?: Timestamp;
+    importedAt?: Timestamp;
     learnedOn?: Date;
     fav?: boolean;
     tags?: string[];

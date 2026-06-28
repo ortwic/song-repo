@@ -4,6 +4,7 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
     advanced: {
         editProgressManually: false,
         quickSessionDeltaPerArea: 1,
+        quickSessionDurationMinutes: 10,
         progressArchivedThreshold: 10,
         progressDoneThreshold: 90,
         progressRepeatThreshold: 10,

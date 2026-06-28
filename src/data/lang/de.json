@@ -7,7 +7,6 @@
     "event-calendar": "Veranstaltungeskalender",
     "events-empty": "Keine Veranstaltungen gefunden!",
     "donate": "An Song-Repo spenden",
-    "masterdata": "Stammdaten",
     "login": {
       "login": "Login",
       "email": "E-Mail",
@@ -129,7 +128,6 @@
       "title": "Session"
     },
     "focus": {
-      "label": "Schwerpunkte",
       "melody": "Melodie",
       "harmony": "Harmonie",
       "rhythm": "Rhythmus",
@@ -146,20 +144,23 @@
       "label": "Notizen & Labels"
     },
     "summary": "Zusammenfassung",
-    "touch-count-info": "Wie oft hast Du dieses Stück geübt?"
+    "total-runs": "Gesamtläufe",
+    "total-runs-info": "Wie oft hast Du dieses Stück geübt?"
   },
   "songs": {
     "columns": {
+      "__summary": "Σ",
       "fav": "Favoriten",
       "progress": "Fortschritt",
       "status": "Status",
+      "touchCount": "Σ",
       "artistImg": "Bild",
       "artist": "Künstler",
       "title": "Titel",
       "genre": "Genre",
       "style": "Style",
       "source": "Quelle",
-      "uri": "URI zur Ressource",
+      "uri": "URI",
       "key": "Tonart",
       "time": "Taktart",
       "bpm": "Tempo",
@@ -168,11 +169,12 @@
       "tags": "Labels",
       "learnedOn": "Gelernt",
       "changedAt": "Geändert",
+      "createdAt": "Erstellt",
       "country": "Land",
       "year": "Jahr",
       "signature": "Tonangaben",
-      "notes": "Notizen",
-      "touch-count": "Gesamtläufe"
+      "mastery": "Schwerpunkte",
+      "notes": "Notizen"
     },
     "menu": {
       "open": "Öffne Ressource",

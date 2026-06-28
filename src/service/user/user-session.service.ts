@@ -8,8 +8,6 @@ import { stores } from '../base/firestore.service';
 import { currentUser } from './auth.service';
 import type SongService from './user-song.service';
 
-const QUICK_DURATION_MINUTES = 10;
-
 export default class SessionService {
     private uid: string | undefined;
     readonly sessions: Observable<UserSession[]>;
@@ -21,7 +19,7 @@ export default class SessionService {
         );
     }
 
-    async addQuick(entity: SongEntity, durationMinutes = QUICK_DURATION_MINUTES): Promise<void> {
+    async addQuick(entity: SongEntity, durationMinutes: number): Promise<void> {
         await this.addSession(entity, {
             type: 'quick',
             songId: entity.id,

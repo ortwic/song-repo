@@ -197,12 +197,10 @@
                     <i class="item bx bx-file"></i>
                 </button>
             {/if}
-            <span class="no-wrap" style="padding: 0 1rem">
-                <label for="touchCount">
-                    &Sigma; {$t('songs.columns.touch-count')}
-                </label>
+            <span class="no-wrap" style="padding: 0 1rem" title={$t('sessions.total-runs')}>
+                <label for="touchCount">{$t('songs.columns.touchCount')}</label>
                 <input class="input" type="number" min="1" disabled={!isImportMode} bind:value={session.touchCount} />
-                <i class="item bx bx-info-circle" title={$t('sessions.touch-count-info')}
+                <i class="item bx bx-info-circle" title={$t('sessions.total-runs-info')}
                     class:primary={isImportMode}>
                 </i>
             </span>
@@ -248,7 +246,7 @@
             {/if}
         </div>
 
-        <Expand title={$t('sessions.focus.label')}>
+        <Expand title={$t('songs.columns.mastery')}>
             <div class="focus-list">
                 {#each activeFocus as [key, value]}
                     <span class="no-wrap" in:slide={slideParams} out:slide={slideParams}>

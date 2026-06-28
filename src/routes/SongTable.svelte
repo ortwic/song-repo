@@ -15,11 +15,11 @@
     import { SongActions } from '../domain/song.actions';
     import type { UserSong } from '../model/song.model';
     import type { TableView } from '../model/table-view.model';
-    import type { MessageFormatter } from '../service/base/i18n.setup';
     import { refData } from '../service/base/app-cache.setup';
     import SessionService from '../service/user/user-session.service';
     import SongService, { viewStoreId } from '../service/user/user-song.service';
     import { showError, showInfo } from '../store/notification.store';
+    import { settings } from '../store/user-settings.svelte';
 
     interface Props {
         params?: { id?: string };
@@ -32,16 +32,16 @@
     const service = new SongService(sharedUid);
     const sessionService = new SessionService(service);
     const actions = new SongActions(service, sessionService);
-    const actionMenu = buildActionMenu(actions, $t);
+    const actionMenu = buildActionMenu(actions, settings.advanced);
     const songs = service.usersongs$;
     const column = createColumnBuilder();
-    const format = formatFactory(actions);
+    const format = formatFactory(service, settings.advanced);
 
     const genreList = refData.genres.map((v) => v.name);
     const editor = createEditor(updateHandler(), readonly);
 
     // https://tabulator.info/docs/5.4/edit#editor-list
-    const columns = (t: MessageFormatter): ColumnDefinition[] => [
+    const columns: ColumnDefinition[] = [
         {
             title: '',
             field: '__responsive',
@@ -50,32 +50,35 @@
             responsive: 0,
             visible: false,
         },
-        column('Σ', 0, '__summary', undefined, 'string', summaryFormatter(readonly), {
+        column(0, '__summary', undefined, 'string', summaryFormatter(readonly), {
             visible: false,
             clickMenu: !readonly ? actionMenu : undefined,
         }),
-        column('✮', -1, 'fav', '50', undefined, format('favorite'), editor()),
-        column(t, -1, 'status', '50', 'string', format('status'), autoFilter(), editor(), {
+        column(-1, 'fav', '50', undefined, format('favorite'), editor()),
+        column(-1, 'status', '50', 'string', format('status'), autoFilter(), editor(), {
             visible: !readonly,
             clickMenu: !readonly ? actionMenu : undefined,
             hozAlign: 'center',
         }),
-        column(t, 2, 'progress', '136', 'number', format('progress'), rangeFilter(), editor(), { visible: !readonly }),
-        column(t, 1, 'artistImg', '30', undefined, format('image')),
-        column(t, 1, 'artist', '200', 'string', autoFilter(), editor('list'), { validator: 'required' }),
-        column(t, 1, 'title', '200', 'string', autoFilter(), editor('input'), { validator: 'required' }),
-        column(t, 2, 'genre', '136', 'string', format('genre'), autoFilter(), editor('list', genreList)),
-        column(t, 2, 'style', '136', 'string', autoFilter(), editor('list')),
-        column(t, 3, 'key', '80', 'string', autoFilter(), editor('input')),
-        column(t, 3, 'time', '80', 'string', autoFilter(), editor('input')),
-        column(t, 3, 'bpm', '80', 'string', autoFilter(), editor('input')),
-        column(t, 3, 'difficulty', '50', 'number', format('difficulty'), editor('number')),
-        column(t, 4, 'source', '200', 'string', format('marked'), autoFilter(), editor('input'), { visible: !readonly }),
-        column(t, 4, 'uri', '200', 'string', format('url'), autoFilter(), editor('input')),
-        column(t, 5, 'features', '200', 'string', format('label'), autoFilter(), editor('input')),
-        column(t, 6, 'tags', '200', 'string', format('label'), autoFilter(), editor('input'), { visible: !readonly }),
-        column(t, 7, 'learnedOn', '136', 'date', format('timestamp'), dateFilter(), editor('date'), { visible: !readonly }),
-        column(t, 7, 'changedAt', '136', 'date', format('timestamp'), dateFilter(), { visible: !readonly }),
+        column(2, 'progress', '136', 'number', format('progress'), rangeFilter(), editor(), { visible: !readonly }),
+        column(1, 'artistImg', '30', undefined, format('image')),
+        column(1, 'artist', '200', 'string', autoFilter(), editor('list'), { validator: 'required' }),
+        column(1, 'title', '200', 'string', autoFilter(), editor('input'), { validator: 'required' }),
+        column(4, 'uri', '30', 'string', format('resource'), autoFilter()),
+        column(2, 'touchCount', '40', 'number', autoFilter(), editor('number')),
+        column(2, 'genre', '136', 'string', format('genre'), autoFilter(), editor('list', genreList)),
+        column(2, 'style', '136', 'string', autoFilter(), editor('list')),
+        column(3, 'key', '80', 'string', autoFilter(), editor('input')),
+        column(3, 'time', '80', 'string', autoFilter(), editor('input')),
+        column(3, 'bpm', '80', 'string', autoFilter(), editor('input')),
+        column(3, 'difficulty', '50', 'number', format('difficulty'), editor('number')),
+        column(4, 'source', '200', 'string', format('marked'), autoFilter(), editor('input'), { visible: !readonly }),
+        column(5, 'features', '200', 'string', format('label'), autoFilter(), editor('input')),
+        column(6, 'tags', '200', 'string', format('label'), autoFilter(), editor('input'), { visible: !readonly }),
+        column(7, 'learnedOn', '136', 'date', format('timestamp'), dateFilter(), editor('date'), { visible: !readonly }),
+        column(7, 'changedAt', '136', 'date', format('timestamp'), dateFilter(), { visible: false }),
+        column(8, 'mastery', '200', 'string', format('label'), autoFilter(), { visible: false }),
+        column(9, 'createdAt', '136', 'date', format('timestamp'), dateFilter(), { visible: false }),
         { title: 'id', field: 'id', visible: false },
     ];
 
@@ -131,7 +134,7 @@
     <TitlebarMenu minimal={true} />
     <FileDrop onEnter={() => showInfo($t('songs.import'))} onAddJson={(detail) => importJSON(detail)}>
         <Table
-            columns={columns($t)}
+            {columns}
             data={songs}
             idField="id"
             placeholder={$t('songs.search-empty')}
