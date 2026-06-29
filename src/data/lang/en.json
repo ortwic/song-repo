@@ -211,12 +211,14 @@
     "noPersist": "You are not signed in, so data won't be persisted after leaving the app!",
     "hint-markdown": "markdown supported e.g.",
     "status": {
+      "auto": "Auto",
       "todo": "Todo",
       "wip": "Wip",
       "done": "Done",
       "repeat": "Repeat",
       "archived": "Archived"
     },
+    "recent-change": "Recently changed songs",
     "recent-wip": "Recent songs in progress",
     "recent-days": "Recent days",
     "recent-limit": "Recent limit",

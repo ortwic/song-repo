@@ -19,7 +19,11 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
             hasProfile: false,
             hasShared: false,
         },
-        showFilter: true,
+        expands: {
+            showRecentFilter: true,
+            showRecentChanges: true,
+            showRecentWip: true,
+        },
         recentDays: 1,
         limit: 4,
         status: {

@@ -278,6 +278,10 @@ i.status {
     font-size: x-small;
 }
 
+.status.auto::before {
+    content: '✨';
+}
+
 .status.todo::before {
     content: '⏳️';
 }

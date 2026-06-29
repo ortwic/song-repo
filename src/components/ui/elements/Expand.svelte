@@ -35,7 +35,8 @@
             title="{open ? $t('common.collapse') : $t('common.expand')}">
             <i class="bx bx-{open ? 'down' : 'right'}-arrow"></i>
         </button>
-        <span class="no-wrap">
+        <!-- svelte-ignore a11y_no_static_element_interactions -->
+        <span class="no-wrap" onclick={handleToggle} onkeydown={handleToggle}>
             {#if icon} <i class="bx {icon}"></i> {/if}
             {title}
         </span>

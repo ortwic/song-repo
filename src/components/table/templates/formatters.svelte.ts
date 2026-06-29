@@ -54,7 +54,7 @@ export function formatFactory(songService: SongService, settings: AdvancedSettin
                     const status = entity.resolvedStatus();
                     const element = cell.getElement();
                     element.title = status;
-                    element.classList.add('status', status, entity.status ? 'forced' : undefined);
+                    element.classList.add('status', status, !entity.status ? undefined : 'forced');
                     return hiddenValue(status);
                 },
                 accessorDownload(value: string, data: UserSong): string {

@@ -29,11 +29,13 @@ const SESSIONKIND_RECORD = {
 } as const;
 
 export const STATUS_KEYS = Object.values(STATUS_RECORD);
+export const STATUS_MODES = ['auto', ...STATUS_KEYS] as const;
 export const FOCUS_KEYS = Object.values(FOCUS_RECORD);
 export const SESSIONKIND_KEYS = Object.values(SESSIONKIND_RECORD);
 
 export type Percent = number;
 export type Status = ObjectValues<typeof STATUS_RECORD>;
+export type StatusMode = 'auto' | Status;
 export type TrainingAreas<T> = Partial<Record<TrainingFocus, T>>;
 export type TrainingFocus = ObjectValues<typeof FOCUS_RECORD>;
 

@@ -4,7 +4,7 @@ import type { CellComponent, MenuObject, MenuSeparator } from 'tabulator-tables'
 import { SEARCH_ACTIONS, SongActions } from '../../../domain/song.actions';
 import type { UserSong } from '../../../model/song.model';
 import type { AdvancedSettings } from '../../../model/settings.model';
-import { STATUS_KEYS } from '../../../model/types';
+import { STATUS_MODES } from '../../../model/types';
 import { createSongEntity } from '../../../domain/song.entity';
 
 export function buildActionMenu(actions: SongActions, settings: AdvancedSettings): Array<MenuObject<CellComponent> | MenuSeparator> {
@@ -40,7 +40,7 @@ export function buildActionMenu(actions: SongActions, settings: AdvancedSettings
         },
         {
             label: `<i class='bx bx-pie-chart'></i> ${translate('songs.menu.status-override')}`,
-            menu: STATUS_KEYS.map((status) => ({
+            menu: STATUS_MODES.map((status) => ({
                 label: `<i class='status ${status}'></i> ${translate(`songs.status.${status}`)}`,
                 action: async (e, c) => { await actions.changeStatus(songEntity(c), status); reformat(c); },
             })),

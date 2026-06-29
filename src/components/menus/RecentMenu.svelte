@@ -48,7 +48,7 @@
     </div>
 
     <div class="options">
-        <Expand bind:open={settings.dashboard.showFilter} 
+        <Expand bind:open={settings.dashboard.expands.showRecentFilter} 
             onToggle={updateFilter}
             icon='bx-filter'
             title={$t('menu.recent.filter')} >

@@ -211,12 +211,14 @@
     "noPersist": "Sie sind nicht angemeldet, daher bleiben die Daten nach dem Verlassen der App nicht erhalten!",
     "hint-markdown": "Markdown unterstützt z.B.",
     "status": {
+      "auto": "Automatisch",
       "todo": "Offen",
       "wip": "In Arbeit",
       "done": "Erledigt",
       "repeat": "Wiederholen",
       "archived": "Archiviert"
     },
+    "recent-change": "Kürzlich geänderte Songs",
     "recent-wip": "Aktuelle Songs in Arbeit",
     "recent-days": "Letzte Tage",
     "recent-limit": "Anzahl Songs",
@@ -309,18 +311,18 @@
       "linkhub": "Eigene Liste von Links verwalten"
     },
     "advanced": {
-        "edit-progress-manually":          "Fortschritt manuell überschreiben",
-        "quick-session-delta-per-area":    "Fortschrittsinkrement pro Schwerpunkt (Schnellsession)",
-        "quick-session-duration-minutes":  "Dauer der Schnellsession (Minuten)",
-        "progress-archived-threshold":     "Ab wann gilt ein Stück als archiviert? (%)",
-        "progress-done-threshold":         "Ab wann gilt ein Stück als fertig? (%)",
-        "progress-repeat-threshold":       "Ab wie viel % Vergessen wird \"Wiederholen\" ausgelöst?",
-        "retention-half-life-days":        "Nach wie vielen Tagen ist die Hälfte vergessen?",
-        "retention-session-boost-factor":  "Wie hoch startet die Vergessenskurve nach einer Session?",
-        "retention-grace-period-days":     "Ab wann setzt die Vergessenskurve ein? (Tage)",
-        "suggested-mastery-focus-count":   "Anzahl vorgeschlagener Schwerpunkte",
-        "migrate-legacy-progress":         "Alte Fortschrittsdaten in Mastery interpolieren",
-        "migrate-button":                  "Fortschritt interpolieren"
+      "edit-progress-manually": "Fortschritt manuell überschreiben",
+      "quick-session-delta-per-area": "Fortschrittsinkrement pro Schwerpunkt (Schnellsession)",
+      "quick-session-duration-minutes": "Dauer der Schnellsession (Minuten)",
+      "progress-archived-threshold": "Ab wann gilt ein Stück als archiviert? (%)",
+      "progress-done-threshold": "Ab wann gilt ein Stück als fertig? (%)",
+      "progress-repeat-threshold": "Ab wie viel % Vergessen wird \"Wiederholen\" ausgelöst?",
+      "retention-half-life-days": "Nach wie vielen Tagen ist die Hälfte vergessen?",
+      "retention-session-boost-factor": "Wie hoch startet die Vergessenskurve nach einer Session?",
+      "retention-grace-period-days": "Ab wann setzt die Vergessenskurve ein? (Tage)",
+      "suggested-mastery-focus-count": "Anzahl vorgeschlagener Schwerpunkte",
+      "migrate-legacy-progress": "Alte Fortschrittsdaten in Mastery interpolieren",
+      "migrate-button": "Fortschritt interpolieren"
     },
     "drive": {
       "loading": "Öffne Drive",

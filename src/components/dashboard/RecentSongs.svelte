@@ -2,12 +2,14 @@
     import { t } from 'svelte-i18n';
     import { flip } from 'svelte/animate';
     import { map } from 'rxjs';
-    import { settings } from '../../store/user-settings.svelte';
-    import SongService from '../../service/user/user-song.service';
-    import type { UserSong } from '../../model/song.model';
-    import { unfold } from '../ui/helper/transition.helper';
-    import { toDate, truncateTime } from '../../utils/date.helper';
+    import { createSongEntity } from '../../domain/song.entity';
     import { toStore } from '../../interop/rx.store';
+    import type { UserSong } from '../../model/song.model';
+    import SongService from '../../service/user/user-song.service';
+    import { saveSettings, settings } from '../../store/user-settings.svelte';
+    import { toDate, truncateTime } from '../../utils/date.helper';
+    import { unfold } from '../ui/helper/transition.helper';
+    import Expand from '../ui/elements/Expand.svelte';
     import SongCard from './SongCard.svelte';
     import SongStats from './SongStats.svelte';
 
@@ -23,13 +25,15 @@
         []
     );
 
+    const status = (song: UserSong) => song.status ?? createSongEntity(song, settings.advanced).resolvedStatus();
+
     // Avoid storing a reference to settings.dashboard!
     // assignment captures the object at init time and won't 
     // reflect later replacements of the property.
     const filterByFav = (song: UserSong): boolean => 
         settings.dashboard.fav !== null ? song.fav === settings.dashboard.fav : true;
     const filterByStatus = (song: UserSong): boolean => 
-        settings.dashboard.status[song.status];
+        settings.dashboard.status[status(song)];
     const filterByDate = (song: UserSong): boolean => 
         song.changedAt && settings.dashboard.recentDays > -toDate(song.changedAt).diffNow('days').days;
     const filterByTag = (song: UserSong): boolean => 
@@ -45,19 +49,21 @@
         .filter((s) => !filterByDate(s) && filterByFav(s) && filterByStatus(s) && filterByTag(s))
         .slice(0, settings.dashboard.limit)
     );
+    
+    function updateFilter() {
+        saveSettings('dashboard', settings.dashboard);
+    }
 </script>
 
 <section class="recent-songs">
     <SongStats />
-    
-    <header class="header">
-        <div class="title">
-            <i class="bx bx-history"></i>
-            {$t('songs.recent-wip')}
-        </div>
-    </header>
 
     {#if recentSongs.length > 0}
+    <Expand title={$t('songs.recent-change')}
+        icon='bx-history'
+        bind:open={settings.dashboard.expands.showRecentChanges}
+        onToggle={updateFilter}>
+        <br>
         <div id="recent-songs" class="card-grid">
             {#each recentSongs as song (song.id)}
                 <div class="card-wrapper" animate:flip={{ duration: 150 }} transition:unfold>
@@ -65,9 +71,14 @@
                 </div>
             {/each}
         </div>
-        <hr class="divider" />
+    </Expand>
+    <br>
     {/if}
 
+    <Expand title={$t('songs.recent-wip')}
+        icon='bx-stopwatch'
+        bind:open={settings.dashboard.expands.showRecentWip}
+        onToggle={updateFilter}>
     {#if currentSongs.length === 0}
         <p class="empty">{$t('songs.search-empty')}</p>
         <h3>{$t('songs.search-filter-settings')}</h3>
@@ -83,6 +94,7 @@
             {/each}
         </ul>
     {:else}
+        <br>
         <div id="current-songs" class="card-grid">
             {#each currentSongs as song (song.id)}
                 <div class="card-wrapper" animate:flip={{ duration: 150 }} transition:unfold>
@@ -91,6 +103,7 @@
             {/each}
         </div>
     {/if}
+    </Expand>
 </section>
 
 <style lang="scss">

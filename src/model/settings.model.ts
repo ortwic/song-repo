@@ -19,7 +19,11 @@ export interface DashboardSettings {
         hasProfile: boolean;
         hasShared: boolean;
     },
-    showFilter: boolean;
+    expands: {
+        showRecentFilter: boolean;
+        showRecentChanges: boolean;
+        showRecentWip: boolean;
+    },
     recentDays: number;
     limit: number;
     status: Record<Status, boolean>;

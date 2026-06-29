@@ -7,6 +7,7 @@
     import { settings, saveSettings } from '../../store/user-settings.svelte';
     import SongService from '../../service/user/user-song.service';
     import { currentMenu } from '../../store/app.store';
+    import { createSongEntity } from '../../domain/song.entity';
 
     const EMPTY_STATS = {
         todo: 0,
@@ -32,7 +33,9 @@
     onMount(() => {
         const subs = [
             service.usersongs$.subscribe((songs) => stats = STATUS_KEYS.reduce((acc, s) => {
-                acc[s] = songs.filter((song) => song.status === s).length;
+                acc[s] = songs
+                    .map((song) => createSongEntity(song, settings.advanced))
+                    .filter((song) => song.resolvedStatus() === s).length;
                 return acc;
             }, { total: songs.length } as typeof stats)),
             service.tagIndex$.subscribe((index) => mostUsedTags = index.values().take(3).toArray()),
@@ -70,7 +73,8 @@
 
     function showAdvancedFilters(ev: Event) {
         ev.preventDefault();
-        saveSettings('dashboard', { ...settings.dashboard, showFilter: true });
+        settings.dashboard.expands.showRecentFilter = true;
+        saveSettings('dashboard', settings.dashboard);
         currentMenu.set('dynamic');
     }
 

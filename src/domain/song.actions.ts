@@ -4,7 +4,7 @@ import { type DialogArgs, DialogKeys, type Dialog } from '../model/dialog.model'
 import type { UserSession } from '../model/session.model';
 import type { SongEntity } from './song.entity';
 import type { Song, UserSong } from '../model/song.model';
-import type { Status } from '../model/types';
+import type { StatusMode } from '../model/types';
 import type SessionService from '../service/user/user-session.service';
 import type SongService from '../service/user/user-song.service';
 
@@ -81,9 +81,9 @@ export class SongActions {
         await this.songService.setSong(song);
     }
 
-    async changeStatus(song: UserSong, status: Status): Promise<void> {
-        song.status = status;
-        await this.songService.updateSong(song);
+    async changeStatus(song: UserSong, status: StatusMode): Promise<void> {
+        song.status = status !== 'auto' ? status : null;
+        await this.songService.setSong(song);
     }
 
     async runSession(entity: SongEntity): Promise<UserSession> {

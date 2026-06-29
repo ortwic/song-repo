@@ -32,7 +32,7 @@ body::before {
     text-align: center;
 
     inset: 0;
-    background: url('logo.svg') center / 40vh no-repeat;
+    background: url('/logo.svg') center / 40vh no-repeat;
     transition: opacity 0.4s ease-out;
     pointer-events: none;
 }
@@ -262,11 +262,15 @@ div.titlebar {
     .text {
         display: inline-block;
         flex-grow: 1;
+        min-width: 0; // Flex-Bug: make overflow work
+        overflow: hidden;
+        white-space: nowrap;
         font-style: italic;
         padding: .4em .8em;
     }
 
     .titlebar-button {
+        flex-shrink: 0;
         color: inherit;
         background-color: transparent;
         box-shadow: unset;

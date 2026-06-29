@@ -58,6 +58,7 @@ export default class SongService {
     async addSong(song: Partial<UserSong>): Promise<string> {
         const newSong = appendGeneratedId(this.uid, {
             fav: false,
+            status: null,
             progress: 0,
             touchCount: 0,
             mastery: {},

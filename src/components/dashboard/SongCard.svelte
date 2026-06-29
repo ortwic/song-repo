@@ -3,6 +3,7 @@
     import { SEARCH_ACTIONS, SongActions } from '../../domain/song.actions';
     import { createSongEntity } from '../../domain/song.entity';
     import type { UserSong } from '../../model/song.model';
+    import { STATUS_MODES } from '../../model/types';
     import { lang } from '../../service/base/i18n.setup';
     import SessionService from '../../service/user/user-session.service';
     import SongService from '../../service/user/user-song.service';
@@ -27,6 +28,7 @@
     const lastChangeAgo = $derived(toDate(song.changedAt).toRelative({ locale: lang }));
 
     let searchPopupMenu: PopupMenu = $state();
+    let statusPopupMenu: PopupMenu = $state();
     let morePopupMenu: PopupMenu = $state();
 
     function getGenreStyles(genre: string) {
@@ -45,7 +47,10 @@
 <!-- svelte-ignore event_directive_deprecated -->
 <article class="song-card" style={gradient ? `background: ${gradient};` : undefined}>
     <header>
-        <div class="status {status}" class:forced={song.status}></div>
+        <button class="lg clear" title="{$t(`songs.status.${song.status}`)}"
+            onclick={(e) => statusPopupMenu.showPopupMenu(e)}>
+            <span class="status {status}" class:forced={!!song.status}></span>
+        </button>
         <button class="lg clear" title="{$t('songs.menu.toggle-favorite')}"
             onclick={() => actions.toggleFavorite(song)}>
             <span class="fav" class:active={song.fav}></span>
@@ -134,6 +139,23 @@
         {/each}
     </PopupMenu>
 
+    <PopupMenu bind:this={statusPopupMenu}>
+        <span class="option option-header">
+            <i class='bx bx-pie-chart'></i> &nbsp; {$t('songs.menu.status-override')}
+        </span>
+        {#each STATUS_MODES as status}
+            <button class="option"
+                class:active={(song.status ?? 'auto') === status}
+                onclick={() => actions.changeStatus(song, status)}
+            >
+                <span class="status {status}"></span>
+                <span style="margin-left: 8px">
+                    {$t(`songs.status.${status}`)}
+                </span>
+            </button>
+        {/each}
+    </PopupMenu>
+
     <PopupMenu bind:this={morePopupMenu}>
         <button class="option" title="{$t('songs.menu.edit')}"
             onclick={() => actions.editSong(song)}>
@@ -168,10 +190,6 @@
 
         &:hover {
             border-color: var(--border);
-        }
-
-        .status {
-            padding-top: .4rem;
         }
     }
 
@@ -257,6 +275,14 @@
         .active {
             border-color: var(--accent);
         }
+    }
+
+    .option-header {
+        font-size: 10pt;
+        margin: .4em;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--text-muted);
+        cursor: default;
     }
 
     footer {
