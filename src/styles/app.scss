@@ -20,25 +20,24 @@ body {
     color: var(--text);
     overflow: hidden;
     min-height: 100dvh;
-}
 
-body::before {
-    content: 'Song-Repo . . .';
-    position: fixed;
-    padding-top: 70vh;
-    font-size: 2rem;
-    font-style: italic;
-    font-weight: bold;
-    text-align: center;
+    &::before {
+        content: 'Song-Repo . . .';
+        position: fixed;
+        inset: 0;
+        padding-top: 70vh;
+        background: url('/logo.svg') center / 40vh no-repeat;
+        font-size: 2rem;
+        font-style: italic;
+        font-weight: bold;
+        text-align: center;
+        pointer-events: none;
+        transition: opacity .4s ease-out;
+    }
 
-    inset: 0;
-    background: url('/logo.svg') center / 40vh no-repeat;
-    transition: opacity 0.4s ease-out;
-    pointer-events: none;
-}
-
-body.app-ready::before {
-    opacity: 0;
+    &.app-ready::before {
+        opacity: 0;
+    }
 }
 
 main {
@@ -53,14 +52,16 @@ main {
 a {
     color: var(--accent);
     text-decoration: inherit;
-}
-a:hover,
-a:hover:visited {
-    color: var(--accent-active);
-}
-a:visited {
-    font-weight: 300;
-    color: var(--text-muted);
+
+    &:visited {
+        color: var(--text-muted);
+        font-weight: 300;
+    }
+
+    &:hover,
+    &:hover:visited {
+        color: var(--accent-active);
+    }
 }
 
 h1 {
@@ -71,8 +72,9 @@ h1 {
 h1,
 h2,
 h3 {
-    letter-spacing: -0.2pt;
+    letter-spacing: -.2pt;
 }
+
 
 button,
 button.default,
@@ -81,21 +83,102 @@ input[type='reset'],
 input[type='submit'],
 input[type='file']::file-selector-button,
 select {
+    border: 1px solid var(--surface-mid);
     border-radius: 4px;
-    border: 1px solid #606060;
-    padding: 0.4em 1.2em;
-    font-size: 1em;
+    padding: .4em 1.2em;
+    font: inherit;
     font-weight: 500;
-    font-family: inherit;
     color: var(--accent);
     background-color: var(--surface);
     cursor: pointer;
-    transition: border-color 0.25s;
-    text-shadow: 0px 0px 2px rgba(0, 0, 0, 20%);
+    text-shadow: 0 0 2px rgb(0 0 0 / 20%);
+    transition: all .25s;
 
     &:hover:not(:disabled) {
-        border-color: gray;
-        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        border-color: var(--surface-light);
+        text-shadow: 1px 1px 3px rgb(0 0 0 / 30%);
+    }
+}
+
+button {
+    &:focus,
+    &:focus-visible,
+    &.default:focus,
+    &.default:focus-visible {
+        outline: 4px auto -webkit-focus-ring-color;
+    }
+
+    &:hover {
+        color: var(--text);
+        background-color: var(--surface-light);
+    }
+
+    &.primary {
+        color: var(--surface);
+        background-color: var(--accent);
+        box-shadow: var(--shadow-md);
+
+        &:hover:not(:disabled) {
+            background-color: var(--accent-muted);
+        }
+    }
+
+    &.clear {
+        border: 0;
+        outline: 0;
+        background: transparent;
+        box-shadow: unset;
+
+        &:disabled {
+            background: transparent;
+        }
+    }
+
+    &.icon {
+        padding: 0 .5em;
+        color: var(--surface-mid);
+        opacity: .7;
+        text-shadow: 1px 1px 2px rgb(0 0 0 / 70%);
+        transition: opacity .25s;
+
+        &:hover:not(:disabled) {
+            color: var(--text);
+            opacity: 1;
+        }
+
+        i.bx {
+            font-size: 3em;
+        }
+    }
+
+    &.switch-icon {
+        width: 2em;
+        height: 2em;
+        padding: .2rem;
+        font-size: small;
+
+        color: var(--accent);
+        background: var(--bg);
+
+        border: 1px solid var(--border);
+        border-radius: 1em;
+        outline: 0;
+        text-shadow: unset;
+        transition: all .2s ease-in-out;
+
+        &.selected {
+            border-color: var(--accent);
+        }
+
+        &.disabled {
+            color: var(--surface-mid);
+            border-color: var(--surface-mid);
+            background: transparent;
+        }
+
+        &:hover:not(:disabled) {
+            color: var(--text);
+        }
     }
 
     &:disabled {
@@ -103,148 +186,85 @@ select {
         color: var(--text-muted);
         border-color: var(--surface-light);
         background-color: var(--surface);
+        box-shadow: unset;
         text-shadow: unset;
     }
 }
 
+a[role='button'],
+input[type='reset'],
+input[type='submit'],
+input[type='file']::file-selector-button {
+    &:hover {
+        background-color: var(--surface-light);
+    }
+
+    &.primary {
+        color: var(--surface);
+        background-color: var(--accent);
+        box-shadow: var(--shadow-md);
+
+        &:hover:not(:disabled) {
+            background-color: var(--accent-muted);
+        }
+    }
+
+    &:disabled {
+        color: var(--text-muted);
+        background-color: var(--surface-light);
+        box-shadow: unset;
+        cursor: not-allowed;
+    }
+}
+
+input[type='file'] {
+    &.primary::file-selector-button {
+        color: var(--surface);
+        background-color: var(--accent);
+        box-shadow: var(--shadow-md);
+    }
+
+    &.clear,
+    &.clear::file-selector-button {
+        border: 0;
+        outline: 0;
+        background: transparent;
+        box-shadow: unset;
+    }
+}
+
 option {
-    background-color: var(--surface);
     color: var(--text);
-}
-
-button:focus,
-button:focus-visible,
-button.default:focus,
-button.default:focus-visible {
-    outline: 4px auto -webkit-focus-ring-color;
-}
-
-button.icon {
-    color: var(--surface-mid);
-    padding: 0 0.5em;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 70%);
-    transition: opacity 0.25s;
-    opacity: 0.7;
-
-    &:hover:not(:disabled) {
-        opacity: 1;
-    }
-
-    i.bx {
-        font-size: 3em;
-    }
-}
-
-button.switch-icon {
-    padding: .2rem;
-    outline: 0;
-    border: 1px solid var(--border);
-    border-radius: 1em;
-    text-shadow: unset;
-    font-size: small;
-    width: 2em;
-    height: 2em;
-    transition: all .2s ease-in-out;
-
-    color: var(--accent);
-    background-color: var(--bg);
-
-    &.selected {
-        color: var(--accent);
-        border-color: var(--accent);            
-    }
-
-    &.disabled {
-        color: var(--surface-mid);
-        border-color: var(--surface-mid);
-        background-color: transparent;
-    }
-
-    &:hover:not(:disabled) {
-        color: var(--text);
-        background-color: var(--bg);
-    }
-}
-
-button.primary,
-a[role='button'].primary,
-input[type='reset'].primary,
-input[type='submit'].primary,
-input[type='file'].primary::file-selector-button {
-    color: var(--surface);
-    background-color: var(--accent);
-    box-shadow: var(--shadow-md);
-}
-
-button.primary:hover:not(:disabled),
-a[role='button'].primary:hover:not(:disabled),
-input[type='reset'].primary:hover:not(:disabled),
-input[type='submit'].primary:hover:not(:disabled),
-input[type='file'].primary:hover:not(:disabled)::file-selector-button {
-    background-color: var(--accent-muted);
-}
-
-button:disabled,
-a[role='button']:disabled,
-input[type='reset']:disabled,
-input[type='submit']:disabled,
-input[type='file']:disabled::file-selector-button {
-    color: var(--text-muted);
-    background-color: var(--surface-light);
-    box-shadow: unset;
-    cursor: not-allowed;
-}
-
-button:hover,
-a[role='button']:hover,
-input[type='reset']:hover,
-input[type='submit']:hover,
-input[type='file']:hover::file-selector-button {
-    background-color: var(--surface-light);
-}
-
-button.clear,
-button.clear:disabled,
-input[type='file'].clear,
-input[type='file'].clear::file-selector-button {
-    border: 0;
-    outline: 0;
-    box-shadow: unset;
-    background-color: transparent;
+    background: var(--surface);
 }
 
 input,
 textarea {
     font: inherit;
-    padding: 0.35em 0.6em;
+    padding: .35em .6em;
     color: var(--text);
-    background-color: var(--bg);
-}
+    background: var(--bg);
 
-input:disabled,
-textarea:disabled {
-    color: var(--text);
-    background-color: var(--surface);
-}
+    &.error,
+    &.mark:focus {
+        outline: 2px solid var(--highlight);
+        outline-offset: 1px;
+        border-radius: 4px;
+        box-shadow: 0 0 8px var(--highlight);
+    }
 
-input.error,
-textarea.error,
-input.mark:focus,
-textarea.mark:focus {
-    outline: 2px solid var(--highlight);
-    outline-offset: 1px;
-    border-radius: 4px;
-    box-shadow: 0px 0px 8px var(--highlight);
-}
+    &.valid,
+    &.valid:focus {
+        outline: 2px solid var(--accent);
+        outline-offset: 1px;
+        border-radius: 4px;
+        box-shadow: 0 0 8px var(--accent);
+    }
 
-input.valid,
-input.valid:focus,
-textarea.valid,
-textarea.valid:focus {
-    outline: 2px solid var(--accent);
-    outline-offset: 1px;
-    border-radius: 4px;
-    box-shadow: 0px 0px 8px var(--accent);
+    &:disabled {
+        color: var(--text);
+        background: var(--surface);
+    }
 }
 
 div.titlebar {
