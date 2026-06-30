@@ -5,6 +5,7 @@
     import Portal from "svelte-portal";
     import Titlebar from "../ui/elements/Titlebar.svelte";
     import type { MenuTarget } from "../../model/types";
+    import { onMount } from "svelte";
 
     interface Props {
         size: 'auto' | 'max' | 'full';
@@ -27,6 +28,17 @@
         footer,
         onClose
     }: Props = $props();
+
+    onMount(() => {
+        const handleKeydown = (event: KeyboardEvent) => {
+            if (visible && event.key === 'Escape') {
+                onClose(false);
+            }
+        };
+
+        document.addEventListener('keydown', handleKeydown);
+        return () => document.removeEventListener('keydown', handleKeydown);
+    });
 
     function confirm(event: Event) {
         event.stopPropagation();

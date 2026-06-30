@@ -276,6 +276,7 @@ div.titlebar {
     font-weight: 500;
     font-style: italic;
     width: 100%;
+    max-width: 100vw;
     max-height: 2.2em;
     padding: 0;
 
@@ -285,6 +286,7 @@ div.titlebar {
         min-width: 0; // Flex-Bug: make overflow work
         overflow: hidden;
         white-space: nowrap;
+        text-overflow: ellipsis;
         font-style: italic;
         padding: .4em .8em;
     }

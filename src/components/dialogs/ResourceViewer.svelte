@@ -39,7 +39,7 @@
 <ConfirmDialog {visible} size="full" onClose={close}>
     {#snippet header()}
         <i class="bx bx-file"></i>
-        {uri}
+        <a href={uri} target="_blank">{uri}</a>
     {/snippet}
     {#snippet footer()}
         <!-- hide confirm/decline -->
@@ -69,6 +69,17 @@
         height: 70vh;
         display: flex;
         flex-direction: column;
+    }
+
+    a {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: inherit;
+
+        &:hover {
+            color: inherit;
+            text-decoration: underline;
+        }
     }
 
     iframe {
