@@ -7,7 +7,7 @@
     import TitlebarMenu from '../components/menus/TitlebarMenu.svelte';
     import type { ColumnDefinition } from '../components/table/tabulator/types';
     import { createColumnBuilder, createEditor } from '../components/table/templates/column.helper';
-    import { autoFilter, dateFilter, rangeFilter, statusFilter } from '../components/table/templates/filter.helper';
+    import { autoFilter, dateFilter, hasValueFilter, rangeFilter, statusFilter } from '../components/table/templates/filter.helper';
     import { createIntervals, formatTemplates, groupByFormatter } from '../components/table/templates/formatters.svelte';
     import Table from '../components/table/Table.svelte';
     import FileDrop from '../components/table/FileDrop.svelte';
@@ -73,7 +73,11 @@
         column(1, 'artistImg', '30', undefined, format.image),
         column(1, 'artist', '200', 'string', autoFilter(), editor('list'), { validator: 'required' }),
         column(1, 'title', '200', 'string', autoFilter(), editor('input'), { validator: 'required' }),
-        column(4, 'uri', '30', 'string', format.resource, autoFilter()),
+        column(4, 'uri', '30', 'string', format.resource, hasValueFilter([
+            '<i class="bx bx-link"></i>',
+            '<i class="bx bx-unlink"></i>',
+            '<i class="bx bx-minus"></i>',
+        ])),
         column(2, 'touchCount', '40', 'number', autoFilter(), editor('number'), { groupByFunc: (song: SongEntity) => createIntervals(song.touchCount), }),
         column(2, 'genre', '136', 'string', format.genre, autoFilter(), editor('list', genreList)),
         column(2, 'style', '136', 'string', autoFilter(), editor('list')),

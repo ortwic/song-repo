@@ -45,6 +45,83 @@ export const dateFilter = (operator: FilterType = 'like'): Partial<ColumnDefinit
 };
 
 export const rangeFilter = (min = 0, max = 100, step = 5): Partial<ColumnDefinition> => {
+    const getMinMax = (value: string) => (value?.split('-') ?? []);
+    // copied from example // https://tabulator.info/examples/5.5#filter-header
+    const minMaxFilterEditorElement = (cell, _onRendered, success, cancel, editorParams) => {
+        const container = document.createElement('span');
+        const [min, max] = getMinMax(cell.getValue());
+
+        //create and style inputs
+        const start = document.createElement('input');
+        start.setAttribute('type', 'number');
+        start.setAttribute('placeholder', 'Min');
+        start.setAttribute('min', editorParams.min);
+        start.setAttribute('max', editorParams.max);
+        start.setAttribute('step', editorParams.step);
+        start.setAttribute('value', min);
+        start.style.padding = '4px';
+        start.style.width = '50%';
+        start.style.boxSizing = 'border-box';
+        
+        const end = start.cloneNode() as HTMLInputElement;
+        end.setAttribute('placeholder', 'Max');
+        end.setAttribute('value', max);
+
+        start.addEventListener('change', buildValues);
+        start.addEventListener('blur', buildValues);
+        start.addEventListener('keydown', keypress);
+
+        end.addEventListener('change', buildValues);
+        end.addEventListener('blur', buildValues);
+        end.addEventListener('keydown', keypress);
+
+        function buildValues() {
+            success(start.value || end.value ? `${start.value}-${end.value}` : undefined);
+        }
+
+        function keypress(ev: KeyboardEvent) {
+            if (ev.key == 'Enter') {
+                buildValues();
+            }
+
+            if (ev.key == 'Esc') {
+                cancel();
+            }
+        }
+
+        container.appendChild(start);
+        container.appendChild(end);
+
+        return container;
+    };
+
+    /**
+     * custom max min filter function
+     * @param headerValue - the value of the header filter element
+     * @param rowValue - the value of the column in this row
+     * @param rowData - the data for the row being filtered
+     * @param filterParams - params object passed to the headerFilterFuncParams property
+     * @returns must return a boolean, true if it passes the filter.
+     */
+    function minMaxFilterFunction(headerValue: string, rowValue: number) {
+        const hasValue = <T>(value: T) => value === 0 || value;
+        
+        if (hasValue(rowValue)) {
+            const [start, end] = getMinMax(headerValue);
+            if (hasValue(start)) {
+                if (hasValue(end)) {
+                    return +rowValue >= +start && +rowValue <= +end;
+                } else {
+                    return +rowValue >= +start;
+                }
+            } else if (hasValue(+end)) {
+                return +rowValue <= +end;
+            }
+        }
+
+        return true;
+    }
+
     return {
         headerFilter: minMaxFilterEditorElement,
         headerFilterParams: { min, max, step },
@@ -52,80 +129,78 @@ export const rangeFilter = (min = 0, max = 100, step = 5): Partial<ColumnDefinit
     };
 };
 
-const getMinMax = (value: string) => (value?.split('-') ?? []);
+export const hasValueFilter = (
+    labels: [hasLabel: string, noneLabel: string, allLabel: string],
+): Partial<ColumnDefinition> => {
+    type TriState = 'has' | 'none' | undefined;
+    const [hasLabel, noneLabel, allLabel] = labels;
 
-// copied from example // https://tabulator.info/examples/5.5#filter-header
-const minMaxFilterEditorElement = (cell, _onRendered, success, cancel, editorParams) => {
-    const container = document.createElement('span');
-    const [min, max] = getMinMax(cell.getValue());
-
-    //create and style inputs
-    const start = document.createElement('input');
-    start.setAttribute('type', 'number');
-    start.setAttribute('placeholder', 'Min');
-    start.setAttribute('min', editorParams.min);
-    start.setAttribute('max', editorParams.max);
-    start.setAttribute('step', editorParams.step);
-    start.setAttribute('value', min);
-    start.style.padding = '4px';
-    start.style.width = '50%';
-    start.style.boxSizing = 'border-box';
-    
-    const end = start.cloneNode() as HTMLInputElement;
-    end.setAttribute('placeholder', 'Max');
-    end.setAttribute('value', max);
-
-    start.addEventListener('change', buildValues);
-    start.addEventListener('blur', buildValues);
-    start.addEventListener('keydown', keypress);
-
-    end.addEventListener('change', buildValues);
-    end.addEventListener('blur', buildValues);
-    end.addEventListener('keydown', keypress);
-
-    function buildValues() {
-        success(start.value || end.value ? `${start.value}-${end.value}` : undefined);
-    }
-
-    function keypress(ev: KeyboardEvent) {
-        if (ev.key == 'Enter') {
-            buildValues();
+    const nextState = (current: TriState): TriState => {
+        if (current === undefined) {
+            return 'has';
         }
-
-        if (ev.key == 'Esc') {
-            cancel();
+        if (current === 'has') {
+            return 'none';
         }
-    }
+        return undefined;
+    };
 
-    container.appendChild(start);
-    container.appendChild(end);
+    const labelFor = (state: TriState): string => {
+        if (state === 'has') {
+            return hasLabel;
+        }
+        if (state === 'none') {
+            return noneLabel;
+        }
+        return allLabel;
+    };
 
-    return container;
-};
+    const hasValueFilterEditorElement = (cell, _onRendered, success, cancel, _editorParams) => {
+        const button = document.createElement('button');
+        button.style.padding = '4px';
+        button.style.width = '100%';
+        button.style.boxSizing = 'border-box';
 
-/**
- * custom max min filter function
- * @param headerValue - the value of the header filter element
- * @param rowValue - the value of the column in this row
- * @param rowData - the data for the row being filtered
- * @param filterParams - params object passed to the headerFilterFuncParams property
- * @returns must return a boolean, true if it passes the filter.
- */
-function minMaxFilterFunction(headerValue: string, rowValue: number) {
-    const hasValue = <T>(value: T) => value === 0 || value;
-    
-    if (hasValue(rowValue)) {
-        const [start, end] = getMinMax(headerValue);
-        if (hasValue(start)) {
-            if (hasValue(end)) {
-                return +rowValue >= +start && +rowValue <= +end;
-            } else {
-                return +rowValue >= +start;
+        let state: TriState = undefined;
+        button.innerHTML = labelFor(state);
+
+        button.addEventListener('click', () => {
+            state = nextState(state);
+            button.innerHTML = labelFor(state);
+            success(state);
+        });
+
+        button.addEventListener('keydown', (ev: KeyboardEvent) => {
+            if (ev.key === 'Enter' || ev.key === ' ') {
+                ev.preventDefault();
+                state = nextState(state);
+                button.innerHTML = labelFor(state);
+                success(state);
             }
-        } else if (hasValue(+end)) {
-            return +rowValue <= +end;
+            if (ev.key === 'Escape') {
+                cancel();
+            }
+        });
+
+        return button;
+    };
+
+    /**
+     * custom hasValue filter function
+     * @param headerValue - 'has' = nur Zeilen mit Wert, 'none' = nur Zeilen ohne Wert, undefined = kein Filter
+     * @param rowValue - the value of the column in this row
+     * @returns must return a boolean, true if it passes the filter.
+     */
+    function hasValueFilterFunction(headerValue: TriState, rowValue: unknown) {
+        if (headerValue === undefined) {
+            return true;
         }
+        const rowHasValue = rowValue !== undefined && rowValue !== null && rowValue !== '';
+        return headerValue === 'has' ? rowHasValue : !rowHasValue;
     }
 
-    return true;
-}
+    return {
+        headerFilter: hasValueFilterEditorElement,
+        headerFilterFunc: hasValueFilterFunction,
+    };
+};

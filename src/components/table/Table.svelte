@@ -111,7 +111,7 @@
     let tableContainer: HTMLElement = $state();
     let endOrientation = () => {};
 
-    const groupContextMenu = [
+    const groupContextMenu = import.meta.env.DEV ? [
         {
             label: 'Open all', // TODO not working
             action() {
@@ -127,7 +127,7 @@
                 $table$.getGroups().forEach((g) => g.hide());
             },
         },
-    ];
+    ] : undefined;
 
     const usePersistance = !!persistenceID;
     const options: Options = {
