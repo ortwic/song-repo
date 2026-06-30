@@ -308,7 +308,17 @@
       "advanced": "Erweiterte Einstellungen (Vorsicht!)",
       "danger-zone": "Gefahrenzone",
       "view": "Ansicht",
-      "linkhub": "Eigene Liste von Links verwalten"
+      "linkhub": "Eigene Liste von Links verwalten",
+      "account": "Kontoeinstellungen verwalten"
+    },
+    "account": {
+      "new-password": "Neues Passwort",
+      "confirm-password": "Passwort bestätigen",
+      "password-too-short": "Das Passwort muss mindestens {count} Zeichen lang sein",
+      "password-mismatch": "Passwörter stimmen nicht überein",
+      "password-match": "Passwörter stimmen überein",
+      "change-password": "Passwort ändern",
+      "change-pwd-done": "Passwort erfolgreich geändert"
     },
     "advanced": {
       "edit-progress-manually": "Fortschritt manuell überschreiben",

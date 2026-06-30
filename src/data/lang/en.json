@@ -311,21 +311,31 @@
       "profile": "Profile",
       "danger-zone": "Danger Zone",
       "view": "View",
-      "linkhub": "Manage your custom link list"
+      "linkhub": "Manage your custom link list",
+      "account": "Manage account settings"
+    },
+    "account": {
+        "new-password": "New password",
+        "confirm-password": "Confirm password",
+        "password-too-short": "Password must be at least {count} characters",
+        "password-mismatch": "Passwords do not match",
+        "password-match": "Passwords match",
+        "change-password": "Change password",
+        "change-pwd-done": "Password changed successfully"
     },
     "advanced": {
-        "edit-progress-manually":          "Override progress manually",
-        "quick-session-delta-per-area":    "Progress increment per focus area (quick session)",
-        "quick-session-duration-minutes":  "Quick session duration (minutes)",
-        "progress-archived-threshold":     "When is a piece considered archived? (%)",
-        "progress-done-threshold":         "When is a piece considered finished? (%)",
-        "progress-repeat-threshold":       "How much forgetting triggers \"Repeat\"? (%)",
-        "retention-half-life-days":        "After how many days is half of it forgotten?",
-        "retention-session-boost-factor":  "How high does the forgetting curve start after a session?",
-        "retention-grace-period-days":     "When does the forgetting curve kick in? (days)",
-        "suggested-mastery-focus-count":   "Number of suggested focus areas",
-        "migrate-legacy-progress":         "Interpolate legacy progress data to mastery",
-        "migrate-button":                  "Interpolate progress"
+      "edit-progress-manually": "Override progress manually",
+      "quick-session-delta-per-area": "Progress increment per focus area (quick session)",
+      "quick-session-duration-minutes": "Quick session duration (minutes)",
+      "progress-archived-threshold": "When is a piece considered archived? (%)",
+      "progress-done-threshold": "When is a piece considered finished? (%)",
+      "progress-repeat-threshold": "How much forgetting triggers \"Repeat\"? (%)",
+      "retention-half-life-days": "After how many days is half of it forgotten?",
+      "retention-session-boost-factor": "How high does the forgetting curve start after a session?",
+      "retention-grace-period-days": "When does the forgetting curve kick in? (days)",
+      "suggested-mastery-focus-count": "Number of suggested focus areas",
+      "migrate-legacy-progress": "Interpolate legacy progress data to mastery",
+      "migrate-button": "Interpolate progress"
     },
     "drive": {
       "loading": "Opening Drive…",

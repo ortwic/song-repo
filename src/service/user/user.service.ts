@@ -17,6 +17,7 @@ export const currentProfile = authState(auth).pipe(
 );
 
 export const isGoogleUser = currentProfile.pipe(map(p => p?.provider === GoogleAuthProvider.PROVIDER_ID));
+export const isEmailPwdUser = currentProfile.pipe(map(p => !p?.provider));
 
 export default class UserService {
     getProfileByAlias(alias: string): Observable<UserProfile> {

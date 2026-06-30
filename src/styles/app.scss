@@ -93,7 +93,7 @@ select {
     transition: border-color 0.25s;
     text-shadow: 0px 0px 2px rgba(0, 0, 0, 20%);
 
-    &:hover {
+    &:hover:not(:disabled) {
         border-color: gray;
         text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
     }
@@ -126,7 +126,7 @@ button.icon {
     transition: opacity 0.25s;
     opacity: 0.7;
 
-    &:hover {
+    &:hover:not(:disabled) {
         opacity: 1;
     }
 
@@ -160,7 +160,7 @@ button.switch-icon {
         background-color: transparent;
     }
 
-    &:hover {
+    &:hover:not(:disabled) {
         color: var(--text);
         background-color: var(--bg);
     }
@@ -176,11 +176,11 @@ input[type='file'].primary::file-selector-button {
     box-shadow: var(--shadow-md);
 }
 
-button.primary:hover,
-a[role='button'].primary:hover,
-input[type='reset'].primary:hover,
-input[type='submit'].primary:hover,
-input[type='file'].primary:hover::file-selector-button {
+button.primary:hover:not(:disabled),
+a[role='button'].primary:hover:not(:disabled),
+input[type='reset'].primary:hover:not(:disabled),
+input[type='submit'].primary:hover:not(:disabled),
+input[type='file'].primary:hover:not(:disabled)::file-selector-button {
     background-color: var(--accent-muted);
 }
 
