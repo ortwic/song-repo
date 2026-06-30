@@ -2,7 +2,7 @@
     import { t } from "svelte-i18n";
     import { derived } from "svelte/store";
     import { portal } from "svelte-portal";
-    import type { ColumnDefinition, SortDirection, Sorter } from "tabulator-tables";
+    import type { ColumnDefinition, LabelValue, ListEditorParams, SortDirection, Sorter } from "tabulator-tables";
     import Switch from "../ui/elements/Switch.svelte";
     import PopupMenu from "../ui/PopupMenu.svelte";
     import { tableView as view } from "../../store/app.store";
@@ -21,8 +21,19 @@
     const columns = derived(view, (v) => v?.table.getColumnDefinitions()
         .filter(c => !c.field.startsWith('__') && (!v.useResponsiveLayout || c.visible !== false)) ?? []);
 
-    const filterListValues = (col: ColumnDefinition) => 
-        col.headerFilter === 'list' && col.headerFilterFuncParams?.values as string[];
+    const filterListValues = (col: ColumnDefinition): LabelValue[] => {
+        const params = col.headerFilter === 'list' && col.headerFilterParams as ListEditorParams;
+        if (Array.isArray(params?.values)) {
+            const formatter = params?.itemFormatter ?? ((l, v) => $t(`songs.${col.field}.${v}`));
+            return typeof params?.values[0] === 'object' && 'label' in params?.values[0] 
+                ? params?.values as LabelValue[] 
+                : params?.values.map(v => ({ 
+                    label: formatter(col.field, v, v, undefined),
+                    value: v 
+                }));
+        }
+        return [];
+    }
 
     function sortBy(column: string, dir?: SortDirection) {
         sortedFields[column] = dir;
@@ -61,6 +72,7 @@
 <section class="menu">
     <div class="options">
         {#each $columns as col}
+            {@const listValues = filterListValues(col)}
             <p>
                 {#if !$view.useResponsiveLayout}
                 <Switch title="{ $t('menu.table.show-hide') } {col.title}"
@@ -79,7 +91,7 @@
                         state={headerFilter[col.field] ?? undefined}
                         options={[undefined, true, false]} icon="bx-filter-alt"
                         onToggle={(state) => filterBy(col.field, state as string)} />
-                {:else if filterListValues(col)}
+                {:else if listValues.length > 0}
                     <Switch title="{ $t('menu.table.filter-by') } {col.title}"
                         state={!!headerFilter[col.field]} icon="bx-filter-alt"
                         on:click={(event) => showPopupMenu(event, col.field)} />
@@ -90,9 +102,9 @@
                                 <button class="option empty" onclick={() => filterBy(col.field, undefined)}>
                                     &lt; { $t('table.filter.empty') } {col.title} &gt;
                                 </button>
-                                {#each filterListValues(col) as value}
-                                    <button class="option" onclick={() => filterBy(col.field, value)}>
-                                        <i class="{col.field} {value}"></i> { $t(`songs.${col.field}.${value}`) }
+                                {#each listValues as { label, value }}
+                                    <button class="option" onclick={() => filterBy(col.field, value as string)}>
+                                        {@html label}
                                     </button>
                                 {/each}
                             </div>

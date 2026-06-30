@@ -95,7 +95,7 @@ export class FirestoreService {
         return Promise.resolve(null);
     }
 
-    public async setDocument<T extends { id: string }>(data: T, options?: SetOptions): Promise<void> {
+    public async setDocument<T extends { id: string }>(data: Partial<T> & { id: string }, options?: SetOptions): Promise<void> {
         if (this.path && data.id) {
             const docRef = doc(store, this.path, data.id);
             await setDoc(docRef, omitUndefinedFields(data), options);

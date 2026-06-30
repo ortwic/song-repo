@@ -1,25 +1,11 @@
 import { DateTime } from 'luxon';
 import type { SessionRecord } from '../model/session.model';
 import type { SongParams } from '../model/settings.model';
-import type { UserSong } from '../model/song.model';
-import type { Status, TrainingFocus } from '../model/types';
+import type { Genre, UserSong } from '../model/song.model';
+import type { Status, StatusMode, TrainingFocus } from '../model/types';
 import { refData } from '../service/base/app-cache.setup';
 import { type DateLike, toDate } from '../utils/date.helper';
 import { defineMethods } from '../utils/object.helper';
-
-// Maximum accumulated intensity per focus area across all sessions.
-// Raise this constant to require more sessions before progress saturates.
-export const DEFAULT_MASTERY_TARGETS: Record<TrainingFocus, number> = {
-    melody:     10,
-    rhythm:     10,
-    harmony:    10,
-    form:       15,
-    technique:  25,
-    expression: 25,
-    memorize:   10,
-    improv:     15,
-    finishing:  25,
-} as const;
 
 // Controls the logarithmic soft-cap curve for mastery exceeding the target.
 // Higher values mean faster diminishing returns beyond the target.
@@ -48,11 +34,31 @@ export const MASTERY_INTERPOLATION_ORDER: TrainingFocus[] = [
     ...MATURITY_AREAS,
 ];
 
+// Maximum accumulated intensity per focus area across all sessions.
+// Raise this constant to require more sessions before progress saturates.
+const DEFAULT_MASTERY_TARGETS: Genre['masteryTargets'] = {
+    melody:     10,
+    rhythm:     10,
+    harmony:    10,
+    form:       15,
+    technique:  25,
+    expression: 25,
+    memorize:   10,
+    improv:     15,
+    finishing:  25,
+} as const;
+
+const targetsLookup = refData.genres.reduce((acc, genre) => {
+    acc[genre.name] = genre.masteryTargets;
+    return acc;
+}, {} as Record<string, Genre['masteryTargets']>);
+
 export type SongEntity = ReturnType<typeof createSongEntity> & UserSong;
 
 export function createSongEntity(song: UserSong, config: SongParams) {
-    const targets = song.genre && refData.genres.find((v) => v.name === song.genre)?.masteryTargets || {};
-    const getFocusTarget = (focus: TrainingFocus) => targets[focus] ?? DEFAULT_MASTERY_TARGETS[focus];
+    const statusMode: StatusMode = song.status || 'auto';
+    const getFocusTarget = (focus: TrainingFocus) => 
+        song.genre && targetsLookup[song.genre] && targetsLookup[song.genre][focus] || DEFAULT_MASTERY_TARGETS[focus];
 
     function progressFromMastery(fromPreview?: UserSong['mastery']): number | undefined {
         const mastery = fromPreview ?? song.mastery;
@@ -186,6 +192,10 @@ export function createSongEntity(song: UserSong, config: SongParams) {
         return 'todo';
     }
 
+    function resolvedStatus(): Status {
+        return statusMode !== 'auto' ? song.status : derivedStatus(song.progress ?? 0);
+    }
+
     function suggestInitialFocus(): TrainingFocus[] {
         if (song.mastery && Object.keys(song.mastery).length > 0) {
             return suggestFromMasteryGaps();
@@ -227,12 +237,13 @@ export function createSongEntity(song: UserSong, config: SongParams) {
     }
 
     return defineMethods(song, {
+        statusMode,
         getFocusTarget,
         progressFromMastery,
         masteryFromProgress,
         retentionFactor,
         retentionDelta,
-        resolvedStatus: () => song.status || derivedStatus(song.progress ?? 0),
+        resolvedStatus,
         migrateLegacyProgress,
         suggestInitialFocus,
         quickSessionFocus(): SessionRecord['areas'] {

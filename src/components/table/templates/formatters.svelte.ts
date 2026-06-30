@@ -3,10 +3,8 @@ import { marked } from 'marked';
 import { mount } from 'svelte';
 import type { CellComponent, GroupComponent } from 'tabulator-tables';
 import type { ColumnDefinition } from '../tabulator/types';
-import { createSongEntity } from '../../../domain/song.entity';
+import type { SongEntity } from '../../../domain/song.entity';
 import type { AdvancedSettings } from '../../../model/settings.model';
-import type { UserSong } from '../../../model/song.model';
-import { STATUS_KEYS } from '../../../model/types';
 import type SongService from '../../../service/user/user-song.service';
 import { toDate } from '../../../utils/date.helper';
 import ProgressBar from '../../ui/elements/ProgressBar.svelte';
@@ -20,8 +18,17 @@ function hiddenValue<T>(value: T): HTMLElement {
     return span;
 }
 
-export function formatFactory(songService: SongService, settings: AdvancedSettings) {
-    const formatterTemplates = {
+export function createIntervals(value: number, range = 10) {
+    if (value > 0) {
+        const start = Math.floor((value - 1) / range) * range + 1;
+        const end = start + range - 1;
+        return `${start} - ${end}`;
+    }
+    return '0';
+}
+
+export function formatTemplates(songService: SongService, settings: AdvancedSettings) {
+    return {
         get favorite(): Partial<ColumnDefinition> {
             return {
                 hozAlign: 'center',
@@ -49,40 +56,24 @@ export function formatFactory(songService: SongService, settings: AdvancedSettin
         get status(): Partial<ColumnDefinition> {
             return {
                 formatter(cell: CellComponent): HTMLElement | string {
-                    const song = cell.getData() as UserSong;
-                    const entity = createSongEntity(song, settings);
-                    const status = entity.resolvedStatus();
+                    const song = cell.getData() as SongEntity;
+                    const status = cell.getValue();
                     const element = cell.getElement();
                     element.title = status;
-                    element.classList.add('status', status, !entity.status ? undefined : 'forced');
+                    element.ariaLabel = status;
+                    element.classList.add('status', status, song.statusMode !== 'auto' ? 'forced' : undefined);
                     return hiddenValue(status);
-                },
-                accessorDownload(value: string, data: UserSong): string {
-                    const entity = createSongEntity(data, settings);
-                    return entity.resolvedStatus();
-                },
-                headerFilterFuncParams: {
-                    values: STATUS_KEYS
                 },
             };
         },
 
         get progress(): Partial<ColumnDefinition> {
-            const progress = (data: UserSong) => {
-                if (data.progress > 0) {
-                    const value = Math.floor((data.progress - 1) / 10) * 10 + 1;
-                    return`${value} - ${value + 9}%`;
-                }
-                return '0%';
-            };
-
             return {
                 formatter(cell: CellComponent, formatterParams: { min: number, max: number }): HTMLElement {
-                    const song = cell.getData() as UserSong;
-                    const entity = createSongEntity(song, settings);
+                    const song = cell.getData() as SongEntity;
                     const props = $state({
                         value: Number(cell.getValue()) ?? 0,
-                        delta: entity.retentionDelta(),
+                        delta: song.retentionDelta(),
                         min: formatterParams.min,
                         max: formatterParams.max,
                         disabled: false,
@@ -96,7 +87,7 @@ export function formatFactory(songService: SongService, settings: AdvancedSettin
                         props.onChange = (value: number) => {
                             cell.setValue(value);
                             song.progress = value;
-                            song.mastery = entity.masteryFromProgress();
+                            song.mastery = song.masteryFromProgress();
                             songService.updateSong(song).then(() => cell.getRow().reformat());
                         };
                     } else {
@@ -109,7 +100,7 @@ export function formatFactory(songService: SongService, settings: AdvancedSettin
                     min: 0,
                     max: 100
                 },
-                groupByFunc: progress
+                groupByFunc: (song: SongEntity) => createIntervals(song.progress) + '%'
             };
         },
 
@@ -192,7 +183,8 @@ export function formatFactory(songService: SongService, settings: AdvancedSettin
                 editorParams: {
                     min: 1,
                     max: 10
-                }
+                },
+                groupByFunc: (song: SongEntity) => createIntervals(song.difficulty, 2)
             };
         },
 
@@ -232,12 +224,10 @@ export function formatFactory(songService: SongService, settings: AdvancedSettin
             };
         },
     } satisfies Record<string, Partial<ColumnDefinition>>;
-
-    return (key: keyof typeof formatterTemplates) => formatterTemplates[key];
 }
 
 
-const formatterFuncs: Partial<Record<keyof UserSong, (value: unknown) => string>> = {
+const formatterFuncs: Partial<Record<keyof SongEntity, (value: unknown) => string>> = {
     fav(value) {
         return `<span class='fav ${value ? 'active': ''}'></span>`;
     },
@@ -250,7 +240,7 @@ const formatterFuncs: Partial<Record<keyof UserSong, (value: unknown) => string>
     }
 };
 
-export const groupByFormatter = (value: unknown, count: number, data: UserSong[], group: GroupComponent) => {
+export const groupByFormatter = (value: unknown, count: number, data: SongEntity[], group: GroupComponent) => {
     const sumUp = (accumulator: number, current: number) => accumulator + current;
     let info = `<span class='label' style='min-width: 2em'>Σ ${count}</span>`;
     if (data.length) {
@@ -263,6 +253,9 @@ export const groupByFormatter = (value: unknown, count: number, data: UserSong[]
             ${tags.map((t) => `<span class='label'>${t}</span>`).join('')}`;
     }
     const field = group.getField();
+    if (typeof value === 'object' && !Array.isArray(value)) {
+        return field + info;
+    }
     return formatterFuncs[field] ? formatterFuncs[field](value) + info
         : `<span class='title'>${value || 'n/a'}</span>${info}`;
 };

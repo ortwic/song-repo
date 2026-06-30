@@ -1,30 +1,39 @@
-import { type Readable, get } from 'svelte/store';
-import type { CellComponent, ColumnDefinition, FilterType, ListEditorParams, RowRangeLookup } from 'tabulator-tables';
+import { t } from 'svelte-i18n';
+import { get } from 'svelte/store';
+import type { ColumnDefinition, FilterType, ListEditorParams } from 'tabulator-tables';
+import { STATUS_KEYS } from '../../../model/types';
 
-export const toRowRangeLookup = (valueStore: Readable<string[]> | string[]) => {
-    return ((cell: CellComponent, filterTerm: string) => {
-        const values = 'subscribe' in valueStore ? get(valueStore) : valueStore;
-        // return values?.filter((v) => v.toLowerCase().includes(filterTerm.toLowerCase()));
-        console.log(values, filterTerm);
-        return values;
-    }) as unknown as RowRangeLookup;
+type AutoFilterParams = ListEditorParams & {
+    operator?: ColumnDefinition['headerFilterFunc'];
 };
 
-export const autoFilter = (
-    valuesLookup: RowRangeLookup = 'active', 
-    operator: FilterType = 'like'
-): Partial<ColumnDefinition> => {
+const DEFAULT_AUTOFILTER: AutoFilterParams = {
+    operator: 'like',
+    valuesLookup: 'active',
+    autocomplete: true,
+    clearable: true,
+    allowEmpty: true,
+    listOnEmpty: true,
+    freetext: true
+};
+
+export const autoFilter = (params = DEFAULT_AUTOFILTER): Partial<ColumnDefinition> => {
     return {
         headerFilter: 'list',
-        headerFilterParams: {
-            valuesLookup,
-            autocomplete: true,
-            clearable: true,
-            allowEmpty: true,
-            listOnEmpty: true,
-            freetext: true
+        headerFilterParams: params,
+        headerFilterFunc: params.operator,
+    };
+};
+
+export const statusFilter = (): Partial<ColumnDefinition> => {
+    const translate = (key: string) => get(t)(key);
+    return {
+        headerFilter: 'list',
+        headerFilterParams: { 
+            values: STATUS_KEYS,
+            itemFormatter: (_, value) => `<i class="status ${value}"></i> ${translate('songs.status.' + value)}`,
         },
-        headerFilterFunc: operator as FilterType,
+        headerFilterFunc: '='
     };
 };
 

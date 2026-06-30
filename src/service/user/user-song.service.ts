@@ -85,7 +85,7 @@ export default class SongService {
         return this.setSong(song);
     }
 
-    async setSong(song: UserSong, forceLocalUpdate = false): Promise<string> {
+    async setSong(song: Partial<UserSong>& { id: string }, forceLocalUpdate = false): Promise<string> {
         if (this.uid) {
             if (song.id) {
                 await stores.usersongs(this.uid).setDocument(song, { merge: true });

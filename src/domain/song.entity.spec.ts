@@ -4,13 +4,25 @@ import type { SongParams } from '../model/settings.model';
 import type { UserSong } from '../model/song.model';
 import { FOCUS_KEYS } from '../model/types';
 import { DEFAULT_USER_SETTINGS } from '../service/user/default-settings';
-import { createSongEntity, DEFAULT_MASTERY_TARGETS, MASTERY_INTERPOLATION_ORDER, SongEntity } from './song.entity';
+import { createSongEntity, MASTERY_INTERPOLATION_ORDER, SongEntity } from './song.entity';
 
 vi.mock('../service/base/app-cache.setup', () => ({
     refData: {
         genres: [],
     },
 }));
+
+const DEFAULT_MASTERY_TARGETS: UserSong['mastery'] = {
+    melody:     10,
+    rhythm:     10,
+    harmony:    10,
+    form:       15,
+    technique:  25,
+    expression: 25,
+    memorize:   10,
+    improv:     15,
+    finishing:  25,
+} as const;
 
 const defaultSongParams: SongParams = {
     ...DEFAULT_USER_SETTINGS.advanced,

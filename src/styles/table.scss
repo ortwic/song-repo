@@ -238,11 +238,10 @@ div.tabulator-popup-container {
 div.tabulator-cell.fav, 
 span.fav {
     &::before {
-        font-size: larger;
         color: transparent;
         background: none;
-        text-shadow: 1px 1px 1px #A0A0A0;
-        content: '✩';
+        text-shadow: 1px 1px 1px var(--surface-mid);
+        content: '⭐️';
     }
 }
 
@@ -255,8 +254,8 @@ span.fav.active {
     // background: radial-gradient(white, wheat 40%, gold 50%, gray, transparent 55%);
     
     &::before {
-        color: gold;
-        content: '✮';
+        color: var(--text);
+        content: '⭐️';
     }
 }
 
