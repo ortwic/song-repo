@@ -1,0 +1,69 @@
+{
+  "_comment": "Lookup table for ResourceView embed resolution. Each provider is matched by hostname pattern, then the embed URL is derived via the pattern + replacement rule. 'embedType' determines which HTML tag the component renders.",
+  "providers": [
+    {
+      "id": "youtube",
+      "hostnames": ["www.youtube.com", "youtube.com", "youtu.be"],
+      "embedType": "iframe",
+      "matchPattern": "(?:youtube\\.com\\/watch\\?v=|youtu\\.be\\/)([a-zA-Z0-9_-]+)",
+      "embedUrlTemplate": "https://www.youtube.com/embed/{id}",
+      "iframeAttributes": {
+        "allow": "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen",
+        "referrerpolicy": "strict-origin-when-cross-origin"
+      },
+      "verified": true,
+      "source": "https://developers.google.com/youtube/player_parameters"
+    },
+    {
+      "id": "google-drive",
+      "hostnames": ["drive.google.com"],
+      "embedType": "iframe",
+      "matchPattern": "drive\\.google\\.com\\/file\\/d\\/([a-zA-Z0-9_-]+)",
+      "embedUrlTemplate": "https://drive.google.com/file/d/{id}/preview",
+      "iframeAttributes": {
+        "allow": "autoplay"
+      },
+      "verified": true,
+      "source": "https://developers.google.com/drive/api/guides/manage-downloads (preview embedding is documented Google Drive behavior)"
+    },
+    {
+      "id": "musescore",
+      "hostnames": ["musescore.com"],
+      "embedType": "iframe",
+      "matchPattern": "musescore\\.com\\/(.+?)(?:\\?.*)?$",
+      "embedUrlTemplate": "https://musescore.com/{path}/embed",
+      "iframeAttributes": {
+        "allow": "autoplay; fullscreen",
+        "sandbox": "allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-presentation"
+      },
+      "verified": false,
+      "source": "Community-confirmed embed pattern (append /embed to score URL); official mechanism is generated via MuseScore's own Share->Embed button, exact long-term stability not guaranteed by Anthropic verification",
+      "knownIssues": "Community reports intermittent blank/broken embeds. sandbox value below is UNVERIFIED for this revised attribute set (previous sandbox value caused a top-level navigation bug with YouTube and was removed there; this MuseScore-specific value adds allow-popups-to-escape-sandbox compared to the original and has not yet been retested). Test thoroughly before treating as fixed."
+    },
+    {
+      "id": "pdf-direct",
+      "extensions": [".pdf"],
+      "embedType": "iframe",
+      "verified": true,
+      "source": "MDN: iframe can render PDF via native browser PDF viewer when supported"
+    },
+    {
+      "id": "image-direct",
+      "extensions": [".png", ".jpg", ".jpeg", ".gif", ".webp"],
+      "embedType": "image",
+      "verified": true,
+      "source": "Native img element rendering; avoids iframe overhead and document-context quirks for raster images"
+    },
+    {
+      "id": "svg-direct",
+      "extensions": [".svg"],
+      "embedType": "object",
+      "verified": true,
+      "source": "MDN: object recommended for SVG to preserve document context and scripting"
+    }
+  ],
+  "fallback": {
+    "embedType": "iframe",
+    "_comment": "Used when no provider/extension matches. isBlocked handling in the component covers cases where this also fails (e.g. X-Frame-Options deny)."
+  }
+}
