@@ -1,5 +1,6 @@
 import 'boxicons/css/boxicons.min.css';
 import './styles/app.scss';
+import './styles/icons.scss';
 import './styles/utils.scss';
 import App from './App.svelte';
 import { mount } from "svelte";

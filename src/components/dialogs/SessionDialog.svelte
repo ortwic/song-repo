@@ -376,12 +376,4 @@
     button.clear {
         padding: .1rem;
     }
-
-    i.bx.bx-group-alt {
-        background-color: currentColor;
-        width: 1em;
-        height: 1em;
-        -webkit-mask: url('/icons/bx-group-alt.svg') center/contain no-repeat;
-        mask: url('/icons/bx-group-alt.svg') center/contain no-repeat;
-    }
 </style>

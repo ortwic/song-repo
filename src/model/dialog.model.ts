@@ -7,9 +7,14 @@ export interface DialogArgs {
     message: string;
 }
 
+export interface ExceptionDialogArgs extends DialogArgs {
+    error: Error;
+}
+
 export enum DialogKeys {
     editSong,
     sessionTracker,
     resourceViewer,
+    exceptionDialog,
     confirmDialog
 }

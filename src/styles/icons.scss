@@ -1,0 +1,15 @@
+@mixin icon($url) {
+    background-color: currentColor;
+    width: 1em;
+    height: 1em;
+    -webkit-mask: url($url) center/contain no-repeat;
+    mask: url($url) center/contain no-repeat;
+}
+
+i.bx.bx-alert-triangle {
+    @include icon('/icons/bx-alert-triangle.svg');
+}
+
+i.bx.bx-group-alt {
+    @include icon('/icons/bx-group-alt.svg');
+}

@@ -1,5 +1,7 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
+    import { onMount } from 'svelte';
+    import { setSessionError } from '../../domain/error-handler';
     import { createResourceResolver } from '../../domain/resource-resolver';
     import type { Song } from '../../model/song.model';
     import ConfirmDialog from './ConfirmDialog.svelte';
@@ -13,8 +15,16 @@
     let isBlocked = $state(false);
     let zoom = $state(1);
     let isZoomed = $derived(zoom !== 1);
+    let likelyClosedIntentionally = $derived(!visible);
 
     let resolved = $derived(resolver.resolve(uri));
+
+    onMount(() => {
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        }
+    });
 
     export function showDialog(song: Song): Promise<void> {
         uri = song.uri;
@@ -28,6 +38,19 @@
     function handleIframeError(err: unknown): void {
         isBlocked = true;
         console.log(err);
+    }
+
+    function handleBeforeUnload(): void {
+        if (resolved.embedType === 'iframe' && !likelyClosedIntentionally) {
+            // Reload could be triggered intentionally or unexpectedly by some extension like ublock origin
+            const title = $t('warnings.extension-interrupt.title');
+            const message = '<i class="bx bx-extension"></i> ' + $t('warnings.extension-interrupt.body');
+            setSessionError({
+                title,
+                message,
+                error: new Error(message, { cause: resolved.providerId })
+            });
+        }
     }
 
     function openExternal(): void {

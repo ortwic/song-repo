@@ -364,5 +364,12 @@
     "page": "Page",
     "total": "Total",
     "more": "Show more"
+  },
+  "warnings": {
+    "extension-interrupt": {
+        "title": "Embed interrupted",
+        "body": "The resource view was unexpectedly interrupted by a browser extension. <br>(e.\u00a0g. uBlock Origin or another content blocker) <br><br>Disable content-blocking extensions for this site to use embeds reliably.",
+        "confirm": "Got it"
+    }
   }
 }
