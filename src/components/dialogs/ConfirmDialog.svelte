@@ -1,11 +1,12 @@
 <script lang="ts">
-    import { fade } from "svelte/transition";
+    import { onMount, tick } from "svelte";
+    import { fly, type FlyParams } from "svelte/transition";
     import { cubicOut } from 'svelte/easing';
     import { t } from "svelte-i18n";
     import Portal from "svelte-portal";
+    import { swipeable } from "@svelte-put/swipeable";
     import Titlebar from "../ui/elements/Titlebar.svelte";
     import type { MenuTarget } from "../../model/types";
-    import { onMount } from "svelte";
 
     interface Props {
         size: 'auto' | 'max' | 'full';
@@ -29,6 +30,8 @@
         onClose
     }: Props = $props();
 
+    const flyParams: FlyParams = { duration: 200, easing: cubicOut, x: '100%' };
+
     onMount(() => {
         const handleKeydown = (event: KeyboardEvent) => {
             if (visible && event.key === 'Escape') {
@@ -39,6 +42,25 @@
         document.addEventListener('keydown', handleKeydown);
         return () => document.removeEventListener('keydown', handleKeydown);
     });
+
+    /**
+     * Alternative to transform since fly does use transform internally
+     * @param node
+     */
+    function center(node: HTMLElement) {
+        if (size == 'auto') {
+            const update = async () => {
+                await tick();
+                const { width, height } = node.getBoundingClientRect();
+                node.style.top = `calc(50vh - ${height / 2}px)`;
+                node.style.left = `calc(50vw - ${width / 2}px)`;
+            };
+
+            update();
+
+            return { update };
+        }
+    }
 
     function confirm(event: Event) {
         event.stopPropagation();
@@ -53,25 +75,29 @@
 
 {#if visible}
     <Portal>
-        <div class='dialog {size}'
-        in:fade={{ duration: 200, easing: cubicOut }} 
-        out:fade={{ duration: 200, easing: cubicOut }}>
-        <Titlebar {target} onClose={() => onClose(false)}>
-            {@render header?.()} {title}
-        </Titlebar>
-        {@render children?.()}
-        {#if footer}
-            {@render footer()}
-        {:else}
-            <div class="row">
-                <button data-target={target} onclick={confirm}>
-                    { $t('dialog.confirm') }
-                </button>
-                <button data-target={target} onclick={decline}>
-                    { $t('dialog.decline') }
-                </button>
+        <div class='dialog {size}' use:center transition:fly={flyParams}>
+            <Titlebar {target} onClose={() => onClose(false)}>
+                {@render header?.()} {title}
+            </Titlebar>
+            <div class="swipe-handle"
+                title={$t('dialog.swipe-to-close')} 
+                aria-hidden="true"
+                use:swipeable={{ direction: 'right', threshold: '3rem' }}
+                onswipeend={() => onClose(false)}>
             </div>
-        {/if}
+            {@render children?.()}
+            {#if footer}
+                {@render footer()}
+            {:else}
+                <div class="row">
+                    <button data-target={target} onclick={confirm}>
+                        { $t('dialog.confirm') }
+                    </button>
+                    <button data-target={target} onclick={decline}>
+                        { $t('dialog.decline') }
+                    </button>
+                </div>
+            {/if}
         </div>
     </Portal>
     {#if size == 'auto'}
@@ -100,6 +126,16 @@ div.dialog {
     max-height: 100vh;
     background-color: var(--bg-t);
 
+    .swipe-handle {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 1.5rem;
+        z-index: 1212;
+        cursor: grab;
+    }
+
     div.row button {
         background-color: var(--surface-t);
     }
@@ -120,7 +156,7 @@ div.max {
     left: 0;
     bottom: 0;
     right: vars.$sidebar-width;
-    border-right: 1px solid gray;
+    border-right: 1px solid var(--border);
 }
 
 div.auto {
@@ -128,7 +164,6 @@ div.auto {
     top: 50%;
     left: 50%;
     border: 1px solid gray;
-    transform: translate(-50%, -50%);
     box-shadow: .2em .2em .8em #00000080;
 }
 

@@ -267,7 +267,8 @@
   },
   "dialog": {
     "confirm": "Bestätigen",
-    "decline": "Ablehnen"
+    "decline": "Ablehnen",
+    "swipe-to-close": "Zum Schließen nach rechts wischen"
   },
   "profile": {
     "sign-out": "Abmelden",
@@ -365,9 +366,9 @@
   },
   "warnings": {
     "extension-interrupt": {
-        "title": "Einbettung unterbrochen",
-        "body": "Die Ressourcenansicht wurde unerwartet durch eine Browser-Extension unterbrochen. <br>(z.\u00a0B. uBlock Origin oder ein anderer Werbeblocker) <br><br>Deaktiviere Content-Blocking-Extensions für diese Seite, um Einbettungen stabil zu nutzen.",
-        "confirm": "Verstanden"
+      "title": "Einbettung unterbrochen",
+      "body": "Die Ressourcenansicht wurde unerwartet durch eine Browser-Extension unterbrochen. <br>(z. B. uBlock Origin oder ein anderer Werbeblocker) <br><br>Deaktiviere Content-Blocking-Extensions für diese Seite, um Einbettungen stabil zu nutzen.",
+      "confirm": "Verstanden"
     }
- }
+  }
 }

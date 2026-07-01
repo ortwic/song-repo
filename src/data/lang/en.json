@@ -267,7 +267,8 @@
   },
   "dialog": {
     "confirm": "Confirm",
-    "decline": "Decline"
+    "decline": "Decline",
+    "swipe-to-close": "Swipe right to close"
   },
   "calendar": {
     "title": "Event calendar"
@@ -315,13 +316,13 @@
       "account": "Manage account settings"
     },
     "account": {
-        "new-password": "New password",
-        "confirm-password": "Confirm password",
-        "password-too-short": "Password must be at least {count} characters",
-        "password-mismatch": "Passwords do not match",
-        "password-match": "Passwords match",
-        "change-password": "Change password",
-        "change-pwd-done": "Password changed successfully"
+      "new-password": "New password",
+      "confirm-password": "Confirm password",
+      "password-too-short": "Password must be at least {count} characters",
+      "password-mismatch": "Passwords do not match",
+      "password-match": "Passwords match",
+      "change-password": "Change password",
+      "change-pwd-done": "Password changed successfully"
     },
     "advanced": {
       "edit-progress-manually": "Override progress manually",
@@ -367,9 +368,9 @@
   },
   "warnings": {
     "extension-interrupt": {
-        "title": "Embed interrupted",
-        "body": "The resource view was unexpectedly interrupted by a browser extension. <br>(e.\u00a0g. uBlock Origin or another content blocker) <br><br>Disable content-blocking extensions for this site to use embeds reliably.",
-        "confirm": "Got it"
+      "title": "Embed interrupted",
+      "body": "The resource view was unexpectedly interrupted by a browser extension. <br>(e. g. uBlock Origin or another content blocker) <br><br>Disable content-blocking extensions for this site to use embeds reliably.",
+      "confirm": "Got it"
     }
   }
 }

@@ -4,6 +4,7 @@
     import { setSessionError } from '../../domain/error-handler';
     import { createResourceResolver } from '../../domain/resource-resolver';
     import type { Song } from '../../model/song.model';
+    import { showError } from '../../store/notification.store';
     import ConfirmDialog from './ConfirmDialog.svelte';
     import { zoomable } from './zoomable';
 
@@ -13,11 +14,18 @@
     let uri = $state('');
     let title = $state('');
     let isBlocked = $state(false);
+    let isIframeLoading = $state(false);
     let zoom = $state(1);
     let isZoomed = $derived(zoom !== 1);
     let likelyClosedIntentionally = $derived(!visible);
 
     let resolved = $derived(resolver.resolve(uri));
+
+    $effect(() => {
+        // Track embedUrl so the spinner re-appears each time the loaded resource changes.
+        resolved.embedUrl;
+        isIframeLoading = resolved.embedType === 'iframe';
+    });
 
     onMount(() => {
         window.addEventListener('beforeunload', handleBeforeUnload);
@@ -35,8 +43,13 @@
         return Promise.resolve();
     }
 
-    function handleIframeError(err: unknown): void {
+    function handleIframeLoad(): void {
+        isIframeLoading = false;
+    }
+
+    function handleError(err: unknown): void {
         isBlocked = true;
+        isIframeLoading = false;
         console.log(err);
     }
 
@@ -94,21 +107,29 @@
                     maxScale: 4,
                     onChange: (state) => (zoom = state.scale) 
                 }}
-                onerror={() => handleIframeError('image load failed')}
+                onerror={() => handleError('image load failed')}
             />
         </div>
     {:else if resolved.embedType === 'iframe'}
-    {#key resolved.embedUrl}
-        <iframe
-            src={resolved.embedUrl}
-            {title}
-            onerror={handleIframeError}
-            allow={resolved.iframeAttributes?.allow}
-            referrerpolicy={resolved.iframeAttributes?.referrerpolicy}
-            sandbox={resolved.iframeAttributes?.sandbox}
-            allowfullscreen
-        ></iframe>
-    {/key}
+    <div class="iframe-container">
+        {#if isIframeLoading}
+            <div class="iframe-loading-overlay">
+                <span class="spinner"></span>
+            </div>
+        {/if}
+        {#key resolved.embedUrl}
+            <iframe
+                src={resolved.embedUrl}
+                {title}
+                onload={handleIframeLoad}
+                onerror={handleError}
+                allow={resolved.iframeAttributes?.allow}
+                referrerpolicy={resolved.iframeAttributes?.referrerpolicy}
+                sandbox={resolved.iframeAttributes?.sandbox}
+                allowfullscreen
+            ></iframe>
+        {/key}
+    </div>
     {:else}
         <object {title} data={resolved.embedUrl}></object>
     {/if}
@@ -129,6 +150,20 @@
             color: inherit;
             text-decoration: underline;
         }
+    }
+    .iframe-container {
+        position: relative;
+        width: 100%;
+        flex: 1;
+        display: flex;
+    }
+    .iframe-loading-overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1;
     }
     iframe {
         width: 100%;
