@@ -1,10 +1,10 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
-    import { onMount } from 'svelte';
-    import { setSessionError } from '../../domain/error-handler';
     import { createResourceResolver } from '../../domain/resource-resolver';
     import type { Song } from '../../model/song.model';
     import { registerDialog } from '../dialog-context.svelte';
+    import { currentUser } from '../../service/user/auth.service';
+    import IFrame from '../ui/elements/IFrame.svelte';
     import DialogBase from './DialogBase.svelte';
     import { zoomable } from './zoomable';
 
@@ -14,25 +14,11 @@
     let uri = $state('');
     let title = $state('');
     let isBlocked = $state(false);
-    let isIframeLoading = $state(false);
     let zoom = $state(1);
+    let consent = $derived(Boolean($currentUser));
     let isZoomed = $derived(zoom !== 1);
-    let likelyClosedIntentionally = $derived(!visible);
 
     let resolved = $derived(resolver.resolve(uri));
-
-    $effect(() => {
-        // Track embedUrl so the spinner re-appears each time the loaded resource changes.
-        resolved.embedUrl;
-        isIframeLoading = resolved.embedType === 'iframe';
-    });
-
-    onMount(() => {
-        window.addEventListener('beforeunload', handleBeforeUnload);
-        return () => {
-            window.removeEventListener('beforeunload', handleBeforeUnload);
-        }
-    });
 
     registerDialog('ResourceViewer', showDialog);
 
@@ -45,27 +31,9 @@
         return Promise.resolve();
     }
 
-    function handleIframeLoad(): void {
-        isIframeLoading = false;
-    }
-
     function handleError(err: unknown): void {
         isBlocked = true;
-        isIframeLoading = false;
         console.log(err);
-    }
-
-    function handleBeforeUnload(): void {
-        if (resolved.embedType === 'iframe' && !likelyClosedIntentionally) {
-            // Reload could be triggered intentionally or unexpectedly by some extension like ublock origin
-            const title = $t('warnings.extension-interrupt.title');
-            const message = '<i class="bx bx-extension"></i> ' + $t('warnings.extension-interrupt.body');
-            setSessionError({
-                title,
-                body: message,
-                error: new Error(message, { cause: resolved.providerId })
-            });
-        }
     }
 
     function openExternal(): void {
@@ -113,25 +81,15 @@
             />
         </div>
     {:else if resolved.embedType === 'iframe'}
-    <div class="iframe-container">
-        {#if isIframeLoading}
-            <div class="iframe-loading-overlay">
-                <span class="spinner"></span>
-            </div>
-        {/if}
-        {#key resolved.embedUrl}
-            <iframe
-                src={resolved.embedUrl}
-                {title}
-                onload={handleIframeLoad}
-                onerror={handleError}
-                allow={resolved.iframeAttributes?.allow}
-                referrerpolicy={resolved.iframeAttributes?.referrerpolicy}
-                sandbox={resolved.iframeAttributes?.sandbox}
-                allowfullscreen
-            ></iframe>
-        {/key}
-    </div>
+        <IFrame
+            src={resolved.embedUrl}
+            {title}
+            {consent}
+            allow={resolved.iframeAttributes?.allow}
+            referrerpolicy={resolved.iframeAttributes?.referrerpolicy}
+            sandbox={resolved.iframeAttributes?.sandbox}
+            onError={handleError}
+        />
     {:else}
         <object {title} data={resolved.embedUrl}></object>
     {/if}
@@ -152,25 +110,6 @@
             color: inherit;
             text-decoration: underline;
         }
-    }
-    .iframe-container {
-        position: relative;
-        width: 100%;
-        flex: 1;
-        display: flex;
-    }
-    .iframe-loading-overlay {
-        position: absolute;
-        inset: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1;
-    }
-    iframe {
-        width: 100%;
-        flex: 1;
-        border: none;
     }
     .image-viewer {
         width: 100%;

@@ -366,6 +366,13 @@
     "total": "Total",
     "more": "Show more"
   },
+  "iframe": {
+    "consent": {
+      "title": "External content",
+      "description": "This content is provided by a third party. ({provider}) <br><br>By loading it, you consent to the transfer of data to the external provider.",
+      "accept": "Load content"
+    }
+  },
   "warnings": {
     "extension-interrupt": {
       "title": "Embed interrupted",

@@ -2,12 +2,14 @@
     import { marked } from 'marked';
     import { t } from 'svelte-i18n';
     import { push, querystring } from 'svelte-spa-router';
-    import DialogBase from './DialogBase.svelte';
-    import { logPageView } from '../../store/notification.store';
     import type { Content, Post } from '../../model/post.model';
+    import { currentUser } from '../../service/user/auth.service';
+    import { logPageView } from '../../store/notification.store';
     import NotFound from '../../routes/NotFound.svelte';
     import { registerDialog } from '../dialog-context.svelte';
+    import IFrame from '../ui/elements/IFrame.svelte';
     import { toClipboard } from '../ui/helper/input.helper';
+    import DialogBase from './DialogBase.svelte';
     
     interface Props {
         id?: string;
@@ -27,6 +29,7 @@
     const size = $derived(post?.content?.length ? 'full' : 'auto');
     const slugOrId = $derived(post?.slug ?? post?.id ?? '');
     const shareLink = $derived(window.location.origin + `#/blog/${slugOrId}`);
+    let consent = $derived(Boolean($currentUser));
 
     registerDialog('BlogPostDialog', showDialog);
 
@@ -57,10 +60,13 @@
         <section>
         {#each post.content as entry}
             {#if entry.type === 'youtube'}
-            <iframe loading="lazy" src="https://www.youtube.com/embed/{entry.value.id}" title={entry.value.title ?? ''}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                allowfullscreen width="560" height="315" frameborder="0"></iframe>
-                <br />
+            <IFrame src="https://www.youtube.com/embed/{entry.value.id}"
+                    title={entry.value.title ?? ''}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    width={560}
+                    height={315}
+            />
+            <br />
             {:else if entry.type === 'quote'}
             <blockquote>
                 {entry.value.text}

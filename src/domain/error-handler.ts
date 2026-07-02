@@ -1,15 +1,15 @@
 import { type ExceptionDialogArgs } from "../components/dialog-context.svelte";
 
-const storageKey = 'exceptionDialog'.toString();
+const SESSION_ERROR_KEY = 'song-repo_error';
 
 export function setSessionError(error: ExceptionDialogArgs): void {
-    sessionStorage.setItem(storageKey, JSON.stringify(error));
+    sessionStorage.setItem(SESSION_ERROR_KEY, JSON.stringify(error));
 }
 
 export function errorFromSession(): ExceptionDialogArgs {
-    const error = JSON.parse(sessionStorage.getItem(storageKey) || 'null') as ExceptionDialogArgs;
+    const error = JSON.parse(sessionStorage.getItem(SESSION_ERROR_KEY) || 'null') as ExceptionDialogArgs;
     if (error) {
-        sessionStorage.removeItem(storageKey);
+        sessionStorage.removeItem(SESSION_ERROR_KEY);
     }
     return error;
 }
