@@ -1,22 +1,21 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
-    import { getContext } from 'svelte';
     import { cubicOut } from 'svelte/easing';
     import { slide } from 'svelte/transition';
     import { Timestamp } from 'firebase/firestore';
     import { SEARCH_ACTIONS } from '../../domain/song.actions';
     import type { SongEntity } from '../../domain/song.entity';
-    import { DialogKeys, type Dialog } from '../../model/dialog.model';
     import type { TrainingFocus, SessionKind, TrainingAreas } from '../../model/types';
     import type { Intensity, UserSession } from '../../model/session.model';
     import type { Song } from '../../model/song.model';
     import { FOCUS_KEYS, SESSIONKIND_KEYS } from '../../model/types';
     import { createDeferred, type DeferredResult } from '../../utils/promise.helper';
-    import ConfirmDialog from './ConfirmDialog.svelte';
+    import { openDialog, registerDialog } from '../dialog-context.svelte';
     import PopupMenu from '../ui/PopupMenu.svelte';
     import Expand from '../ui/elements/Expand.svelte';
     import TagEditor from '../ui/elements/TagEditor.svelte';
     import ProgressBar from '../ui/elements/ProgressBar.svelte';
+    import DialogBase from './DialogBase.svelte';
 
     const MAX_FOCUS_VALUE = 5;
     const MIN_FOCUS_VALUE = 0;
@@ -54,7 +53,6 @@
     let sessionResult: DeferredResult<UserSession> = null;
 
     const slideParams = { duration: 200, easing: cubicOut };
-    const resourceDialog = getContext<Dialog<Song>>(DialogKeys.resourceViewer);
 
     const isImportMode = $derived(selectedKind === 'import');
     const availableFocusKeys = $derived(FOCUS_KEYS.filter((key) => !activeFocus.has(key)));
@@ -74,6 +72,8 @@
         touchCount: (songEntity.touchCount ?? 0) + 1,
         lastRetention: songEntity.retentionFactor(songEntity.changedAt, songEntity.touchCount)
     }));
+
+    registerDialog('SessionDialog', showDialog);
 
     export function showDialog(model: SongEntity): Promise<UserSession> {
         songEntity = model;
@@ -174,7 +174,7 @@
     }
 </script>
 
-<ConfirmDialog {visible} size="auto" onClose={done}>
+<DialogBase {visible} size="auto" onClose={done}>
     {#snippet header()}
         <span class="no-wrap">
             <i class="bx bx-play-circle"></i>
@@ -193,7 +193,7 @@
             </button>
             {#if songEntity?.uri}
                 <button class="clear" title={$t('songs.resource.show')}
-                    onclick={() => resourceDialog.open(songEntity)}>
+                    onclick={() => openDialog<Song>('ResourceViewer', songEntity)}>
                     <i class="item bx bx-file"></i>
                 </button>
             {/if}
@@ -287,7 +287,7 @@
             ></textarea>
         </Expand>
     </div>
-</ConfirmDialog>
+</DialogBase>
 
 <PopupMenu bind:this={kindPopupMenu}>
     {#each SESSIONKIND_KEYS as kind}

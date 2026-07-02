@@ -1,6 +1,6 @@
-import { DialogKeys, type ExceptionDialogArgs } from "../model/dialog.model";
+import { type ExceptionDialogArgs } from "../components/dialog-context.svelte";
 
-const storageKey = DialogKeys.exceptionDialog.toString();
+const storageKey = 'exceptionDialog'.toString();
 
 export function setSessionError(error: ExceptionDialogArgs): void {
     sessionStorage.setItem(storageKey, JSON.stringify(error));

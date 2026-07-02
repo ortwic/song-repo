@@ -1,9 +1,9 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
-    import ConfirmDialog from '../dialogs/ConfirmDialog.svelte';
     import { authService } from '../../service/user/auth.service';
     import { logPageView, showError } from '../../store/notification.store';
     import { getPage } from '../../service/common/page.service';
+    import { type DialogArgs, openDialog } from '../dialog-context.svelte';
     
     interface RequiredPageChecks {
         termsofuse: boolean;
@@ -17,17 +17,11 @@
     let email = $state(import.meta.env.DEV ? 'john.doe@example.com' : '');
     let password = $state('');
     let pwdRepeat = $state('');
-    let page: keyof RequiredPageChecks = $state();
 
     const checks: RequiredPageChecks = $state({
         privacypolicy: false,
         termsofuse: false,
     });
-
-    function confirm(accepted: boolean) {
-        checks[page] = accepted;
-        page = undefined;
-    }
 
     async function signUp() {
         try {
@@ -53,8 +47,15 @@
         }
     }
 
-    function load(target: keyof RequiredPageChecks) {
-        page = target;
+    async function showDialog(target: keyof RequiredPageChecks) {
+        const title = $t('menu.login.read-carefully');
+        const { body } = getPage(target);
+        checks[target] = await openDialog<DialogArgs, boolean>('ConfirmDialog', { 
+            title, 
+            body,
+            size: 'full',
+            target: 'signup'
+        });
         logPageView({ page: 'signup', target });
     }
 
@@ -74,7 +75,7 @@
         <br/>
     </div>
     <div class="row">
-        <button title="{ $t('menu.login.read-privacy-policy') }" onclick={() => load('privacypolicy')}>
+        <button title="{ $t('menu.login.read-privacy-policy') }" onclick={() => showDialog('privacypolicy')}>
             <span class="caption">
                 <i class={checks.privacypolicy ? checkedIcon : uncheckedIcon}></i>
                 <span>{ $t('menu.login.read-privacy-policy') }</span>
@@ -82,17 +83,12 @@
         </button>
     </div>
     <div class="row">
-        <button title="{ $t('menu.login.read-terms-of-use') }" onclick={() => load('termsofuse')}>
+        <button title="{ $t('menu.login.read-terms-of-use') }" onclick={() => showDialog('termsofuse')}>
             <span class="caption">
                 <i class={checks.termsofuse ? checkedIcon : uncheckedIcon}></i>
                 <span>{ $t('menu.login.read-terms-of-use') }</span>
             </span>
         </button>
-
-        <ConfirmDialog title='{ $t('menu.login.read-carefully') }' 
-            visible={!!page} target='signup' size='full' onClose={confirm}>
-            <div class="body">{@html getPage(page).body}</div>
-        </ConfirmDialog>
     </div>
     <div class="row">
         <button data-close={valid ? '' : undefined} title="{ $t('menu.login.signup') }" onclick={signUp} 
@@ -133,11 +129,6 @@
     div > p {
         color: gray;
         text-align: center;
-    }
-    
-    div.body {
-        padding: 1em;
-        overflow-y: auto;
     }
 
     .bxs-check-circle {

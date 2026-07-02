@@ -164,7 +164,7 @@
         </button>
         <button class="option" 
             onclick={() => actions.delete(song, {
-                message: $t('songs.menu.delete-confirm')
+                body: $t('songs.menu.delete-confirm')
             })}>
             <i class="bx bx-trash"></i>
             {$t('songs.menu.delete')}

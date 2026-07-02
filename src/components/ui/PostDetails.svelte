@@ -2,7 +2,7 @@
     import { preventDefault } from 'svelte/legacy';
 
     import { t } from 'svelte-i18n';
-    import ConfirmDialog from '../dialogs/ConfirmDialog.svelte';
+    import DialogBase from '../dialogs/DialogBase.svelte';
     import { logPageView } from '../../store/notification.store';
     import type { Content } from '../../model/post.model';
     import { marked } from 'marked';
@@ -44,7 +44,7 @@
     {/if}
 </summary>
 
-<ConfirmDialog size="full" onClose={hide} {visible}>
+<DialogBase size="full" onClose={hide} {visible}>
     {#snippet header()}
         <i class="bx bx-detail"></i> {title} 
     {/snippet}
@@ -81,7 +81,7 @@
             </div>
         
             {/snippet}
-</ConfirmDialog>
+</DialogBase>
 
 <style lang="scss">
     h2 {

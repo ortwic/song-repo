@@ -4,8 +4,8 @@
     import { setSessionError } from '../../domain/error-handler';
     import { createResourceResolver } from '../../domain/resource-resolver';
     import type { Song } from '../../model/song.model';
-    import { showError } from '../../store/notification.store';
-    import ConfirmDialog from './ConfirmDialog.svelte';
+    import { registerDialog } from '../dialog-context.svelte';
+    import DialogBase from './DialogBase.svelte';
     import { zoomable } from './zoomable';
 
     const resolver = createResourceResolver();
@@ -34,6 +34,8 @@
         }
     });
 
+    registerDialog('ResourceViewer', showDialog);
+
     export function showDialog(song: Song): Promise<void> {
         uri = song.uri;
         title = `${song.artist} ${song.title}`;
@@ -60,7 +62,7 @@
             const message = '<i class="bx bx-extension"></i> ' + $t('warnings.extension-interrupt.body');
             setSessionError({
                 title,
-                message,
+                body: message,
                 error: new Error(message, { cause: resolved.providerId })
             });
         }
@@ -75,7 +77,7 @@
     }
 </script>
 
-<ConfirmDialog {visible} size="full" onClose={close}>
+<DialogBase {visible} size="full" onClose={close}>
     {#snippet header()}
         <i class="bx bx-file"></i>
         <a href={uri} target="_blank">{uri}</a>
@@ -133,7 +135,7 @@
     {:else}
         <object {title} data={resolved.embedUrl}></object>
     {/if}
-</ConfirmDialog>
+</DialogBase>
 
 <style lang="scss">
     .viewer-body {

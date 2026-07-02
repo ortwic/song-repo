@@ -1,12 +1,11 @@
-import { getContext } from 'svelte';
-import { logAction } from '../store/notification.store';
-import { type DialogArgs, DialogKeys, type Dialog } from '../model/dialog.model';
+import { type DialogArgs, openDialog } from '../components/dialog-context.svelte';
 import type { UserSession } from '../model/session.model';
-import type { SongEntity } from './song.entity';
 import type { Song, UserSong } from '../model/song.model';
 import type { StatusMode } from '../model/types';
 import type SessionService from '../service/user/user-session.service';
 import type SongService from '../service/user/user-song.service';
+import { logAction } from '../store/notification.store';
+import type { SongEntity } from './song.entity';
 
 export interface SearchAction {
     label: string;
@@ -49,17 +48,12 @@ export const SEARCH_ACTIONS: SearchAction[] = [
 ];
 
 export class SongActions {
-    readonly editSongDialog = getContext<Dialog<UserSong, UserSong>>(DialogKeys.editSong);
-    readonly sessionDialog = getContext<Dialog<SongEntity, UserSession>>(DialogKeys.sessionTracker);
-    readonly resourceDialog = getContext<Dialog<Song>>(DialogKeys.resourceViewer);
-    readonly confirmDialog = getContext<Dialog<DialogArgs, boolean>>(DialogKeys.confirmDialog);
-    
     constructor(private songService: SongService, private sessionService: SessionService) {
     }
 
     async showResource(song: UserSong): Promise<void> {
         if (song.uri) {
-            return this.resourceDialog.open(song);
+            return openDialog<Song>('ResourceViewer', song);
         } 
         return this.editSong(song);
     }
@@ -70,7 +64,7 @@ export class SongActions {
     }
 
     async editSong(song: UserSong): Promise<void> {
-        const editedSong = await this.editSongDialog.open(song);
+        const editedSong = await openDialog<UserSong, UserSong>('EditSongDialog', song);
         if (editedSong) {
             await this.songService.setSong(editedSong);
         }
@@ -87,7 +81,7 @@ export class SongActions {
     }
 
     async runSession(entity: SongEntity): Promise<UserSession> {
-        const session = await this.sessionDialog.open(entity);
+        const session = await openDialog<SongEntity, UserSession>('SessionDialog', entity);
         if (session) {
             await this.sessionService.addSession(entity, session);
         }
@@ -99,7 +93,7 @@ export class SongActions {
     }
 
     async delete(song: UserSong, args?: DialogArgs): Promise<void> {
-        const confirmed = !args || await this.confirmDialog.open(args);
+        const confirmed = !args || await openDialog<DialogArgs, boolean>('ConfirmDialog', args);
         if (confirmed === true) {
             await this.songService.deleteSong(song);
         }

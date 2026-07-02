@@ -10,12 +10,13 @@
     import { logAction } from '../../store/notification.store';
     import { redToGreenRange } from '../../styles/style.helper';
     import { createDeferred, type DeferredResult } from '../../utils/promise.helper';
-    import ConfirmDialog from './ConfirmDialog.svelte';
+    import { registerDialog } from '../dialog-context.svelte';
     import SelectKey from '../ui/SelectKey.svelte';
     import Expand from '../ui/elements/Expand.svelte';
     import Image from '../ui/elements/Image.svelte';
     import TagEditor from '../ui/elements/TagEditor.svelte';
     import CloudResource from '../storage/CloudResource.svelte';
+    import DialogBase from './DialogBase.svelte';
 
     const TIME_PRESETS = ['4/4', '3/4', '6/8', '2/4', '12/8', '5/4', '7/8', '2/2'];
     const songService = new SongService();
@@ -26,6 +27,8 @@
     const isNew = $derived(editSong.id === undefined);
     const difficultyColor = $derived(redToGreenRange(100 - editSong.difficulty * 10));
     let result: DeferredResult<UserSong> = null;
+
+    registerDialog('EditSongDialog', showDialog);
 
     export function showDialog(initial?: Partial<UserSong>): Promise<UserSong> {
         result = createDeferred<UserSong>();
@@ -92,7 +95,7 @@
 </script>
 
 <form bind:this={form} onsubmit={(e) => e.preventDefault()}>
-    <ConfirmDialog {visible} size="full" onClose={done}>
+    <DialogBase {visible} size="full" onClose={done}>
         {#snippet header()}
             <span>
                 <i class="bx bx-music"></i>
@@ -342,7 +345,7 @@
         {#if !songService.hasUser()}
             <div class="warn">{$t('songs.noPersist')}</div>
         {/if}
-    </ConfirmDialog>
+    </DialogBase>
 </form>
 
 <style lang="scss">

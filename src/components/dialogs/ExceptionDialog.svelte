@@ -1,11 +1,19 @@
 <script lang="ts">
-    import ConfirmDialog from "./ConfirmDialog.svelte";
-    import type { ExceptionDialogArgs } from "../../model/dialog.model";
+    import { onMount } from "svelte";
+    import { errorFromSession } from "../../domain/error-handler";
+    import type { ExceptionDialogArgs } from "../dialog-context.svelte";
+    import { registerDialog } from "../dialog-context.svelte";
+    import DialogBase from "./DialogBase.svelte";
 
     let error = $state<ExceptionDialogArgs>(null);
 
-    export function showDialog(args: ExceptionDialogArgs): void {
+    onMount(() => showDialog(errorFromSession()));
+    
+    registerDialog('ExceptionDialog', showDialog);
+
+    export function showDialog(args: ExceptionDialogArgs): Promise<void> {
         error = args;
+        return Promise.resolve();
     }
 
     function handleClose(): void {
@@ -14,15 +22,15 @@
 </script>
 
 
-<ConfirmDialog size="auto" visible={!!error} onClose={handleClose}>
+<DialogBase size="auto" visible={!!error} onClose={handleClose}>
     {#snippet header()}
         <i class="bx bx-alert-triangle"></i>
         {error?.title}
     {/snippet}
     <p>
-        {@html error?.message}
+        {@html error?.body}
     </p>
-</ConfirmDialog>
+</DialogBase>
 
 <style>
     p {

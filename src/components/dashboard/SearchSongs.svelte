@@ -1,6 +1,5 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
-    import { getContext } from 'svelte';
     import { cubicOut } from 'svelte/easing';
     import { slide } from 'svelte/transition';
     import Autocomplete from '../ui/Autocomplete.svelte';
@@ -8,13 +7,12 @@
     import SongService from '../../service/user/user-song.service';
     import { buildArtistImgUrl } from '../../service/catalog/artists.util';
     import { createSearchService } from '../../service/catalog/search.service';
-    import { DialogKeys, type Dialog } from '../../model/dialog.model';
+    import { openDialog } from '../dialog-context.svelte';
     import type { Song, UserSong } from '../../model/song.model';
     import type { SearchEngines } from '../../model/types';
     import { logAction } from '../../store/notification.store';
 
     const songService = new SongService();
-    const addSongDialog = getContext<Dialog<UserSong, UserSong>>(DialogKeys.editSong);
 
     let currentSearchEngine = $state<SearchEngines>();
     const searchService = $derived(createSearchService(currentSearchEngine));
@@ -52,7 +50,7 @@
 
     async function openCustomForm(): Promise<void> {
         autocomplete.close();
-        const newSong = await addSongDialog.open({ title: searchTerm } as UserSong);
+        const newSong = await openDialog<UserSong, UserSong>('EditSongDialog', { title: searchTerm } as UserSong);
         if (newSong !== null) {
             await songService.addSong(newSong);
         }

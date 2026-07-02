@@ -1,13 +1,12 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
-    import { getContext } from 'svelte';
     import type { DownloadOptions, DownloadType } from 'tabulator-tables';
-    import { DialogKeys, type Dialog } from '../../model/dialog.model';
     import type { UserSong } from '../../model/song.model';
     import FileIcon from '../ui/elements/FileIcon.svelte';
     import SongService from '../../service/user/user-song.service';
     import { tableView } from '../../store/app.store';
     import { showError } from '../../store/notification.store';
+    import { openDialog } from '../dialog-context.svelte';
     import { exportTableToPdf } from '../table/pdf-export';
 
     interface Props {
@@ -17,10 +16,9 @@
     let { exportTitle = 'export' }: Props = $props();
 
     const service = new SongService();
-    const addSongDialog = getContext<Dialog<UserSong, UserSong>>(DialogKeys.editSong);
 
     async function addSong() {
-        const newSong = await addSongDialog.open();
+        const newSong = await openDialog<UserSong, UserSong>('EditSongDialog');
         if (newSong !== null) {
             await service.addSong(newSong);
         }

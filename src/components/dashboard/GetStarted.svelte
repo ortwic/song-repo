@@ -1,15 +1,15 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
     import { push } from 'svelte-spa-router';
-    import { getContext, onMount } from 'svelte';
+    import { onMount } from 'svelte';
     import { combineLatest } from 'rxjs';
-    import { DialogKeys, type Dialog } from '../../model/dialog.model';
+    import { openDialog } from '../dialog-context.svelte';
     import type { UserSong } from '../../model/song.model';
     import SongService from '../../service/user/user-song.service';
     import { UserLinkService } from '../../service/user/user-link.service';
     import { currentProfile } from '../../service/user/user.service';
     import { settings, saveSettings } from '../../store/user-settings.svelte';
-    import ConfirmDialog from '../dialogs/ConfirmDialog.svelte';
+    import DialogBase from '../dialogs/DialogBase.svelte';
     import ShareMenu from '../menus/ShareMenu.svelte';
 
     type SetupStatus = Partial<typeof settings.dashboard.setupStatus>;
@@ -21,10 +21,8 @@
 
     let shareDialogVisible = $state(false);
 
-    const addSongDialog = getContext<Dialog<UserSong, UserSong>>(DialogKeys.editSong);
-
     async function addSong() {
-        const newSong = await addSongDialog.open();
+        const newSong = await openDialog<UserSong, UserSong>('EditSongDialog');
         if (newSong !== null) {
             await songService.addSong(newSong);
         }
@@ -104,7 +102,7 @@
         </div>
     </section>
 
-    <ConfirmDialog
+    <DialogBase
         size="auto"
         title={$t('start.setup.share.dialog-title')}
         visible={shareDialogVisible}
@@ -112,7 +110,7 @@
     >
         <ShareMenu showPreview={false} showQRDownload={true} />
         <p class="center smaller">{$t('start.setup.share.dialog-hint')}</p>
-    </ConfirmDialog>
+    </DialogBase>
 {/if}
 
 <style lang="scss">
