@@ -31,7 +31,7 @@
         '/events': EventMap,
         '/events/:id': EventMap,
         '/blog': Blog,
-        '/blog/:label': Blog,
+        '/blog/:slug': Blog,
         '/docs/:id': Document,
         '/settings': Settings,
         '/feedback': Feedback,

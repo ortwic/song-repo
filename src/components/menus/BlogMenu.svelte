@@ -1,5 +1,6 @@
 <script lang="ts">
-    import { link } from 'svelte-spa-router';
+    import { t } from 'svelte-i18n';
+    import { link, push } from 'svelte-spa-router';
     import { blogService } from '../../service/common/blog.service';
     import TagCloud from '../ui/elements/TagCloud.svelte';
     import { onMount } from 'svelte';
@@ -15,9 +16,15 @@
 </script>
 
 <section class="menu">
+    <div class="row">
+        <button data-close onclick={() => push('/blog')}>
+            <i class="bx bx-music"></i>
+            {$t('blog.all-entries')}
+        </button>
+    </div>
     <TagCloud index={tags}>
         {#snippet item(tag)}
-            <a href="/blog/{tag}" use:link>{tag}</a>
+            <a href="/blog?tag={tag}" use:link>{tag}</a>
         {/snippet}
     </TagCloud>
 </section>

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import BlogPostDialog from './dialogs/BlogPostDialog.svelte';
     import ConfirmDialog from './dialogs/ConfirmDialog.svelte';
     import EditSongDialog from './dialogs/EditSongDialog.svelte';
     import ExceptionDialog from './dialogs/ExceptionDialog.svelte';
@@ -12,9 +13,10 @@
     let { children }: Props = $props();
 </script>
 
+<BlogPostDialog />
 <ConfirmDialog />
 <EditSongDialog />
-<SessionDialog />
-<ResourceViewer />
 <ExceptionDialog />
+<ResourceViewer />
+<SessionDialog />
 {@render children?.()}

@@ -104,10 +104,13 @@
 
     <DialogBase
         size="auto"
-        title={$t('start.setup.share.dialog-title')}
         visible={shareDialogVisible}
         onClose={handleShareClose}
     >
+        {#snippet header()}
+            <i class="bx bx-share-alt"></i>
+            {$t('start.setup.share.title')}
+        {/snippet}
         <ShareMenu showPreview={false} showQRDownload={true} />
         <p class="center smaller">{$t('start.setup.share.dialog-hint')}</p>
     </DialogBase>

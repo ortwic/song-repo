@@ -1,7 +1,12 @@
 import type { MenuTarget } from "../model/types";
 
 export type DialogSize = 'auto' | 'max' | 'full';
-type DialogNames = 'EditSongDialog' | 'SessionDialog' | 'ConfirmDialog' | 'ResourceViewer' | 'ExceptionDialog';
+type DialogNames = 'BlogPostDialog'
+                 | 'ConfirmDialog' 
+                 | 'EditSongDialog' 
+                 | 'ExceptionDialog'
+                 | 'ResourceViewer' 
+                 | 'SessionDialog';
 type ShowDialogEventCallback<TArgs = DialogArgs, TResult = void> = (args?: TArgs) => Promise<TResult>;
 
 interface Dialog<TArgs = DialogArgs, TResult = void> {

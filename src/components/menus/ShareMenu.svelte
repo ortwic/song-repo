@@ -3,8 +3,8 @@
     import QRCode from 'qrcode';
     import { onDestroy } from 'svelte';
     import { currentProfile } from '../../service/user/user.service';
-    import { showError, showInfo } from "../../store/notification.store";
     import { getCssVariable } from '../../styles/style.helper';
+    import { toClipboard } from '../ui/helper/input.helper';
 
     let {
         showPreview = true,
@@ -64,15 +64,6 @@
 
         qrCodeUrl = qrCodeCanvas.toDataURL('image/png');
     }
-
-    async function copyText(text: string): Promise<void> {
-        try {
-            await navigator.clipboard.writeText(text);
-            showInfo($t('profile.share-link-copied'));
-        } catch (error) {
-            showError(error);
-        }
-    }
 </script>
 
 <section class="menu">
@@ -84,7 +75,7 @@
     </div>
     {/if}
     <div class="row">
-        <button title="{ $t('profile.share-link') }" onclick={() => copyText(shareLink)}>
+        <button title="{ $t('profile.share-link') }" onclick={() => toClipboard(shareLink)}>
             <i class='bx bx-share-alt'></i> { $t('profile.share-link') }
         </button>
     </div>

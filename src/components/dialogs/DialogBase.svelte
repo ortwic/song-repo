@@ -3,7 +3,6 @@
     import { fly, type FlyParams } from "svelte/transition";
     import { cubicOut } from 'svelte/easing';
     import { t } from "svelte-i18n";
-    import Portal from "svelte-portal";
     import { swipeable } from "@svelte-put/swipeable";
     import type { MenuTarget } from "../../model/types";
     import type { DialogSize } from "../dialog-context.svelte";
@@ -15,6 +14,7 @@
         title?: string;
         visible?: boolean;
         header?: import('svelte').Snippet;
+        controls?: import('svelte').Snippet;
         children?: import('svelte').Snippet;
         footer?: import('svelte').Snippet;
         onClose: (confirmed: boolean) => void;
@@ -26,6 +26,7 @@
         title = '',
         visible = false,
         header,
+        controls,
         children,
         footer,
         onClose
@@ -75,32 +76,33 @@
 </script>
 
 {#if visible}
-    <Portal>
-        <div class='dialog {size}' use:center transition:fly={flyParams}>
-            <Titlebar {target} onClose={() => onClose(false)}>
-                {@render header?.()} {title}
-            </Titlebar>
-            <div class="swipe-handle"
-                title={$t('dialog.swipe-to-close')} 
-                aria-hidden="true"
-                use:swipeable={{ direction: 'right', threshold: '3rem' }}
-                onswipeend={() => onClose(false)}>
-            </div>
-            {@render children?.()}
-            {#if footer}
-                {@render footer()}
-            {:else}
-                <div class="row">
-                    <button data-target={target} onclick={confirm}>
-                        { $t('dialog.confirm') }
-                    </button>
-                    <button data-target={target} onclick={decline}>
-                        { $t('dialog.decline') }
-                    </button>
-                </div>
-            {/if}
+    <div class='dialog {size}' use:center transition:fly={flyParams}>
+        <Titlebar {target} onClose={() => onClose(false)}>
+            {@render header?.()} {title}
+            {#snippet controls()}
+                {@render controls?.()}
+            {/snippet}
+        </Titlebar>
+        <div class="swipe-handle"
+            title={$t('dialog.swipe-to-close')} 
+            aria-hidden="true"
+            use:swipeable={{ direction: 'right', threshold: '3rem' }}
+            onswipeend={() => onClose(false)}>
         </div>
-    </Portal>
+        {@render children?.()}
+        {#if footer}
+            {@render footer()}
+        {:else}
+            <div class="row">
+                <button data-target={target} onclick={confirm}>
+                    { $t('dialog.confirm') }
+                </button>
+                <button data-target={target} onclick={decline}>
+                    { $t('dialog.decline') }
+                </button>
+            </div>
+        {/if}
+    </div>
     {#if size == 'auto'}
     <div class='backdrop'></div>
     {/if}

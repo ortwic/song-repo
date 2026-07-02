@@ -1,3 +1,6 @@
+import { get } from "svelte/store";
+import { t } from "svelte-i18n";
+import { showError, showInfo } from "../../../store/notification.store";
 
 export function confirmed(event: Event) {
     if (event instanceof KeyboardEvent) {
@@ -15,4 +18,13 @@ export function debounce(func: (...args: any[]) => any, wait: number) {
         clearTimeout(timeout);
         timeout = setTimeout(later, wait);
     };
+}
+
+export async function toClipboard(text: string): Promise<void> {
+    try {
+        await navigator.clipboard.writeText(text);
+        showInfo(get(t)('profile.share-link-copied'));
+    } catch (error) {
+        showError(error);
+    }
 }

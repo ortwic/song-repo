@@ -1,7 +1,9 @@
 export interface Post {
     id: string;
     title: string;
-    excerpt: string;
+    slug?: string;
+    lang?: 'en-US' | 'de-DE';
+    excerpt?: string;
     images: PostImage[];
     content: Content[];
     tags: string[];
