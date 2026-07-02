@@ -115,7 +115,8 @@
     "menu": {
       "quick": "Quicky",
       "start": "Übung starten",
-      "focus": "Schwerpunkt hinzufügen"
+      "focus": "Schwerpunkt hinzufügen",
+      "metronome": "Metronom"
     },
     "kind": {
       "practice": "Übung",
@@ -142,6 +143,9 @@
     "notes": {
       "placeholder": "Notizen zur Session...",
       "label": "Notizen & Labels"
+    },
+    "metronome": {
+      "mute": "Stumm"
     },
     "summary": "Zusammenfassung",
     "total-runs": "Gesamtläufe",
@@ -364,7 +368,7 @@
     "total": "Gesamt",
     "more": "Mehr anzeigen"
   },
-   "iframe": {
+  "iframe": {
     "consent": {
       "title": "Externer Inhalt",
       "description": "Dieser Inhalt wird von einem externen Anbieter bereitgestellt. ({provider}) <br><br>Mit dem Laden stimmen Sie zu, dass Daten an den Anbieter übertragen werden können.",

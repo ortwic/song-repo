@@ -8,6 +8,9 @@ importers:
 
   .:
     devDependencies:
+      '@dougflip/metronome':
+        specifier: ^0.0.3
+        version: 0.0.3
       '@googlemaps/js-api-loader':
         specifier: ^1.16.6
         version: 1.16.6
@@ -26,6 +29,9 @@ importers:
       '@testing-library/user-event':
         specifier: ^14.4.3
         version: 14.4.3(@testing-library/dom@9.3.4)
+      '@tonaljs/time-signature':
+        specifier: ^4.9.0
+        version: 4.9.0
       '@tsconfig/svelte':
         specifier: ^3.0.0
         version: 3.0.0
@@ -800,6 +806,9 @@ packages:
 
   '@bcoe/v8-coverage@0.2.3':
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
+
+  '@dougflip/metronome@0.0.3':
+    resolution: {integrity: sha512-YlKSYjAr8pfKJ58pSIcNvReE1LnlFpHOCMvwbuiVBo98KyokGqMOzMBReHwyaWPkA3KdipkLIlX1Q0kmkBPOUg==}
 
   '@esbuild/aix-ppc64@0.21.5':
     resolution: {integrity: sha512-1SDgH6ZSPTlggy1yI6+Dbkiz8xzpHJEVAlF/AM1tHPLsf5STom9rwtjE4hKAF20FfXXNTFqEYXyJNWh1GiZedQ==}
@@ -1640,6 +1649,9 @@ packages:
     engines: {node: '>=12', npm: '>=6'}
     peerDependencies:
       '@testing-library/dom': '>=7.21.4'
+
+  '@tonaljs/time-signature@4.9.0':
+    resolution: {integrity: sha512-zRo8CBqg/2guzTlF2vxyVIuB5gmwWQaxlknJPUSDII8CTdQ/x3a1LlNoMKkvTUnqwCihe3WrNPZ5XUfOOTthYA==}
 
   '@tootallnate/once@2.0.0':
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
@@ -5383,6 +5395,8 @@ snapshots:
 
   '@bcoe/v8-coverage@0.2.3': {}
 
+  '@dougflip/metronome@0.0.3': {}
+
   '@esbuild/aix-ppc64@0.21.5':
     optional: true
 
@@ -6220,6 +6234,8 @@ snapshots:
   '@testing-library/user-event@14.4.3(@testing-library/dom@9.3.4)':
     dependencies:
       '@testing-library/dom': 9.3.4
+
+  '@tonaljs/time-signature@4.9.0': {}
 
   '@tootallnate/once@2.0.0': {}
 

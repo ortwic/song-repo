@@ -115,7 +115,8 @@
     "menu": {
       "quick": "Quick session",
       "start": "Start practicing",
-      "focus": "Add focus area"
+      "focus": "Add focus area",
+      "metronome": "Metronome"
     },
     "kind": {
       "practice": "Practice",
@@ -142,6 +143,9 @@
     "notes": {
       "placeholder": "Notes on this session...",
       "label": "Notes & Labels"
+    },
+    "metronome": {
+      "mute": "Mute"
     },
     "summary": "Summary",
     "total-runs": "Total runs",

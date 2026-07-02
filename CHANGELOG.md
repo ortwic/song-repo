@@ -1,3 +1,7 @@
+v0.7.1 (2026-07-02)
+-------------------
+- added Metronome component
+
 v0.7.0 (2026-06-18)
 -------------------
 - session tracking for each song

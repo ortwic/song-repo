@@ -3,6 +3,7 @@
     import { cubicOut } from 'svelte/easing';
     import { slide } from 'svelte/transition';
     import { Timestamp } from 'firebase/firestore';
+    import { createMetronome, type Metronome } from '@dougflip/metronome';
     import { SEARCH_ACTIONS } from '../../domain/song.actions';
     import type { SongEntity } from '../../domain/song.entity';
     import type { TrainingFocus, SessionKind, TrainingAreas } from '../../model/types';
@@ -10,9 +11,11 @@
     import type { Song } from '../../model/song.model';
     import { FOCUS_KEYS, SESSIONKIND_KEYS } from '../../model/types';
     import { createDeferred, type DeferredResult } from '../../utils/promise.helper';
+    import { normalizeSignature } from '../../utils/metronome/tonal-params';
     import { openDialog, registerDialog } from '../dialog-context.svelte';
     import PopupMenu from '../ui/PopupMenu.svelte';
     import Expand from '../ui/elements/Expand.svelte';
+    import MetronomeElement from '../ui/elements/Metronome.svelte';
     import TagEditor from '../ui/elements/TagEditor.svelte';
     import ProgressBar from '../ui/elements/ProgressBar.svelte';
     import DialogBase from './DialogBase.svelte';
@@ -46,9 +49,13 @@
     let activeFocus = $state<Map<TrainingFocus, Intensity>>(new Map());
     let elapsedSeconds = $state(0);
     let intervalId: ReturnType<typeof setInterval>;
+    let metronome: Metronome = $state();
+    let minTempo = $state(40);
+    let maxTempo = $state(256);
 
     let kindPopupMenu = $state<PopupMenu>();
     let searchPopupMenu = $state<PopupMenu>();
+    let metronomePopupMenu = $state<PopupMenu>();
     let addFocusPopupMenu = $state<PopupMenu>();
     let sessionResult: DeferredResult<UserSession> = null;
 
@@ -83,7 +90,16 @@
         session.tags = model.tags ?? [];
         session.notes = model.notes ?? '';
         elapsedSeconds = 0;
-        
+
+        const { tempo, beatsPerBar } = normalizeSignature(songEntity.bpm, songEntity.time);
+        maxTempo = tempo;
+        minTempo = Math.floor(tempo * 0.6);
+        metronome = createMetronome({
+            tempo,
+            beatsPerBar,
+            volume: 50,
+        });
+
         const manualProgressMode = model.progress && !Object.keys(model.mastery ?? {}).length;
         setSessionKind(manualProgressMode ? 'import' : 'practice');
 
@@ -154,8 +170,15 @@
         }
     }
 
+    function startMetronome(e: MouseEvent): void {
+        metronome.start();
+        metronomePopupMenu?.showPopupMenu(e);
+    }
+
     function done(confirmed: boolean): void {
         clearInterval(+intervalId);
+        metronome.stop();
+
         if (!confirmed || !songEntity) {
             sessionResult?.resolve(null);
         } else {
@@ -197,6 +220,10 @@
                     <i class="item bx bx-file"></i>
                 </button>
             {/if}
+            <button title={$t('sessions.menu.metronome')} class="clear" 
+                onclick={startMetronome}>
+                <i class="item bx metronome"></i>
+            </button>
             <span class="no-wrap" style="padding: 0 1rem" title={$t('sessions.total-runs')}>
                 <label for="touchCount">{$t('songs.columns.touchCount')}</label>
                 <input class="input" type="number" min="1" disabled={!isImportMode} bind:value={session.touchCount} />
@@ -204,20 +231,14 @@
                     class:primary={isImportMode}>
                 </i>
             </span>
-            <!-- svelte-ignore a11y_missing_attribute -->
-            <!-- svelte-ignore a11y_click_events_have_key_events -->
-            <a role="button" class="label clear sm" title={$t(`sessions.kind.${selectedKind}`)} tabindex="0"
-                onclick={(e) => kindPopupMenu?.showPopupMenu(e)}>
-                <i class="item bx {SESSION_KIND_ICON[selectedKind]}"></i>
-                {$t(`sessions.kind.${selectedKind}`)}
-            </a>
             <span class="max-width right">
-                <button class="clear" title={$t('settings.add')}
-                    disabled={!availableFocusKeys.length}
-                    onclick={(e) => addFocusPopupMenu?.showPopupMenu(e)}>
-                    <i class="item bx bx-plus-circle"></i>
-                    {$t('sessions.menu.focus')}
-                </button>
+                <!-- svelte-ignore a11y_missing_attribute -->
+                <!-- svelte-ignore a11y_click_events_have_key_events -->
+                <a role="button" class="label clear sm" title={$t(`sessions.kind.${selectedKind}`)} tabindex="0"
+                    onclick={(e) => kindPopupMenu?.showPopupMenu(e)}>
+                    <i class="item bx {SESSION_KIND_ICON[selectedKind]}"></i>
+                    {$t(`sessions.kind.${selectedKind}`)}
+                </a>
             </span>
         </div>
 
@@ -275,6 +296,12 @@
                     </button>
                 {/each}
             </div>
+            <button class="clear" title={$t('settings.add')}
+                disabled={!availableFocusKeys.length}
+                onclick={(e) => addFocusPopupMenu?.showPopupMenu(e)}>
+                <i class="item bx bx-plus-circle"></i>
+                {$t('sessions.menu.focus')}
+            </button>
         </Expand>
 
         <Expand title={$t('sessions.notes.label')}>
@@ -306,6 +333,10 @@
             {action.label}
         </button>
     {/each}
+</PopupMenu>
+
+<PopupMenu bind:this={metronomePopupMenu}>
+    <MetronomeElement {metronome} min={minTempo} max={maxTempo} />
 </PopupMenu>
 
 <PopupMenu bind:this={addFocusPopupMenu}>
