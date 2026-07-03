@@ -3,7 +3,6 @@
     import { cubicOut } from 'svelte/easing';
     import { slide } from 'svelte/transition';
     import { Timestamp } from 'firebase/firestore';
-    import { createMetronome, type Metronome } from '@dougflip/metronome';
     import { SEARCH_ACTIONS } from '../../domain/song.actions';
     import type { SongEntity } from '../../domain/song.entity';
     import type { TrainingFocus, SessionKind, TrainingAreas } from '../../model/types';
@@ -11,6 +10,7 @@
     import type { Song } from '../../model/song.model';
     import { FOCUS_KEYS, SESSIONKIND_KEYS } from '../../model/types';
     import { createDeferred, type DeferredResult } from '../../utils/promise.helper';
+    import { createMetronome, type Metronome } from '../../utils/metronome/metronome';
     import { normalizeSignature } from '../../utils/metronome/tonal-params';
     import { openDialog, registerDialog } from '../dialog-context.svelte';
     import PopupMenu from '../ui/PopupMenu.svelte';
@@ -177,7 +177,7 @@
 
     function done(confirmed: boolean): void {
         clearInterval(+intervalId);
-        metronome.stop();
+        metronome.destroy();
 
         if (!confirmed || !songEntity) {
             sessionResult?.resolve(null);

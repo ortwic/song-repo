@@ -1,6 +1,6 @@
 <script lang="ts">
     import { t } from "svelte-i18n";
-    import type { Metronome } from "@dougflip/metronome";
+    import type { Metronome } from "../../../utils/metronome/metronome";
 
     interface Props {
         mute?: boolean;
