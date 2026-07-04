@@ -65,7 +65,7 @@ export function createMetronome(config: MetronomeConfig) {
 
         if (!state.audioContext) {
             state.audioContext = new AudioContext();
-            soundGenerator = createSoundGenerator(state.audioContext);
+            soundGenerator = createSoundGenerator(state.audioContext, config.soundConfig);
         }
 
         return state.audioContext;
@@ -75,7 +75,9 @@ export function createMetronome(config: MetronomeConfig) {
     const scheduleNote = (time: number) => {
         if (!state.audioContext || !soundGenerator) return;
 
-        const isFirstBeatOfBar = state.currentBeat % beatsPerBar === 0;
+        const isFirstBeatOfBar = beatsPerBar > 0 
+            ? state.currentBeat % beatsPerBar === 0 
+            : false;
 
         soundGenerator.play({
             time,

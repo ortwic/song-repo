@@ -10,12 +10,10 @@
     import type { Song } from '../../model/song.model';
     import { FOCUS_KEYS, SESSIONKIND_KEYS } from '../../model/types';
     import { createDeferred, type DeferredResult } from '../../utils/promise.helper';
-    import { createMetronome, type Metronome } from '../../utils/metronome/metronome';
-    import { normalizeSignature } from '../../utils/metronome/tonal-params';
     import { openDialog, registerDialog } from '../dialog-context.svelte';
     import PopupMenu from '../ui/PopupMenu.svelte';
     import Expand from '../ui/elements/Expand.svelte';
-    import MetronomeElement from '../ui/elements/Metronome.svelte';
+    import Metronome from '../ui/elements/Metronome.svelte';
     import TagEditor from '../ui/elements/TagEditor.svelte';
     import ProgressBar from '../ui/elements/ProgressBar.svelte';
     import DialogBase from './DialogBase.svelte';
@@ -49,13 +47,9 @@
     let activeFocus = $state<Map<TrainingFocus, Intensity>>(new Map());
     let elapsedSeconds = $state(0);
     let intervalId: ReturnType<typeof setInterval>;
-    let metronome: Metronome = $state();
-    let minTempo = $state(40);
-    let maxTempo = $state(256);
 
     let kindPopupMenu = $state<PopupMenu>();
     let searchPopupMenu = $state<PopupMenu>();
-    let metronomePopupMenu = $state<PopupMenu>();
     let addFocusPopupMenu = $state<PopupMenu>();
     let sessionResult: DeferredResult<UserSession> = null;
 
@@ -90,15 +84,6 @@
         session.tags = model.tags ?? [];
         session.notes = model.notes ?? '';
         elapsedSeconds = 0;
-
-        const { tempo, beatsPerBar } = normalizeSignature(songEntity.bpm, songEntity.time);
-        maxTempo = tempo;
-        minTempo = Math.floor(tempo * 0.6);
-        metronome = createMetronome({
-            tempo,
-            beatsPerBar,
-            volume: 50,
-        });
 
         const manualProgressMode = model.progress && !Object.keys(model.mastery ?? {}).length;
         setSessionKind(manualProgressMode ? 'import' : 'practice');
@@ -170,14 +155,8 @@
         }
     }
 
-    function startMetronome(e: MouseEvent): void {
-        metronome.start();
-        metronomePopupMenu?.showPopupMenu(e);
-    }
-
     function done(confirmed: boolean): void {
         clearInterval(+intervalId);
-        metronome.destroy();
 
         if (!confirmed || !songEntity) {
             sessionResult?.resolve(null);
@@ -220,10 +199,7 @@
                     <i class="item bx bx-file"></i>
                 </button>
             {/if}
-            <button title={$t('sessions.menu.metronome')} class="clear" 
-                onclick={startMetronome}>
-                <i class="item bx metronome"></i>
-            </button>
+            <Metronome time={songEntity.time} bpm={songEntity.bpm} limitRange={true}/>
             <span class="no-wrap" style="padding: 0 1rem" title={$t('sessions.total-runs')}>
                 <label for="touchCount">{$t('songs.columns.touchCount')}</label>
                 <input class="input" type="number" min="1" disabled={!isImportMode} bind:value={session.touchCount} />
@@ -333,10 +309,6 @@
             {action.label}
         </button>
     {/each}
-</PopupMenu>
-
-<PopupMenu bind:this={metronomePopupMenu}>
-    <MetronomeElement {metronome} min={minTempo} max={maxTempo} />
 </PopupMenu>
 
 <PopupMenu bind:this={addFocusPopupMenu}>

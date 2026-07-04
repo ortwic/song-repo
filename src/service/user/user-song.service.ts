@@ -70,6 +70,7 @@ export default class SongService {
             features: [],
             learnedOn: '',
             createdAt: Timestamp.now(),
+            changedAt: Timestamp.now(),
             ...song
         } as UserSong);
 

@@ -1,3 +1,5 @@
+import type { SoundGeneratorConfig } from "./sound-generator.types";
+
 export type MaxBeatsConfig = {
   count: number;
   onEnd?: () => void;
@@ -21,6 +23,7 @@ export type MetronomeConfig = {
   onBeatStart?: (event: BeatEvent) => void;
   maxBeats?: MaxBeatsConfig;
   beatInterval?: BeatIntervalConfig;
+  soundConfig?: SoundGeneratorConfig;
 };
 
 export type MetronomeUpdateConfig = {
