@@ -24,11 +24,11 @@
         ['a', 'Am'],
         ['e', 'Em'],
         ['b', 'Bm', 'h', 'Hm'],
-        ['f♯', 'g♭', 'gb', 'f#', 'F♯m', 'F#m', 'GBm', 'G♭m'],
-        ['c♯', 'd♭', 'db', 'c#', 'C♯m', 'C#m', 'DBm', 'D♭m'],
-        ['g♯', 'a♭', 'ab', 'g#', 'G♯m', 'G#m', 'ABm', 'A♭m'],
-        ['e♭', 'd♯', 'd#', 'eb', 'E♭m', 'Ebm', 'D♯m', 'D#m'],
-        ['b♭', 'a♯', 'a#', 'bb', 'B♭m', 'Bbm', 'A♯m', 'A#m'],
+        ['f♯', 'F♯m', 'g♭', 'gb', 'f#', 'F#m', 'GBm', 'G♭m'],
+        ['c♯', 'C♯m', 'd♭', 'db', 'c#', 'C#m', 'DBm', 'D♭m'],
+        ['g♯', 'G♯m', 'a♭', 'ab', 'g#', 'G#m', 'ABm', 'A♭m'],
+        ['e♭', 'E♭m', 'd♯', 'd#', 'eb', 'Ebm', 'D♯m', 'D#m'],
+        ['b♭', 'B♭m', 'a♯', 'a#', 'bb', 'Bbm', 'A♯m', 'A#m'],
         ['f', 'Fm'],
         ['c', 'Cm'],
         ['g', 'Gm'],
@@ -49,9 +49,9 @@
 </script>
 
 <svg viewBox="0 0 {size} {size}">
-    <circle r={outerRadius * 1.2} cx={center} cy={center} fill="Gainsboro" stroke="Silver" stroke-width=".4" />
-    <circle r={innerRadius * 1.3} cx={center} cy={center} fill="WhiteSmoke" />
-    <circle r={innerRadius * 0.7} cx={center} cy={center} fill="white" stroke="Gainsboro" stroke-width=".4" />
+    <circle class="outer" r={outerRadius * 1.2} cx={center} cy={center} stroke-width=".4" />
+    <circle class="inner" r={innerRadius * 1.3} cx={center} cy={center} />
+    <circle class="center" r={innerRadius * 0.7} cx={center} cy={center} stroke-width=".4" />
 
     {#each majorKeys as keys, idx}
         <!-- Minor Keys -->
@@ -61,7 +61,7 @@
             role="button"
             tabindex="0"
             class:selectedKey={minorKeys[idx].includes(selectedKey ?? '')}
-            onclick={() => select(minorKeys[idx][0])}
+            onclick={() => select(minorKeys[idx][1])}
         >
             <circle cx={calcX(idx, innerRadius)} cy={calcY(idx, innerRadius)} r={innerRadius * 0.24} />
             <text
@@ -71,7 +71,7 @@
                 text-anchor="middle"
                 dominant-baseline="middle"
             >
-                {minorKeys[idx][0]}
+                {minorKeys[idx][1]}
             </text>
         </g>
 
@@ -99,17 +99,33 @@
 </svg>
 
 <style>
+    circle.outer {
+        fill: var(--surface-mid);
+        stroke: var(--border);
+    }
+
+    circle.inner {
+        font-size: smaller;
+        fill: var(--surface-t);
+    }
+
+    circle.center {
+        fill: var(--surface-light);
+        stroke: var(--surface);
+    }
+
     g.key,
     g.key text {
         cursor: pointer;
+        fill: var(--text);
     }
     g.key > circle {
-        fill: #a0a0a060;
+        fill: var(--surface-t);
     }
     g.key:hover > circle {
         fill: var(--surface);
-        stroke: gray;
-        stroke-width: 0.2;
+        stroke: var(--accent);
+        stroke-width: 0.5;
     }
 
     g.key > text.major {
@@ -117,7 +133,7 @@
         font-weight: 500;
     }
     g.key > text.minor {
-        font-size: 0.4em;
+        font-size: 0.35em;
     }
 
     g.selectedKey > circle,

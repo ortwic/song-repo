@@ -18,12 +18,13 @@
     import CloudResource from '../storage/CloudResource.svelte';
     import DialogBase from './DialogBase.svelte';
 
+    const EMPTY_SONG = { features: [], tags: [], difficulty: 3 };
     const TIME_PRESETS = ['4/4', '3/4', '6/8', '2/4', '12/8', '5/4', '7/8', '2/2'];
     const songService = new SongService();
     const searchService = createSearchService() as SearchCatalogService;
     let form: HTMLFormElement = $state();
     let visible = $state(false);
-    let editSong: Partial<UserSong> = $state({ features: [], tags: [] });
+    let editSong: Partial<UserSong> = $state(EMPTY_SONG);
     const isNew = $derived(editSong.id === undefined);
     const difficultyColor = $derived(redToGreenRange(100 - editSong.difficulty * 10));
     let result: DeferredResult<UserSong> = null;
@@ -32,7 +33,7 @@
 
     export function showDialog(initial?: Partial<UserSong>): Promise<UserSong> {
         result = createDeferred<UserSong>();
-        editSong = { features: [], tags: [], ...initial };
+        editSong = { ...EMPTY_SONG, ...initial };
         visible = true;
         return result.promise;
     }
@@ -53,26 +54,26 @@
         }
     }
 
-    function setSong(song?: Song | null) {
+    function setSong(song?: Song | null): void {
         if (song !== undefined) {
             logAction({ type: 'search', song });
 
             editSong = {
+                ...editSong,
                 ...(song ?? {}),
-                ...editSong
             }
             editSong.features.push(...song?.features ?? []);
         }
     }
 
-    function setGenre(genre?: Genre | null) {
+    function setGenre(genre?: Genre | null): void {
         if (genre !== undefined && editSong.genre !== genre?.name) {
             editSong.genre = genre?.name;
             editSong.style = '';
         }
     }
 
-    function setStyle(style?: string | null) {
+    function setStyle(style?: string | null): void {
         if (style !== undefined) {
             editSong.style = style ?? '';
         }
@@ -114,7 +115,7 @@
                             placeholder={$t('songs.columns.artist')} 
                             required={true}
                             delay={500}
-                            text={editSong.artist} 
+                            bind:text={editSong.artist}
                             minCharactersToSearch={1}
                             searchFunction={(text) => searchService.findArtists(text)}
                             onChange={setArtist}
@@ -158,7 +159,7 @@
                             placeholder={$t('songs.columns.title')}
                             required={true}
                             delay={500} 
-                            text={editSong.title}
+                            bind:text={editSong.title}
                             minCharactersToSearch={0}
                             searchFunction={(text) => searchService.findTitles(text, editSong.artistMbid)}
                             onChange={setSong} 
@@ -202,9 +203,9 @@
                         <Autocomplete
                             inputClassName="lg"
                             labelFieldName="name"
-                            placeholder="genre"
+                            placeholder={$t('songs.columns.genre')}
                             minCharactersToSearch={0}
-                            text={editSong.genre}
+                            bind:text={editSong.genre}
                             searchFunction={(text) => searchService.findGenres(text)}
                             onChange={setGenre}
                             clearSelection={() => setGenre(null)}
@@ -223,8 +224,8 @@
                         {#key editSong.genre}
                         <Autocomplete
                             inputClassName="lg"
-                            placeholder="style"
-                            text={editSong.style}
+                            placeholder={$t('songs.columns.style')}
+                            bind:text={editSong.style}
                             minCharactersToSearch={0}
                             searchFunction={(text) => searchService.findStyles(text, editSong.genre)}
                             onChange={setStyle}
@@ -245,7 +246,7 @@
                 <div class="field-grid">
                     <div class="group sm">
                         <label for="key">{$t('songs.columns.key')}</label>
-                        <SelectKey bind:value={editSong.key} />
+                        <SelectKey id="select-key" bind:value={editSong.key} />
                     </div>
 
                     <div class="group sm">
@@ -264,6 +265,7 @@
                     <div class="group sm">
                         <label for="time">{$t('songs.columns.time')}</label>
                         <Autocomplete
+                            id="time"
                             className="sm"
                             inputClassName="sm"
                             hideArrow={true}

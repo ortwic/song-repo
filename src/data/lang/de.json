@@ -211,7 +211,8 @@
     "exportTitle": "Meine Songliste",
     "import": "Import starten...",
     "importDone": "{found} Songs gefunden. Gesamtzahl der Songs: {total}",
-    "addTitle": "Neuen Song vom Katalog hinzufügen",
+    "addTitle": "Neuen Song hinzufügen",
+    "addTitleCatalog": "Neuen Song vom Katalog hinzufügen",
     "noPersist": "Sie sind nicht angemeldet, daher bleiben die Daten nach dem Verlassen der App nicht erhalten!",
     "hint-markdown": "Markdown unterstützt z.B.",
     "status": {

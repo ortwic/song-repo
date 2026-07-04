@@ -58,7 +58,7 @@
 </script>
 
 <div class="search-song">
-    <label for="search" class="muted">{$t('songs.addTitle')}</label>
+    <label for="search" class="muted">{$t('songs.addTitleCatalog')}</label>
     <div class="search-row">
         <Autocomplete
             bind:this={autocomplete}

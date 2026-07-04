@@ -211,7 +211,8 @@
     "exportTitle": "My Song List",
     "import": "Start importing...",
     "importDone": "Found {found} songs. Total songs: {total}",
-    "addTitle": "Add new song from catalog",
+    "addTitle": "Add new song",
+    "addTitleCatalog": "Add new song from catalog",
     "noPersist": "You are not signed in, so data won't be persisted after leaving the app!",
     "hint-markdown": "markdown supported e.g.",
     "status": {
