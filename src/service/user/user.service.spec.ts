@@ -29,13 +29,11 @@ vi.mock('./auth.service', () => ({
 }));
 
 import * as firestore from 'firebase/firestore';
-import * as rxfireFs from 'rxfire/firestore';
 import UserService from './user.service';
 
 const mockGetDoc  = vi.mocked(firestore.getDoc);
 const mockGetDocs = vi.mocked(firestore.getDocs);
 const mockSetDoc  = vi.mocked(firestore.setDoc);
-const mockCollectionData = vi.mocked(rxfireFs.collectionData);
 
 function makeSnapshot(data: object | null) {
     return {

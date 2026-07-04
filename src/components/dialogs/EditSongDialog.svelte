@@ -246,13 +246,13 @@
                 <div class="field-grid">
                     <div class="group sm">
                         <label for="key">{$t('songs.columns.key')}</label>
-                        <SelectKey id="select-key" bind:value={editSong.key} />
+                        <SelectKey id="edit-key" bind:value={editSong.key} />
                     </div>
 
                     <div class="group sm">
                         <label for="bpm">{$t('songs.columns.bpm')}</label>
                         <input class="lg"
-                            id="bpm"
+                            id="edit-bpm"
                             type="number"
                             min="40"
                             max="280"
@@ -265,7 +265,7 @@
                     <div class="group sm">
                         <label for="time">{$t('songs.columns.time')}</label>
                         <Autocomplete
-                            id="time"
+                            id="edit-time"
                             className="sm"
                             inputClassName="sm"
                             hideArrow={true}
@@ -292,7 +292,7 @@
                             {/if}
                         </label>
                         <input class="lg"
-                            id="difficulty"
+                            id="edit-difficulty"
                             style:accent-color={difficultyColor.hex()}
                             type="range"
                             min="1"
@@ -307,7 +307,7 @@
                             {$t('songs.columns.source')}
                         </label>
                         <input class="lg"
-                            id="source"
+                            id="edit-source"
                             type="text"
                             bind:value={editSong.source}
                             placeholder="{$t('songs.hint-markdown')} [Sheet Music](https://...)"
@@ -338,7 +338,7 @@
 
                     <div class="group span-full">
                         <label for="notes">{$t('songs.columns.notes')}</label>
-                        <textarea id="notes" bind:value={editSong.notes} placeholder="..."></textarea>
+                        <textarea id="edit-notes" bind:value={editSong.notes} placeholder="..."></textarea>
                     </div>
                 </div>
             </Expand>

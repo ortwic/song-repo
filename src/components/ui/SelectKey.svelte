@@ -3,10 +3,11 @@
     import PopupMenu from "./PopupMenu.svelte";
 
     interface Props {
+        id?: string;
         value: string;
     }
 
-    let { value = $bindable() }: Props = $props();
+    let { id, value = $bindable() }: Props = $props();
     let popup: ReturnType<typeof PopupMenu>;
 
     $effect(() => {
@@ -18,6 +19,7 @@
 
 <div class="combobox-anchor">
     <input
+        {id}
         type="text"
         readonly
         class="input sm"
