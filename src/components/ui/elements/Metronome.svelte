@@ -21,8 +21,8 @@
     }: Props = $props();
 
     let tempo = $derived(parseTempo(bpm));
-    let max = $derived(limitRange ? tempo : 256);
-    let min = $derived(limitRange ? tempo * .5 : 40);
+    let max = limitRange ? tempo : 256;
+    let min = limitRange ? tempo * .5 : 40;
     let metronome: Metronome = $state(null);
     let metronomePopupMenu = $state<PopupMenu>();
 

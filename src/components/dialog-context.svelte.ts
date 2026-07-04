@@ -1,6 +1,6 @@
 import type { MenuTarget } from "../model/types";
 
-export type DialogSize = 'auto' | 'max' | 'full';
+export type DialogSize = 'auto' | 'full';
 type DialogNames = 'BlogPostDialog'
                  | 'ConfirmDialog' 
                  | 'EditSongDialog' 

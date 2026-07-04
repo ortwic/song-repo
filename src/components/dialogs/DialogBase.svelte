@@ -50,17 +50,27 @@
      * @param node
      */
     function center(node: HTMLElement) {
-        if (size == 'auto') {
-            const update = async () => {
+        if (size === 'auto') {
+            const reposition = async () => {
                 await tick();
                 const { width, height } = node.getBoundingClientRect();
-                node.style.top = `calc(50vh - ${height / 2}px)`;
+                
+                const idealTop = window.innerHeight / 2 - height / 2;
+                const maxTop = window.innerHeight - height;
+                const top = Math.min(Math.max(0, idealTop), maxTop);
+                node.style.top = `${top}px`;
                 node.style.left = `calc(50vw - ${width / 2}px)`;
             };
 
-            update();
+            const resizeObserver = new ResizeObserver(reposition);
+            resizeObserver.observe(node);
+            reposition();
 
-            return { update };
+            return { 
+                destroy() {
+                    resizeObserver.disconnect();
+                }
+            };
         }
     }
 
@@ -89,7 +99,9 @@
             use:swipeable={{ direction: 'right', threshold: '3rem' }}
             onswipeend={() => onClose(false)}>
         </div>
-        {@render children?.()}
+        <div class="dialog-content">
+            {@render children?.()}
+        </div>
         {#if footer}
             {@render footer()}
         {:else}
@@ -139,6 +151,12 @@ div.dialog {
         cursor: grab;
     }
 
+    .dialog-content {
+        overflow-y: auto;
+        flex: 1 1 auto;
+        min-height: 0;
+    }
+
     div.row button {
         background-color: var(--surface-t);
     }
@@ -151,15 +169,6 @@ div.full {
     bottom: 0;
     right: 0;
     z-index: 130;
-}
-
-div.max {
-    @include layout;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: vars.$sidebar-width;
-    border-right: 1px solid var(--border);
 }
 
 div.auto {
