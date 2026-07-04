@@ -49,7 +49,7 @@
 
     async function showDialog(target: keyof RequiredPageChecks) {
         const title = $t('menu.login.read-carefully');
-        const { body } = getPage(target);
+        const { body } = getPage(target) ?? { body: `Trouble while loading '${target}'` };
         checks[target] = await openDialog<DialogArgs, boolean>('ConfirmDialog', { 
             title, 
             body,

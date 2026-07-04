@@ -87,7 +87,8 @@
       "online": "Online-Suche nach „Songtitel [- Künstlername]“",
       "catalog": "Nach Titel, Künstler oder Genre suchen",
       "custom": "Eigenen Songeintrag hinzufügen"
-    }
+    },
+    "dont-show-again": "Wische nach rechts, um Info auszublenden."
   },
   "feedback": {
     "submit": "Feedback senden",
@@ -200,7 +201,7 @@
     },
     "resource": {
       "show": "Anzeigen",
-      "info": "**Tipp**  \nSie können jeden freigegebenen Link aus einem Cloud-Speicher verwenden.  \nAlternativ können Sie Ihr Profil verknüpfen, um die Google Drive-Auswahl zu ermöglichen.",
+      "info": "Sie können jeden freigegebenen Link aus einem Cloud-Speicher verwenden.  \nAlternativ können Sie Ihr Profil verknüpfen, um die Google Drive-Auswahl zu ermöglichen.",
       "select": "Datei auswählen",
       "select-cloud": "Datei aus Cloud",
       "select-title": "Datei aus Google Drive auswählen",

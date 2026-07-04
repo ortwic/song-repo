@@ -13,8 +13,5 @@ export function getPage(id: string) {
         };
     }
     
-    return {
-        title: '404 - Not found',
-        body: `Page '${id}' not found`
-    };
+    return null;
 }

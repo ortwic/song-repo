@@ -87,7 +87,8 @@
       "online": "Online-Search for \"Song Title [- Artist Name]\"",
       "catalog": "Search by title, artist or genre",
       "custom": "Add custom song entry"
-    }
+    },
+    "dont-show-again": "Swipe right to hide info."
   },
   "feedback": {
     "submit": "Submit feedback",
@@ -200,7 +201,7 @@
     },
     "resource": {
       "show": "Show",
-      "info": "**Tip**  \nYou can use any shared link from a cloud storage.  \nAlternatively, you can link your profile to enable Google Drive selection.",
+      "info": "You can use any shared link from a cloud storage.  \nAlternatively, you can link your profile to enable Google Drive selection.",
       "select": "Select file",
       "select-cloud": "File from cloud",
       "select-title": "Select a file from Google Drive",

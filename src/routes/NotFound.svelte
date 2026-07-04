@@ -1,5 +1,6 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
+    
     interface Props {
         children?: import('svelte').Snippet;
     }
@@ -15,7 +16,11 @@
         { $t(`notfound.messages.${no}`) }
     </p>
     <p style="color: red">
-        {@render children?.()}
+        {#if children?.()}
+            {@render children?.()}
+        {:else}
+            <img src="error.jpg" title="{$t('notfound.title')}" alt="{$t('notfound.title')}">
+        {/if}
     </p>
 </div>
 
@@ -26,5 +31,15 @@
 
     div {
         margin: 1em;
+    }
+
+    img {
+        max-width: 100%;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        img {
+            filter: invert();
+        }
     }
 </style>

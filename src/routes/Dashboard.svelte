@@ -1,20 +1,34 @@
 <script>
     import { t } from 'svelte-i18n';
+    import { fly } from 'svelte/transition';
+    import { cubicOut } from 'svelte/easing';
     import { link } from 'svelte-spa-router';
+    import { swipeable } from '@svelte-put/swipeable';
     import RecentSongs from '../components/dashboard/RecentSongs.svelte';
     import Footer from '../components/ui/Footer.svelte';
     import GetStarted from '../components/dashboard/GetStarted.svelte';
     import SearchSongs from '../components/dashboard/SearchSongs.svelte';
     import Landing from '../components/dashboard/Landing.svelte';
     import TitlebarMenu from '../components/menus/TitlebarMenu.svelte';
+    import { getPage } from '../service/common/page.service';
     import { authService, currentUser } from '../service/user/auth.service';
     import { currentProfile } from '../service/user/user.service';
     import { currentMenu } from '../store/app.store';
+
+    const INFO_KEY = 'song-repo_hide-dashboard-info';
+    let hideInfo = $state(sessionStorage.getItem(INFO_KEY) === 'true');
+
+    function setHideInfo() {
+        hideInfo = true;
+        sessionStorage.setItem(INFO_KEY, 'true');
+    }
 
     async function signOut() {
         await authService.signOut();
         currentMenu.set('dynamic');
     }
+
+    const dashboard = getPage('dashboard');
 </script>
 
 <main class="content">
@@ -27,6 +41,14 @@
     </TitlebarMenu>
     <section>
         {#if $currentUser}
+        {#if dashboard && !hideInfo}
+            <div class="info-box" title={$t('start.dont-show-again')}
+                transition:fly={{ duration: 200, x: '100%', easing: cubicOut }}
+                use:swipeable={{ direction: 'right', threshold: '1rem' }}
+                onswipeend={setHideInfo}>
+                {@html dashboard.body}
+            </div>
+        {/if}
         <p>
             <GetStarted />
         </p>

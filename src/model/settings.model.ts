@@ -24,6 +24,7 @@ export interface DashboardSettings {
         showRecentChanges: boolean;
         showRecentWip: boolean;
     },
+    custom: Record<string, unknown>;
     recentDays: number;
     limit: number;
     status: Record<Status, boolean>;

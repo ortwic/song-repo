@@ -232,6 +232,11 @@ div.tabulator-popup-container {
     div.tabulator-menu-item:hover {
         background-color: var(--bg);
     }
+
+    div.tabulator-edit-list-item {
+        color: var(--text);
+        background-color: var(--surface);
+    }
 }
 
 /* favorite column */

@@ -1,8 +1,9 @@
 <script lang="ts">
     import DialogBase from '../dialogs/DialogBase.svelte';
-    import { createDeferred, type DeferredResult } from '../../utils/promise.helper';
     import type { DialogArgs } from '../dialog-context.svelte';
     import { registerDialog } from '../dialog-context.svelte';
+    import { interceptInternalLinks } from '../actions/intercept-internal-links';
+    import { createDeferred, type DeferredResult } from '../../utils/promise.helper';
 
     let props = $state<DialogArgs | undefined>();
     let result: DeferredResult<boolean> | undefined;
@@ -29,7 +30,9 @@
     target={props.target}
     onClose={handleClose}
 >
-    <div class="body">{@html props.body}</div>
+    <div class="body" use:interceptInternalLinks>
+        {@html props.body}
+    </div>
 </DialogBase>
 {/if}
 
