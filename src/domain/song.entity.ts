@@ -98,7 +98,7 @@ export function createSongEntity(song: UserSong, config: SongParams) {
      *
      * @param targetProgress - Estimated progress (0–100) from imported data.
      */
-    function masteryFromProgress(): UserSong['mastery'] {
+    function masteryFromProgress(progress: number): UserSong['mastery'] {
         function setFractionalValue(area: TrainingFocus, target: number) {
             // Binary search for the fractional value in this area that hits the target.
             let low = 0;
@@ -120,13 +120,13 @@ export function createSongEntity(song: UserSong, config: SongParams) {
         }
 
         const result: UserSong['mastery'] = {};
-        if (song.progress > 0) {
+        if (progress > 0) {
             for (const area of MASTERY_INTERPOLATION_ORDER) {
                 const target = getFocusTarget(area);
                 result[area] = target;
 
                 const achieved = progressFromMastery(result) ?? 0;
-                if (achieved >= song.progress) {
+                if (achieved >= progress) {
                     setFractionalValue(area, target);
                     break;
                 }

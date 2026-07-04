@@ -213,11 +213,11 @@ describe('createSongEntity(song).progressFromMastery', () => {
 describe('createSongEntity(song).masteryFromProgress', () => {
     it('returns empty object for progress 0', () => {
         const song = makeSongEntity({});
-        expect(song.masteryFromProgress()).toEqual({});
+        expect(song.masteryFromProgress(0)).toEqual({});
     });
 
     it('fills melody first as the first area in canonical order', () => {
-        const result = makeSongEntity({ progress: 10 }).masteryFromProgress();
+        const result = makeSongEntity({ progress: 10 }).masteryFromProgress(10);
         expect(result.melody).toBeGreaterThan(0);
         expect(result.harmony).toBeUndefined();
     });
@@ -227,17 +227,17 @@ describe('createSongEntity(song).masteryFromProgress', () => {
         [80,  'Foundation + Execution boundary'],
         [100, 'fully saturated'],
     ])('round-trips for progress %i (%s)', (progress) => {
-        const mastery = makeSongEntity({ progress }).masteryFromProgress();
+        const mastery = makeSongEntity({ progress }).masteryFromProgress(progress);
         const roundTrip = makeSongEntity({ mastery }).progressFromMastery() ?? 0;
         expect(Math.abs(roundTrip - progress)).toBeLessThanOrEqual(1);
     });
 
     it('does not fill later areas when an earlier area suffices', () => {
-        const song = makeSongEntity({ progress: 20 });
+        const entity = makeSongEntity({ progress: 20 });
         // Progress 20 is achievable within Maturity alone (20%), but canonically
         // melody comes first — so Foundation areas are filled first.
         // Either way, improv must be absent if the target is reached earlier.
-        const result = song.masteryFromProgress();
+        const result = entity.masteryFromProgress(20);
         const filledAreas = MASTERY_INTERPOLATION_ORDER.filter((k) => result[k] !== undefined);
         const lastFilled = filledAreas.at(-1)!;
         const indexOfLast = MASTERY_INTERPOLATION_ORDER.indexOf(lastFilled);
@@ -248,8 +248,8 @@ describe('createSongEntity(song).masteryFromProgress', () => {
     });
 
     it('allows a fractional value on the last filled area', () => {
-        const song = makeSongEntity({ progress: 33.33 });
-        const result = song.masteryFromProgress();
+        const entity = makeSongEntity({ progress: 33.33 });
+        const result = entity.masteryFromProgress(entity.progress);
         const filledValues = Object.values(result) as number[];
         const lastValue = filledValues.at(-1)!;
         // All areas except the last must be at their full target.

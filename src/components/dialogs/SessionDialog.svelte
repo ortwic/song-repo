@@ -71,7 +71,7 @@
     const delta = $derived(songEntity.retentionDelta({
         changedAt: Timestamp.now(),
         touchCount: (songEntity.touchCount ?? 0) + 1,
-        lastRetention: songEntity.retentionFactor(songEntity.changedAt, songEntity.touchCount)
+        lastRetention: isImportMode ? 1 : songEntity.retentionFactor(songEntity.changedAt, songEntity.touchCount),
     }));
 
     registerDialog('SessionDialog', showDialog);
@@ -96,7 +96,7 @@
 
     function setSessionKind(newValue: SessionKind, oldValue?: SessionKind) {
         if (newValue === 'import') {
-            initFocusFromProgress();
+            initFocusFromProgress(songEntity.progress);
         } else if (!oldValue || oldValue === 'import') {
             initFocusFromSuggestion();
         }
@@ -108,17 +108,11 @@
         activeFocus = new Map(suggested.map((key) => [key, INIT_FOCUS_VALUE]));
     }
 
-    function initFocusFromProgress(): void {
-        const mastery = songEntity.masteryFromProgress();
+    function initFocusFromProgress(progress: number): void {
+        const mastery = songEntity.masteryFromProgress(progress);
         activeFocus = new Map(
             (Object.entries(mastery) as [TrainingFocus, number][]).map(([key, value]) => [key, value])
         );
-    }
-
-    function updateFocusFromProgress(progress: number): void {
-        // bind:value updates progress one cycle late
-        songEntity.progress = progress;
-        initFocusFromProgress();
     }
 
     function formatElapsed(seconds: number): string {
@@ -226,7 +220,7 @@
             <ProgressBar 
                 bind:value={songEntity.progress} 
                 delta={delta} 
-                onChange={updateFocusFromProgress} 
+                onChange={initFocusFromProgress} 
             />
             {:else}
             <label for="progress">

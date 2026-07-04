@@ -87,7 +87,7 @@ export function formatTemplates(songService: SongService, settings: AdvancedSett
                         props.onChange = (value: number) => {
                             cell.setValue(value);
                             song.progress = value;
-                            song.mastery = song.masteryFromProgress();
+                            song.mastery = song.masteryFromProgress(value);
                             songService.updateSong(song).then(() => cell.getRow().reformat());
                         };
                     } else {

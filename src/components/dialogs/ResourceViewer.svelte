@@ -33,7 +33,7 @@
 
     function handleError(err: unknown): void {
         isBlocked = true;
-        console.log(err);
+        console.warn(err);
     }
 
     function openExternal(): void {
