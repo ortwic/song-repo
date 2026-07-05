@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { t } from "svelte-i18n";
     import { fade } from "svelte/transition";
     interface Props {
         height?: string;
@@ -13,13 +14,23 @@
     }
 </script>
 
+{#if isLoading}
+    <div id="loader" style:height transition:fade>
+    <i class="bx bx-loader-alt bx-spin"></i>
+    { $t('start.loading') }
+    </div>
+{:else}
+    {@render children?.()}
+{/if}
+
 <style lang="scss">
 div#loader {
-    color: white;
-    font-size: small;
+    position: absolute;
+    color: var(--surface);
+    font-weight: 500;
     font-style: italic;
+    padding: .4em .8em;
     width: 100%;
-    text-align: center;
 
     &#loader {
         background: linear-gradient(90deg, var(--accent), var(--surface-light), var(--accent), var(--accent));
@@ -38,9 +49,3 @@ div#loader {
     }
 }
 </style>
-
-{#if isLoading}
-    <div id="loader" style:height transition:fade>
-        {@render children?.()}
-    </div>
-{/if}

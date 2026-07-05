@@ -16,8 +16,8 @@
         { $t(`notfound.messages.${no}`) }
     </p>
     <p style="color: red">
-        {#if children?.()}
-            {@render children?.()}
+        {#if children}
+            {@render children()}
         {:else}
             <img src="error.jpg" title="{$t('notfound.title')}" alt="{$t('notfound.title')}">
         {/if}

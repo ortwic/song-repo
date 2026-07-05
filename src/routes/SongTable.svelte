@@ -9,6 +9,7 @@
     import { createColumnBuilder, createEditor } from '../components/table/templates/column.helper';
     import { autoFilter, dateFilter, hasValueFilter, rangeFilter, statusFilter } from '../components/table/templates/filter.helper';
     import { createIntervals, formatTemplates, groupByFormatter } from '../components/table/templates/formatters.svelte';
+    import LoadingBar from '../components/ui/elements/LoadingBar.svelte';
     import Table from '../components/table/Table.svelte';
     import FileDrop from '../components/table/FileDrop.svelte';
     import { buildActionMenu } from '../components/table/templates/actionMenu.helper';
@@ -147,19 +148,21 @@
 
 <main>
     <TitlebarMenu minimal={true} />
-    <FileDrop onEnter={() => showInfo($t('songs.import'))} onAddJson={(detail) => importJSON(detail)}>
-        <Table
-            {columns}
-            data={entities}
-            idField="id"
-            placeholder={$t('songs.search-empty')}
-            placeholderSearch={$t('table.search')}
-            persistenceID={readonly ? `ro-${viewStoreId}` : viewStoreId}
-            groupHeader={groupByFormatter}
-            onInit={init}
-            onError={showError}
-        />
-    </FileDrop>
+    <LoadingBar isLoading={!$entities}>
+        <FileDrop onEnter={() => showInfo($t('songs.import'))} onAddJson={(detail) => importJSON(detail)}>
+            <Table
+                {columns}
+                data={entities}
+                idField="id"
+                placeholder={$t('songs.search-empty')}
+                placeholderSearch={$t('table.search')}
+                persistenceID={readonly ? `ro-${viewStoreId}` : viewStoreId}
+                groupHeader={groupByFormatter}
+                onInit={init}
+                onError={showError}
+            />
+        </FileDrop>
+    </LoadingBar>
 </main>
 
 <style lang="scss">
