@@ -5,10 +5,10 @@
     import { Timestamp } from 'firebase/firestore';
     import { SEARCH_ACTIONS } from '../../domain/song.actions';
     import type { SongEntity } from '../../domain/song.entity';
-    import type { TrainingFocus, SessionKind, TrainingAreas } from '../../model/types';
+    import type { TrainingFocus, SessionKind, TrainingAreas } from '../../model/app.types';
     import type { Intensity, UserSession } from '../../model/session.model';
     import type { Song } from '../../model/song.model';
-    import { FOCUS_KEYS, SESSIONKIND_KEYS } from '../../model/types';
+    import { FOCUS_KEYS, SESSIONKIND_KEYS } from '../../model/app.types';
     import { createDeferred, type DeferredResult } from '../../utils/promise.helper';
     import { openDialog, registerDialog } from '../dialog-context.svelte';
     import PopupMenu from '../ui/PopupMenu.svelte';

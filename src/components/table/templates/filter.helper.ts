@@ -1,7 +1,7 @@
 import { t } from 'svelte-i18n';
 import { get } from 'svelte/store';
 import type { ColumnDefinition, FilterType, ListEditorParams } from 'tabulator-tables';
-import { STATUS_KEYS } from '../../../model/types';
+import { STATUS_KEYS } from '../../../model/app.types';
 
 type AutoFilterParams = ListEditorParams & {
     operator?: ColumnDefinition['headerFilterFunc'];

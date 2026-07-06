@@ -4,7 +4,7 @@ import type { CellComponent, MenuObject, MenuSeparator } from 'tabulator-tables'
 import { SEARCH_ACTIONS, SongActions } from '../../../domain/song.actions';
 import type { UserSong } from '../../../model/song.model';
 import type { AdvancedSettings } from '../../../model/settings.model';
-import { STATUS_MODES } from '../../../model/types';
+import { STATUS_MODES } from '../../../model/app.types';
 import { createSongEntity } from '../../../domain/song.entity';
 
 export function buildActionMenu(actions: SongActions, settings: AdvancedSettings): Array<MenuObject<CellComponent> | MenuSeparator> {

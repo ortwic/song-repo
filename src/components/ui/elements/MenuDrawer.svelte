@@ -1,7 +1,7 @@
 <script lang="ts">
     import { get } from 'svelte/store';
     import { swipeable } from '@svelte-put/swipeable';
-    import type { MenuTarget } from '../../../model/types';
+    import type { MenuTarget } from '../../../model/app.types';
     import { currentMenu } from '../../../store/app.store';
 
     interface Props {

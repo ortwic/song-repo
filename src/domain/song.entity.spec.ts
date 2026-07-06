@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { Timestamp } from 'firebase/firestore';
 import type { SongParams } from '../model/settings.model';
 import type { UserSong } from '../model/song.model';
-import { FOCUS_KEYS } from '../model/types';
+import { FOCUS_KEYS } from '../model/app.types';
 import { DEFAULT_USER_SETTINGS } from '../service/user/default-settings';
 import { createSongEntity, MASTERY_INTERPOLATION_ORDER, SongEntity } from './song.entity';
 

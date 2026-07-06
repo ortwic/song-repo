@@ -16,10 +16,10 @@
     import { summaryFormatter } from '../components/table/templates/responsive.helper';
     import { SongActions } from '../domain/song.actions';
     import { createSongEntity, type SongEntity } from '../domain/song.entity';
-    import type { TableView } from '../model/table-view.model';
     import { refData } from '../service/base/app-cache.setup';
     import SessionService from '../service/user/user-session.service';
     import SongService, { viewStoreId } from '../service/user/user-song.service';
+    import type { TableView } from '../store/app.store';
     import { showError, showInfo } from '../store/notification.store';
     import { settings } from '../store/user-settings.svelte';
 

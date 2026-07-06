@@ -1,7 +1,7 @@
 import { type DialogArgs, openDialog } from '../components/dialog-context.svelte';
 import type { UserSession } from '../model/session.model';
 import type { Song, UserSong } from '../model/song.model';
-import type { StatusMode } from '../model/types';
+import type { StatusMode } from '../model/app.types';
 import type SessionService from '../service/user/user-session.service';
 import type SongService from '../service/user/user-song.service';
 import { logAction } from '../store/notification.store';

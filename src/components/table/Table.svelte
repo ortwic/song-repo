@@ -34,8 +34,7 @@
     import { t } from 'svelte-i18n';
     import { onMount, onDestroy } from 'svelte';
     import { Observable, fromEvent, map, take } from 'rxjs';
-    import type { TableView } from '../../model/table-view.model';
-    import { tableView } from '../../store/app.store';
+    import { tableView, type TableView } from '../../store/app.store';
     import { showError } from '../../store/notification.store';
     import { orientation, type Orientation } from '../../store/media.store';
     import responsiveCollapse from './tabulator/modules/formatters/responsiveCollapse';

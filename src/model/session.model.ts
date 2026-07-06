@@ -1,5 +1,5 @@
 import type { Timestamp } from "firebase/firestore";
-import type { SessionType, Status, TrainingAreas } from "./types";
+import type { SessionType, Status, TrainingAreas } from "./app.types";
 
 export type Intensity = number;
 

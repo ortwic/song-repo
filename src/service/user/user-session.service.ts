@@ -2,7 +2,7 @@ import { DateTime } from 'luxon';
 import { orderBy, Timestamp } from 'firebase/firestore';
 import { Observable, switchMap } from 'rxjs';
 import type { SongEntity } from '../../domain/song.entity';
-import type { TrainingFocus } from '../../model/types';
+import type { TrainingFocus } from '../../model/app.types';
 import type { UserSession } from '../../model/session.model';
 import { stores } from '../base/firestore.service';
 import { currentUser } from './auth.service';

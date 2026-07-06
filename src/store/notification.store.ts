@@ -1,7 +1,14 @@
 import { logEvent } from 'firebase/analytics';
 import { ArrayStore } from './array.class';
-import type { Notification, NotificationType } from '../model/notification.model';
 import { analytics } from '../service/user/auth.service';
+
+type NotificationType = 'info' | 'warn' | 'error';
+
+interface Notification {
+    type: NotificationType;
+    message: string;
+    timeout?: number;
+}
 
 const defaultTimeout = 3;
 

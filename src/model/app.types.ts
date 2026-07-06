@@ -1,4 +1,4 @@
-type ObjectValues<T> = T[keyof T];
+export type ObjectValues<T> = T[keyof T];
 
 const STATUS_RECORD = {
     1: 'todo',

@@ -9,7 +9,7 @@
     import { createSearchService } from '../../service/catalog/search.service';
     import { openDialog } from '../dialog-context.svelte';
     import type { Song, UserSong } from '../../model/song.model';
-    import type { SearchEngines } from '../../model/types';
+    import type { SearchEngines } from '../../model/app.types';
     import { logAction } from '../../store/notification.store';
 
     const songService = new SongService();

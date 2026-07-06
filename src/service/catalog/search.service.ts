@@ -1,5 +1,5 @@
 import type { Artist, Song } from '../../model/song.model';
-import type { SearchEngines } from '../../model/types';
+import type { SearchEngines } from '../../model/app.types';
 import SearchAudiusService from './search-audius.service';
 import SearchDiscogsService from './search-discogs.service';
 import SearchMusicBrainzService from './search-musicbrainz.service';

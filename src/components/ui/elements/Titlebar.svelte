@@ -1,6 +1,6 @@
 <script lang="ts">
     import { t } from "svelte-i18n";
-    import type { MenuTarget } from "../../../model/types";
+    import type { MenuTarget } from "../../../model/app.types";
 
     interface Props {
         target?: MenuTarget;

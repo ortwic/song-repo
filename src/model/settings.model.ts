@@ -1,4 +1,4 @@
-import type { Status } from "./types";
+import type { Status } from "./app.types";
 
 export interface UserSettings {
     advanced: AdvancedSettings;

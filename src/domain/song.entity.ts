@@ -2,7 +2,7 @@ import { DateTime } from 'luxon';
 import type { SessionRecord } from '../model/session.model';
 import type { SongParams } from '../model/settings.model';
 import type { Genre, UserSong } from '../model/song.model';
-import type { Status, StatusMode, TrainingFocus } from '../model/types';
+import type { Status, StatusMode, TrainingFocus } from '../model/app.types';
 import { refData } from '../service/base/app-cache.setup';
 import { type DateLike, toDate } from '../utils/date.helper';
 import { defineMethods } from '../utils/object.helper';

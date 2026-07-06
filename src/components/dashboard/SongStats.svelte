@@ -3,7 +3,7 @@
     import { onMount } from 'svelte';
     import type { DashboardSettings } from '../../model/settings.model';
     import type { IndexEntry } from '../../utils/index-builder';
-    import { type Status, STATUS_KEYS } from '../../model/types';
+    import { type Status, STATUS_KEYS } from '../../model/app.types';
     import { settings, saveSettings } from '../../store/user-settings.svelte';
     import SongService from '../../service/user/user-song.service';
     import { currentMenu } from '../../store/app.store';

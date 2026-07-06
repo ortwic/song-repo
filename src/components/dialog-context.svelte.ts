@@ -1,4 +1,4 @@
-import type { MenuTarget } from "../model/types";
+import type { MenuTarget } from "../model/app.types";
 
 export type DialogSize = 'auto' | 'full';
 type DialogNames = 'BlogPostDialog'

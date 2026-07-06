@@ -4,7 +4,7 @@
     import { cubicOut } from 'svelte/easing';
     import { t } from "svelte-i18n";
     import { swipeable } from "@svelte-put/swipeable";
-    import type { MenuTarget } from "../../model/types";
+    import type { MenuTarget } from "../../model/app.types";
     import type { DialogSize } from "../dialog-context.svelte";
     import Titlebar from "../ui/elements/Titlebar.svelte";
 
