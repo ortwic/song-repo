@@ -2,7 +2,7 @@
     import { marked } from 'marked';
     import { t } from 'svelte-i18n';
     import { push, querystring } from 'svelte-spa-router';
-    import type { Content, Post } from '../../model/post.model';
+    import type { PostContent, Post } from '../../model/post.model';
     import { currentUser } from '../../service/user/auth.service';
     import { logPageView } from '../../store/notification.store';
     import NotFound from '../../routes/NotFound.svelte';
@@ -14,7 +14,7 @@
     interface Props {
         id?: string;
         title?: string;
-        content?: Content[];
+        content?: PostContent[];
     }
 
     let {
