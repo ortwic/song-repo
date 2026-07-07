@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import type { SessionRecord } from '../model/session.model';
+import type { SongSession } from '../model/session.model';
 import type { SongParams } from '../model/settings.model';
 import type { Genre, UserSong } from '../model/song.model';
 import type { Status, StatusMode, TrainingFocus } from '../model/app.types';
@@ -226,7 +226,7 @@ export function createSongEntity(song: UserSong, config: SongParams) {
     function migrateLegacyProgress(): UserSong | undefined {
         const copy = { ...song };
         if (copy.mastery === undefined || copy.mastery === null) {
-            copy.mastery = masteryFromProgress();
+            copy.mastery = masteryFromProgress(song.progress);
             copy.touchCount = Object.entries(copy.mastery ?? {}).reduce((acc, [key, value]) => acc + Math.round(value), 0);
             if (copy.fav) {
                 copy.touchCount *= 3;
@@ -246,7 +246,7 @@ export function createSongEntity(song: UserSong, config: SongParams) {
         resolvedStatus,
         migrateLegacyProgress,
         suggestInitialFocus,
-        quickSessionFocus(): SessionRecord['areas'] {
+        quickSessionFocus(): SongSession['areas'] {
             const delta = config.quickSessionDeltaPerArea;
             return Object.fromEntries(suggestInitialFocus().map((key) => [key, delta]));
         },

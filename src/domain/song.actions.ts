@@ -83,13 +83,13 @@ export class SongActions {
     async runSession(entity: SongEntity): Promise<UserSession> {
         const session = await openDialog<SongEntity, UserSession>('SessionDialog', entity);
         if (session) {
-            await this.sessionService.addSession(entity, session);
+            await this.sessionService.addSongSession(entity, session);
         }
         return session;
     }
 
     async quickSession(entity: SongEntity, durationMinutes: number): Promise<void> {
-        return this.sessionService.addQuick(entity, durationMinutes);
+        return this.sessionService.addQuickSong(entity, durationMinutes);
     }
 
     async delete(song: UserSong, args?: DialogArgs): Promise<void> {

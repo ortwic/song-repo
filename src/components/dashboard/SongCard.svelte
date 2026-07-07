@@ -62,7 +62,7 @@
         <button
             class="clear sm"
             title={$t('sessions.menu.quick')}
-            onclick={() => sessionService.addQuick(songEntity, settings.advanced.quickSessionDurationMinutes)}
+            onclick={() => sessionService.addQuickSong(songEntity, settings.advanced.quickSessionDurationMinutes)}
         >
             <i class="icon bx bxs-bolt"></i>
         </button>

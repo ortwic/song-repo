@@ -19,8 +19,8 @@ export default class SessionService {
         );
     }
 
-    async addQuick(entity: SongEntity, durationMinutes: number): Promise<void> {
-        await this.addSession(entity, {
+    async addQuickSong(entity: SongEntity, durationMinutes: number): Promise<void> {
+        await this.addSongSession(entity, {
             type: 'quick',
             songId: entity.id,
             title: entity.title,
@@ -30,7 +30,7 @@ export default class SessionService {
         });
     }
 
-    async addSession(entity: SongEntity, session: Partial<UserSession>) {
+    async addSongSession(entity: SongEntity, session: Partial<UserSession>) {
         if (session != null) {
             this.updateSong(entity, session);
             session.status = entity.resolvedStatus();

@@ -42,7 +42,7 @@
 
     let visible = $state(false);
     let songEntity = $state<SongEntity | null>(null);
-    let session = $state({} as UserSession);
+    let session = $state({ rel: 'song' } as UserSession);
     let selectedKind = $state<SessionKind>('practice');
     let activeFocus = $state<Map<TrainingFocus, Intensity>>(new Map());
     let elapsedSeconds = $state(0);
