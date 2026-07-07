@@ -3,6 +3,7 @@
     import { params as params$ } from "svelte-spa-router";
     import { t } from "svelte-i18n";
     import { Loader } from '@googlemaps/js-api-loader';
+    import TitlebarMenu from "../components/menus/TitlebarMenu.svelte";
     import { getEvents } from "../service/common/event.service";
     import { showError } from "../store/notification.store";
     import type { CalendarEvent } from "../model/event.model";
@@ -106,6 +107,9 @@
 </svelte:head>
 
 <main>
+    <TitlebarMenu>
+        <i class="bx bx-calendar"></i>&nbsp; {$t('menu.events')}
+    </TitlebarMenu>
     <div class="full" bind:this={mapContainer}></div>
     <div class="template">
         {#each $events$ as event}

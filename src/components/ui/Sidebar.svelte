@@ -1,21 +1,20 @@
 <script lang="ts">
     import '../../styles/menu.scss';
     import { t } from 'svelte-i18n';
-    import { push } from 'svelte-spa-router';
+    import { location, push } from 'svelte-spa-router';
     import { slide } from 'svelte/transition';
     import { swipeable } from '@svelte-put/swipeable';
     import { currentUser } from '../../service/user/auth.service';
     import Titlebar from './elements/Titlebar.svelte';
 
     interface Props {
-        title?: string;
         children?: import('svelte').Snippet;
         lower?: import('svelte').Snippet;
         footer?: import('svelte').Snippet;
         onclose: () => void;
     }
 
-    let { title = '', children, lower, footer, onclose }: Props = $props();
+    let { children, lower, footer, onclose }: Props = $props();
 
     function hide() {
         onclose();
@@ -29,15 +28,34 @@
     out:slide={{ duration: 200, axis: 'x' }}
 >
     <Titlebar target="hidden">
-        {title}
         {#snippet controls()}
-            {#if $currentUser}
+            {#if $location !== '/'}
+            <button class="titlebar-button" title={$t('start.hello')} data-close onclick={() => push('/')}>
+                {#if $currentUser}
+                <i class="item bx bx-user-circle"></i>
+                {:else}
+                <i class="item bx bx-world"></i>
+                {/if}
+            </button>
+            {/if}
+            {#if !$location.startsWith('/songs')}
+            <button class="titlebar-button" title={$t('menu.repo')} data-close onclick={() => push('/songs')}>
+                <i class="item bx bxs-playlist"></i>
+            </button> 
+            {/if}
+            {#if !$location.startsWith('/blog')}
+            <button class="titlebar-button" title={$t('menu.howto')} data-close onclick={() => push('/blog')}>
+                <i class="item bx bx-book-open"></i>
+            </button>
+            {/if}
+            {#if $location !== '/events'}
+            <button class="titlebar-button" title={$t('menu.events')} data-close onclick={() => push('/events')}>
+                <i class="item bx bx-calendar"></i>
+            </button>
+            {/if}
+            {#if $location !== '/settings'}
             <button class="titlebar-button" title={$t('settings.title')} data-close onclick={() => push('/settings')}>
                 <i class="item bx bx-cog"></i>
-            </button>
-            {:else}
-            <button class="titlebar-button" title={$t('start.hello')} data-close onclick={() => push('/')}>
-                <i class="item bx bx-world"></i>
             </button>
             {/if}
         {/snippet}
@@ -61,12 +79,17 @@
         display: flex;
         flex-direction: column;
         position: fixed;
+        top: 0; //2.2em;
         right: 0;
+        bottom: 0;
         width: vars.$sidebar-width;
-        height: 100%;
         z-index: 100;
         box-shadow: 0 0 2em #00000080;
         user-select: none;
+
+        a.title {
+            color: inherit;
+        }
 
         button {
             padding: 0;

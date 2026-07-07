@@ -70,7 +70,7 @@
     });
 
     type T = $$Generic;
-    type GroupFormatter = (value: unknown, count: number, data: T[], group?: GroupComponent) => string;
+    type GroupFormatter = (value: unknown, count: number, data: T[], group?: GroupComponent) => string | HTMLElement;
 
     const rowGroups: Record<string, GroupArg> = {};
     export const isGroupedBy = (field: string) => field in rowGroups;
@@ -78,7 +78,7 @@
         idField: keyof T;
         columns?: ColumnDefinition[];
         data: Observable<T[]>;
-        groupBy?: string[];
+        groupBy?: Array<keyof T>;
         placeholder?: string;
         placeholderSearch?: string;
         groupHeader?: GroupFormatter;

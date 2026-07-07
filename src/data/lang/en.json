@@ -1,7 +1,6 @@
 {
   "menu": {
-    "start": "Start",
-    "repo": "Repertory",
+    "repo": "Complete repertory",
     "howto": "How to music",
     "howto-blog": "How to make music blog",
     "events": "Public events",
@@ -208,7 +207,6 @@
       "upload": "Upload file",
       "blocked": "Unable to display resource!"
     },
-    "search-empty": "No results found! 😥",
     "exportTitle": "My Song List",
     "import": "Start importing...",
     "importDone": "Found {found} songs. Total songs: {total}",
@@ -364,6 +362,7 @@
     "alias-unknown": "User alias is unkown!"
   },
   "common": {
+    "search-empty": "No results found! 😥",
     "collapse": "Collapse",
     "expand": "Expand",
     "true": "Yes",

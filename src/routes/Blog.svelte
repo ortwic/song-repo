@@ -54,7 +54,7 @@
 
 <main class="content">
     <TitlebarMenu>
-        <i class="bx bx-music"></i>&nbsp; {$t('blog.title')}
+        <i class="bx bx-book-open"></i>&nbsp; {$t('blog.title')}
     </TitlebarMenu>
     {#each posts as post}
         <div class="post">

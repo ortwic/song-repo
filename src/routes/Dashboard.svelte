@@ -8,6 +8,7 @@
     import Footer from '../components/ui/Footer.svelte';
     import GetStarted from '../components/dashboard/GetStarted.svelte';
     import SearchSongs from '../components/dashboard/SearchSongs.svelte';
+    import SongStats from '../components/dashboard/SongStats.svelte';
     import Landing from '../components/dashboard/Landing.svelte';
     import TitlebarMenu from '../components/menus/TitlebarMenu.svelte';
     import { getPage } from '../service/common/page.service';
@@ -56,6 +57,7 @@
             <SearchSongs />
         </p>
         <p>
+            <SongStats />
             <RecentSongs />
         </p>
         <div style="text-align: right;">

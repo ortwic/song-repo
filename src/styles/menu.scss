@@ -17,12 +17,12 @@
 @mixin icon {
     border: 1px solid var(--border);
     border-radius: 1em;
-    background-color: var(--bg);
     padding: 4px;
 }
 
 i.icon {
     @include icon;
+    background-color: var(--bg);
 }
 
 .input {
@@ -76,7 +76,7 @@ i.icon {
             }
 
             &.warn {
-                color: black;
+                color: var(--accent-text);
                 background-color: var(--highlight-t);
 
                 &:hover {

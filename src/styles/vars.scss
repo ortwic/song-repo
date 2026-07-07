@@ -6,6 +6,25 @@ $sidebar-width: 234px;
     -webkit-backdrop-filter: blur(10px);
 }
 
+@mixin accent-button {
+    color: var(--surface);
+    background-color: var(--accent);
+    box-shadow: var(--shadow-md);
+
+    &:hover:not(:disabled) {
+        background-color: var(--accent-muted);
+    }
+}
+
+@mixin disabled-button {
+    color: var(--text-muted);
+    background-color: var(--surface);
+    border-color: var(--surface-light);
+    box-shadow: unset;
+    text-shadow: unset;
+    cursor: not-allowed;
+}
+
 // ─── Theme ───────────────────────────────────────────────
 // https://coolors.co/e9e3d6-e0d7c7-bfb9aa-a71908-0b0802
 :root {
@@ -14,7 +33,7 @@ $sidebar-width: 234px;
     --accent-t:      #a71908c0;
     --accent-active: #8a1406;
     --accent-muted:  #661108;
-    --accent-text:   #e9e3d6;
+    --accent-text:   #161210;
 
     // Highlight
     --highlight:        #d0ff00;

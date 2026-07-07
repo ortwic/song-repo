@@ -154,7 +154,7 @@
                 {columns}
                 data={entities}
                 idField="id"
-                placeholder={$t('songs.search-empty')}
+                placeholder={$t('common.search-empty')}
                 placeholderSearch={$t('table.search')}
                 persistenceID={readonly ? `ro-${viewStoreId}` : viewStoreId}
                 groupHeader={groupByFormatter}

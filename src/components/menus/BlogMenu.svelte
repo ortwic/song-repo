@@ -18,7 +18,7 @@
 <section class="menu">
     <div class="row">
         <button data-close onclick={() => push('/blog')}>
-            <i class="bx bx-music"></i>
+            <i class="bx bx-book-open"></i>
             {$t('blog.all-entries')}
         </button>
     </div>

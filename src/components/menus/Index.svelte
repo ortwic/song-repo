@@ -35,7 +35,7 @@
 
 <MenuDrawer>
     {#if $currentMenu === 'dynamic'}
-        <Sidebar title={$t('menu.start')} onclose={hide}>
+        <Sidebar onclose={hide}>
             {#if $currentUser}
                 <ProfileMenu
                     email={$currentUser.email}
@@ -61,14 +61,11 @@
             {/if}
 
             {#snippet lower()}
-                <NavButton href="/songs" title={$t('menu.repo')}>
-                    <span><i class="bx bxs-playlist"></i> {$t('menu.repo')}</span>
-                </NavButton>
                 <NavButton href="/events" title={$t('menu.event-calendar')}>
                     <span><i class="bx bx-calendar"></i> {$t('menu.events')}</span>
                 </NavButton>
                 <NavButton href="/blog" title={$t('menu.howto-blog')}>
-                    <span><i class="bx bx-music"></i> {$t('menu.howto')}</span>
+                    <span><i class="bx bx-book-open"></i> {$t('menu.howto')}</span>
                 </NavButton>
                 <div class="row">
                     <a use:link class="warn" role="button" href="/user/ocsoft42">
@@ -83,7 +80,7 @@
             {/snippet}
         </Sidebar>
     {:else if $currentMenu === 'signup'}
-        <Sidebar title={$t('menu.login.signup')} onclose={hide}>
+        <Sidebar onclose={hide}>
             <SignupMenu />
             {#snippet footer()}
                 {footer}
