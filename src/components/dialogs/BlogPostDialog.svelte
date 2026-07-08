@@ -47,7 +47,7 @@
     }
 </script>
 
-<DialogBase {visible} {size} onClose={handleClose}>
+<DialogBase {visible} {size} type='view' onClose={handleClose}>
     {#snippet header()}
         <i class="bx bx-detail"></i> {post?.title ?? $t('notfound.title')}
     {/snippet}
@@ -86,10 +86,6 @@
     {:else}
     <NotFound />
     {/if}
-
-    {#snippet footer()}
-        <!-- hide confirm/decline -->
-    {/snippet}
 </DialogBase>
 
 <style lang="scss">

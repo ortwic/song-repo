@@ -5,7 +5,7 @@
     import { t } from "svelte-i18n";
     import { swipeable } from "@svelte-put/swipeable";
     import type { MenuTarget } from "../../model/app.types";
-    import type { DialogSize } from "../dialog-context.svelte";
+    import type { DialogAction, DialogSize, DialogType } from "../dialog-context.svelte";
     import Titlebar from "../ui/elements/Titlebar.svelte";
 
     interface Props {
@@ -13,11 +13,14 @@
         target?: MenuTarget;
         title?: string;
         visible?: boolean;
+        type: DialogType;
         header?: import('svelte').Snippet;
         controls?: import('svelte').Snippet;
         children?: import('svelte').Snippet;
         footer?: import('svelte').Snippet;
-        onClose: (confirmed: boolean) => void;
+        onClose: (result: { 
+            action?: DialogAction; 
+        }) => void;
     }
 
     let {
@@ -25,6 +28,7 @@
         target = 'hidden',
         title = '',
         visible = false,
+        type = 'confirm',
         header,
         controls,
         children,
@@ -37,7 +41,7 @@
     onMount(() => {
         const handleKeydown = (event: KeyboardEvent) => {
             if (visible && event.key === 'Escape') {
-                onClose(false);
+                handleClose();
             }
         };
 
@@ -74,20 +78,15 @@
         }
     }
 
-    function confirm(event: Event) {
-        event.stopPropagation();
-        onClose(true);
-    }
-
-    function decline(event: Event) {
-        event.stopPropagation();
-        onClose(false);
-    }
+    function handleClose(event?: Event, action?: DialogAction): void {
+        event?.stopPropagation();
+        onClose({ action });
+    };
 </script>
 
 {#if visible}
     <div class='dialog {size}' use:center transition:fly={flyParams}>
-        <Titlebar {target} onClose={() => onClose(false)}>
+        <Titlebar {target} onClose={handleClose}>
             {@render header?.()} {title}
             {#snippet controls()}
                 {@render controls?.()}
@@ -97,20 +96,28 @@
             title={$t('dialog.swipe-to-close')} 
             aria-hidden="true"
             use:swipeable={{ direction: 'right', threshold: '3rem' }}
-            onswipeend={() => onClose(false)}>
+            onswipeend={handleClose}>
         </div>
         <div class="dialog-content">
             {@render children?.()}
         </div>
-        {#if footer}
-            {@render footer()}
-        {:else}
+        {@render footer?.()}
+        {#if type === 'confirm'}
             <div class="row">
-                <button data-target={target} onclick={confirm}>
+                <button data-target={target} onclick={(e) => handleClose(e, 'confirm')}>
                     { $t('dialog.confirm') }
                 </button>
-                <button data-target={target} onclick={decline}>
+                <button data-target={target} onclick={(e) => handleClose(e)}>
                     { $t('dialog.decline') }
+                </button>
+            </div>
+        {:else if type === 'wizard'}
+            <div class="row">
+                <button data-target={target} onclick={(e) => handleClose(e, 'next')}>
+                    { $t('dialog.next') }
+                </button>
+                <button data-target={target} onclick={(e) => handleClose(e, 'previous')}>
+                    { $t('dialog.prev') }
                 </button>
             </div>
         {/if}

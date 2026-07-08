@@ -1,24 +1,24 @@
 <script lang="ts">
     import DialogBase from '../dialogs/DialogBase.svelte';
-    import type { DialogArgs } from '../dialog-context.svelte';
+    import type { DialogAction, DialogArgs } from '../dialog-context.svelte';
     import { registerDialog } from '../dialog-context.svelte';
     import { interceptInternalLinks } from '../actions/intercept-internal-links';
     import { createDeferred, type DeferredResult } from '../../utils/promise.helper';
 
     let props = $state<DialogArgs | undefined>();
-    let result: DeferredResult<boolean> | undefined;
+    let result: DeferredResult<DialogAction> | undefined;
 
-    registerDialog<DialogArgs, boolean>('ConfirmDialog', showDialog);
+    registerDialog<DialogArgs, DialogAction>('ConfirmDialog', showDialog);
 
     export function showDialog(args: DialogArgs) {
         props = args;
-        result = createDeferred<boolean>();
+        result = createDeferred<DialogAction>();
         return result.promise;
     }
 
-    function handleClose(confirmed: boolean) {
+    function done(action: DialogAction) {
         props = undefined;
-        result.resolve(confirmed);
+        result.resolve(action);
     }
 </script>
 
@@ -27,8 +27,9 @@
     visible={props !== undefined} 
     title={props.title ? `${props.title} | Song-Repo` : 'Song-Repo'} 
     size={props.size ?? 'auto'} 
+    type='confirm'
     target={props.target}
-    onClose={handleClose}
+    onClose={({ action }) => done(action)}
 >
     <div class="body" use:interceptInternalLinks>
         {@html props.body}

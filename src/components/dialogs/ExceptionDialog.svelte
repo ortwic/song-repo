@@ -22,7 +22,7 @@
 </script>
 
 
-<DialogBase size="auto" visible={!!error} onClose={handleClose}>
+<DialogBase size="auto" visible={!!error} type="confirm" onClose={handleClose}>
     {#snippet header()}
         <i class="bx bx-alert-triangle"></i>
         {error?.title}

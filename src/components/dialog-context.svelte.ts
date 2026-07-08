@@ -1,12 +1,15 @@
 import type { MenuTarget } from "../model/app.types";
 
 export type DialogSize = 'auto' | 'full';
+export type DialogType = 'view' | 'confirm' | 'wizard';
+export type DialogAction = 'confirm' | 'next' | 'previous' | undefined;
 type DialogNames = 'BlogPostDialog'
                  | 'ConfirmDialog' 
                  | 'EditSongDialog' 
                  | 'ExceptionDialog'
                  | 'ResourceViewer' 
-                 | 'SessionDialog';
+                 | 'SessionDialog'
+                 | 'SnippetDialog';
 type ShowDialogEventCallback<TArgs = DialogArgs, TResult = void> = (args?: TArgs) => Promise<TResult>;
 
 interface Dialog<TArgs = DialogArgs, TResult = void> {
@@ -18,6 +21,10 @@ export interface DialogArgs {
     body: string;
     size?: DialogSize;
     target?: MenuTarget;
+}
+
+export interface WizardDialogArgs<T> {
+    model: T;
 }
 
 export interface ExceptionDialogArgs extends DialogArgs {

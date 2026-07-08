@@ -242,6 +242,16 @@
     "search-filter-settings": "Filtereinstellungen",
     "played-times": "{count}x gespielt"
   },
+  "snippets": {
+    "dialog": {
+      "title": "Snippet",
+      "never-played": "Noch nie gespielt",
+      "last-played": "Zuletzt gespielt",
+      "no-score": "Keine Notenansicht verfügbar",
+      "score-error": "Notenansicht konnte nicht geladen werden",
+      "play-midi": "MIDI abspielen"
+    }
+  },
   "table": {
     "groupBy": "Gruppieren nach {title}",
     "search": "Suchen nach etwas wie Genre, Künstler, todo...",
@@ -273,6 +283,9 @@
   "dialog": {
     "confirm": "Bestätigen",
     "decline": "Ablehnen",
+    "next": "Nächstes",
+    "prev": "Vorheriges",
+    "done": "Abschließen",
     "swipe-to-close": "Zum Schließen nach rechts wischen"
   },
   "profile": {

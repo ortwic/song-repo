@@ -1,4 +1,4 @@
-import { type DialogArgs, openDialog } from '../components/dialog-context.svelte';
+import { type DialogAction, type DialogArgs, openDialog } from '../components/dialog-context.svelte';
 import type { UserSession } from '../model/session.model';
 import type { Song, UserSong } from '../model/song.model';
 import type { StatusMode } from '../model/app.types';
@@ -93,8 +93,8 @@ export class SongActions {
     }
 
     async delete(song: UserSong, args?: DialogArgs): Promise<void> {
-        const confirmed = !args || await openDialog<DialogArgs, boolean>('ConfirmDialog', args);
-        if (confirmed === true) {
+        const action = !args || await openDialog<DialogArgs, DialogAction>('ConfirmDialog', args);
+        if (action) {
             await this.songService.deleteSong(song);
         }
     }
