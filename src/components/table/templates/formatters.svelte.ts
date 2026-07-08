@@ -1,8 +1,11 @@
 import Color from 'color';
 import { marked } from 'marked';
+import { t } from 'svelte-i18n';
 import { mount } from 'svelte';
+import { get } from 'svelte/store';
 import type { CellComponent, GroupComponent } from 'tabulator-tables';
 import type { ColumnDefinition } from '../tabulator/types';
+import type { Snippet } from '../../../model/snippet.model';
 import type { SongEntity } from '../../../domain/song.entity';
 import type { AdvancedSettings } from '../../../model/settings.model';
 import type SongService from '../../../service/user/user-song.service';
@@ -226,6 +229,30 @@ export function formatTemplates(songService: SongService, settings: AdvancedSett
     } satisfies Record<string, Partial<ColumnDefinition>>;
 }
 
+export function snippetActionsFormatter(onOpen: (snippet: Snippet) => void): Partial<ColumnDefinition> {
+    return {
+        formatter(cell: CellComponent): HTMLElement {
+            const snippet = cell.getData() as Snippet;
+
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.classList.add('clear');
+            button.title = get(t)('menu.open');
+            button.innerHTML = `<i class="bx bx-play-circle"></i>`;
+
+            button.addEventListener('click', (event) => {
+                event.stopPropagation();
+                onOpen(snippet);
+            });
+
+            return button;
+        }
+    }
+}
+
+// ----------------------------------------------------------------------
+// Group Header Formatters
+// ----------------------------------------------------------------------
 
 const formatterFuncs: Partial<Record<keyof SongEntity, (value: unknown) => string>> = {
     fav(value) {
@@ -240,8 +267,9 @@ const formatterFuncs: Partial<Record<keyof SongEntity, (value: unknown) => strin
     }
 };
 
-export const groupByFormatter = (value: unknown, count: number, data: SongEntity[], group: GroupComponent) => {
-    const sumUp = (accumulator: number, current: number) => accumulator + current;
+const sumUp = (accumulator: number, current: number) => accumulator + current;
+
+export const songGroupHeaderFormatter = (value: unknown, count: number, data: SongEntity[], group: GroupComponent) => {
     let info = `<span class='label' style='min-width: 2em'>Σ ${count}</span>`;
     if (data.length) {
         const tags = [...new Set(data.flatMap((f) => f.tags || []))];
@@ -259,3 +287,37 @@ export const groupByFormatter = (value: unknown, count: number, data: SongEntity
     return formatterFuncs[field] ? formatterFuncs[field](value) + info
         : `<span class='title'>${value || 'n/a'}</span>${info}`;
 };
+
+export function snippetGroupHeaderFormatter(value: unknown, count: number, data: Snippet[], group: GroupComponent): HTMLElement {
+    const element = group.getElement();
+    element.classList.add('no-wrap');
+
+    const wrapper = document.createElement('span');
+    wrapper.classList.add('snippet-group-header', 'no-wrap');
+
+    // TODO later with some wizard dialog
+    // const button = document.createElement('button');
+    // button.type = 'button';
+    // button.classList.add('clear');
+    // button.innerHTML = `<i class="item bx bx-play-circle"></i> ${get(t)('menu.start')} (${count})`;
+    // button.addEventListener('click', (event) => {
+    //     event.stopPropagation();
+    //     // actions.startSetSession(value, data);
+    // });
+    // wrapper.appendChild(button);
+
+    const groups = Array.isArray(value) ? value.join(' > ') : value;
+    const label = document.createElement('span');
+    label.textContent = `${groups}`;
+    wrapper.appendChild(label);
+
+    const instruments = [...new Set(data.flatMap(s => s.instruments ?? []))];
+    if (instruments.length) {
+        const instrumentsEl = document.createElement('span');
+        instrumentsEl.classList.add('instruments');
+        instrumentsEl.textContent = instruments.join(', ');
+        wrapper.appendChild(instrumentsEl);
+    }
+
+    return wrapper;
+}

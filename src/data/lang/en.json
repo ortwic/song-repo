@@ -6,6 +6,7 @@
     "events": "Public events",
     "event-calendar": "Public event calendar",
     "events-empty": "No events found!",
+    "snippets": "Ideas, Riffs, Etudes",
     "donate": "Donate Song-Repo",
     "login": {
       "login": "Login",
@@ -32,6 +33,7 @@
     },
     "open": "Open",
     "close": "Close",
+    "start": "Start",
     "search": {
       "select-provider": "Select search provider"
     },
@@ -169,6 +171,8 @@
       "time": "Time",
       "bpm": "BPM",
       "difficulty": "Level",
+      "instruments": "Instruments",
+      "type": "Type",
       "features": "Features",
       "tags": "Labels",
       "learnedOn": "Learned",

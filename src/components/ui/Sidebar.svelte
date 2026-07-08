@@ -41,6 +41,11 @@
             {#if !$location.startsWith('/songs')}
             <button class="titlebar-button" title={$t('menu.repo')} data-close onclick={() => push('/songs')}>
                 <i class="item bx bxs-playlist"></i>
+            </button>
+            {/if}
+            {#if !$location.startsWith('/snippets')}
+            <button class="titlebar-button" title="{ $t('menu.snippets') }" data-close onclick={() => push('/snippets')}>
+                <i class="bx bx-bulb"></i>
             </button> 
             {/if}
             {#if !$location.startsWith('/blog')}

@@ -12,6 +12,7 @@
     import EventCalendar from './routes/EventCalendar.svelte';
     import EventMap from './routes/EventMap.svelte';
     import Settings from './routes/Settings.svelte';
+    import SnippetTable from './routes/SnippetTable.svelte';
     import SongTable from './routes/SongTable.svelte';
     import Feedback from './routes/Feedback.svelte';
     import UserPage from './routes/UserPage.svelte';
@@ -25,17 +26,21 @@
 
     const routes = {
         '/': Dashboard,
-        '/songs': SongTable,
-        '/songs/:id': SongTable,
-        '/calendar': EventCalendar,
-        '/events': EventMap,
-        '/events/:id': EventMap,
         '/blog': Blog,
         '/blog/:slug': Blog,
         '/docs/:id': Document,
+        '/events': EventMap,
+        '/events/:id': EventMap,
         '/settings': Settings,
-        '/feedback': Feedback,
+        '/snippets': SnippetTable,
+        '/snippets/:id': SnippetTable,
+        '/songs': SongTable,
+        '/songs/:id': SongTable,
         '/user/:alias': UserPage,
+
+        // hidden / unused routes
+        '/calendar': EventCalendar,
+        '/feedback': Feedback,
         '*': NotFound,
     };
 

@@ -6,6 +6,7 @@
     "events": "Veranstaltungen",
     "event-calendar": "Veranstaltungeskalender",
     "events-empty": "Keine Veranstaltungen gefunden!",
+    "snippets": "Ideen, Riffs, Etüden",
     "donate": "An Song-Repo spenden",
     "login": {
       "login": "Login",
@@ -170,6 +171,8 @@
       "time": "Taktart",
       "bpm": "Tempo",
       "difficulty": "Level",
+      "instruments": "Instrumente",
+      "type": "Typ",
       "features": "Merkmale",
       "tags": "Labels",
       "learnedOn": "Gelernt",

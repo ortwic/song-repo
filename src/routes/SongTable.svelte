@@ -8,12 +8,12 @@
     import type { ColumnDefinition } from '../components/table/tabulator/types';
     import { createColumnBuilder, createEditor } from '../components/table/templates/column.helper';
     import { autoFilter, dateFilter, hasValueFilter, rangeFilter, statusFilter } from '../components/table/templates/filter.helper';
-    import { createIntervals, formatTemplates, groupByFormatter } from '../components/table/templates/formatters.svelte';
+    import { createIntervals, formatTemplates, songGroupHeaderFormatter } from '../components/table/templates/formatters.svelte';
     import LoadingBar from '../components/ui/elements/LoadingBar.svelte';
     import Table from '../components/table/Table.svelte';
     import FileDrop from '../components/table/FileDrop.svelte';
     import { buildActionMenu } from '../components/table/templates/actionMenu.helper';
-    import { summaryFormatter } from '../components/table/templates/responsive.helper';
+    import { songSummaryFormatter } from '../components/table/templates/responsive.helper';
     import { SongActions } from '../domain/song.actions';
     import { createSongEntity, type SongEntity } from '../domain/song.entity';
     import { refData } from '../service/base/app-cache.setup';
@@ -60,7 +60,7 @@
             responsive: 0,
             visible: false,
         },
-        column(0, '__summary', undefined, 'string', summaryFormatter(readonly), {
+        column(0, '__summary', undefined, 'string', songSummaryFormatter(readonly), {
             visible: false,
             clickMenu: !readonly ? actionMenu : undefined,
         }),
@@ -157,7 +157,7 @@
                 placeholder={$t('common.search-empty')}
                 placeholderSearch={$t('table.search')}
                 persistenceID={readonly ? `ro-${viewStoreId}` : viewStoreId}
-                groupHeader={groupByFormatter}
+                groupHeader={songGroupHeaderFormatter}
                 onInit={init}
                 onError={showError}
             />

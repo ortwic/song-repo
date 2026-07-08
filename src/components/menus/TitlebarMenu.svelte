@@ -43,6 +43,11 @@
         <i class="bx bxs-playlist"></i>
     </a> 
     {/if}
+    {#if !$location.startsWith('/snippets')}
+    <a use:link class="titlebar-button" href="/snippets" title="{ $t('menu.snippets') }">
+        <i class="bx bx-bulb"></i>
+    </a> 
+    {/if}
     {#if !$location.startsWith('/blog')}
     <a use:link class="titlebar-button" href="/blog" title="{ $t('menu.howto') }">
         <i class="bx bx-book-open"></i>

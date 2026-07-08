@@ -118,7 +118,6 @@ div#table.tabulator {
                         }
                     }
                     i {
-                        font-size: x-small;
                         &.bx-unlink {
                             color: var(--border);
                         }
@@ -308,6 +307,11 @@ i.status {
 
 .status.archived::before {
     content: '📦';
+}
+
+.snippet-summary > *,
+.snippet-group-header > * {
+    padding-right: .6em;
 }
 
 // overriding colors

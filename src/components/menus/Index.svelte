@@ -68,7 +68,7 @@
                     <span><i class="bx bx-book-open"></i> {$t('menu.howto')}</span>
                 </NavButton>
                 <div class="row">
-                    <a use:link class="warn" role="button" href="/user/ocsoft42">
+                    <a use:link class="warn" role="button" href="/user/song-repo">
                         <span>
                             <i class="bx bxs-coffee"></i> {$t('menu.donate')}
                         </span>
