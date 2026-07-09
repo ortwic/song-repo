@@ -249,10 +249,7 @@
     "dialog": {
       "title": "Snippet",
       "never-played": "Never played",
-      "last-played": "Last played",
-      "no-score": "No score available",
-      "score-error": "Score could not be loaded",
-      "play-midi": "Play MIDI"
+      "last-played": "Last played"
     }
   },
   "table": {
@@ -386,7 +383,17 @@
     "false": "No",
     "page": "Page",
     "total": "Total",
-    "more": "Show more"
+    "more": "Show more",
+    "details": "Details for {title}",
+    "score-preview": {
+        "title": "Scores for {title}",
+      "no-score": "No score available",
+      "score-error": "Score could not be loaded"
+    },
+    "midi-player": {
+      "no-midi": "No midi available",
+      "play-midi": "Play MIDI"
+    }
   },
   "iframe": {
     "consent": {

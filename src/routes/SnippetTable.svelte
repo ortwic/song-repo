@@ -2,20 +2,29 @@
     import 'tabulator-tables/dist/css/tabulator_bulma.min.css';
     import '../styles/table.scss';
     import { t } from 'svelte-i18n';
-    import type { CellComponent, CellEditEventCallback, GroupComponent } from 'tabulator-tables';
+    import type { CellComponent, CellEditEventCallback } from 'tabulator-tables';
     import type { ColumnDefinition } from '../components/table/tabulator/types';
-    import TitlebarMenu from '../components/menus/TitlebarMenu.svelte';
     import { createColumnBuilder, createEditor } from '../components/table/templates/column.helper';
     import { autoFilter, dateFilter } from '../components/table/templates/filter.helper';
-    import { formatTemplates, snippetActionsFormatter, snippetGroupHeaderFormatter } from '../components/table/templates/formatters.svelte';
+    import { formatTemplates, snippetActionsFormatter, createSnippetGroupHeader } from '../components/table/templates/formatters.svelte';
     import { snippetSummaryFormatter } from '../components/table/templates/responsive.helper';
+    import { openDialog, type WizardDialogArgs } from '../components/dialog-context.svelte';
+    import TitlebarMenu from '../components/menus/TitlebarMenu.svelte';
     import LoadingBar from '../components/ui/elements/LoadingBar.svelte';
     import Table from '../components/table/Table.svelte';
-    import type { Snippet } from '../model/snippet.model';
+    import type { Snippet, UserSnippet } from '../model/snippet.model';
     import SnippetService from '../service/user/snippet.service';
     import type { TableView } from '../store/app.store';
     import { showError } from '../store/notification.store';
     import { settings } from '../store/user-settings.svelte';
+
+    interface Props {
+        params?: { id?: string };
+    }
+
+    let { 
+        params = {}
+    }: Props = $props();
 
     const service = new SnippetService();
     const data = service.snippets$;
@@ -23,6 +32,7 @@
     const column = createColumnBuilder();
     const editor = createEditor(updateHandler());
     const format = formatTemplates(null, settings.advanced);
+    const { formatter: snippetGroupHeaderFormatter } = createSnippetGroupHeader(openSnippet);
 
     const columns: ColumnDefinition[] = [
         {
@@ -31,8 +41,6 @@
             headerSort: false,
             responsive: 0,
             visible: false,
-            // ANNAHME: euer eigenes Responsive-Modul hängt sich hier genauso ein
-            // wie zuvor der eingebaute 'responsiveCollapse'-Formatter.
         },
         column(0, '__summary', undefined, 'string', snippetSummaryFormatter(openSnippet), { visible: false }),
         column(-1, 'fav', '50', undefined, format.favorite, editor()),
@@ -53,8 +61,18 @@
         { title: 'groups', field: 'groups', visible: false },
     ];
 
-    function openSnippet(snippet: Snippet): void {
-        console.log('TODO: SnippetActions.open', snippet);
+    $effect(() => {
+        if (params?.id) {
+            const subscription = service.getSnippet(params?.id)
+                .subscribe((snippet) => {
+                    return openDialog('SnippetDialog', { model: snippet });
+                });
+            return () => subscription.unsubscribe();
+        }
+    });
+
+    function openSnippet(snippet: Snippet): Promise<void> {
+        return openDialog('SnippetDialog', { model: snippet});
     }
     
     function updateHandler(): CellEditEventCallback {

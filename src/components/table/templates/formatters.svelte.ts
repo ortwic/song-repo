@@ -5,7 +5,7 @@ import { mount } from 'svelte';
 import { get } from 'svelte/store';
 import type { CellComponent, GroupComponent } from 'tabulator-tables';
 import type { ColumnDefinition } from '../tabulator/types';
-import type { Snippet } from '../../../model/snippet.model';
+import type { UserSnippet } from '../../../model/snippet.model';
 import type { SongEntity } from '../../../domain/song.entity';
 import type { AdvancedSettings } from '../../../model/settings.model';
 import type SongService from '../../../service/user/user-song.service';
@@ -229,10 +229,10 @@ export function formatTemplates(songService: SongService, settings: AdvancedSett
     } satisfies Record<string, Partial<ColumnDefinition>>;
 }
 
-export function snippetActionsFormatter(onOpen: (snippet: Snippet) => void): Partial<ColumnDefinition> {
+export function snippetActionsFormatter(onOpen: (snippet: UserSnippet) => void): Partial<ColumnDefinition> {
     return {
         formatter(cell: CellComponent): HTMLElement {
-            const snippet = cell.getData() as Snippet;
+            const snippet = cell.getData() as UserSnippet;
 
             const button = document.createElement('button');
             button.type = 'button';
@@ -288,36 +288,40 @@ export const songGroupHeaderFormatter = (value: unknown, count: number, data: So
         : `<span class='title'>${value || 'n/a'}</span>${info}`;
 };
 
-export function snippetGroupHeaderFormatter(value: unknown, count: number, data: Snippet[], group: GroupComponent): HTMLElement {
-    const element = group.getElement();
-    element.classList.add('no-wrap');
+export function createSnippetGroupHeader(onOpen: (snippet: UserSnippet) => void) {
+    return {
+        formatter(value: unknown, count: number, data: UserSnippet[], group: GroupComponent): HTMLElement {
+            const element = group.getElement();
+            element.classList.add('no-wrap');
 
-    const wrapper = document.createElement('span');
-    wrapper.classList.add('snippet-group-header', 'no-wrap');
+            const wrapper = document.createElement('span');
+            wrapper.classList.add('snippet-group-header', 'no-wrap');
 
-    // TODO later with some wizard dialog
-    // const button = document.createElement('button');
-    // button.type = 'button';
-    // button.classList.add('clear');
-    // button.innerHTML = `<i class="item bx bx-play-circle"></i> ${get(t)('menu.start')} (${count})`;
-    // button.addEventListener('click', (event) => {
-    //     event.stopPropagation();
-    //     // actions.startSetSession(value, data);
-    // });
-    // wrapper.appendChild(button);
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.disabled = !data.length;
+            button.classList.add('clear');
+            button.innerHTML = `<i class="item bx bx-play-circle"></i> ${get(t)('menu.start')} (${count})`;
+            button.addEventListener('click', (event) => {
+                event.stopPropagation();
+                onOpen(data.at(0));
+            });
+            wrapper.appendChild(button);
 
-    const groups = Array.isArray(value) ? value.join(' > ') : value;
-    const label = document.createElement('span');
-    label.textContent = `${groups}`;
-    wrapper.appendChild(label);
+            const groups = Array.isArray(value) ? value.join(' > ') : value;
+            const label = document.createElement('span');
+            label.textContent = `${groups}`;
+            wrapper.appendChild(label);
 
-    const instruments = [...new Set(data.flatMap(s => s.instruments ?? []))];
-    if (instruments.length) {
-        const instrumentsEl = document.createElement('span');
-        instrumentsEl.classList.add('instruments');
-        instrumentsEl.textContent = instruments.join(', ');
-        wrapper.appendChild(instrumentsEl);
-    }
+            const instruments = [...new Set(data.flatMap(s => s.instruments ?? []))];
+            if (instruments.length) {
+                const instrumentsEl = document.createElement('span');
+                instrumentsEl.classList.add('instruments');
+                instrumentsEl.textContent = instruments.join(', ');
+                wrapper.appendChild(instrumentsEl);
+            }
 
-    return wrapper;
+            return wrapper;
+        }
+    };
 }

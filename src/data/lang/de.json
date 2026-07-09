@@ -249,10 +249,7 @@
     "dialog": {
       "title": "Snippet",
       "never-played": "Noch nie gespielt",
-      "last-played": "Zuletzt gespielt",
-      "no-score": "Keine Notenansicht verfügbar",
-      "score-error": "Notenansicht konnte nicht geladen werden",
-      "play-midi": "MIDI abspielen"
+      "last-played": "Zuletzt gespielt"
     }
   },
   "table": {
@@ -384,7 +381,17 @@
     "false": "Nein",
     "page": "Seite",
     "total": "Gesamt",
-    "more": "Mehr anzeigen"
+    "more": "Mehr anzeigen",
+    "details": "Details zu {title}",
+    "score-preview": {
+      "title": "Noten für {title}",
+      "no-score": "Keine Notenansicht verfügbar",
+      "score-error": "Notenansicht konnte nicht geladen werden"
+    },
+    "midi-player": {
+      "no-midi": "Kein Midi verfügbar",
+      "play-midi": "MIDI abspielen"
+    }
   },
   "iframe": {
     "consent": {

@@ -44,7 +44,13 @@ export default class SnippetService {
         );
     }
 
-    bySetName(name: string): Observable<UserSnippet[]> {
+    getSnippet(id: string): Observable<UserSnippet[]> {
+        return this.snippets$.pipe(
+            map(items => items.filter(p => p.groups?.includes(id)))
+        );
+    }
+
+    byGroupName(name: string): Observable<UserSnippet[]> {
         return this.snippets$.pipe(
             map(items => items.filter(p => p.groups?.includes(name)))
         );
