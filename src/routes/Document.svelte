@@ -1,7 +1,7 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
     import { link, push } from 'svelte-spa-router';
-    import { interceptInternalLinks } from '../components/actions/intercept-internal-links';
+    import { interceptInternalLinks } from '../components/actions/intercept-internal-links.action';
     import Footer from '../components/ui/Footer.svelte';
     import Titlebar from '../components/ui/elements/Titlebar.svelte';
     import { getPage } from '../service/common/page.service';

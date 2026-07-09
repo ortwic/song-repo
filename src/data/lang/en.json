@@ -166,6 +166,8 @@
       "genre": "Genre",
       "style": "Style",
       "source": "Source",
+      "groups": "Groups",
+      "mxmlPath": "Score",
       "uri": "URI",
       "key": "Key",
       "time": "Time",

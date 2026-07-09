@@ -2,7 +2,7 @@
     import DialogBase from '../dialogs/DialogBase.svelte';
     import type { DialogAction, DialogArgs } from '../dialog-context.svelte';
     import { registerDialog } from '../dialog-context.svelte';
-    import { interceptInternalLinks } from '../actions/intercept-internal-links';
+    import { interceptInternalLinks } from '../actions/intercept-internal-links.action';
     import { createDeferred, type DeferredResult } from '../../utils/promise.helper';
 
     let props = $state<DialogArgs | undefined>();

@@ -79,6 +79,7 @@
         columns?: ColumnDefinition[];
         data: Observable<T[]>;
         groupBy?: Array<keyof T>;
+        groupStartOpen?: Options['groupStartOpen'];
         placeholder?: string;
         placeholderSearch?: string;
         groupHeader?: GroupFormatter;
@@ -94,6 +95,7 @@
         columns = undefined,
         data,
         groupBy = undefined,
+        groupStartOpen = [true, (v, n) => n < 3],
         placeholder = '',
         placeholderSearch = '',
         groupHeader = undefined,
@@ -137,7 +139,7 @@
         groupBy,
         groupContextMenu,
         groupHeader,
-        groupStartOpen: [true, (v, n) => n < 3],
+        groupStartOpen,
         groupToggleElement: 'header',
         groupUpdateOnCellEdit: true,
         footerElement: '#footer',

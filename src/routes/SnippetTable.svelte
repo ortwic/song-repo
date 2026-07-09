@@ -31,7 +31,7 @@
     const service = new SnippetService();
     const data = service.snippets$;
 
-    const column = createColumnBuilder();
+    const column = createColumnBuilder('songs');
     const editor = createEditor(updateHandler());
     const format = formatTemplates(null, settings.advanced);
     const pushSnippetId = (id: string) => push(`/snippets/${id}`);
@@ -51,17 +51,18 @@
         column(1, 'title', '200', 'string', autoFilter()),
         column(1, 'artist', '200', 'string', autoFilter()),
         column(1, 'instruments', '200', 'string', autoFilter()),
-        column(2, 'key', '80', 'string', autoFilter()),
-        column(2, 'time', '80', 'string', autoFilter()),
-        column(2, 'bpm', '80', 'string', autoFilter()),
-        column(2, 'difficulty', '50', 'number', format.difficulty),
+        column(1, 'mxmlPath', '200', 'string', autoFilter(), format.scorePreview, { visible: false }),
+        column(2, 'type', '100', 'string', autoFilter()),
+        column(2, 'tags', '200', 'string', format.label, autoFilter()),
+        column(2, 'key', '80', 'string', autoFilter(), { visible: false }),
+        column(2, 'time', '80', 'string', autoFilter(), { visible: false }),
+        column(2, 'bpm', '80', 'string', autoFilter(), { visible: false }),
+        column(2, 'difficulty', '50', 'number', format.difficulty, { visible: false }),
         column(2, 'source', '200', 'string', autoFilter(), { visible: false }),
-        column(3, 'tags', '200', 'string', format.label, autoFilter()),
-        column(3, 'type', '100', 'string', autoFilter()),
+        column(3, 'groups', '100', 'string', autoFilter(), format.label, { visible: false }),
         column(4, 'changedAt', '136', 'date', format.timestamp, dateFilter(), { visible: false }),
         column(4, 'createdAt', '136', 'date', format.timestamp, dateFilter(), { visible: false }),
         { title: 'id', field: 'id', visible: false },
-        { title: 'groups', field: 'groups', visible: false },
     ];
 
     $effect(() => {
@@ -107,7 +108,7 @@
 </script>
 
 <svelte:head>
-    <title>{$t('menu.snippets')} | Song-Repo</title>
+    <title>{$t('menu.snippets')} | {import.meta.env.PACKAGE_NAME}</title>
 </svelte:head>
 
 <main>
@@ -122,6 +123,7 @@
             persistenceID={SNIPPETS_SETTINGS_ID}
             groupBy={["groups"]}
             groupHeader={snippetGroupHeaderFormatter}
+            groupStartOpen={false}
             onInit={init}
             onError={showError}
         />

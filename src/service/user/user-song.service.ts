@@ -6,7 +6,7 @@ import type { UserSong } from '../../model/song.model';
 import { buildIndex } from '../../utils/index-builder';
 import { docId } from '../../utils/object.helper';
 
-export const viewStoreId = 'songs.v1';
+export const SONG_SETTINGS_ID = 'songs.v1';
 
 const localStore = {};
 const localSubject = new BehaviorSubject<UserSong[]>([]);

@@ -166,6 +166,8 @@
       "genre": "Genre",
       "style": "Style",
       "source": "Quelle",
+      "groups": "Zuordnung",
+      "mxmlPath": "Noten",
       "uri": "URI",
       "key": "Tonart",
       "time": "Taktart",

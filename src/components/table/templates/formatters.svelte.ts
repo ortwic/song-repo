@@ -8,8 +8,10 @@ import type { ColumnDefinition } from '../tabulator/types';
 import type { UserSnippet } from '../../../model/snippet.model';
 import type { SongEntity } from '../../../domain/song.entity';
 import type { AdvancedSettings } from '../../../model/settings.model';
+import { StorageService } from '../../../service/base/storage.service';
 import type SongService from '../../../service/user/user-song.service';
 import { toDate } from '../../../utils/date.helper';
+import ScorePreview from '../../ui/ScorePreview.svelte';
 import ProgressBar from '../../ui/elements/ProgressBar.svelte';
 import { genreColor, redToGreenGradient, redToGreenRange } from '../../../styles/style.helper';
 
@@ -31,6 +33,8 @@ export function createIntervals(value: number, range = 10) {
 }
 
 export function formatTemplates(songService: SongService, settings: AdvancedSettings) {
+    const storage = new StorageService();
+
     return {
         get favorite(): Partial<ColumnDefinition> {
             return {
@@ -226,6 +230,29 @@ export function formatTemplates(songService: SongService, settings: AdvancedSett
                 },
             };
         },
+
+        get scorePreview(): Partial<ColumnDefinition> {
+            return {
+                formatter(cell: CellComponent): HTMLElement {
+                    const height = '80px';
+                    const target = document.createElement('div');
+                    target.style.height = height;
+                    storage.getFileUrl(cell.getValue())
+                        .then(url => {
+                            const props = $state({
+                                url,
+                                height,
+                                firstInstrumentOnly: true,
+                                measureCount: 2,
+                                zoom: 0.8
+                            });
+                            mount(ScorePreview, { target, props });
+                        });
+
+                    return target;
+                },
+            }
+        }
     } satisfies Record<string, Partial<ColumnDefinition>>;
 }
 
