@@ -1,10 +1,15 @@
-import { combineLatest, map, Observable, of, shareReplay, switchMap } from 'rxjs';
+import { combineLatest, filter, map, Observable, of, shareReplay, switchMap, take } from 'rxjs';
 import { Timestamp } from 'firebase/firestore';
 import { stores } from '../base/firestore.service';
 import type { Snippet, UserSnippet } from '../../model/snippet.model';
 import { currentUser } from './auth.service';
 
+export const SNIPPETS_SETTINGS_ID = 'snippets.v1';
 const TEMPLATE_USER_ID = '__master';
+
+function areEquivalent(a = [], b = []) {
+    return a.length === b.length && a.every((value, i) => value === b[i]);
+}
 
 export default class SnippetService {
     private uid: string | undefined;
@@ -44,15 +49,18 @@ export default class SnippetService {
         );
     }
 
-    getSnippet(id: string): Observable<UserSnippet[]> {
+    getWithSiblings(id: string): Observable<{ item: UserSnippet; siblings: UserSnippet[] }> {
+        const notFound = { item: null, siblings: [] };
         return this.snippets$.pipe(
-            map(items => items.filter(p => p.groups?.includes(id)))
-        );
-    }
-
-    byGroupName(name: string): Observable<UserSnippet[]> {
-        return this.snippets$.pipe(
-            map(items => items.filter(p => p.groups?.includes(name)))
+            filter(items => items.length > 0),
+            map(items => {
+                const item = items.find(s => s.id === id);
+                if (item) {
+                    const siblings = item.groups?.length && items.filter(s => areEquivalent(s.groups, item.groups)) || [];
+                    return { item, siblings };
+                }
+                return notFound;
+            })
         );
     }
 

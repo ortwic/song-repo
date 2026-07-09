@@ -229,21 +229,16 @@ export function formatTemplates(songService: SongService, settings: AdvancedSett
     } satisfies Record<string, Partial<ColumnDefinition>>;
 }
 
-export function snippetActionsFormatter(onOpen: (snippet: UserSnippet) => void): Partial<ColumnDefinition> {
+export function snippetActionsFormatter(onAction: (id: string) => void): Partial<ColumnDefinition> {
     return {
         formatter(cell: CellComponent): HTMLElement {
-            const snippet = cell.getData() as UserSnippet;
-
+            const id = cell.getData()['id'];
             const button = document.createElement('button');
             button.type = 'button';
             button.classList.add('clear');
             button.title = get(t)('menu.open');
             button.innerHTML = `<i class="bx bx-play-circle"></i>`;
-
-            button.addEventListener('click', (event) => {
-                event.stopPropagation();
-                onOpen(snippet);
-            });
+            button.addEventListener('click', () => onAction(id));
 
             return button;
         }
@@ -288,9 +283,10 @@ export const songGroupHeaderFormatter = (value: unknown, count: number, data: So
         : `<span class='title'>${value || 'n/a'}</span>${info}`;
 };
 
-export function createSnippetGroupHeader(onOpen: (snippet: UserSnippet) => void) {
+export function createSnippetGroupHeader(onAction: (id: string) => void) {
     return {
         formatter(value: unknown, count: number, data: UserSnippet[], group: GroupComponent): HTMLElement {
+            const firstId = data.at(0)['id'];
             const element = group.getElement();
             element.classList.add('no-wrap');
 
@@ -302,10 +298,7 @@ export function createSnippetGroupHeader(onOpen: (snippet: UserSnippet) => void)
             button.disabled = !data.length;
             button.classList.add('clear');
             button.innerHTML = `<i class="item bx bx-play-circle"></i> ${get(t)('menu.start')} (${count})`;
-            button.addEventListener('click', (event) => {
-                event.stopPropagation();
-                onOpen(data.at(0));
-            });
+            button.addEventListener('click', () => onAction(firstId));
             wrapper.appendChild(button);
 
             const groups = Array.isArray(value) ? value.join(' > ') : value;

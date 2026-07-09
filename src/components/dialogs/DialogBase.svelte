@@ -28,7 +28,7 @@
         target = 'hidden',
         title = '',
         visible = false,
-        type = 'confirm',
+        type = 'view',
         header,
         controls,
         children,
@@ -109,15 +109,6 @@
                 </button>
                 <button data-target={target} onclick={(e) => handleClose(e)}>
                     { $t('dialog.decline') }
-                </button>
-            </div>
-        {:else if type === 'wizard'}
-            <div class="row">
-                <button data-target={target} onclick={(e) => handleClose(e, 'next')}>
-                    { $t('dialog.next') }
-                </button>
-                <button data-target={target} onclick={(e) => handleClose(e, 'previous')}>
-                    { $t('dialog.prev') }
                 </button>
             </div>
         {/if}

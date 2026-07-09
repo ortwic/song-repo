@@ -10,7 +10,7 @@
     import type { Song } from '../../model/song.model';
     import { FOCUS_KEYS, SESSIONKIND_KEYS } from '../../model/app.types';
     import { createDeferred, type DeferredResult } from '../../utils/promise.helper';
-    import { type DialogAction, openDialog, registerDialog } from '../dialog-context.svelte';
+    import { openDialog, registerDialog } from '../dialog-context.svelte';
     import PopupMenu from '../ui/PopupMenu.svelte';
     import Expand from '../ui/elements/Expand.svelte';
     import Metronome from '../ui/elements/Metronome.svelte';
@@ -149,10 +149,10 @@
         }
     }
 
-    function done(action: DialogAction): void {
+    function done(confirmed: boolean): void {
         clearInterval(+intervalId);
 
-        if (!action || !songEntity) {
+        if (!confirmed || !songEntity) {
             sessionResult?.resolve(null);
         } else {
             session.type = selectedKind;
@@ -170,7 +170,7 @@
     }
 </script>
 
-<DialogBase {visible} size="auto" type="confirm" onClose={({ action }) => done(action)}>
+<DialogBase {visible} size="auto" type="confirm" onClose={({ action }) => done(action === 'confirm')}>
     {#snippet header()}
         <span class="no-wrap">
             <i class="bx bx-play-circle"></i>

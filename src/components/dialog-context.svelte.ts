@@ -2,7 +2,7 @@ import type { MenuTarget } from "../model/app.types";
 
 export type DialogSize = 'auto' | 'full';
 export type DialogType = 'view' | 'confirm' | 'wizard';
-export type DialogAction = 'confirm' | 'next' | 'previous' | undefined;
+export type DialogAction = 'confirm' | undefined;
 type DialogNames = 'BlogPostDialog'
                  | 'ConfirmDialog' 
                  | 'EditSongDialog' 
@@ -23,8 +23,9 @@ export interface DialogArgs {
     target?: MenuTarget;
 }
 
-export interface WizardDialogArgs<T> {
-    model: T;
+export interface NavigationContext<T> {
+    items: T[];
+    currentIndex: number;
 }
 
 export interface ExceptionDialogArgs extends DialogArgs {

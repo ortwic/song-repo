@@ -2,19 +2,19 @@
     import { t } from 'svelte-i18n';
     import { onDestroy } from 'svelte';
     import { push } from 'svelte-spa-router';
+    import NavigableDialog from './NavigableDialog.svelte';
+    import { type NavigationContext, registerDialog } from '../dialog-context.svelte';
+    import { toClipboard } from '../ui/helper/input.helper';
+    import ScorePreview from '../ui/ScorePreview.svelte';
+    import MidiPlayer from '../ui/MidiPlayer.svelte';
+    import Expand from '../ui/elements/Expand.svelte';
+    import IFrame from '../ui/elements/IFrame.svelte';
+    import NotFound from '../../routes/NotFound.svelte';
     import type { SnippetType, UserSnippet } from '../../model/snippet.model';
-    import { type DialogAction, registerDialog, type WizardDialogArgs } from '../dialog-context.svelte';
-    import { createDeferred, type DeferredResult } from '../../utils/promise.helper';
     import { StorageService } from '../../service/base/storage.service';
     import { lang } from '../../service/base/i18n.setup';
     import { toDate } from '../../utils/date.helper';
-    import NotFound from '../../routes/NotFound.svelte';
-    import ScorePreview from '../ui/ScorePreview.svelte';
-    import MidiPlayer from '../ui/MidiPlayer.svelte';
-    import { toClipboard } from '../ui/helper/input.helper';
-    import Expand from '../ui/elements/Expand.svelte';
-    import IFrame from '../ui/elements/IFrame.svelte';
-    import DialogBase from './DialogBase.svelte';
+    import { createDeferred, type DeferredResult } from '../../utils/promise.helper';
 
     const EMPTY_SNIPPET = { groups: [], tags: [], difficulty: 3 } as UserSnippet;
     const DEFAULT_META_VALUE = '–';
@@ -46,6 +46,8 @@
     const storage = new StorageService();
 
     let visible = $state(false);
+    let currentIndex = $state(0);
+    let items = $state([]);
     let snippet = $state<UserSnippet | null>(null);
 
     let dialogResult: DeferredResult<void> = null;
@@ -64,18 +66,28 @@
 
     registerDialog('SnippetDialog', showDialog);
 
-    export function showDialog(args: WizardDialogArgs<UserSnippet>): Promise<void> {
-        snippet = { ...EMPTY_SNIPPET, ...args.model };
+    export function showDialog(ctx: NavigationContext<UserSnippet>): Promise<void> {
+        currentIndex = ctx.currentIndex;
+        items = ctx.items;
+        
+        const model = items[currentIndex] ?? {};
+        snippet = { ...EMPTY_SNIPPET, ...model };
         visible = true;
         dialogResult = createDeferred<void>();
 
         return dialogResult.promise;
     }
 
-    function handleClose(action?: DialogAction): void {
+    function handleNavigate(snippet?: UserSnippet): void {
         visible = false;
         dialogResult?.resolve();
-        push('/snippets');
+        push(`/snippets/${snippet?.id ?? ''}`);
+    }
+
+    function handleClose() {
+        handleNavigate();
+        currentIndex = 0;
+        items = [];
     }
 
     function formatLastPlayed(): string {
@@ -90,7 +102,9 @@
     });
 </script>
 
-<DialogBase {visible} size="full" type="wizard" onClose={({ action }) => handleClose(action)}>
+<NavigableDialog {currentIndex} {items} {visible} size="full" 
+    onNavigate={handleNavigate}
+    onClose={handleClose}>
     {#snippet header()}
         <span class="no-wrap">
             <i class="bx {SNIPPET_TYPE_ICON[snippet?.type ?? 'custom']}"></i>
@@ -168,7 +182,7 @@
     {:else}
     <NotFound />
     {/if}
-</DialogBase>
+</NavigableDialog>
 
 <style lang="scss">
     .body {

@@ -10,7 +10,7 @@
     import { logAction } from '../../store/notification.store';
     import { redToGreenRange } from '../../styles/style.helper';
     import { createDeferred, type DeferredResult } from '../../utils/promise.helper';
-    import { type DialogAction, registerDialog } from '../dialog-context.svelte';
+    import { registerDialog } from '../dialog-context.svelte';
     import SelectKey from '../ui/SelectKey.svelte';
     import Expand from '../ui/elements/Expand.svelte';
     import Image from '../ui/elements/Image.svelte';
@@ -79,8 +79,8 @@
         }
     }
 
-    function done(action: DialogAction): void {
-        if (!action) {
+    function done(confirmed: boolean): void {
+        if (!confirmed) {
             result?.resolve(null);
             reset();
         } else if (form.checkValidity()) {
@@ -96,7 +96,7 @@
 </script>
 
 <form bind:this={form} onsubmit={(e) => e.preventDefault()}>
-    <DialogBase {visible} size="full" type="confirm" onClose={({ action }) => done(action)}>
+    <DialogBase {visible} size="full" type="confirm" onClose={({ action }) => done(action === 'confirm')}>
         {#snippet header()}
             <span>
                 <i class="bx bx-music"></i>

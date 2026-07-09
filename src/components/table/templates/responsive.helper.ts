@@ -1,5 +1,4 @@
 import type { ColumnDefinition } from 'tabulator-tables';
-import type { Snippet } from '../../../model/snippet.model';
 import { genreColor, redToGreenRange } from '../../../styles/style.helper';
 
 function formatProgress(progress: number) {
@@ -38,12 +37,12 @@ export const songSummaryFormatter = (readonly = false): Partial<ColumnDefinition
     }
 });
 
-export function snippetSummaryFormatter(onOpen: (snippet: Snippet) => void): Partial<ColumnDefinition> {
+export function snippetSummaryFormatter(onAction: (id: string) => void): Partial<ColumnDefinition> {
     return {
         formatter(cell) {
             const element = cell.getElement();
             element.classList.add('responsive');
-            const data = cell.getData() as Snippet;
+            const data = cell.getData();
 
             const color = genreColor(data['type']);
             if (color) {
@@ -58,10 +57,7 @@ export function snippetSummaryFormatter(onOpen: (snippet: Snippet) => void): Par
             button.type = 'button';
             button.classList.add('clear', 'play-action');
             button.innerHTML = `<i class="bx bx-play-circle"></i>`;
-            button.addEventListener('click', (event) => {
-                event.stopPropagation();
-                onOpen(data);
-            });
+            button.addEventListener('click', () => onAction(data['id']));
             wrapper.appendChild(button);
 
             const favActive = data['fav'] ? 'active' : '';

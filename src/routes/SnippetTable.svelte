@@ -2,18 +2,20 @@
     import 'tabulator-tables/dist/css/tabulator_bulma.min.css';
     import '../styles/table.scss';
     import { t } from 'svelte-i18n';
+    import { push } from 'svelte-spa-router';
+    import { firstValueFrom } from 'rxjs';
     import type { CellComponent, CellEditEventCallback } from 'tabulator-tables';
     import type { ColumnDefinition } from '../components/table/tabulator/types';
     import { createColumnBuilder, createEditor } from '../components/table/templates/column.helper';
     import { autoFilter, dateFilter } from '../components/table/templates/filter.helper';
     import { formatTemplates, snippetActionsFormatter, createSnippetGroupHeader } from '../components/table/templates/formatters.svelte';
     import { snippetSummaryFormatter } from '../components/table/templates/responsive.helper';
-    import { openDialog, type WizardDialogArgs } from '../components/dialog-context.svelte';
+    import { openDialog, type NavigationContext } from '../components/dialog-context.svelte';
     import TitlebarMenu from '../components/menus/TitlebarMenu.svelte';
     import LoadingBar from '../components/ui/elements/LoadingBar.svelte';
     import Table from '../components/table/Table.svelte';
-    import type { Snippet, UserSnippet } from '../model/snippet.model';
-    import SnippetService from '../service/user/snippet.service';
+    import type { UserSnippet } from '../model/snippet.model';
+    import SnippetService, { SNIPPETS_SETTINGS_ID } from '../service/user/snippet.service';
     import type { TableView } from '../store/app.store';
     import { showError } from '../store/notification.store';
     import { settings } from '../store/user-settings.svelte';
@@ -32,7 +34,8 @@
     const column = createColumnBuilder();
     const editor = createEditor(updateHandler());
     const format = formatTemplates(null, settings.advanced);
-    const { formatter: snippetGroupHeaderFormatter } = createSnippetGroupHeader(openSnippet);
+    const pushSnippetId = (id: string) => push(`/snippets/${id}`);
+    const { formatter: snippetGroupHeaderFormatter } = createSnippetGroupHeader(pushSnippetId);
 
     const columns: ColumnDefinition[] = [
         {
@@ -42,9 +45,9 @@
             responsive: 0,
             visible: false,
         },
-        column(0, '__summary', undefined, 'string', snippetSummaryFormatter(openSnippet), { visible: false }),
+        column(0, '__summary', undefined, 'string', snippetSummaryFormatter(pushSnippetId), { visible: false }),
         column(-1, 'fav', '50', undefined, format.favorite, editor()),
-        column(-1, '__actions', '50', undefined, snippetActionsFormatter(openSnippet), { headerSort: false, hozAlign: 'center' }),
+        column(-1, '__actions', '50', undefined, snippetActionsFormatter(pushSnippetId), { headerSort: false, hozAlign: 'center' }),
         column(1, 'title', '200', 'string', autoFilter()),
         column(1, 'artist', '200', 'string', autoFilter()),
         column(1, 'instruments', '200', 'string', autoFilter()),
@@ -62,17 +65,18 @@
     ];
 
     $effect(() => {
-        if (params?.id) {
-            const subscription = service.getSnippet(params?.id)
-                .subscribe((snippet) => {
-                    return openDialog('SnippetDialog', { model: snippet });
-                });
-            return () => subscription.unsubscribe();
-        }
+        openSnippet(params?.id);
     });
 
-    function openSnippet(snippet: Snippet): Promise<void> {
-        return openDialog('SnippetDialog', { model: snippet});
+    async function openSnippet(id: string | undefined) {
+        if (id) {
+            const { item, siblings: items } = await firstValueFrom(service.getWithSiblings(id));
+            const currentIndex = items.findIndex(s => s.id === item.id);
+            return openDialog<NavigationContext<UserSnippet>>('SnippetDialog', {
+                currentIndex,
+                items
+            });
+        }
     }
     
     function updateHandler(): CellEditEventCallback {
@@ -115,7 +119,7 @@
             idField="id"
             placeholder={$t('common.search-empty')}
             placeholderSearch={$t('table.search')}
-            persistenceID="snippets.v1"
+            persistenceID={SNIPPETS_SETTINGS_ID}
             groupBy={["groups"]}
             groupHeader={snippetGroupHeaderFormatter}
             onInit={init}
