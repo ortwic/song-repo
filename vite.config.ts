@@ -24,6 +24,7 @@ export default defineConfig({
                 if (env) {
                     return {
                         define: { 
+                            ['import.meta.env.PACKAGE_NAME']: JSON.stringify(process.env.npm_package_name), 
                             ['import.meta.env.PACKAGE_VERSION']: JSON.stringify(process.env.npm_package_version), 
                             ['import.meta.env.FIRESTORE_EMULATOR_HOST']: JSON.stringify(process.env.FIRESTORE_EMULATOR_HOST),
                             ['import.meta.env.AUTH_EMULATOR_HOST']: JSON.stringify(process.env.AUTH_EMULATOR_HOST)

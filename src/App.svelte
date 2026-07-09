@@ -21,7 +21,6 @@
     import { setupI18n } from './service/base/i18n.setup';
 
     const usertitle = currentUser.pipe(map(autoRedirect));
-    const version = import.meta.env.PACKAGE_VERSION;
     const setAppReady = () => document.body.classList.add('app-ready');
 
     const routes = {
@@ -76,7 +75,7 @@
     &nbsp;
 {:then} 
 <Context>
-    <Menu footer="Version {version}" />
+    <Menu />
 
     <Router {routes} />
 

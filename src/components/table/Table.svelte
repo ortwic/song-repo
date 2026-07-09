@@ -185,6 +185,8 @@
             persistence,
         });
 
+        tableInstance.on('tableDestroyed', () => tableView.set(undefined));
+
         table$ = fromEvent(tableInstance, 'tableBuilt').pipe(
             take(1),
             map(() => handleTableBuilt(tableInstance, useResponsiveLayout))
@@ -239,6 +241,7 @@
         }
 
         const view: TableView = {
+            id: persistenceID,
             table,
             useResponsiveLayout,
             groups: Object.keys(rowGroups),

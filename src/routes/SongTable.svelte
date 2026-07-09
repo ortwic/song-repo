@@ -18,7 +18,7 @@
     import { createSongEntity, type SongEntity } from '../domain/song.entity';
     import { refData } from '../service/base/app-cache.setup';
     import SessionService from '../service/user/user-session.service';
-    import SongService, { viewStoreId } from '../service/user/user-song.service';
+    import SongService, { SONG_SETTINGS_ID } from '../service/user/user-song.service';
     import type { TableView } from '../store/app.store';
     import { showError, showInfo } from '../store/notification.store';
     import { settings } from '../store/user-settings.svelte';
@@ -44,7 +44,7 @@
             return entity;
         }))
     );
-    const column = createColumnBuilder();
+    const column = createColumnBuilder('songs');
     const format = formatTemplates(service, settings.advanced);
 
     const genreList = refData.genres.map((v) => v.name);
@@ -143,7 +143,7 @@
 </script>
 
 <svelte:head>
-    <title>{$t('menu.repo')} | Song-Repo</title>
+    <title>{$t('menu.repo')} | {import.meta.env.PACKAGE_NAME}</title>
 </svelte:head>
 
 <main>
@@ -156,7 +156,7 @@
                 idField="id"
                 placeholder={$t('common.search-empty')}
                 placeholderSearch={$t('table.search')}
-                persistenceID={readonly ? `ro-${viewStoreId}` : viewStoreId}
+                persistenceID={readonly ? `${SONG_SETTINGS_ID}.readonly` : SONG_SETTINGS_ID}
                 groupHeader={songGroupHeaderFormatter}
                 onInit={init}
                 onError={showError}

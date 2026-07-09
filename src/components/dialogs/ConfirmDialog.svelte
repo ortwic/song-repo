@@ -25,7 +25,7 @@
 {#if props}
 <DialogBase 
     visible={props !== undefined} 
-    title={props.title ? `${props.title} | Song-Repo` : 'Song-Repo'} 
+    title={props.title ? `${props.title} | ${import.meta.env.PACKAGE_NAME}` : import.meta.env.PACKAGE_NAME} 
     size={props.size ?? 'auto'} 
     type='confirm'
     target={props.target}

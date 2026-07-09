@@ -16,15 +16,11 @@
     import MenuDrawer from '../ui/elements/MenuDrawer.svelte';
     import NavButton from '../ui/elements/NavButton.svelte';
     import { currentUser } from '../../service/user/auth.service';
-    import { currentMenu } from '../../store/app.store';
+    import { SONG_SETTINGS_ID } from '../../service/user/user-song.service';
+    import { currentMenu, tableView } from '../../store/app.store';
 
-    interface Props {
-        footer: string;
-    }
-
-    let { footer }: Props = $props();
+    const version = `${import.meta.env.PACKAGE_NAME} ${import.meta.env.PACKAGE_VERSION}`;
     const isDashboard = derived(location, (path) => path === '/');
-    const isTableView = derived(location, (path) => path.startsWith('/songs'));
     const isBlogView = derived(location, (path) => path.startsWith('/blog'));
     const isEventView = derived(location, (path) => path.startsWith('/events'));
 
@@ -46,8 +42,10 @@
                 <LoginMenu />
             {/if}
 
-            {#if $isTableView}
+            {#if $tableView}
+                {#if $tableView?.id === SONG_SETTINGS_ID}
                 <TableMenu exportTitle={$t('menu.table.exportTitle')} />
+                {/if}
                 <ColumnMenu />
             {:else if $isBlogView}
                 <BlogMenu />
@@ -76,14 +74,14 @@
                 </div>
             {/snippet}
             {#snippet footer()}
-                {footer}
+                {version}
             {/snippet}
         </Sidebar>
     {:else if $currentMenu === 'signup'}
         <Sidebar onclose={hide}>
             <SignupMenu />
             {#snippet footer()}
-                {footer}
+                {version}
             {/snippet}
         </Sidebar>
     {/if}

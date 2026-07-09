@@ -49,7 +49,7 @@
 </script>
 
 <svelte:head>
-    <title>{$t('menu.howto')} blog | Song-Repo</title>
+    <title>{$t('menu.howto')} blog | {import.meta.env.PACKAGE_NAME}</title>
 </svelte:head>
 
 <main class="content">

@@ -112,7 +112,7 @@
             <p>
                 <label for="provider">{$t('menu.search.select-provider')}:</label>
                 <select bind:value={currentSearchEngine}>
-                    <option value="">Song-Repo</option>
+                    <option value="">{import.meta.env.PACKAGE_NAME}</option>
                     <option value="musicbrainz">MusicBrainz</option>
                     <option value="discogs">Discogs</option>
                     <option value="audius">Audius</option>

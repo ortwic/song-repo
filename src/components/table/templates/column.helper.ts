@@ -24,7 +24,7 @@ type Sorter =
         sorterParams: NonNullable<unknown>,
     ) => number);
 
-export function createColumnBuilder() {
+export function createColumnBuilder(i18nKey: string) {
     return (
         responsive: number,
         field: string,
@@ -32,7 +32,7 @@ export function createColumnBuilder() {
         sorter: Sorter,
         ...more: Partial<ColumnDefinition>[]
     ): ColumnDefinition => {
-        const title = get(t)(`songs.columns.${field}`);
+        const title = get(t)(`${i18nKey}.columns.${field}`);
         return Object.assign(
             {
                 title,

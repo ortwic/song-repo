@@ -103,7 +103,7 @@
 </script>
 
 <svelte:head>
-   <title>{ $t('calendar.title') } | Song-Repo</title>
+   <title>{ $t('calendar.title') } | {import.meta.env.PACKAGE_NAME}</title>
 </svelte:head>
 
 <main>
