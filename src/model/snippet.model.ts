@@ -1,27 +1,32 @@
 import { Timestamp } from "firebase/firestore";
+import { ObjectValues } from "./app.types";
 
-export type SnippetType =
-    | 'custom'      // User-defined snippet that does not fit a predefined category
+const SNIPPET_TYPE_RECORD = {
+    custom: 'custom', // User-defined snippet that does not fit a predefined category
 
     // Learning and practice
-    | 'etude'       // Technical study or exercise piece for practicing specific skills
+    etude: 'etude', // Technical study or exercise piece for practicing specific skills
 
     // Musical ideas and phrases
-    | 'motif'       // Short musical idea that can be developed or repeated
-    | 'phrase'      // Complete musical statement made of one or more motifs
+    motif: 'motif', // Short musical idea that can be developed or repeated
+    phrase: 'phrase', // Complete musical statement made of one or more motifs
 
-     // Characteristic short ideas
-    | 'riff'        // Repeating melodic or rhythmic figure, often driving a section
-    | 'lick'        // Short, characteristic musical phrase, often used in improvisation
+    // Characteristic short ideas
+    riff: 'riff', // Repeating melodic or rhythmic figure, often driving a section
+    lick: 'lick', // Short, characteristic musical phrase, often used in improvisation
 
     // Rhythmic material
-    | 'groove'      // Rhythmic pattern that establishes the feel or pulse
-    | 'pattern'     // Generic repeating sequence of notes, rhythms, or movements
+    groove: 'groove', // Rhythmic pattern that establishes the feel or pulse
+    pattern: 'pattern', // Generic repeating sequence of notes, rhythms, or movements
 
     // Structural elements
-    | 'fill'        // Brief transitional passage connecting musical sections
-    | 'progression' // Sequence of chords forming a harmonic structure
-    | 'cadence';    // Harmonic progression that creates a sense of resolution or pause
+    fill: 'fill', // Brief transitional passage connecting musical sections
+    progression: 'progression', // Sequence of chords forming a harmonic structure
+    cadence: 'cadence' // Harmonic progression that creates a sense of resolution or pause
+} as const;
+
+export const SNIPPET_KEYS = Object.keys(SNIPPET_TYPE_RECORD) as SnippetType[];
+export type SnippetType = ObjectValues<typeof SNIPPET_TYPE_RECORD>;
 
 export interface Snippet {
     id: string;

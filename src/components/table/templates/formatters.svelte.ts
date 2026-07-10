@@ -311,6 +311,7 @@ export const songGroupHeaderFormatter = (value: unknown, count: number, data: So
 };
 
 export function createSnippetGroupHeader(onAction: (id: string) => void) {
+    const translate = get(t);
     return {
         formatter(value: unknown, count: number, data: UserSnippet[], group: GroupComponent): HTMLElement {
             const firstId = data.at(0)['id'];
@@ -320,11 +321,13 @@ export function createSnippetGroupHeader(onAction: (id: string) => void) {
             const wrapper = document.createElement('span');
             wrapper.classList.add('snippet-group-header', 'no-wrap');
 
+            const type = translate(`snippets.types.${data.at(0)?.type ?? 'custom'}`);
+            const title = translate('snippets.start-type', { values: { type } });
             const button = document.createElement('button');
             button.type = 'button';
             button.disabled = !data.length;
             button.classList.add('clear');
-            button.innerHTML = `<i class="item bx bx-play-circle"></i> ${get(t)('menu.start')} (${count})`;
+            button.innerHTML = `<i class="item bx bx-play-circle"></i> ${title} (${count})`;
             button.addEventListener('click', (ev) => {
                 ev.stopImmediatePropagation();
                 onAction(firstId);

@@ -248,6 +248,20 @@
     "played-times": "Played {count}x"
   },
   "snippets": {
+    "start-type": "Start {type}",
+    "types": {
+        "custom": "Custom",
+        "etude": "Étude",
+        "motif": "Motif",
+        "phrase": "Phrase",
+        "riff": "Riff",
+        "lick": "Lick",
+        "groove": "Groove",
+        "pattern": "Pattern",
+        "fill": "Fill",
+        "progression": "Progression",
+        "cadence": "Cadence"
+    },
     "dialog": {
       "title": "Snippet",
       "never-played": "Never played",

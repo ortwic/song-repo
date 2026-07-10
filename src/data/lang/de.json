@@ -248,6 +248,20 @@
     "played-times": "{count}x gespielt"
   },
   "snippets": {
+    "start-type": "{type} starten",
+    "types": {
+        "custom": "Benutzerdefiniert",
+        "etude": "Etüden",
+        "motif": "Motiv",
+        "phrase": "Phrase",
+        "riff": "Riff",
+        "lick": "Lick",
+        "groove": "Groove",
+        "pattern": "Muster",
+        "fill": "Fill",
+        "progression": "Akkordfolge",
+        "cadence": "Kadenz"
+    },
     "dialog": {
       "title": "Snippet",
       "never-played": "Noch nie gespielt",
