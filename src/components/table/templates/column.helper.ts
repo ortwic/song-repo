@@ -2,6 +2,7 @@ import { t } from 'svelte-i18n';
 import { get } from 'svelte/store';
 import type { CellEditEventCallback, ColumnComponent, Editor, ListEditorParams, RowComponent, SortDirection } from 'tabulator-tables';
 import type { ColumnDefinition } from '../tabulator/types';
+import { arrayInputEditor } from './input.editor';
 
 type Sorter =
     | undefined
@@ -64,10 +65,10 @@ export function createEditor(cellEdited: CellEditEventCallback, readonly = false
         return editorParams;
     };
 
-    return (editor?: Editor, values?: string[]): Partial<ColumnDefinition> => {
+    return (editor?: Editor | 'array', values?: string[]): Partial<ColumnDefinition> => {
         if (!readonly) {
             const definition: Partial<ColumnDefinition> = {
-                editor,
+                editor: editor === 'array' ? arrayInputEditor : editor,
                 cellEdited
             };
             if (editor === 'list') {

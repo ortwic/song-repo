@@ -325,7 +325,10 @@ export function createSnippetGroupHeader(onAction: (id: string) => void) {
             button.disabled = !data.length;
             button.classList.add('clear');
             button.innerHTML = `<i class="item bx bx-play-circle"></i> ${get(t)('menu.start')} (${count})`;
-            button.addEventListener('click', () => onAction(firstId));
+            button.addEventListener('click', (ev) => {
+                ev.stopImmediatePropagation();
+                onAction(firstId);
+            });
             wrapper.appendChild(button);
 
             const groups = Array.isArray(value) ? value.join(' > ') : value;
