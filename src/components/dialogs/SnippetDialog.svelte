@@ -3,10 +3,10 @@
     import { onDestroy } from 'svelte';
     import { push } from 'svelte-spa-router';
     import NavigableDialog from './NavigableDialog.svelte';
+    import { createMidiPlayer } from '../actions/midi-player.svelte';
     import { type NavigationContext, registerDialog } from '../dialog-context.svelte';
     import { toClipboard } from '../ui/helper/input.helper';
     import ScorePreview from '../ui/ScorePreview.svelte';
-    import MidiPlayer from '../ui/MidiPlayer.svelte';
     import Expand from '../ui/elements/Expand.svelte';
     import IFrame from '../ui/elements/IFrame.svelte';
     import NotFound from '../../routes/NotFound.svelte';
@@ -44,6 +44,7 @@
     };
 
     const storage = new StorageService();
+    const player = createMidiPlayer();
 
     let visible = $state(false);
     let currentIndex = $state(0);
@@ -80,6 +81,7 @@
 
     function handleNavigate(snippet?: UserSnippet): void {
         visible = false;
+        player.dispose();
         dialogResult?.resolve();
         push(`/snippets/${snippet?.id ?? ''}`);
     }
@@ -160,21 +162,24 @@
         </Expand>
 
         <Expand title={$t('common.score-preview.title', { values: { title: snippet?.title } })}>
+            {#await storage.getFileUrl(snippet.midiPath).then(player.load)}
+                <span class="spinner"></span>
+            {:then}
+            <button
+                class="clear"
+                disabled={!player.isReady}
+                title={player.isPlaying ? $t('common.midi-player.pause') : $t('common.midi-player.play-midi')}
+                onclick={player.toggle}
+            >
+                <i class="item bx {player.isPlaying ? 'bx-pause-circle' : 'bx-play-circle'}"></i>
+                {player.isPlaying ? $t('common.midi-player.pause') : $t('common.midi-player.play-midi')}
+            </button>
+            {/await}
             <p>
                 {#await storage.getFileUrl(snippet.mxmlPath)}
                     <span class="spinner"></span>
                 {:then url}
                 <ScorePreview {url} />
-                {/await}
-            </p>
-        </Expand>
-
-        <Expand title={$t('common.midi-player.play-midi', { values: { title: snippet?.title } })}>
-            <p>
-                {#await storage.getFileUrl(snippet.midiPath)}
-                    <span class="spinner"></span>
-                {:then midiUrl}
-                <MidiPlayer {midiUrl} />
                 {/await}
             </p>
         </Expand>

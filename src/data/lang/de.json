@@ -392,7 +392,8 @@
     },
     "midi-player": {
       "no-midi": "Kein Midi verfügbar",
-      "play-midi": "MIDI abspielen"
+      "play-midi": "MIDI abspielen",
+      "pause": "MIDI anhalten"
     }
   },
   "iframe": {

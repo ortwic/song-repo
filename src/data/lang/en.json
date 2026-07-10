@@ -388,13 +388,14 @@
     "more": "Show more",
     "details": "Details for {title}",
     "score-preview": {
-        "title": "Scores for {title}",
+      "title": "Scores for {title}",
       "no-score": "No score available",
       "score-error": "Score could not be loaded"
     },
     "midi-player": {
       "no-midi": "No midi available",
-      "play-midi": "Play MIDI"
+      "play-midi": "Play MIDI",
+      "pause": "Pause MIDI"
     }
   },
   "iframe": {
