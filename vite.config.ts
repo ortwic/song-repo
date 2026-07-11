@@ -12,6 +12,7 @@ export default defineConfig({
                     'firestore': ['firebase/firestore'],
                     'flexsearch': ['flexsearch'],
                     'tabulator-tables': ['tabulator-tables'],
+                    'tone': ['tone', '@tonejs/midi'],
                 },
             },
         },
