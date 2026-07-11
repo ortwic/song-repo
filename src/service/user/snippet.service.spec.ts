@@ -14,9 +14,12 @@ vi.mock('../base/firestore.service', () => ({
 
 import SnippetService from './snippet.service';
 
+let snippetCount = 0;
+
 function makeSnippet(overrides: Partial<UserSnippet>): UserSnippet {
     return {
         id: 'default-id',
+        title: `Snippet ${++snippetCount}`,
         groups: [],
         tags: [],
         instruments: [],
