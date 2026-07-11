@@ -52,7 +52,7 @@
         column(1, 'artist', '200', 'string', autoFilter()),
         column(1, 'instruments', '200', 'string', autoFilter()),
         column(1, 'mxmlPath', '200', 'string', autoFilter(), format.scorePreview, { visible: false }),
-        column(2, 'type', '100', 'string', autoFilter()),
+        column(2, 'type', '100', 'string', format.translate('snippets'), autoFilter()),
         column(2, 'tags', '200', 'string', format.label, autoFilter()),
         column(2, 'key', '80', 'string', autoFilter(), { visible: false }),
         column(2, 'time', '80', 'string', autoFilter(), { visible: false }),
@@ -121,9 +121,9 @@
             placeholder={$t('common.search-empty')}
             placeholderSearch={$t('table.search')}
             persistenceID={SNIPPETS_SETTINGS_ID}
-            groupBy={["groups"]}
+            groupBy={["type", "groups"]}
             groupHeader={snippetGroupHeaderFormatter}
-            groupStartOpen={false}
+            groupStartOpen={[true, false]}
             onInit={init}
             onError={showError}
         />

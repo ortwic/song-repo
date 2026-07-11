@@ -1,7 +1,8 @@
 <script lang="ts">
     import { marked } from 'marked';
     import { t } from 'svelte-i18n';
-    import { push, querystring } from 'svelte-spa-router';
+    import { onMount } from 'svelte';
+    import { push, location, querystring } from 'svelte-spa-router';
     import type { PostContent, Post } from '../../model/post.model';
     import { currentUser } from '../../service/user/auth.service';
     import { logPageView } from '../../store/notification.store';
@@ -32,6 +33,18 @@
     let consent = $derived(Boolean($currentUser));
 
     registerDialog('BlogPostDialog', showDialog);
+    
+    onMount(() => {
+        const unsubscribe = location.subscribe((loc) => {
+            if (visible) {
+                visible = loc.indexOf(post.id) > 0;
+            }
+        });
+
+        return () => {
+            unsubscribe();
+        };
+    });
 
     export async function showDialog(args?: Post) {
         post = args;
@@ -62,6 +75,7 @@
             {#if entry.type === 'youtube'}
             <IFrame src="https://www.youtube.com/embed/{entry.value.id}"
                     title={entry.value.title ?? ''}
+                    {consent}
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     width={560}
                     height={315}
@@ -92,7 +106,5 @@
     section {
         padding: 1em 5%;
         height: 100%;
-        
-        overflow-y: auto; 
     }
 </style>

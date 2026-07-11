@@ -224,10 +224,17 @@
                             throw err;
                         }
                     });
-                    console.debug('upd', data.length);
+
+                    if (import.meta.env.DEV) {
+                        console.debug('upd', data.length);
+                    }
+
                 } else {
                     await tableInstance.setData(data);
-                    console.debug('set', data.length);
+                    
+                    if (import.meta.env.DEV) {
+                        console.debug('set', data.length);
+                    }
                 }
             } catch (error) {
                 showError(error);

@@ -249,7 +249,7 @@
   },
   "snippets": {
     "start-type": "Start {type}",
-    "types": {
+    "type": {
         "custom": "Custom",
         "etude": "Étude",
         "motif": "Motif",

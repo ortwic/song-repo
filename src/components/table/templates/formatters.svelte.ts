@@ -3,7 +3,7 @@ import { marked } from 'marked';
 import { t } from 'svelte-i18n';
 import { mount } from 'svelte';
 import { get } from 'svelte/store';
-import type { CellComponent, GroupComponent } from 'tabulator-tables';
+import type { CellComponent, GroupComponent, Tabulator } from 'tabulator-tables';
 import type { ColumnDefinition } from '../tabulator/types';
 import type { UserSnippet } from '../../../model/snippet.model';
 import type { SongEntity } from '../../../domain/song.entity';
@@ -33,6 +33,7 @@ export function createIntervals(value: number, range = 10) {
 }
 
 export function formatTemplates(songService: SongService, settings: AdvancedSettings) {
+    const translate = get(t);
     const storage = new StorageService();
 
     return {
@@ -252,8 +253,18 @@ export function formatTemplates(songService: SongService, settings: AdvancedSett
                     return target;
                 },
             }
+        },
+
+        translate(key: string): Partial<ColumnDefinition> {
+            return {
+                formatter(cell: CellComponent): string {
+                    const field = cell.getField();
+                    const value = cell.getValue();
+                    return value ? translate(`${key}.${field}.${value}`) : '';
+                }
+            }
         }
-    } satisfies Record<string, Partial<ColumnDefinition>>;
+    };
 }
 
 export function snippetActionsFormatter(onAction: (id: string) => void): Partial<ColumnDefinition> {
@@ -321,33 +332,67 @@ export function createSnippetGroupHeader(onAction: (id: string) => void) {
             const wrapper = document.createElement('span');
             wrapper.classList.add('snippet-group-header', 'no-wrap');
 
-            const type = translate(`snippets.types.${data.at(0)?.type ?? 'custom'}`);
-            const title = translate('snippets.start-type', { values: { type } });
-            const button = document.createElement('button');
-            button.type = 'button';
-            button.disabled = !data.length;
-            button.classList.add('clear');
-            button.innerHTML = `<i class="item bx bx-play-circle"></i> ${title} (${count})`;
-            button.addEventListener('click', (ev) => {
-                ev.stopImmediatePropagation();
-                onAction(firstId);
-            });
-            wrapper.appendChild(button);
+            const field = group.getField();
+            if (field === 'groups') {
+                const type = translate(`snippets.type.${data.at(0)?.type ?? 'custom'}`);
+                const title = translate('snippets.start-type', { values: { type } });
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.disabled = !data.length;
+                button.classList.add('clear');
+                button.innerHTML = `<i class="item bx bx-play-circle"></i> ${title} (${count})`;
+                button.addEventListener('click', (ev) => {
+                    ev.stopImmediatePropagation();
+                    onAction(firstId);
+                });
+                wrapper.appendChild(button);
 
-            const groups = Array.isArray(value) ? value.join(' > ') : value;
-            const label = document.createElement('span');
-            label.textContent = `${groups}`;
-            wrapper.appendChild(label);
+                const label = Array.isArray(value) ? value.join(' > ') : value;
+                const span = document.createElement('span');
+                span.textContent = `${label}`;
+                wrapper.appendChild(span);
 
-            const instruments = [...new Set(data.flatMap(s => s.instruments ?? []))];
-            if (instruments.length) {
-                const instrumentsEl = document.createElement('span');
-                instrumentsEl.classList.add('instruments');
-                instrumentsEl.textContent = instruments.join(', ');
-                wrapper.appendChild(instrumentsEl);
+
+                const instruments = [...new Set(data.flatMap(s => s.instruments ?? []))];
+                if (instruments.length) {
+                    const instrumentsEl = document.createElement('span');
+                    instrumentsEl.classList.add('instruments');
+                    instrumentsEl.textContent = instruments.join(', ');
+                    wrapper.appendChild(instrumentsEl);
+                }
+            } else {
+                const label = tryAppendFormatter(group.getTable(), field, value);
+                if (label) {
+                    wrapper.appendChild(label);
+                } else {
+                    const span = document.createElement('span');
+                    span.textContent = `${value ?? 'n/a'}`;
+                    wrapper.appendChild(span);
+                }
             }
 
             return wrapper;
         }
     };
+}
+
+function tryAppendFormatter(table: Tabulator, field: string, value: unknown): HTMLElement {
+    const definition = table.getColumnDefinitions().find(c => c.field === field);
+    if (typeof definition.formatter === 'function') {  
+        try {
+            const label = definition.formatter({
+                getValue: () => value,
+                getField: () => field
+            } as CellComponent, {}, () => {});
+            if (typeof label === 'string') {
+                const span = document.createElement('span');
+                span.innerHTML = `${label}`;
+                return span;
+            } 
+            return label;
+        } catch (e) {
+            return null;
+        }
+    }
+
 }

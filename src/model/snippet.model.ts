@@ -1,5 +1,5 @@
 import { Timestamp } from "firebase/firestore";
-import { ObjectValues } from "./app.types";
+import { AccessType, ObjectValues } from "./app.types";
 
 const SNIPPET_TYPE_RECORD = {
     custom: 'custom', // User-defined snippet that does not fit a predefined category
@@ -46,6 +46,8 @@ export interface Snippet {
     bpm?: number;
     time?: string;
     tags: [];
+    access?: AccessType;
+    status: 'published' | 'draft';
     createdAt: Timestamp;
 }
 

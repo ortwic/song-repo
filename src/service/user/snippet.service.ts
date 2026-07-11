@@ -14,8 +14,12 @@ function areEquivalent(a = [], b = []) {
 export default class SnippetService {
     private uid: string | undefined;
     hasUser = () => !!this.uid;
+    canAccess = (snippet: UserSnippet): boolean => 
+        snippet.status === 'published' &&
+        (snippet.access === 'any' || snippet.access === 'users' && this.hasUser());
 
     readonly templates$ = stores.userSnippets(TEMPLATE_USER_ID).getDocuments<Snippet>().pipe(
+        map(items => items.filter(this.canAccess)),
         shareReplay(1) // one stream only for multiple subscribers
     );
     readonly snippets$: Observable<UserSnippet[]>;
@@ -56,7 +60,11 @@ export default class SnippetService {
             map(items => {
                 const item = items.find(s => s.id === id);
                 if (item) {
-                    const siblings = item.groups?.length && items.filter(s => areEquivalent(s.groups, item.groups)) || [];
+                    if (!item.groups?.length) {
+                        return { item, siblings: [] };
+                    }
+                    const siblings = items.filter(s => areEquivalent(s.groups, item.groups))
+                        .toSorted((a, b) => a.title.localeCompare(b.title));
                     return { item, siblings };
                 }
                 return notFound;

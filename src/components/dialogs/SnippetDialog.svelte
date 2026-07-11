@@ -1,7 +1,7 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
-    import { onDestroy } from 'svelte';
-    import { push } from 'svelte-spa-router';
+    import { onMount } from 'svelte';
+    import { push, location } from 'svelte-spa-router';
     import NavigableDialog from './NavigableDialog.svelte';
     import { createMidiPlayer } from '../actions/midi-player.svelte';
     import { type NavigationContext, registerDialog } from '../dialog-context.svelte';
@@ -67,6 +67,19 @@
 
     registerDialog('SnippetDialog', showDialog);
 
+    onMount(() => {
+        const unsubscribe = location.subscribe((loc) => {
+            if (visible && !loc.endsWith(snippet.id)) {
+                // history.back() was invoked
+                hideDialog();
+            }
+        });
+
+        return () => {
+            unsubscribe();
+        };
+    });
+
     export function showDialog(ctx: NavigationContext<UserSnippet>): Promise<void> {
         currentIndex = ctx.currentIndex;
         items = ctx.items;
@@ -79,17 +92,22 @@
         return dialogResult.promise;
     }
 
-    function handleNavigate(snippet?: UserSnippet): void {
-        visible = false;
-        player.dispose();
-        dialogResult?.resolve();
+    function handleNavigate(snippet: UserSnippet): void {
+        hideDialog();
         push(`/snippets/${snippet?.id ?? ''}`);
     }
 
     function handleClose() {
-        handleNavigate();
+        hideDialog();
+        push('/snippets');
         currentIndex = 0;
         items = [];
+    }
+
+    function hideDialog() {
+        visible = false;
+        player.dispose();
+        dialogResult?.resolve();
     }
 
     function formatLastPlayed(): string {
@@ -98,10 +116,6 @@
         }
         return $t('snippets.dialog.last-played') + ' ' + toDate(snippet.changedAt).toRelative();
     }
-
-    onDestroy(() => {
-        dialogResult?.resolve();
-    });
 </script>
 
 <NavigableDialog {currentIndex} {items} {visible} size="full" 

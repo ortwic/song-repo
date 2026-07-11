@@ -249,7 +249,7 @@
   },
   "snippets": {
     "start-type": "{type} starten",
-    "types": {
+    "type": {
         "custom": "Benutzerdefiniert",
         "etude": "Etüden",
         "motif": "Motiv",
