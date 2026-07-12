@@ -1,8 +1,7 @@
-<script lang="ts">
+<script lang="ts" generics="T">
     import 'tabulator-tables/dist/css/tabulator_bulma.min.css';
     import {
         type ColumnComponent,
-        type Filter,
         type GroupArg,
         type GroupComponent,
         type Options,
@@ -32,7 +31,6 @@
     import type { ColumnDefinition } from './tabulator/types';
     import { default as ResponsiveLayoutModule, type CollapsedCellData } from './tabulator/modules/ResponsiveLayout';
     import { t } from 'svelte-i18n';
-    import { onMount, onDestroy } from 'svelte';
     import { Observable, fromEvent, map, take } from 'rxjs';
     import { tableView, type TableView } from '../../store/app.store';
     import { showError } from '../../store/notification.store';
@@ -69,11 +67,10 @@
         responsiveCollapse,
     });
 
-    type T = $$Generic;
     type GroupFormatter = (value: unknown, count: number, data: T[], group?: GroupComponent) => string | HTMLElement;
 
     const rowGroups: Record<string, GroupArg> = {};
-    export const isGroupedBy = (field: string) => field in rowGroups;
+    const isGroupedBy = (field: string) => field in rowGroups;
     interface Props {
         idField: keyof T;
         columns?: ColumnDefinition[];
@@ -81,11 +78,9 @@
         groupBy?: Array<keyof T>;
         groupStartOpen?: Options['groupStartOpen'];
         placeholder?: string;
-        placeholderSearch?: string;
         groupHeader?: GroupFormatter;
         detailFormatter?: (data: CollapsedCellData[]) => HTMLElement;
         persistenceID?: string;
-        footer?: import('svelte').Snippet;
         onInit?: (view: TableView) => void;
         onError?: (error: string) => void;
     }
@@ -97,38 +92,15 @@
         groupBy = undefined,
         groupStartOpen = [true, (v, n) => n < 3],
         placeholder = '',
-        placeholderSearch = '',
         groupHeader = undefined,
         detailFormatter = undefined,
         persistenceID = '',
-        footer,
         onInit,
         onError,
     }: Props = $props();
 
     let useResponsiveLayout = $state(false);
-    let searchTerm = $state('');
     let table$: Observable<Tabulator> = $state();
-    let tableContainer: HTMLElement = $state();
-    let endOrientation = () => {};
-
-    const groupContextMenu = import.meta.env.DEV ? [
-        {
-            label: 'Open all', // TODO not working
-            action() {
-                $table$.getGroups().forEach((g) => {
-                    console.log(g.getKey(), g.getField());
-                    g.show();
-                });
-            },
-        },
-        {
-            label: 'Collapse all', // TODO not working
-            action() {
-                $table$.getGroups().forEach((g) => g.hide());
-            },
-        },
-    ] : undefined;
 
     const usePersistance = !!persistenceID;
     const options: Options = {
@@ -137,7 +109,6 @@
         clipboard: true,
         movableColumns: true,
         groupBy,
-        groupContextMenu,
         groupHeader,
         groupStartOpen,
         groupToggleElement: 'header',
@@ -161,42 +132,43 @@
         },
     };
 
-    onMount(() => (endOrientation = orientation.subscribe(createTable)));
-    onDestroy(() => {
-        $table$?.destroy();
-        endOrientation();
-    });
+    function createTabulator(node: HTMLElement) {
+        let tableInstance: Tabulator;
+        function createTable(node: HTMLElement, orientation: Orientation) {
+            tableInstance?.destroy();
 
-    function createTable(orientation: Orientation) {
-        $table$?.destroy();
+            useResponsiveLayout = orientation === 'portrait';
+            const persistence = {
+                columns: usePersistance && !useResponsiveLayout ? ['width', 'visible'] : false,
+                sort: usePersistance,
+                headerFilter: usePersistance && !useResponsiveLayout,
+                filter: usePersistance && useResponsiveLayout,
+                group: usePersistance,
+            };
 
-        useResponsiveLayout = orientation === 'portrait';
-        const persistence = {
-            columns: usePersistance && !useResponsiveLayout ? ['width', 'visible'] : false,
-            sort: usePersistance,
-            headerFilter: usePersistance && !useResponsiveLayout,
-            filter: usePersistance && useResponsiveLayout,
-            group: usePersistance,
+            tableInstance = new Tabulator(node, {
+                ...options,
+                layout: useResponsiveLayout ? 'fitDataStretch' : 'fitData',
+                headerVisible: !useResponsiveLayout,
+                responsiveLayout: useResponsiveLayout ? 'collapse' : undefined,
+                persistence,
+            });
+
+            tableInstance.on('tableDestroyed', () => tableView.set(undefined));
+            table$ = fromEvent(tableInstance, 'tableBuilt').pipe(
+                take(1),
+                map(() => handleTableBuilt(tableInstance, useResponsiveLayout))
+            );
+        }
+
+        const unsubscribe = orientation.subscribe((o) => createTable(node, o));
+
+        return {
+            destroy() {
+                tableInstance?.destroy();
+                unsubscribe();
+            },
         };
-
-        const tableInstance = new Tabulator(tableContainer, {
-            ...options,
-            layout: useResponsiveLayout ? 'fitDataStretch' : 'fitData',
-            headerVisible: !useResponsiveLayout,
-            responsiveLayout: useResponsiveLayout ? 'collapse' : undefined,
-            persistence,
-        });
-
-        tableInstance.on('tableDestroyed', () => tableView.set(undefined));
-
-        table$ = fromEvent(tableInstance, 'tableBuilt').pipe(
-            take(1),
-            map(() => handleTableBuilt(tableInstance, useResponsiveLayout))
-        );
-
-        // Does not work since it causes an internal tabulator error:
-        // Uncaught TypeError: Cannot read properties of undefined (reading 'getPath')
-        // subscription = data.subscribe(rows => setData(tableInstance, rows));
     }
 
     $effect(() => {
@@ -245,16 +217,13 @@
     function handleTableBuilt(table: Tabulator, useResponsiveLayout: boolean) {
         initHeaderMenu(table);
         initGroupBy(table);
-        if (useResponsiveLayout) {
-            initSearch(table);
-        }
 
         const view: TableView = {
             id: persistenceID,
             table,
             useResponsiveLayout,
             groups: Object.keys(rowGroups),
-            toggleGroup,
+            toggleGroup: (field: string) => toggleGroup(table, field),
         };
         tableView.set(view);
         onInit?.(view);
@@ -271,7 +240,7 @@
                 if (Array.isArray(c.headerMenu)) {
                     c.headerMenu.push({
                         label: `${$t('menu.table.group-by')} ${c.title}`,
-                        action: (ev: Event, column: ColumnComponent) => toggleGroup(c.field, column.getElement()),
+                        action: (ev: Event, column: ColumnComponent) => toggleGroup(table, c.field),
                     });
                 }
             });
@@ -289,12 +258,8 @@
         }
     }
 
-    function initSearch(table: Tabulator) {
-        const array = table.getFilters(false)[0] as unknown as Filter[];
-        searchTerm = array?.filter((f) => f.value)[0]?.value;
-    }
-
-    function toggleGroup(field: string, element?: HTMLElement) {
+    function toggleGroup(table: Tabulator, field: string) {
+        const element = table.getColumn(field)?.getElement();
         if (!isGroupedBy(field)) {
             rowGroups[field] = columns.find((c) => c.field === field)?.groupByFunc;
             element?.classList.add('primary');
@@ -302,7 +267,7 @@
             delete rowGroups[field];
             element?.classList.remove('primary');
         }
-        setGroupBy($table$);
+        setGroupBy(table);
     }
 
     function setGroupBy(table: Tabulator) {
@@ -310,67 +275,6 @@
         table.setGroupBy(groups.length ? (groups as string[]) : undefined);
     }
 
-    function search() {
-        if (searchTerm) {
-            $table$.clearHeaderFilter();
-
-            // 2nd level array enforces OR comparison
-            $table$.setFilter([
-                columns
-                    .filter((c) => c.sorter === 'string')
-                    .map((c) => ({ field: c.field, type: 'like', value: searchTerm })),
-            ]);
-        } else {
-            $table$.clearFilter(false);
-        }
-    }
 </script>
 
-<span class="menu {useResponsiveLayout ? 'responsive' : 'static'}">
-    <div class="section">
-        <input
-            type="search"
-            placeholder={placeholderSearch}
-            autocomplete="off"
-            bind:value={searchTerm}
-            oninput={search}
-        />
-    </div>
-</span>
-
-<div id="table" bind:this={tableContainer}></div>
-<span id="footer">
-    {@render footer?.()}
-</span>
-
-<style lang="scss">
-    .menu {
-        &.static {
-            display: none;
-        }
-
-        &.responsive {
-            display: inline;
-        }
-
-        .section {
-            display: flex;
-
-            input[type='search'] {
-                width: 100%;
-            }
-        }
-    }
-
-    #table {
-        overflow: auto;
-        width: 100%;
-        height: 100%;
-        max-height: 100%;
-        overflow: hidden;
-    }
-
-    #footer {
-        width: 100%;
-    }
-</style>
+<div use:createTabulator></div>

@@ -14,12 +14,14 @@
     import FileDrop from '../components/table/FileDrop.svelte';
     import { buildActionMenu } from '../components/table/templates/actionMenu.helper';
     import { songSummaryFormatter } from '../components/table/templates/responsive.helper';
+    import TableSearch from '../components/table/TableSearch.svelte';
     import { SongActions } from '../domain/song.actions';
     import { createSongEntity, type SongEntity } from '../domain/song.entity';
     import { refData } from '../service/base/app-cache.setup';
     import SessionService from '../service/user/user-session.service';
     import SongService, { SONG_SETTINGS_ID } from '../service/user/user-song.service';
     import type { TableView } from '../store/app.store';
+    import { orientation } from '../store/media.store';
     import { showError, showInfo } from '../store/notification.store';
     import { settings } from '../store/user-settings.svelte';
 
@@ -150,12 +152,14 @@
     <TitlebarMenu minimal={true} />
     <LoadingBar isLoading={!$entities}>
         <FileDrop onEnter={() => showInfo($t('songs.import'))} onAddJson={(detail) => importJSON(detail)}>
+            {#if $orientation === 'portrait'}
+            <TableSearch placeholder={$t('table.search')} />
+            {/if}
             <Table
                 {columns}
                 data={entities}
                 idField="id"
                 placeholder={$t('common.search-empty')}
-                placeholderSearch={$t('table.search')}
                 persistenceID={readonly ? `${SONG_SETTINGS_ID}.readonly` : SONG_SETTINGS_ID}
                 groupHeader={songGroupHeaderFormatter}
                 onInit={init}

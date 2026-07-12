@@ -14,9 +14,11 @@
     import TitlebarMenu from '../components/menus/TitlebarMenu.svelte';
     import LoadingBar from '../components/ui/elements/LoadingBar.svelte';
     import Table from '../components/table/Table.svelte';
+    import TableSearch from '../components/table/TableSearch.svelte';
     import type { UserSnippet } from '../model/snippet.model';
     import SnippetService, { SNIPPETS_SETTINGS_ID } from '../service/user/snippet.service';
     import type { TableView } from '../store/app.store';
+    import { orientation } from '../store/media.store';
     import { showError } from '../store/notification.store';
     import { settings } from '../store/user-settings.svelte';
 
@@ -114,12 +116,14 @@
 <main>
     <TitlebarMenu minimal={true} />
     <LoadingBar isLoading={!$data}>
+        {#if $orientation === 'portrait'}
+        <TableSearch placeholder={$t('table.search')} />
+        {/if}
         <Table
             {columns}
             data={data}
             idField="id"
             placeholder={$t('common.search-empty')}
-            placeholderSearch={$t('table.search')}
             persistenceID={SNIPPETS_SETTINGS_ID}
             groupBy={["type", "groups"]}
             groupHeader={snippetGroupHeaderFormatter}
