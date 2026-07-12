@@ -10,7 +10,7 @@
     import { autoFilter, dateFilter, hasValueFilter, rangeFilter, statusFilter } from '../components/table/templates/filter.helper';
     import { createIntervals, formatTemplates, songGroupHeaderFormatter } from '../components/table/templates/formatters.svelte';
     import LoadingBar from '../components/ui/elements/LoadingBar.svelte';
-    import Table from '../components/table/Table.svelte';
+    import { createTable, type TableView } from '../components/table/table.svelte';
     import FileDrop from '../components/table/FileDrop.svelte';
     import { buildActionMenu } from '../components/table/templates/actionMenu.helper';
     import { songSummaryFormatter } from '../components/table/templates/responsive.helper';
@@ -20,7 +20,6 @@
     import { refData } from '../service/base/app-cache.setup';
     import SessionService from '../service/user/user-session.service';
     import SongService, { SONG_SETTINGS_ID } from '../service/user/user-song.service';
-    import type { TableView } from '../store/app.store';
     import { orientation } from '../store/media.store';
     import { showError, showInfo } from '../store/notification.store';
     import { settings } from '../store/user-settings.svelte';
@@ -155,16 +154,19 @@
             {#if $orientation === 'portrait'}
             <TableSearch placeholder={$t('table.search')} />
             {/if}
-            <Table
-                {columns}
-                data={entities}
-                idField="id"
-                placeholder={$t('common.search-empty')}
-                persistenceID={readonly ? `${SONG_SETTINGS_ID}.readonly` : SONG_SETTINGS_ID}
-                groupHeader={songGroupHeaderFormatter}
-                onInit={init}
-                onError={showError}
-            />
+            <div use:createTable={{
+                columns,
+                data$: entities,
+                idField: "id",
+                placeholder: $t('common.search-empty'),
+                persistenceID: readonly ? `${SONG_SETTINGS_ID}.readonly` : SONG_SETTINGS_ID,
+                groupFormatter: songGroupHeaderFormatter,
+                groupStartOpen: [true, (v, n) => n < 3],
+                tableMenuVisible: true,
+                tableDownloadTitle: $t('menu.table.exportTitle'),
+                onInit: init,
+                onError: showError
+            }}></div>
         </FileDrop>
     </LoadingBar>
 </main>
@@ -177,4 +179,4 @@
         height: 0;
         text-align: left;
     }
-</style>
+</style>data$

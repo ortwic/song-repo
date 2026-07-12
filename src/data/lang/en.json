@@ -24,7 +24,7 @@
     },
     "or": "or",
     "table": {
-      "exportTitle": "My Song List",
+      "exportTitle": "Song-List",
       "set-view": "Edit column view",
       "show-hide": "Show/Hide",
       "group-by": "Group by",
@@ -250,17 +250,17 @@
   "snippets": {
     "start-type": "Start {type}",
     "type": {
-        "custom": "Custom",
-        "etude": "Étude",
-        "motif": "Motif",
-        "phrase": "Phrase",
-        "riff": "Riff",
-        "lick": "Lick",
-        "groove": "Groove",
-        "pattern": "Pattern",
-        "fill": "Fill",
-        "progression": "Progression",
-        "cadence": "Cadence"
+      "custom": "Custom",
+      "etude": "Étude",
+      "motif": "Motif",
+      "phrase": "Phrase",
+      "riff": "Riff",
+      "lick": "Lick",
+      "groove": "Groove",
+      "pattern": "Pattern",
+      "fill": "Fill",
+      "progression": "Progression",
+      "cadence": "Cadence"
     },
     "dialog": {
       "title": "Snippet",

@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { Filter } from "tabulator-tables";
-    import { type TableView, tableView } from "../../store/app.store";
+    import { tableContext } from "./table.svelte";
     import { onMount } from "svelte";
 
     interface Props {
@@ -13,30 +13,27 @@
 
     let searchTerm = $state('');
 
-    onMount(() => tableView.subscribe(initSearch));
-
-    function initSearch(view: TableView) {
-        if (view) {
-            const array = view.table.getFilters(false)[0] as unknown as Filter[];
+    $effect(() => {
+        if (tableContext?.table) {
+            const array = tableContext.table.getFilters(false)[0] as unknown as Filter[];
             searchTerm = array?.filter((f) => f.value)[0]?.value;
         }
-    }
+    });
 
     function search(event: Event & { currentTarget: EventTarget & HTMLInputElement }) {
         const value = event.currentTarget.value;
         if (value) {
-            $tableView.table.clearHeaderFilter();
-
-            const columns = $tableView.table.getColumnDefinitions();
+            tableContext.table.clearHeaderFilter();
+            const columns = tableContext.table.getColumnDefinitions();
 
             // 2nd level array enforces OR comparison
-            $tableView.table.setFilter([
+            tableContext.table.setFilter([
                 columns
                     .filter((c) => c.sorter === 'string')
                     .map((c) => ({ field: c.field, type: 'like', value })),
             ]);
         } else {
-            $tableView.table.clearFilter(false);
+            tableContext.table.clearFilter(false);
         }
     }
 </script>

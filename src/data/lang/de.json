@@ -24,7 +24,7 @@
     },
     "or": "oder",
     "table": {
-      "exportTitle": "Meine Songliste",
+      "exportTitle": "Songliste",
       "set-view": "Ansicht bearbeiten",
       "show-hide": "Zeige/Verstecke ",
       "group-by": "Gruppiere nach",
@@ -250,17 +250,17 @@
   "snippets": {
     "start-type": "{type} starten",
     "type": {
-        "custom": "Benutzerdefiniert",
-        "etude": "Etüden",
-        "motif": "Motiv",
-        "phrase": "Phrase",
-        "riff": "Riff",
-        "lick": "Lick",
-        "groove": "Groove",
-        "pattern": "Muster",
-        "fill": "Fill",
-        "progression": "Akkordfolge",
-        "cadence": "Kadenz"
+      "custom": "Benutzerdefiniert",
+      "etude": "Etüden",
+      "motif": "Motiv",
+      "phrase": "Phrase",
+      "riff": "Riff",
+      "lick": "Lick",
+      "groove": "Groove",
+      "pattern": "Muster",
+      "fill": "Fill",
+      "progression": "Akkordfolge",
+      "cadence": "Kadenz"
     },
     "dialog": {
       "title": "Snippet",

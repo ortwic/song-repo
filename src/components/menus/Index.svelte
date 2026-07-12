@@ -13,11 +13,11 @@
     import BlogMenu from './BlogMenu.svelte';
     import EventListMenu from './EventListMenu.svelte';
     import Sidebar from '../ui/Sidebar.svelte';
+    import { tableContext } from '../table/table.svelte';
     import MenuDrawer from '../ui/elements/MenuDrawer.svelte';
     import NavButton from '../ui/elements/NavButton.svelte';
     import { currentUser } from '../../service/user/auth.service';
-    import { SONG_SETTINGS_ID } from '../../service/user/user-song.service';
-    import { currentMenu, tableView } from '../../store/app.store';
+    import { currentMenu } from '../../store/app.store';
 
     const version = `${import.meta.env.PACKAGE_NAME} ${import.meta.env.PACKAGE_VERSION}`;
     const isDashboard = derived(location, (path) => path === '/');
@@ -42,9 +42,9 @@
                 <LoginMenu />
             {/if}
 
-            {#if $tableView}
-                {#if $tableView?.id === SONG_SETTINGS_ID}
-                <TableMenu exportTitle={$t('menu.table.exportTitle')} />
+            {#if tableContext}
+                {#if tableContext.tableMenuVisible}
+                <TableMenu />
                 {/if}
                 <ColumnMenu />
             {:else if $isBlogView}

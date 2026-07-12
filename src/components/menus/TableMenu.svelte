@@ -4,16 +4,10 @@
     import type { UserSong } from '../../model/song.model';
     import FileIcon from '../ui/elements/FileIcon.svelte';
     import SongService from '../../service/user/user-song.service';
-    import { tableView } from '../../store/app.store';
+    import { tableContext } from '../table/table.svelte';
     import { showError } from '../../store/notification.store';
     import { openDialog } from '../dialog-context.svelte';
     import { exportTableToPdf } from '../table/pdf-export';
-
-    interface Props {
-        exportTitle?: string;
-    }
-
-    let { exportTitle = 'export' }: Props = $props();
 
     const service = new SongService();
 
@@ -25,18 +19,24 @@
     }
 
     async function downloadPdf() {
-        try {
-            await exportTableToPdf($tableView?.table, exportTitle);
-        } catch (error) {
-            showError(error.message);
+        if (tableContext) {
+            const { table, tableDownloadTitle } = tableContext;
+            try {
+                await exportTableToPdf(table, tableDownloadTitle);
+            } catch (error) {
+                showError(error.message);
+            }
         }
     }
 
     function download(type: DownloadType, params?: DownloadOptions): void {
-        try {
-            $tableView?.table.download(type, `${exportTitle}.${type}`, params);
-        } catch (error) {
-            showError(error.message);
+        if (tableContext) {
+            const { tableDownloadTitle } = tableContext;
+            try {
+                tableContext?.table.download(type, `${tableDownloadTitle}.${type}`, params);
+            } catch (error) {
+                showError(error.message);
+            }
         }
     }
 </script>
