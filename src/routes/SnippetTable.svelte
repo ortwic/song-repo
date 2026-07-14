@@ -13,8 +13,9 @@
     import { openDialog, type NavigationContext } from '../components/dialog-context.svelte';
     import TitlebarMenu from '../components/menus/TitlebarMenu.svelte';
     import LoadingBar from '../components/ui/elements/LoadingBar.svelte';
-    import { createTable, type TableView } from '../components/table/table.svelte';
-    import TableSearch from '../components/table/TableSearch.svelte';
+    import type { TableView } from '../components/table/table.action';
+    import { tableContext } from '../components/table/table.svelte';
+    import TableSearch from '../components/ui/TableSearch.svelte';
     import type { UserSnippet } from '../model/snippet.model';
     import SnippetService, { SNIPPETS_SETTINGS_ID } from '../service/user/snippet.service';
     import { orientation } from '../store/media.store';
@@ -118,13 +119,14 @@
         {#if $orientation === 'portrait'}
         <TableSearch placeholder={$t('table.search')} />
         {/if}
-        <div use:createTable={{
+        <div use:tableContext={{
             columns,
             data$: service.snippets$,
             idField: "id",
             placeholder: $t('common.search-empty'),
             persistenceID: SNIPPETS_SETTINGS_ID,
             groupBy: ["type", "groups"],
+            groupByLabel: $t('menu.table.group-by'),
             groupFormatter: snippetGroupHeaderFormatter,
             groupStartOpen: [true, false],
             onInit: init,

@@ -14,10 +14,10 @@
         acc[field] = value;
         return acc;
     };
-    const sortedFields = $state(view?.table.getSorters().reduce(sortEntry, {} as Record<string, SortDirection>) ?? {});
-    const headerFilter = $state(view?.table.getHeaderFilters().reduce(filterEntry, {} as Record<string, string>) ?? {});
+    const sortedFields = $state(view.table?.getSorters().reduce(sortEntry, {} as Record<string, SortDirection>) ?? {});
+    const headerFilter = $state(view.table?.getHeaderFilters().reduce(filterEntry, {} as Record<string, string>) ?? {});
     const menus: Record<string, PopupMenu> = $state({});
-    const columns = () => view?.table?.getColumnDefinitions()
+    const columns = () => view.table?.getColumnDefinitions()
         .filter(c => !c.field.startsWith('__') && (!view.useResponsiveLayout || c.visible !== false)) ?? [];
 
     const filterListValues = (col: ColumnDefinition): LabelValue[] => {
@@ -45,7 +45,7 @@
                 column: field, 
                 dir: sortedFields[field] 
             }));
-        view?.table.setSort(sorter);
+        view.table?.setSort(sorter);
     }
 
     function sortIcon(order: 'asc' | 'desc') {
@@ -58,7 +58,7 @@
             delete headerFilter[value];
         }
 
-        view?.table.setHeaderFilterValue(column, value);
+        view.table?.setHeaderFilterValue(column, value);
     }
 
     function showPopupMenu(event: CustomEvent<MouseEvent>, field: string) {
@@ -76,15 +76,15 @@
                 {#if !view.useResponsiveLayout}
                 <Switch title="{ $t('menu.table.show-hide') } {col.title}"
                     state={col.visible !== false} icon="bx-show"
-                    onToggle={() => view?.table.getColumn(col.field).toggle()} />
+                    onToggle={() => view.table?.getColumn(col.field).toggle()} />
                 {/if}
                 <Switch title="{ $t('menu.table.sort-by') } {col.title}"
                     state={sortedFields[col.field] ?? null}
                     options={[null, 'asc', 'desc']} icon={sortIcon(sortedFields[col.field])}
                     onToggle={(dir) => sortBy(col.field, dir as SortDirection)} />
                 <Switch title="{ $t('menu.table.group-by') } {col.title}"
-                    state={view?.groups.includes(col.field)} icon="bx-collection bx-flip-vertical"
-                    onToggle={() => view?.toggleGroup(col.field)} />
+                    state={view.groups?.includes(col.field)} icon="bx-collection bx-flip-vertical"
+                    onToggle={() => view.toggleGroup?.(col.field)} />
                 {#if col.headerFilter === 'tickCross'}
                     <Switch title="{ $t('menu.table.filter-by') } {col.title}"
                         state={headerFilter[col.field] ?? undefined}

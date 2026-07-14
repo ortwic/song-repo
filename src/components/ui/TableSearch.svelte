@@ -1,7 +1,6 @@
 <script lang="ts">
     import type { Filter } from "tabulator-tables";
-    import { tableContext } from "./table.svelte";
-    import { onMount } from "svelte";
+    import { tableContext } from "../table/table.svelte";
 
     interface Props {
         placeholder?: string;
@@ -14,7 +13,7 @@
     let searchTerm = $state('');
 
     $effect(() => {
-        if (tableContext?.table) {
+        if (tableContext.table) {
             const array = tableContext.table.getFilters(false)[0] as unknown as Filter[];
             searchTerm = array?.filter((f) => f.value)[0]?.value;
         }

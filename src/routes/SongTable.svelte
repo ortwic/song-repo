@@ -9,14 +9,17 @@
     import { createColumnBuilder, createEditor } from '../components/table/templates/column.helper';
     import { autoFilter, dateFilter, hasValueFilter, rangeFilter, statusFilter } from '../components/table/templates/filter.helper';
     import { createIntervals, formatTemplates, songGroupHeaderFormatter } from '../components/table/templates/formatters.svelte';
+    import { openDialog } from '../components/dialog-context.svelte';
     import LoadingBar from '../components/ui/elements/LoadingBar.svelte';
-    import { createTable, type TableView } from '../components/table/table.svelte';
-    import FileDrop from '../components/table/FileDrop.svelte';
+    import type { TableView } from '../components/table/table.action';
+    import { tableContext } from '../components/table/table.svelte';
+    import FileDrop from '../components/ui/FileDrop.svelte';
     import { buildActionMenu } from '../components/table/templates/actionMenu.helper';
     import { songSummaryFormatter } from '../components/table/templates/responsive.helper';
-    import TableSearch from '../components/table/TableSearch.svelte';
+    import TableSearch from '../components/ui/TableSearch.svelte';
     import { SongActions } from '../domain/song.actions';
     import { createSongEntity, type SongEntity } from '../domain/song.entity';
+    import type { UserSong } from '../model/song.model';
     import { refData } from '../service/base/app-cache.setup';
     import SessionService from '../service/user/user-session.service';
     import SongService, { SONG_SETTINGS_ID } from '../service/user/user-song.service';
@@ -97,6 +100,13 @@
         { title: 'id', field: 'id', visible: false },
     ];
 
+    async function addSong() {
+        const newSong = await openDialog<UserSong, UserSong>('EditSongDialog');
+        if (newSong !== null) {
+            await service.addSong(newSong);
+        }
+    }
+
     function updateHandler(): CellEditEventCallback {
         return async (cell: CellComponent): Promise<void> => {
             try {
@@ -154,16 +164,22 @@
             {#if $orientation === 'portrait'}
             <TableSearch placeholder={$t('table.search')} />
             {/if}
-            <div use:createTable={{
+            <div use:tableContext={{
                 columns,
                 data$: entities,
                 idField: "id",
+                addAction: {
+                    label: $t('songs.add-new'),
+                    action: addSong
+                },
+                exportAction: {
+                    fileName: $t('menu.table.exportTitle')
+                },
                 placeholder: $t('common.search-empty'),
+                groupByLabel: $t('menu.table.group-by'),
                 persistenceID: readonly ? `${SONG_SETTINGS_ID}.readonly` : SONG_SETTINGS_ID,
                 groupFormatter: songGroupHeaderFormatter,
                 groupStartOpen: [true, (v, n) => n < 3],
-                tableMenuVisible: true,
-                tableDownloadTitle: $t('menu.table.exportTitle'),
                 onInit: init,
                 onError: showError
             }}></div>
@@ -179,4 +195,4 @@
         height: 0;
         text-align: left;
     }
-</style>data$
+</style>

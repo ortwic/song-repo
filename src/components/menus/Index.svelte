@@ -42,10 +42,8 @@
                 <LoginMenu />
             {/if}
 
-            {#if tableContext}
-                {#if tableContext.tableMenuVisible}
+            {#if tableContext.table}
                 <TableMenu />
-                {/if}
                 <ColumnMenu />
             {:else if $isBlogView}
                 <BlogMenu />
