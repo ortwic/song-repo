@@ -35,10 +35,24 @@ body {
         text-align: center;
         pointer-events: none;
         transition: opacity .4s ease-out;
+        animation: pulse 2.4s ease-in-out infinite;
+        transform-origin: center;
     }
 
     &.app-ready::before {
+        animation-play-state: paused;
         opacity: 0;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        filter: drop-shadow(0 0 14px var(--highlight));
+        transform: scale(1);
+    }
+    42% {
+        transform: scale(1.04);
+        filter: drop-shadow(0 0 1px var(--surface));
     }
 }
 
