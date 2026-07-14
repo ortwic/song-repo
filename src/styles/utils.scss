@@ -108,6 +108,26 @@ span.label {
     }
 }
 
+.info-box {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 0.8em 0;
+    padding: 0.4em 0;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    background-color: var(--surface);
+    white-space: collapse balance;
+
+    & > *:first-child {
+        margin-left: 1em;
+    }
+
+    & > *:last-child {
+        margin-right: 1em;
+    }
+}
+
 .grid-max-2 {
     display: grid;
     grid-template-columns: auto 1fr;

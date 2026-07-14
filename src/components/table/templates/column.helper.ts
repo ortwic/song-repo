@@ -2,6 +2,7 @@ import { t } from 'svelte-i18n';
 import { get } from 'svelte/store';
 import type { CellEditEventCallback, ColumnComponent, Editor, ListEditorParams, RowComponent, SortDirection } from 'tabulator-tables';
 import type { ColumnDefinition } from '../tabulator/types';
+import { arrayInputEditor } from './input.editor';
 
 type Sorter =
     | undefined
@@ -24,7 +25,7 @@ type Sorter =
         sorterParams: NonNullable<unknown>,
     ) => number);
 
-export function createColumnBuilder() {
+export function createColumnBuilder(i18nKey: string) {
     return (
         responsive: number,
         field: string,
@@ -32,7 +33,7 @@ export function createColumnBuilder() {
         sorter: Sorter,
         ...more: Partial<ColumnDefinition>[]
     ): ColumnDefinition => {
-        const title = get(t)(`songs.columns.${field}`);
+        const title = get(t)(`${i18nKey}.columns.${field}`);
         return Object.assign(
             {
                 title,
@@ -64,10 +65,10 @@ export function createEditor(cellEdited: CellEditEventCallback, readonly = false
         return editorParams;
     };
 
-    return (editor?: Editor, values?: string[]): Partial<ColumnDefinition> => {
+    return (editor?: Editor | 'array', values?: string[]): Partial<ColumnDefinition> => {
         if (!readonly) {
             const definition: Partial<ColumnDefinition> = {
-                editor,
+                editor: editor === 'array' ? arrayInputEditor : editor,
                 cellEdited
             };
             if (editor === 'list') {

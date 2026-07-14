@@ -9,7 +9,7 @@
     import { createSearchService } from '../../service/catalog/search.service';
     import { openDialog } from '../dialog-context.svelte';
     import type { Song, UserSong } from '../../model/song.model';
-    import type { SearchEngines } from '../../model/types';
+    import type { SearchEngines } from '../../model/app.types';
     import { logAction } from '../../store/notification.store';
 
     const songService = new SongService();
@@ -112,7 +112,7 @@
             <p>
                 <label for="provider">{$t('menu.search.select-provider')}:</label>
                 <select bind:value={currentSearchEngine}>
-                    <option value="">Song-Repo</option>
+                    <option value="">{import.meta.env.PACKAGE_NAME}</option>
                     <option value="musicbrainz">MusicBrainz</option>
                     <option value="discogs">Discogs</option>
                     <option value="audius">Audius</option>

@@ -1,7 +1,6 @@
 import { stores, type FirestoreService } from './firestore.service';
 import type { Genre } from '../../model/song.model';
-
-type Page = { id: string; title: string; body: string };
+import type { Page } from '../../model/page.model';
 
 const cache = {
     genres: [] as Genre[],

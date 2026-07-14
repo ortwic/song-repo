@@ -45,16 +45,13 @@
     }
 </script>
 
-<DialogBase {visible} size="full" onClose={close}>
+<DialogBase {visible} size="full" type="view" onClose={close}>
     {#snippet header()}
         <i class="bx bx-file"></i>
         <a href={uri} target="_blank">{uri}</a>
         {#if resolved.embedType === 'image'}
         ({(zoom * 100).toFixed()}%)
         {/if}
-    {/snippet}
-    {#snippet footer()}
-        <!-- hide confirm/decline -->
     {/snippet}
     {#if isBlocked}
         <div class="viewer-body">

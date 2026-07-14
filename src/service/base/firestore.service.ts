@@ -20,8 +20,6 @@ import { collectionData, docData } from 'rxfire/firestore';
 import { startWith } from 'rxjs/operators';
 import { of, type Observable } from 'rxjs';
 
-const store = initFirestore();
-
 // firestore does not like undefined values so omit them
 const omitUndefinedFields = (data: object) => {
     Object.keys(data).forEach((key) => {
@@ -32,9 +30,8 @@ const omitUndefinedFields = (data: object) => {
     return data;
 };
 
-export const snapshotOptions: SnapshotOptions = {
-    serverTimestamps: 'none'
-};
+const serverTimestamps: SnapshotOptions['serverTimestamps'] = 'none';
+const store = initFirestore();
 
 export class FirestoreService {
     private constructor(
@@ -63,7 +60,7 @@ export class FirestoreService {
                 const result: T[] = [];
                 snapshot.forEach((doc) => result.push({
                     id: doc.id,
-                    ...doc.data(snapshotOptions)
+                    ...doc.data({ serverTimestamps })
                 }));
                 return result;
             });
@@ -89,7 +86,7 @@ export class FirestoreService {
             const docRef = doc(store, this.path, id);
             const snapshot = await getDoc(docRef);
             if (snapshot.exists()) {
-                return snapshot.data(snapshotOptions) as T;
+                return snapshot.data({ serverTimestamps }) as T;
             }
         }
         return Promise.resolve(null);
@@ -147,5 +144,6 @@ export const stores = {
     user: FirestoreService.create('user'),
     userlinks: (id: string) => FirestoreService.create('user', id, 'links'),
     usersessions: (id: string) => FirestoreService.create('user', id, 'sessions'),
+    userSnippets: (id: string) => FirestoreService.create('user', id, 'snippets'),
     usersongs: (id: string) => FirestoreService.create('user', id, 'songs'),
 };

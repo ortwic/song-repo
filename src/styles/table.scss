@@ -11,7 +11,13 @@
     background: linear-gradient(0deg, wheat, transparent 50%);
 }
 
-div#table.tabulator {
+.tabulator {
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    overflow: hidden;
+
     div.tabulator-header {
         background-color: var(--surface);
         border-bottom: 1px solid var(--border);
@@ -118,7 +124,6 @@ div#table.tabulator {
                         }
                     }
                     i {
-                        font-size: x-small;
                         &.bx-unlink {
                             color: var(--border);
                         }
@@ -232,6 +237,11 @@ div.tabulator-popup-container {
     div.tabulator-menu-item:hover {
         background-color: var(--bg);
     }
+
+    div.tabulator-edit-list-item {
+        color: var(--text);
+        background-color: var(--surface);
+    }
 }
 
 /* favorite column */
@@ -303,6 +313,11 @@ i.status {
 
 .status.archived::before {
     content: '📦';
+}
+
+.snippet-summary > *,
+.snippet-group-header > * {
+    padding-right: .6em;
 }
 
 // overriding colors

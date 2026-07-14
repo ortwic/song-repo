@@ -3,7 +3,7 @@
     import { SEARCH_ACTIONS, SongActions } from '../../domain/song.actions';
     import { createSongEntity } from '../../domain/song.entity';
     import type { UserSong } from '../../model/song.model';
-    import { STATUS_MODES } from '../../model/types';
+    import { STATUS_MODES } from '../../model/app.types';
     import { lang } from '../../service/base/i18n.setup';
     import SessionService from '../../service/user/user-session.service';
     import SongService from '../../service/user/user-song.service';
@@ -62,7 +62,7 @@
         <button
             class="clear sm"
             title={$t('sessions.menu.quick')}
-            onclick={() => sessionService.addQuick(songEntity, settings.advanced.quickSessionDurationMinutes)}
+            onclick={() => sessionService.addQuickSong(songEntity, settings.advanced.quickSessionDurationMinutes)}
         >
             <i class="icon bx bxs-bolt"></i>
         </button>

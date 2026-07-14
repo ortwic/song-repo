@@ -28,7 +28,7 @@
     {/if}
     <GoogleDrivePicker disabled={!$isGoogleUser} onPick={handlePick} />
     {#if !$isGoogleUser}
-        <div class="info">
+        <div class="info-box">
             <i class="bx bx-info-circle"></i>
             <span>
                 {@html marked($t('songs.resource.info'), { mangle: false, headerIds: false })}
@@ -54,16 +54,5 @@
 
     input {
         width: 100%;
-    }
-
-    .info {
-        display: flex;
-        align-items: center;
-        width: 100%;
-        padding: 0.4em 1em;
-        border: 1px solid gray;
-        background-color: #8be2ff80;
-        text-align: center;
-        white-space: collapse balance;
     }
 </style>

@@ -1,11 +1,12 @@
 {
   "menu": {
-    "repo": "Repertoire",
+    "repo": "Gesamtes Repertoire",
     "howto": "Wie geht Musik",
     "howto-blog": "Wie geht Musik Blog",
     "events": "Veranstaltungen",
     "event-calendar": "Veranstaltungeskalender",
     "events-empty": "Keine Veranstaltungen gefunden!",
+    "snippets": "Ideen, Riffs, Etüden",
     "donate": "An Song-Repo spenden",
     "login": {
       "login": "Login",
@@ -23,7 +24,7 @@
     },
     "or": "oder",
     "table": {
-      "exportTitle": "Meine Songliste",
+      "exportTitle": "Songliste",
       "set-view": "Ansicht bearbeiten",
       "show-hide": "Zeige/Verstecke ",
       "group-by": "Gruppiere nach",
@@ -87,7 +88,8 @@
       "online": "Online-Suche nach „Songtitel [- Künstlername]“",
       "catalog": "Nach Titel, Künstler oder Genre suchen",
       "custom": "Eigenen Songeintrag hinzufügen"
-    }
+    },
+    "dont-show-again": "Wische nach rechts, um Info auszublenden."
   },
   "feedback": {
     "submit": "Feedback senden",
@@ -164,11 +166,15 @@
       "genre": "Genre",
       "style": "Style",
       "source": "Quelle",
+      "groups": "Zuordnung",
+      "mxmlPath": "Noten",
       "uri": "URI",
       "key": "Tonart",
       "time": "Taktart",
       "bpm": "Tempo",
       "difficulty": "Level",
+      "instruments": "Instrumente",
+      "type": "Typ",
       "features": "Merkmale",
       "tags": "Labels",
       "learnedOn": "Gelernt",
@@ -200,14 +206,13 @@
     },
     "resource": {
       "show": "Anzeigen",
-      "info": "**Tipp**  \nSie können jeden freigegebenen Link aus einem Cloud-Speicher verwenden.  \nAlternativ können Sie Ihr Profil verknüpfen, um die Google Drive-Auswahl zu ermöglichen.",
+      "info": "Sie können jeden freigegebenen Link aus einem Cloud-Speicher verwenden.  \nAlternativ können Sie Ihr Profil verknüpfen, um die Google Drive-Auswahl zu ermöglichen.",
       "select": "Datei auswählen",
       "select-cloud": "Datei aus Cloud",
       "select-title": "Datei aus Google Drive auswählen",
       "upload": "Datei hochladen",
       "blocked": "Resource kann nicht angezeigt werden!"
     },
-    "search-empty": "Nichts gefunden! 😥",
     "exportTitle": "Meine Songliste",
     "import": "Import starten...",
     "importDone": "{found} Songs gefunden. Gesamtzahl der Songs: {total}",
@@ -242,6 +247,27 @@
     "search-filter-settings": "Filtereinstellungen",
     "played-times": "{count}x gespielt"
   },
+  "snippets": {
+    "start-type": "{type} starten",
+    "type": {
+      "custom": "Benutzerdefiniert",
+      "etude": "Etüden",
+      "motif": "Motiv",
+      "phrase": "Phrase",
+      "riff": "Riff",
+      "lick": "Lick",
+      "groove": "Groove",
+      "pattern": "Muster",
+      "fill": "Fill",
+      "progression": "Akkordfolge",
+      "cadence": "Kadenz"
+    },
+    "dialog": {
+      "title": "Snippet",
+      "never-played": "Noch nie gespielt",
+      "last-played": "Zuletzt gespielt"
+    }
+  },
   "table": {
     "groupBy": "Gruppieren nach {title}",
     "search": "Suchen nach etwas wie Genre, Künstler, todo...",
@@ -273,6 +299,9 @@
   "dialog": {
     "confirm": "Bestätigen",
     "decline": "Ablehnen",
+    "next": "Nächstes",
+    "prev": "Vorheriges",
+    "done": "Abschließen",
     "swipe-to-close": "Zum Schließen nach rechts wischen"
   },
   "profile": {
@@ -361,13 +390,25 @@
     "alias-unknown": "Benutzeralias ist unbekannt!"
   },
   "common": {
+    "search-empty": "Nichts gefunden! 😥",
     "expand": "Erweitern",
     "collapse": "Minimieren",
     "true": "Ja",
     "false": "Nein",
     "page": "Seite",
     "total": "Gesamt",
-    "more": "Mehr anzeigen"
+    "more": "Mehr anzeigen",
+    "details": "Details zu {title}",
+    "score-preview": {
+      "title": "Noten für {title}",
+      "no-score": "Keine Notenansicht verfügbar",
+      "score-error": "Notenansicht konnte nicht geladen werden"
+    },
+    "midi-player": {
+      "no-midi": "Kein Midi verfügbar",
+      "play-midi": "MIDI abspielen",
+      "pause": "MIDI anhalten"
+    }
   },
   "iframe": {
     "consent": {

@@ -1,3 +1,5 @@
+import { MarkupContent, QuoteContent, YouTubeContent, ImagesContent } from "./content.model";
+
 export interface Post {
     id: string;
     title: string;
@@ -5,7 +7,7 @@ export interface Post {
     lang?: 'en-US' | 'de-DE';
     excerpt?: string;
     images: PostImage[];
-    content: Content[];
+    content: PostContent[];
     tags: string[];
     status: 'published' | 'draft';
     publish_date: Date;
@@ -18,30 +20,4 @@ interface PostImage {
     value: string;
 }
 
-export type Content = MarkupContent | QuoteContent | YouTubeContent | ImagesContent;
-
-interface MarkupContent {
-    type: 'text';
-    value: string;
-}
-
-interface QuoteContent {
-    type: 'quote';
-    value: {
-        text: string;
-        cite: string;
-    };
-}
-
-interface YouTubeContent {
-    type: 'youtube';
-    value: {
-        id: string;
-        title: string;
-    };
-}
-
-interface ImagesContent {
-    type: 'images';
-    value: string[];
-}
+export type PostContent = MarkupContent | QuoteContent | YouTubeContent | ImagesContent;

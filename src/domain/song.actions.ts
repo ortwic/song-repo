@@ -1,7 +1,7 @@
-import { type DialogArgs, openDialog } from '../components/dialog-context.svelte';
+import { type DialogAction, type DialogArgs, openDialog } from '../components/dialog-context.svelte';
 import type { UserSession } from '../model/session.model';
 import type { Song, UserSong } from '../model/song.model';
-import type { StatusMode } from '../model/types';
+import type { StatusMode } from '../model/app.types';
 import type SessionService from '../service/user/user-session.service';
 import type SongService from '../service/user/user-song.service';
 import { logAction } from '../store/notification.store';
@@ -83,18 +83,18 @@ export class SongActions {
     async runSession(entity: SongEntity): Promise<UserSession> {
         const session = await openDialog<SongEntity, UserSession>('SessionDialog', entity);
         if (session) {
-            await this.sessionService.addSession(entity, session);
+            await this.sessionService.addSongSession(entity, session);
         }
         return session;
     }
 
     async quickSession(entity: SongEntity, durationMinutes: number): Promise<void> {
-        return this.sessionService.addQuick(entity, durationMinutes);
+        return this.sessionService.addQuickSong(entity, durationMinutes);
     }
 
     async delete(song: UserSong, args?: DialogArgs): Promise<void> {
-        const confirmed = !args || await openDialog<DialogArgs, boolean>('ConfirmDialog', args);
-        if (confirmed === true) {
+        const action = !args || await openDialog<DialogArgs, DialogAction>('ConfirmDialog', args);
+        if (action) {
             await this.songService.deleteSong(song);
         }
     }

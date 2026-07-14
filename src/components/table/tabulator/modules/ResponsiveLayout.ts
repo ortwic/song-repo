@@ -1,5 +1,5 @@
 import type { CellComponent, Tabulator } from 'tabulator-tables';
-import Module from 'tabulator-tables/src/js/core/Module';
+import { Module } from 'tabulator-tables';
 
 type Formatter = (data: CollapsedCellData[]) => HTMLElement;
 
@@ -11,7 +11,7 @@ export interface CollapsedCellData {
     element?: HTMLElement;
 }
 
-export default class ResponsiveLayout extends Module{
+export default class ResponsiveLayout extends Module {
     static moduleName = 'responsiveLayout';
 
     private columns = [];
@@ -22,7 +22,7 @@ export default class ResponsiveLayout extends Module{
     private collapseStartOpen = true;
     private collapseHandleColumn: { show: () => void; hide: () => void; };
 
-    constructor(private table: Tabulator){
+    constructor(table: Tabulator){
         super(table);
 
         super.registerTableOption('responsiveLayout', false); //responsive layout flags

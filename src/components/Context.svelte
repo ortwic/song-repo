@@ -5,6 +5,7 @@
     import ExceptionDialog from './dialogs/ExceptionDialog.svelte';
     import ResourceViewer from './dialogs/ResourceViewer.svelte';
     import SessionDialog from './dialogs/SessionDialog.svelte';
+    import SnippetDialog from './dialogs/SnippetDialog.svelte';
 
     interface Props {
         children?: import('svelte').Snippet;
@@ -19,4 +20,5 @@
 <ExceptionDialog />
 <ResourceViewer />
 <SessionDialog />
+<SnippetDialog />
 {@render children?.()}

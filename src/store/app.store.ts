@@ -1,6 +1,4 @@
 import { writable } from 'svelte/store';
-import type { TableView } from '../model/table-view.model';
-import type { MenuTarget } from '../model/types';
+import type { MenuTarget } from '../model/app.types';
 
-export const tableView = writable<TableView>();
 export const currentMenu = writable<MenuTarget>('hidden');

@@ -3,7 +3,7 @@
     import { onMount } from 'svelte';
     import Autocomplete from 'simple-svelte-autocomplete/src/SimpleAutocomplete.svelte';
     import Switch from '../ui/elements/Switch.svelte';
-    import { type Status, STATUS_KEYS } from '../../model/types';
+    import { type Status, STATUS_KEYS } from '../../model/app.types';
     import type { IndexEntry } from '../../utils/index-builder';
     import SongService from '../../service/user/user-song.service';
     import { MAX_SONGVIEW_LIMIT, settings, saveSettings, MAX_SONGVIEW_DAYS } from '../../store/user-settings.svelte';

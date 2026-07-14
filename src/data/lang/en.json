@@ -1,12 +1,12 @@
 {
   "menu": {
-    "start": "Start",
-    "repo": "Repertory",
+    "repo": "Complete repertory",
     "howto": "How to music",
     "howto-blog": "How to make music blog",
     "events": "Public events",
     "event-calendar": "Public event calendar",
     "events-empty": "No events found!",
+    "snippets": "Ideas, Riffs, Etudes",
     "donate": "Donate Song-Repo",
     "login": {
       "login": "Login",
@@ -24,7 +24,7 @@
     },
     "or": "or",
     "table": {
-      "exportTitle": "My Song List",
+      "exportTitle": "Song-List",
       "set-view": "Edit column view",
       "show-hide": "Show/Hide",
       "group-by": "Group by",
@@ -33,6 +33,7 @@
     },
     "open": "Open",
     "close": "Close",
+    "start": "Start",
     "search": {
       "select-provider": "Select search provider"
     },
@@ -87,7 +88,8 @@
       "online": "Online-Search for \"Song Title [- Artist Name]\"",
       "catalog": "Search by title, artist or genre",
       "custom": "Add custom song entry"
-    }
+    },
+    "dont-show-again": "Swipe right to hide info."
   },
   "feedback": {
     "submit": "Submit feedback",
@@ -164,11 +166,15 @@
       "genre": "Genre",
       "style": "Style",
       "source": "Source",
+      "groups": "Groups",
+      "mxmlPath": "Score",
       "uri": "URI",
       "key": "Key",
       "time": "Time",
       "bpm": "BPM",
       "difficulty": "Level",
+      "instruments": "Instruments",
+      "type": "Type",
       "features": "Features",
       "tags": "Labels",
       "learnedOn": "Learned",
@@ -200,14 +206,13 @@
     },
     "resource": {
       "show": "Show",
-      "info": "**Tip**  \nYou can use any shared link from a cloud storage.  \nAlternatively, you can link your profile to enable Google Drive selection.",
+      "info": "You can use any shared link from a cloud storage.  \nAlternatively, you can link your profile to enable Google Drive selection.",
       "select": "Select file",
       "select-cloud": "File from cloud",
       "select-title": "Select a file from Google Drive",
       "upload": "Upload file",
       "blocked": "Unable to display resource!"
     },
-    "search-empty": "No results found! 😥",
     "exportTitle": "My Song List",
     "import": "Start importing...",
     "importDone": "Found {found} songs. Total songs: {total}",
@@ -242,6 +247,27 @@
     "search-filter-settings": "Filter settings",
     "played-times": "Played {count}x"
   },
+  "snippets": {
+    "start-type": "Start {type}",
+    "type": {
+      "custom": "Custom",
+      "etude": "Étude",
+      "motif": "Motif",
+      "phrase": "Phrase",
+      "riff": "Riff",
+      "lick": "Lick",
+      "groove": "Groove",
+      "pattern": "Pattern",
+      "fill": "Fill",
+      "progression": "Progression",
+      "cadence": "Cadence"
+    },
+    "dialog": {
+      "title": "Snippet",
+      "never-played": "Never played",
+      "last-played": "Last played"
+    }
+  },
   "table": {
     "groupBy": "Group by {title}",
     "search": "Search for anything e. g. genre, artist, todo",
@@ -273,6 +299,9 @@
   "dialog": {
     "confirm": "Confirm",
     "decline": "Decline",
+    "next": "Next",
+    "prev": "Previous",
+    "done": "Finish",
     "swipe-to-close": "Swipe right to close"
   },
   "calendar": {
@@ -363,13 +392,25 @@
     "alias-unknown": "User alias is unkown!"
   },
   "common": {
+    "search-empty": "No results found! 😥",
     "collapse": "Collapse",
     "expand": "Expand",
     "true": "Yes",
     "false": "No",
     "page": "Page",
     "total": "Total",
-    "more": "Show more"
+    "more": "Show more",
+    "details": "Details for {title}",
+    "score-preview": {
+      "title": "Scores for {title}",
+      "no-score": "No score available",
+      "score-error": "Score could not be loaded"
+    },
+    "midi-player": {
+      "no-midi": "No midi available",
+      "play-midi": "Play MIDI",
+      "pause": "Pause MIDI"
+    }
   },
   "iframe": {
     "consent": {

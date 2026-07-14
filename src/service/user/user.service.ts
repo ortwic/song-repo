@@ -21,7 +21,7 @@ export const isEmailPwdUser = currentProfile.pipe(map(p => !p?.provider));
 export default class UserService {
     getProfileByAlias(alias: string): Observable<UserProfile> {
         return stores.user.getDocuments<UserProfile>(where('alias', '==', alias)).pipe(
-            switchMap(docs => docs.length ? of(docs[0]) : of({ alias } as UserProfile))
+            switchMap(docs => docs.length ? of(docs[0]) : of({ alias, id: '' } as UserProfile))
         );
     }
 

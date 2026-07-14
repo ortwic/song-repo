@@ -6,7 +6,7 @@ import type { UserSong } from '../../model/song.model';
 import { buildIndex } from '../../utils/index-builder';
 import { docId } from '../../utils/object.helper';
 
-export const viewStoreId = 'songs.v1';
+export const SONG_SETTINGS_ID = 'songs.v1';
 
 const localStore = {};
 const localSubject = new BehaviorSubject<UserSong[]>([]);
@@ -86,7 +86,7 @@ export default class SongService {
         return this.setSong(song);
     }
 
-    async setSong(song: Partial<UserSong>& { id: string }, forceLocalUpdate = false): Promise<string> {
+    async setSong(song: Partial<UserSong> & { id: string }, forceLocalUpdate = false): Promise<string> {
         if (this.uid) {
             if (song.id) {
                 await stores.usersongs(this.uid).setDocument(song, { merge: true });

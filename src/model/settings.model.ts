@@ -1,4 +1,4 @@
-import type { Status } from "./types";
+import type { Status } from "./app.types";
 
 export interface UserSettings {
     advanced: AdvancedSettings;
@@ -24,6 +24,7 @@ export interface DashboardSettings {
         showRecentChanges: boolean;
         showRecentWip: boolean;
     },
+    custom: Record<string, unknown>;
     recentDays: number;
     limit: number;
     status: Record<Status, boolean>;

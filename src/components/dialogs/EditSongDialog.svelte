@@ -96,7 +96,7 @@
 </script>
 
 <form bind:this={form} onsubmit={(e) => e.preventDefault()}>
-    <DialogBase {visible} size="full" onClose={done}>
+    <DialogBase {visible} size="full" type="confirm" onClose={({ action }) => done(action === 'confirm')}>
         {#snippet header()}
             <span>
                 <i class="bx bx-music"></i>

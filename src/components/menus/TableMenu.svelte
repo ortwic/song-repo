@@ -1,42 +1,29 @@
 <script lang="ts">
-    import { t } from 'svelte-i18n';
     import type { DownloadOptions, DownloadType } from 'tabulator-tables';
-    import type { UserSong } from '../../model/song.model';
     import FileIcon from '../ui/elements/FileIcon.svelte';
-    import SongService from '../../service/user/user-song.service';
-    import { tableView } from '../../store/app.store';
+    import { tableContext } from '../table/table.svelte';
     import { showError } from '../../store/notification.store';
-    import { openDialog } from '../dialog-context.svelte';
     import { exportTableToPdf } from '../table/pdf-export';
 
-    interface Props {
-        exportTitle?: string;
-    }
-
-    let { exportTitle = 'export' }: Props = $props();
-
-    const service = new SongService();
-
-    async function addSong() {
-        const newSong = await openDialog<UserSong, UserSong>('EditSongDialog');
-        if (newSong !== null) {
-            await service.addSong(newSong);
-        }
-    }
-
     async function downloadPdf() {
-        try {
-            await exportTableToPdf($tableView?.table, exportTitle);
-        } catch (error) {
-            showError(error.message);
+        const { table, exportAction } = tableContext;
+        if (table) {
+            try {
+                await exportTableToPdf(table, exportAction.fileName);
+            } catch (error) {
+                showError(error.message);
+            }
         }
     }
 
     function download(type: DownloadType, params?: DownloadOptions): void {
-        try {
-            $tableView?.table.download(type, `${exportTitle}.${type}`, params);
-        } catch (error) {
-            showError(error.message);
+        const { table, exportAction } = tableContext;
+        if (table) {
+            try {
+                table.download(type, `${exportAction.fileName}.${type}`, params);
+            } catch (error) {
+                showError(error.message);
+            }
         }
     }
 </script>
@@ -46,11 +33,16 @@
 </svelte:head>
 
 <section class="menu">
+    {#if tableContext.addAction}
     <div class="row">
-        <button data-close title={$t('songs.add-new')} onclick={addSong}>
-            <span><i class="bx bx-plus"></i> {$t('songs.add-new')}</span>
+        <button data-close 
+            title={tableContext.addAction.label} 
+            onclick={tableContext.addAction.action}>
+            <span><i class="bx bx-plus"></i> {tableContext.addAction.label}</span>
         </button>
     </div>
+    {/if}
+    {#if tableContext.exportAction}
     <div class="row">
         <button class="icon-export" data-close title="Export CSV" onclick={() => download('csv', { delimiter: ';' })}>
             <FileIcon type="CSV" fill="OliveDrab"></FileIcon>
@@ -62,7 +54,7 @@
             class="icon-export"
             data-close
             title="Export XLSX"
-            onclick={() => download('xlsx', { sheetName: exportTitle })}
+            onclick={() => download('xlsx', { sheetName: tableContext.exportAction.fileName })}
         >
             <FileIcon type="XLSX" fill="MediumSeaGreen" letterSpacing="-8px" style="condensed"></FileIcon>
         </button>
@@ -70,6 +62,7 @@
             <FileIcon type="PDF" fill="IndianRed" letterSpacing="5px"></FileIcon>
         </button>
     </div>
+    {/if}
 </section>
 
 <style lang="scss">

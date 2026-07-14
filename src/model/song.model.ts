@@ -1,5 +1,5 @@
 import type { Timestamp } from 'firebase/firestore';
-import type { Percent, Status, TrainingAreas } from './types';
+import type { Percent, Status, TrainingAreas } from './app.types';
 
 export interface Artist {
     id: string;

@@ -1,12 +1,17 @@
 import Color from 'color';
 import { marked } from 'marked';
+import { t } from 'svelte-i18n';
 import { mount } from 'svelte';
-import type { CellComponent, GroupComponent } from 'tabulator-tables';
+import { get } from 'svelte/store';
+import type { CellComponent, GroupComponent, Tabulator } from 'tabulator-tables';
 import type { ColumnDefinition } from '../tabulator/types';
+import type { UserSnippet } from '../../../model/snippet.model';
 import type { SongEntity } from '../../../domain/song.entity';
 import type { AdvancedSettings } from '../../../model/settings.model';
+import { StorageService } from '../../../service/base/storage.service';
 import type SongService from '../../../service/user/user-song.service';
 import { toDate } from '../../../utils/date.helper';
+import ScorePreview from '../../ui/ScorePreview.svelte';
 import ProgressBar from '../../ui/elements/ProgressBar.svelte';
 import { genreColor, redToGreenGradient, redToGreenRange } from '../../../styles/style.helper';
 
@@ -28,6 +33,9 @@ export function createIntervals(value: number, range = 10) {
 }
 
 export function formatTemplates(songService: SongService, settings: AdvancedSettings) {
+    const translate = get(t);
+    const storage = new StorageService();
+
     return {
         get favorite(): Partial<ColumnDefinition> {
             return {
@@ -223,9 +231,61 @@ export function formatTemplates(songService: SongService, settings: AdvancedSett
                 },
             };
         },
-    } satisfies Record<string, Partial<ColumnDefinition>>;
+
+        get scorePreview(): Partial<ColumnDefinition> {
+            return {
+                formatter(cell: CellComponent): HTMLElement {
+                    const height = '80px';
+                    const target = document.createElement('div');
+                    target.style.height = height;
+                    storage.getFileUrl(cell.getValue())
+                        .then(url => {
+                            const props = $state({
+                                url,
+                                height,
+                                firstInstrumentOnly: true,
+                                measureCount: 2,
+                                zoom: 0.8
+                            });
+                            mount(ScorePreview, { target, props });
+                        });
+
+                    return target;
+                },
+            }
+        },
+
+        translate(key: string): Partial<ColumnDefinition> {
+            return {
+                formatter(cell: CellComponent): string {
+                    const field = cell.getField();
+                    const value = cell.getValue();
+                    return value ? translate(`${key}.${field}.${value}`) : '';
+                }
+            }
+        }
+    };
 }
 
+export function snippetActionsFormatter(onAction: (id: string) => void): Partial<ColumnDefinition> {
+    return {
+        formatter(cell: CellComponent): HTMLElement {
+            const id = cell.getData()['id'];
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.classList.add('clear');
+            button.title = get(t)('menu.open');
+            button.innerHTML = `<i class="bx bx-play-circle"></i>`;
+            button.addEventListener('click', () => onAction(id));
+
+            return button;
+        }
+    }
+}
+
+// ----------------------------------------------------------------------
+// Group Header Formatters
+// ----------------------------------------------------------------------
 
 const formatterFuncs: Partial<Record<keyof SongEntity, (value: unknown) => string>> = {
     fav(value) {
@@ -240,8 +300,9 @@ const formatterFuncs: Partial<Record<keyof SongEntity, (value: unknown) => strin
     }
 };
 
-export const groupByFormatter = (value: unknown, count: number, data: SongEntity[], group: GroupComponent) => {
-    const sumUp = (accumulator: number, current: number) => accumulator + current;
+const sumUp = (accumulator: number, current: number) => accumulator + current;
+
+export const songGroupHeaderFormatter = (value: unknown, count: number, data: SongEntity[], group: GroupComponent) => {
     let info = `<span class='label' style='min-width: 2em'>Σ ${count}</span>`;
     if (data.length) {
         const tags = [...new Set(data.flatMap((f) => f.tags || []))];
@@ -259,3 +320,79 @@ export const groupByFormatter = (value: unknown, count: number, data: SongEntity
     return formatterFuncs[field] ? formatterFuncs[field](value) + info
         : `<span class='title'>${value || 'n/a'}</span>${info}`;
 };
+
+export function createSnippetGroupHeader(onAction: (id: string) => void) {
+    const translate = get(t);
+    return {
+        formatter(value: unknown, count: number, data: UserSnippet[], group: GroupComponent): HTMLElement {
+            const firstId = data.at(0)['id'];
+            const element = group.getElement();
+            element.classList.add('no-wrap');
+
+            const wrapper = document.createElement('span');
+            wrapper.classList.add('snippet-group-header', 'no-wrap');
+
+            const field = group.getField();
+            if (field === 'groups') {
+                const type = translate(`snippets.type.${data.at(0)?.type ?? 'custom'}`);
+                const title = translate('snippets.start-type', { values: { type } });
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.disabled = !data.length;
+                button.classList.add('clear');
+                button.innerHTML = `<i class="item bx bx-play-circle"></i> ${title} (${count})`;
+                button.addEventListener('click', (ev) => {
+                    ev.stopImmediatePropagation();
+                    onAction(firstId);
+                });
+                wrapper.appendChild(button);
+
+                const label = Array.isArray(value) ? value.join(' > ') : value;
+                const span = document.createElement('span');
+                span.textContent = `${label}`;
+                wrapper.appendChild(span);
+
+
+                const instruments = [...new Set(data.flatMap(s => s.instruments ?? []))];
+                if (instruments.length) {
+                    const instrumentsEl = document.createElement('span');
+                    instrumentsEl.classList.add('instruments');
+                    instrumentsEl.textContent = instruments.join(', ');
+                    wrapper.appendChild(instrumentsEl);
+                }
+            } else {
+                const label = tryAppendFormatter(group.getTable(), field, value);
+                if (label) {
+                    wrapper.appendChild(label);
+                } else {
+                    const span = document.createElement('span');
+                    span.textContent = `${value ?? 'n/a'}`;
+                    wrapper.appendChild(span);
+                }
+            }
+
+            return wrapper;
+        }
+    };
+}
+
+function tryAppendFormatter(table: Tabulator, field: string, value: unknown): HTMLElement {
+    const definition = table.getColumnDefinitions().find(c => c.field === field);
+    if (typeof definition.formatter === 'function') {  
+        try {
+            const label = definition.formatter({
+                getValue: () => value,
+                getField: () => field
+            } as CellComponent, {}, () => {});
+            if (typeof label === 'string') {
+                const span = document.createElement('span');
+                span.innerHTML = `${label}`;
+                return span;
+            } 
+            return label;
+        } catch (e) {
+            return null;
+        }
+    }
+
+}

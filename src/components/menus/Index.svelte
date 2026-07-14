@@ -13,18 +13,14 @@
     import BlogMenu from './BlogMenu.svelte';
     import EventListMenu from './EventListMenu.svelte';
     import Sidebar from '../ui/Sidebar.svelte';
+    import { tableContext } from '../table/table.svelte';
     import MenuDrawer from '../ui/elements/MenuDrawer.svelte';
     import NavButton from '../ui/elements/NavButton.svelte';
     import { currentUser } from '../../service/user/auth.service';
     import { currentMenu } from '../../store/app.store';
 
-    interface Props {
-        footer: string;
-    }
-
-    let { footer }: Props = $props();
+    const version = `${import.meta.env.PACKAGE_NAME} ${import.meta.env.PACKAGE_VERSION}`;
     const isDashboard = derived(location, (path) => path === '/');
-    const isTableView = derived(location, (path) => path.startsWith('/songs'));
     const isBlogView = derived(location, (path) => path.startsWith('/blog'));
     const isEventView = derived(location, (path) => path.startsWith('/events'));
 
@@ -35,7 +31,7 @@
 
 <MenuDrawer>
     {#if $currentMenu === 'dynamic'}
-        <Sidebar title={$t('menu.start')} onclose={hide}>
+        <Sidebar onclose={hide}>
             {#if $currentUser}
                 <ProfileMenu
                     email={$currentUser.email}
@@ -46,8 +42,8 @@
                 <LoginMenu />
             {/if}
 
-            {#if $isTableView}
-                <TableMenu exportTitle={$t('menu.table.exportTitle')} />
+            {#if tableContext.table}
+                <TableMenu />
                 <ColumnMenu />
             {:else if $isBlogView}
                 <BlogMenu />
@@ -61,17 +57,14 @@
             {/if}
 
             {#snippet lower()}
-                <NavButton href="/songs" title={$t('menu.repo')}>
-                    <span><i class="bx bxs-playlist"></i> {$t('menu.repo')}</span>
-                </NavButton>
                 <NavButton href="/events" title={$t('menu.event-calendar')}>
                     <span><i class="bx bx-calendar"></i> {$t('menu.events')}</span>
                 </NavButton>
                 <NavButton href="/blog" title={$t('menu.howto-blog')}>
-                    <span><i class="bx bx-music"></i> {$t('menu.howto')}</span>
+                    <span><i class="bx bx-book-open"></i> {$t('menu.howto')}</span>
                 </NavButton>
                 <div class="row">
-                    <a use:link class="warn" role="button" href="/user/ocsoft42">
+                    <a use:link class="warn" role="button" href="/user/song-repo">
                         <span>
                             <i class="bx bxs-coffee"></i> {$t('menu.donate')}
                         </span>
@@ -79,14 +72,14 @@
                 </div>
             {/snippet}
             {#snippet footer()}
-                {footer}
+                {version}
             {/snippet}
         </Sidebar>
     {:else if $currentMenu === 'signup'}
-        <Sidebar title={$t('menu.login.signup')} onclose={hide}>
+        <Sidebar onclose={hide}>
             <SignupMenu />
             {#snippet footer()}
-                {footer}
+                {version}
             {/snippet}
         </Sidebar>
     {/if}

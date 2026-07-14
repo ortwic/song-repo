@@ -1,4 +1,4 @@
-type ObjectValues<T> = T[keyof T];
+export type ObjectValues<T> = T[keyof T];
 
 const STATUS_RECORD = {
     1: 'todo',
@@ -34,6 +34,7 @@ export const STATUS_MODES = [AUTO_STATUS, ...STATUS_KEYS] as const;
 export const FOCUS_KEYS = Object.values(FOCUS_RECORD);
 export const SESSIONKIND_KEYS = Object.values(SESSIONKIND_RECORD);
 
+export type AccessType = 'any' | 'users' | 'owners';
 export type Percent = number;
 export type Status = ObjectValues<typeof STATUS_RECORD>;
 export type StatusMode = typeof AUTO_STATUS | Status;

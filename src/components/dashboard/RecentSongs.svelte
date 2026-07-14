@@ -11,7 +11,6 @@
     import { unfold } from '../ui/helper/transition.helper';
     import Expand from '../ui/elements/Expand.svelte';
     import SongCard from './SongCard.svelte';
-    import SongStats from './SongStats.svelte';
 
     const service = new SongService();
     const changedAtSorter = (a: UserSong, b: UserSong) => {
@@ -56,8 +55,6 @@
 </script>
 
 <section class="recent-songs">
-    <SongStats />
-
     {#if recentSongs.length > 0}
     <Expand title={$t('songs.recent-change')}
         icon='bx-history'

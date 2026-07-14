@@ -49,12 +49,12 @@
 </script>
 
 <svelte:head>
-    <title>{$t('menu.howto')} blog | Song-Repo</title>
+    <title>{$t('menu.howto')} blog | {import.meta.env.PACKAGE_NAME}</title>
 </svelte:head>
 
 <main class="content">
     <TitlebarMenu>
-        <i class="bx bx-music"></i>&nbsp; {$t('blog.title')}
+        <i class="bx bx-book-open"></i>&nbsp; {$t('blog.title')}
     </TitlebarMenu>
     {#each posts as post}
         <div class="post">

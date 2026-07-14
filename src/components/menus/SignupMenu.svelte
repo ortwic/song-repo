@@ -3,11 +3,11 @@
     import { authService } from '../../service/user/auth.service';
     import { logPageView, showError } from '../../store/notification.store';
     import { getPage } from '../../service/common/page.service';
-    import { type DialogArgs, openDialog } from '../dialog-context.svelte';
+    import { type DialogAction, type DialogArgs, openDialog } from '../dialog-context.svelte';
     
     interface RequiredPageChecks {
-        termsofuse: boolean;
-        privacypolicy: boolean;
+        termsofuse?: DialogAction;
+        privacypolicy?: DialogAction;
     }
 
     const MIN_PWD_LENGTH = 6;
@@ -18,10 +18,7 @@
     let password = $state('');
     let pwdRepeat = $state('');
 
-    const checks: RequiredPageChecks = $state({
-        privacypolicy: false,
-        termsofuse: false,
-    });
+    const checks: RequiredPageChecks = $state();
 
     async function signUp() {
         try {
@@ -49,8 +46,8 @@
 
     async function showDialog(target: keyof RequiredPageChecks) {
         const title = $t('menu.login.read-carefully');
-        const { body } = getPage(target);
-        checks[target] = await openDialog<DialogArgs, boolean>('ConfirmDialog', { 
+        const { body } = getPage(target) ?? { body: `Trouble while loading '${target}'` };
+        checks[target] = await openDialog<DialogArgs, DialogAction>('ConfirmDialog', { 
             title, 
             body,
             size: 'full',

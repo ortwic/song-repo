@@ -13,14 +13,19 @@
     
     function toggleMenu(e: Event) {
         (e.target as HTMLElement).blur();
-        currentMenu.set('dynamic');
+        if ($currentMenu !== 'hidden') {
+            currentMenu.set('hidden');
+        } else {
+            currentMenu.set('dynamic');
+        }
     }
 
 </script>
 
 
 {#if minimal}
-    <button class="clear float" title={$t('menu.open')} onclick={toggleMenu}>
+    <button class="clear float" onclick={toggleMenu}
+        title={$currentMenu !== 'hidden' ? $t('menu.close') : $t('menu.open')}>
         <i class="icon shadow bx bx-sidebar bx-flip-horizontal"></i>
     </button>
 {:else}
@@ -33,14 +38,19 @@
         <i class="bx bx-user-circle"></i>
     </a> 
     {/if}
-    {#if $location !== '/songs'}
+    {#if !$location.startsWith('/songs')}
     <a use:link class="titlebar-button" href="/songs" title="{ $t('menu.repo') }">
         <i class="bx bxs-playlist"></i>
     </a> 
     {/if}
-    {#if $location !== '/blog'}
+    {#if !$location.startsWith('/snippets')}
+    <a use:link class="titlebar-button" href="/snippets" title="{ $t('menu.snippets') }">
+        <i class="bx bx-bulb"></i>
+    </a> 
+    {/if}
+    {#if !$location.startsWith('/blog')}
     <a use:link class="titlebar-button" href="/blog" title="{ $t('menu.howto') }">
-        <i class="bx bx-music"></i>
+        <i class="bx bx-book-open"></i>
     </a> 
     {/if}
     {#if $location !== '/events'}
