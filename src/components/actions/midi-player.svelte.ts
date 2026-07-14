@@ -1,18 +1,26 @@
-import { Midi } from '@tonejs/midi';
-import * as Tone from 'tone';
+import type { Midi as MidiType } from '@tonejs/midi';
+import type * as Tone from 'tone';
 
 export function createMidiPlayer() {
+    let toneModule: typeof Tone | null = null;
     let synth: Tone.Sampler | null = null;
-    let midi: Midi | null = null;
+    let midi: MidiType | null = null;
     let parts: Tone.Part[] = [];
     let stopEventId: number | null = null;
 
     let isReady = $state(false);
     let isPlaying = $state(false);
 
-    function createPartsFromMidi(midiData: Midi, instrument: Tone.Sampler): Tone.Part[] {
+    async function loadTone(): Promise<typeof Tone> {
+        if (!toneModule) {
+            toneModule = await import('tone');
+        }
+        return toneModule;
+    }
+
+    function createPartsFromMidi(midiData: MidiType, instrument: Tone.Sampler, toneNs: typeof Tone): Tone.Part[] {
         return midiData.tracks.map(track => {
-            const part = new Tone.Part((time, note) => {
+            const part = new toneNs.Part((time, note) => {
                 instrument.triggerAttackRelease(note.name, note.duration, time, note.velocity);
             }, track.notes);
             part.start(0);
@@ -20,33 +28,36 @@ export function createMidiPlayer() {
         });
     }
 
-    function scheduleAutoStop(duration: number) {
+    function scheduleAutoStop(toneNs: typeof Tone, duration: number): void {
         if (stopEventId !== null) {
-            Tone.getTransport().clear(stopEventId);
+            toneNs.getTransport().clear(stopEventId);
         }
 
-        stopEventId = Tone.getTransport().scheduleOnce(() => {
-            resetPlayback();
+        stopEventId = toneNs.getTransport().scheduleOnce(() => {
+            resetPlayback(toneNs);
         }, duration);
     }
 
-    function resetPlayback(): void {
+    function resetPlayback(toneNs: typeof Tone): void {
         // stop() rewinds the transport to position 0 (unlike pause(), which keeps
         // the current position) — required so the track can be replayed after it finished
-        Tone.getTransport().stop();
+        toneNs.getTransport().stop();
         synth?.releaseAll();
         isPlaying = false;
     }
 
-    function pausePlayback(): void {
+    function pausePlayback(toneNs: typeof Tone): void {
         // pause() keeps the current position, so playback can resume from there
-        Tone.getTransport().pause();
+        toneNs.getTransport().pause();
         synth?.releaseAll();
         isPlaying = false;
     }
 
     async function load(midiUrl: string): Promise<void> {
-        synth = new Tone.Sampler({
+        const toneNs = await loadTone();
+        const { Midi } = await import('@tonejs/midi');
+
+        synth = new toneNs.Sampler({
             urls: {
                 A0: 'A0.mp3', C1: 'C1.mp3', 'D#1': 'Ds1.mp3', 'F#1': 'Fs1.mp3', A1: 'A1.mp3',
                 C2: 'C2.mp3', 'D#2': 'Ds2.mp3', 'F#2': 'Fs2.mp3', A2: 'A2.mp3',
@@ -63,35 +74,38 @@ export function createMidiPlayer() {
         }).toDestination();
 
         midi = await Midi.fromUrl(midiUrl); // already fully parsed, no separate load() call exists
-        parts = createPartsFromMidi(midi, synth);
-        scheduleAutoStop(midi.duration);
+        parts = createPartsFromMidi(midi, synth, toneNs);
+        scheduleAutoStop(toneNs, midi.duration);
         isReady = true;
     }
 
     async function toggle(): Promise<void> {
         if (midi && synth) {
-            await Tone.start(); // must happen inside a user-gesture handler
+            const toneNs = await loadTone();
+            await toneNs.start(); // must happen inside a user-gesture handler
 
             if (isPlaying) {
-                pausePlayback();
+                pausePlayback(toneNs);
             } else {
-                scheduleAutoStop(midi.duration);
-                Tone.getTransport().start();
+                scheduleAutoStop(toneNs, midi.duration);
+                toneNs.getTransport().start();
                 isPlaying = true;
             }
         }
     }
 
     function dispose(): void {
-        // Note: Tone.getTransport() is a single global instance shared by the whole app.
-        // Stopping/cancelling it here affects any other component scheduling on the
-        // same transport. Fine for a standalone player, worth knowing if reused elsewhere.
-        Tone.getTransport().stop();
-        Tone.getTransport().cancel();
-        parts.forEach(part => part.dispose());
-        parts = [];
-        synth?.dispose();
-        synth = null;
+        if (toneModule) {
+            // Note: Tone.getTransport() is a single global instance shared by the whole app.
+            // Stopping/cancelling it here affects any other component scheduling on the
+            // same transport. Fine for a standalone player, worth knowing if reused elsewhere.
+            toneModule.getTransport().stop();
+            toneModule.getTransport().cancel();
+            parts.forEach(part => part.dispose());
+            parts = [];
+            synth?.dispose();
+            synth = null;
+        }
     }
 
     return {

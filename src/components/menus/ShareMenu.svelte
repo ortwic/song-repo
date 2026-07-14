@@ -1,10 +1,9 @@
 <script lang='ts'>
     import { t } from 'svelte-i18n';
-    import QRCode from 'qrcode';
     import { onDestroy } from 'svelte';
     import { currentProfile } from '../../service/user/user.service';
-    import { getCssVariable } from '../../styles/style.helper';
     import { toClipboard } from '../ui/helper/input.helper';
+    import { generateQRCode } from '../actions/qrcode.action';
 
     let {
         showPreview = true,
@@ -13,57 +12,16 @@
 
     let shareLink = $state('');
     let qrCodeUrl = $state('');
-    let qrCodeCanvas: HTMLCanvasElement = $state();
 
-    const sub = currentProfile.subscribe((p) => {
-        shareLink = p.alias 
-            ? `${window.location.origin}/@${p.alias}` 
-            : `${window.location.origin}/#/songs/@${p.id}`;
-        setQRCodeUrl(shareLink);
+    const sub = currentProfile.subscribe((profile) => {
+        if (profile) {
+            shareLink = profile.alias 
+                ? `${window.location.origin}/@${profile.alias}` 
+                : `${window.location.origin}/#/songs/@${profile.id}`;
+        }
     });
 
     onDestroy(() => sub?.unsubscribe());
-
-    async function setQRCodeUrl(text: string) {
-        function drawWhiteCircle(center: number, size: number): void {
-            ctx.beginPath();
-            ctx.arc(center, center, size, 0, Math.PI * 2);
-            ctx.fillStyle = '#ffffff';
-            ctx.fill();
-        }
-
-        async function drawLogo(center: number, size: number): Promise<void> {
-            const logo = new Image();
-            logo.src = '/logo.svg';
-            await new Promise(resolve => logo.onload = resolve);
-
-            const pos = center - size / 2.15;
-            ctx.drawImage(logo, pos, pos, size, size);
-        }
-
-        await QRCode.toCanvas(qrCodeCanvas, text, {
-            errorCorrectionLevel: 'H',
-            width: 128,
-            margin: 0,
-            color: {
-                dark: `${getCssVariable('--text')}`,
-                light: '#ffffff00'
-            }
-        });
-
-        if (!qrCodeCanvas) {
-            return;
-        }
-
-        const ctx = qrCodeCanvas.getContext('2d');
-        const center = qrCodeCanvas.width / 2;
-        const size = qrCodeCanvas.width * 0.18;
-
-        drawWhiteCircle(center, size * 0.66);
-        await drawLogo(center, size);
-
-        qrCodeUrl = qrCodeCanvas.toDataURL('image/png');
-    }
 </script>
 
 <section class="menu">
@@ -89,7 +47,10 @@
     </div>
     {/if}
     <p class="center">
-        <canvas id="qrcode" bind:this={qrCodeCanvas}></canvas>
+        <canvas id="qrcode" use:generateQRCode={{
+            text: shareLink,
+            onCreated: (dataUrl) => qrCodeUrl = dataUrl
+        }}></canvas>
     </p>
 </section>
 
