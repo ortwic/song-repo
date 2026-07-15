@@ -50,7 +50,7 @@
 
         <Expand title={$t('settings.sections.linkhub')}>
             <p>
-                <LinkHub />
+                <LinkHub uid={$currentUser.uid} />
             </p>
         </Expand>
         {/if}

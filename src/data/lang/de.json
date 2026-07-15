@@ -387,7 +387,7 @@
   "user": {
     "song-list": "Songliste",
     "not-found": "Benutzer nicht gefunden!",
-    "alias-unknown": "Benutzeralias ist unbekannt!"
+    "alias-unknown": "Benutzeralias \"@{alias}\" ist unbekannt!"
   },
   "common": {
     "search-empty": "Nichts gefunden! 😥",

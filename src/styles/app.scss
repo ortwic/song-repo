@@ -138,10 +138,6 @@ button {
         background-color: var(--surface-light);
     }
 
-    &.primary {
-        @include accent-button;
-    }
-
     &.clear {
         border: 0;
         outline: 0;
@@ -151,6 +147,10 @@ button {
         &:disabled {
             background: transparent;
         }
+    }
+
+    &.primary {
+        @include accent-button;
     }
 
     &.icon {

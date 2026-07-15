@@ -16,8 +16,8 @@ import {
     QueryConstraint,
     Query,
 } from 'firebase/firestore';
-import { collectionData, docData } from 'rxfire/firestore';
-import { startWith } from 'rxjs/operators';
+import { collectionCount, collectionData, docData } from 'rxfire/firestore';
+import { shareReplay, startWith } from 'rxjs/operators';
 import { of, type Observable } from 'rxjs';
 
 // firestore does not like undefined values so omit them
@@ -43,6 +43,14 @@ export class FirestoreService {
     static create(...pathSegments: string[]): FirestoreService {
         const path = pathSegments.length % 2 > 0 ? pathSegments.join('/') : '';
         return new FirestoreService(path);
+    }
+
+    public countDocuments(): Observable<number> {
+        if (this.path) {
+            const ref = collection(store, this.path);
+            return collectionCount(ref).pipe(shareReplay(1));
+        }
+        return of(0);
     }
 
     public getDocuments<T extends DocumentData>(...constraints: QueryConstraint[]): Observable<T[]> {

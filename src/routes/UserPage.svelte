@@ -1,14 +1,11 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
     import { marked } from 'marked';
-    import { of, startWith, switchMap, map } from 'rxjs';
-    import type { UserLink } from '../model/user.model';
-    import UserService from '../service/user/user.service';
-    import { UserLinkService } from '../service/user/user-link.service';
     import Avatar from '../components/ui/Avatar.svelte';
-    import LoadingBar from '../components/ui/elements/LoadingBar.svelte';
-    import NavButton from '../components/ui/elements/NavButton.svelte';
     import Footer from '../components/ui/Footer.svelte';
+    import type { UserProfileView } from '../model/user.model';
+    import UserService from '../service/user/user.service';
+    import { setAppReady } from '../store/app.store';
     import NotFound from './NotFound.svelte';
 
     interface Props {
@@ -17,65 +14,137 @@
 
     let { params = {} }: Props = $props();
 
-    const userService = new UserService();
-    const profile$ = userService.getProfileByAlias(params.alias);
-    const links$ = userService.getProfileByAlias(params.alias).pipe(
-        switchMap((p) => (p?.id ? new UserLinkService(p.id).userlinks$ : of([]))),
-        startWith([] as UserLink[])
-    );
+    let profile = $state<UserProfileView>();
 
+    $effect(() => {
+        const { unsubscribe } = new UserService().getProfileWithLinks(params.alias).subscribe((value) => {
+            profile = value;
+            setAppReady();
+        });
+
+        return () => unsubscribe();
+    });
 </script>
 
 <main class="content">
-    <LoadingBar isLoading={$profile$?.id === undefined}>
-    {#if $profile$?.id !== undefined}
+    {#if profile?.id}
         <h2>
-            <Avatar photoURL={$profile$.photoURL} title={$profile$.name} />
-            {$profile$.name}
+            <Avatar photoURL={profile.photoURL} title={profile.name} />
+            {profile.name}
         </h2>
 
-        <p class="about">{@html marked($profile$.about ?? '')}</p>
+        <p class="about">{@html marked(profile.about ?? '', { mangle: false, headerIds: false })}</p>
+        
+        <section class="linktree">
+            <a class="link primary" role="button" href="/#/songs/{profile.id}">
+                <i class="icon-badge bx bxs-playlist"></i>
+                {$t('user.song-list')}
+            </a>
 
-        <section class="menu">
-            <NavButton href="/songs/@{$profile$.id}">
-                <span>
-                    <i class="bx bxs-playlist"></i>
-                    {$t('user.song-list')}
-                </span>
-            </NavButton>
-
-            {#each $links$ as link}
-                <div class="row">
-                    <a role="button" href={link.url} target="_blank">
-                        <span>
-                            <i class="bx {link.icon}"></i>
-                            {link.title}
-                        </span>
-                    </a>
-                </div>
+            {#each profile.links as link}
+                <a class="link" role="button" href={link.url} target="_blank">
+                    <i class="icon-badge bx {link.icon}"></i>
+                    {link.title}
+                </a>
             {/each}
         </section>
     {:else}
         <NotFound>
-            <p>{$t('user.alias-unknown')}</p>
+            <p>{$t('user.alias-unknown', { 
+                values: { 
+                    alias: params.alias 
+                }
+            })}</p>
         </NotFound>
     {/if}
-    </LoadingBar>
     <p>
         <Footer />
     </p>
 </main>
 
-<style>
+<style lang="scss">
+    .content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem 1rem;
+
+        & > * {
+            max-width: 640px; 
+        }
+    }
+
     h2 {
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 0.5em;
+        margin: 0;
         color: var(--accent);
+        letter-spacing: 0.02em;
     }
 
     .about {
         padding: 0 1em;
+        color: var(--text-muted);
+    }
+
+    .linktree {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        padding: 1.5rem 0.5rem;
+        width: 100%;
+    }
+
+    a[role='button'].link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        padding: 0.85rem 1.1rem;
+        border-radius: 14px;
+        border-left: 4px solid transparent;
+        background: linear-gradient(0deg, var(--surface-light), var(--surface));
+        color: var(--text);
+        box-shadow: var(--shadow-sm);
+        transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+    
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-left-color: var(--accent);
+            background: linear-gradient(90deg, var(--surface-light), var(--surface));
+        }
+
+        .icon-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2rem;
+            height: 2rem;
+            flex-shrink: 0;
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            background-color: var(--icon-bg);
+            color: var(--accent);
+        }
+
+        &.primary {
+            color: var(--surface);
+            background: linear-gradient(0deg, var(--accent), var(--accent-t));
+            border-left-color: transparent;
+
+            &:hover {
+                background-color: var(--accent-muted);
+                border-left-color: transparent;
+                transform: translateY(-2px);
+            }
+
+            .icon-badge {
+                background-color: var(--surface);
+                color: var(--accent);
+            }
+        }
     }
 </style>

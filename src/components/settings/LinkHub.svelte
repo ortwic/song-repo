@@ -6,8 +6,14 @@
     import { showError } from '../../store/notification.store';
     import { slideFade } from '../ui/helper/transition.helper';
 
-    const linkService = new UserLinkService();
-    const links$ = linkService.userlinks$;
+    let {
+        uid,
+    }: {
+        uid: string;
+    } = $props();
+
+    const linkService = $derived(new UserLinkService(uid));
+    const links$ = $derived(linkService.userlinks$);
     
     let addingLink = $state(false);
     let newUrl = $state('');

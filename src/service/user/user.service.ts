@@ -1,27 +1,28 @@
-import { GoogleAuthProvider, type User } from 'firebase/auth';
+import type { User } from 'firebase/auth';
 import { where } from 'firebase/firestore';
-import { authState } from 'rxfire/auth';
-import { from, map, Observable, of, startWith, switchMap } from 'rxjs';
-import { auth } from '../base/firebase.setup';
+import { filter, from, map, Observable, of, startWith, switchMap } from 'rxjs';
 import { stores } from '../base/firestore.service';
-import type { UserProfile } from '../../model/user.model';
-
-const empty = { alias: '' } as UserProfile;
-
-// Do not use currentUser here to avoid circular dependency
-export const currentProfile = authState(auth).pipe(
-    switchMap((p) => stores.user.getDocument<UserProfile>(p?.uid)),
-    map(p => p || empty),
-    startWith(empty)
-);
-
-export const isGoogleUser = currentProfile.pipe(map(p => p?.provider === GoogleAuthProvider.PROVIDER_ID));
-export const isEmailPwdUser = currentProfile.pipe(map(p => !p?.provider));
+import type { UserProfile, UserProfileView } from '../../model/user.model';
+import { UserLinkService } from './user-link.service';
 
 export default class UserService {
-    getProfileByAlias(alias: string): Observable<UserProfile> {
+
+    constructor() {
+    }
+
+    getProfileWithLinks(alias: string): Observable<UserProfileView> | never {
+        return this.getProfileByAlias(alias).pipe(
+            switchMap(profile => new UserLinkService(profile.id).userlinks$.pipe(
+                map(links => ({ ...profile, links } as UserProfileView))
+            )),
+            filter(p => p.id && p.links !== null),
+            startWith({} as UserProfileView)
+        );
+    }
+
+    private getProfileByAlias(alias: string): Observable<UserProfile> {
         return stores.user.getDocuments<UserProfile>(where('alias', '==', alias)).pipe(
-            switchMap(docs => docs.length ? of(docs[0]) : of({ alias, id: '' } as UserProfile))
+            switchMap(docs => docs.length ? of(docs[0]) : of({} as UserProfile))
         );
     }
 

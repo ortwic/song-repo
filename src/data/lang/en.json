@@ -389,7 +389,7 @@
   },
   "user": {
     "song-list": "Song list",
-    "alias-unknown": "User alias is unkown!"
+    "alias-unknown": "User alias \"@{alias}\" is unkown!"
   },
   "common": {
     "search-empty": "No results found! 😥",

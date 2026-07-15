@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { t } from 'svelte-i18n';
+    import { t, json } from 'svelte-i18n';
     
     interface Props {
         children?: import('svelte').Snippet;
@@ -7,25 +7,30 @@
 
     let { children }: Props = $props();
 
-    const no = Math.floor(Math.random() * $t('notfound.messages').length );
+    const messages = $json('notfound.messages');
+    const no = Math.floor(Math.random() * Object.keys(messages).length );
 </script>
 
 <div>
-    <h2>{ $t('notfound.title') }</h2>
-    <p>
-        { $t(`notfound.messages.${no}`) }
-    </p>
-    <p style="color: red">
+    <h2>
+        <i class="bx bx-error"></i>
+        404 &ndash; { $t('notfound.title') }
+    </h2>
+    <h4>
         {#if children}
             {@render children()}
         {:else}
-            <img src="error.jpg" title="{$t('notfound.title')}" alt="{$t('notfound.title')}">
+            { messages[no] }
         {/if}
-    </p>
+    </h4>
+    <img src="error.jpg" title="{$t('notfound.title')}" alt="{$t('notfound.title')}">
 </div>
 
 <style>
     h2 {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
         color: var(--accent);
     }
 
@@ -35,6 +40,7 @@
 
     img {
         max-width: 100%;
+        border: 1px solid var(--border);
     }
 
     @media (prefers-color-scheme: dark) {

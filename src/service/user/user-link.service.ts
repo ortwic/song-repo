@@ -1,28 +1,19 @@
-import { auditTime, Observable, of, switchMap, tap } from 'rxjs';
+import { firstValueFrom, Observable, of } from 'rxjs';
 import { orderBy, Timestamp } from 'firebase/firestore';
 import type { UserLink } from '../../model/user.model';
-import { currentUser } from './auth.service';
 import { stores } from '../base/firestore.service';
 import { resolveIcon } from './icon.util';
 import { docId } from '../../utils/object.helper';
 
 export class UserLinkService {
-    private uid: string | undefined;
-    readonly isShared: boolean;
+    readonly userlinks$: Observable<UserLink[] | null>;
 
-    readonly userlinks$: Observable<UserLink[]>;
-
-    constructor(sharedUid?: string) {
-        if (sharedUid) {
-            this.isShared = true;
-            this.userlinks$ = stores.userlinks(sharedUid).getDocuments<UserLink>(orderBy('order'));
-        } else {
-            this.userlinks$ = currentUser.pipe(
-                tap((user) => (this.uid = user?.uid)),
-                switchMap((user) => stores.userlinks(user?.uid).getDocuments<UserLink>(orderBy('order'))),
-                auditTime(990)
-            );
-        }
+    constructor(private uid?: string) {
+        this.userlinks$ = uid ? stores.userlinks(uid).getDocuments<UserLink>(orderBy('order')) : of(null);
+    }
+    
+    async countLinks(): Promise<number> {
+        return this.uid ? firstValueFrom(stores.userlinks(this.uid).countDocuments()) : 0;
     }
 
     async addLink(url: string, title?: string, order?: number): Promise<string> {

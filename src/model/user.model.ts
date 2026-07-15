@@ -14,6 +14,10 @@ export interface UserProfile {
     deleted?: Date;
 }
 
+export interface UserProfileView extends UserProfile {
+    links: UserLink[];
+}
+
 export interface UserLink {
     id: string;
     title: string;

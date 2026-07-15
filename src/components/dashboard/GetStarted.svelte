@@ -15,9 +15,9 @@
     type SetupStatus = Partial<typeof settings.dashboard.setupStatus>;
 
     const MIN_SONGS = 3;
+    const MIN_LINKS = 1;
 
     const songService = new SongService();
-    const linkService = new UserLinkService();
 
     let shareDialogVisible = $state(false);
 
@@ -43,12 +43,13 @@
     onMount(() => {
         const sub = combineLatest([
             songService.usersongs$,
-            linkService.userlinks$,
             currentProfile,
-        ]).subscribe(([songs, links, profile]) => {
+        ]).subscribe(async ([songs, profile]) => {
+            const service = new UserLinkService(profile.id);
+            const linkCount = await service.countLinks();
             updateSetupStatus({
                 hasSongs: songs.length >= MIN_SONGS,
-                hasProfile: !!profile.about?.trim() && links.length >= 1,
+                hasProfile: !!profile.about?.trim() && linkCount >= MIN_LINKS,
             });
         });
         return () => sub.unsubscribe();
