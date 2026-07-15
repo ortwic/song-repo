@@ -34,6 +34,7 @@
     "preview": "vite preview",
     "mobile": "ngrok http 5173",
     "check": "svelte-check --tsconfig ./tsconfig.json",
+    "check:tdz": "npx madge --circular --extensions ts,js src",
     "spec": "vitest spec",
     "test": "vitest test",
     "test:all": "vitest"

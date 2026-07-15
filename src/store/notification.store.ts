@@ -1,6 +1,6 @@
 import { logEvent } from 'firebase/analytics';
 import { ArrayStore } from './array.class';
-import { analytics } from '../service/user/auth.service';
+import { analytics } from '../service/base/firebase.setup';
 
 type NotificationType = 'info' | 'warn' | 'error';
 

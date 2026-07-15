@@ -1,8 +1,8 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
+import { getAnalytics } from 'firebase/analytics';
 import { connectAuthEmulator, getAuth } from 'firebase/auth';
 import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
-import { showError, showInfo } from '../../store/notification.store';
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -21,6 +21,7 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 
 export const auth = initAuth();
+export const analytics = navigator?.onLine ? getAnalytics(app) : { app };
 
 function initAuth() {
     const auth = getAuth(app);
@@ -29,11 +30,10 @@ function initAuth() {
         try {
             connectAuthEmulator(auth, `http://${host}`, { disableWarnings: true });
         } catch (error) {
-            showError('Unable to init auth emulator config on ' + host);
-            console.error(error);
+            console.error('Unable to init auth emulator config on ' + host, error);
             return auth;
         }
-        showInfo('Using auth emulator on ' + host);
+        console.log('Using auth emulator on ' + host);
     }
     return auth;
 }
@@ -46,11 +46,10 @@ export function initFirestore() {
             const { hostname, port } = new URL(`http://${host}`);
             connectFirestoreEmulator(store, hostname, +port || 8080);
         } catch (error) {
-            showError('Unable to init firestore emulator config on ' + host);
-            console.error(error);
+            console.error('Unable to init firestore emulator config on ' + host, error);
             return store;
         }
-        showInfo('Using firestore emulator on ' + host);
+        console.log('Using firestore emulator on ' + host);
     }
     return store;
 }
