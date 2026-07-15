@@ -3,7 +3,7 @@
     import { push } from 'svelte-spa-router';
     import { map } from 'rxjs';
     import UserIcon from '../ui/Avatar.svelte';
-    import { currentProfile } from '../../service/user/user.service';
+    import { currentProfile } from '../../store/profile.store';
 
     interface Props {
         displayName: string;

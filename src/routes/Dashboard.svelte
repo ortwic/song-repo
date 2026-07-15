@@ -13,8 +13,8 @@
     import TitlebarMenu from '../components/menus/TitlebarMenu.svelte';
     import { getPage } from '../service/common/page.service';
     import { authService, currentUser } from '../service/user/auth.service';
-    import { currentProfile } from '../service/user/user.service';
     import { currentMenu } from '../store/app.store';
+    import { currentProfile } from '../store/profile.store';
 
     const INFO_KEY = 'song-repo_hide-dashboard-info';
     let hideInfo = $state(sessionStorage.getItem(INFO_KEY) === 'true');
@@ -31,6 +31,10 @@
 
     const dashboard = getPage('dashboard');
 </script>
+
+<svelte:head>
+    <title>Dashboard | {import.meta.env.PACKAGE_NAME}</title>
+</svelte:head>
 
 <main class="content">
     <TitlebarMenu>

@@ -3,11 +3,11 @@
     import { push } from 'svelte-spa-router';
     import { onMount } from 'svelte';
     import { combineLatest } from 'rxjs';
-    import { openDialog } from '../dialog-context.svelte';
+    import { type DialogAction, openDialog } from '../dialog-context.svelte';
     import type { UserSong } from '../../model/song.model';
     import SongService from '../../service/user/user-song.service';
     import { UserLinkService } from '../../service/user/user-link.service';
-    import { currentProfile } from '../../service/user/user.service';
+    import { currentProfile } from '../../store/profile.store';
     import { settings, saveSettings } from '../../store/user-settings.svelte';
     import DialogBase from '../dialogs/DialogBase.svelte';
     import ShareMenu from '../menus/ShareMenu.svelte';
@@ -57,9 +57,9 @@
     const setup = $derived(settings.dashboard.setupStatus);
     const isComplete = $derived(setup.hasSongs && setup.hasProfile && setup.hasShared);
 
-    function handleShareClose(confirmed: boolean) {
+    function handleShareClose(action: DialogAction) {
         shareDialogVisible = false;
-        updateSetupStatus({ hasShared: confirmed });
+        updateSetupStatus({ hasShared: action === 'confirm' });
     }
 </script>
 
@@ -104,8 +104,9 @@
 
     <DialogBase
         size="auto"
+        type="confirm"
         visible={shareDialogVisible}
-        onClose={handleShareClose}
+        onClose={({ action }) => handleShareClose(action)}
     >
         {#snippet header()}
             <i class="bx bx-share-alt"></i>

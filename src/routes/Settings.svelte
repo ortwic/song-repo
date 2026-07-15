@@ -11,8 +11,9 @@
     import Expand from '../components/ui/elements/Expand.svelte';
     import Footer from '../components/ui/Footer.svelte';
     import { authService, currentUser } from '../service/user/auth.service';
-    import UserService, { isEmailPwdUser, isGoogleUser } from '../service/user/user.service';
+    import UserService from '../service/user/user.service';
     import { showError, showInfo } from '../store/notification.store';
+    import { isEmailPwdUser, isGoogleUser } from '../store/profile.store';
     import '../styles/menu.scss';
 
     const userService = new UserService();

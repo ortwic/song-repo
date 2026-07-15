@@ -1,7 +1,7 @@
 import type { UserSettings } from '../model/settings.model';
 import { DEFAULT_USER_SETTINGS } from '../service/user/default-settings';
 import { userSettingsService } from '../service/user/user-settings.service';
-import { currentProfile } from '../service/user/user.service';
+import { currentProfile } from '../store/profile.store';
 
 export const MAX_SONGVIEW_DAYS = 30;
 export const MAX_SONGVIEW_LIMIT = 20;

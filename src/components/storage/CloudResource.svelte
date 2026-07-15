@@ -1,7 +1,7 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
     import type { DriveFile } from '../../model/file.model';
-    import { isGoogleUser } from '../../service/user/user.service';
+    import { isGoogleUser } from '../../store/profile.store';
     import GoogleDrivePicker from './GoogleDrivePicker.svelte';
     import { marked } from 'marked';
 

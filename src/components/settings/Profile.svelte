@@ -1,8 +1,9 @@
 <script lang='ts'>
     import { t } from 'svelte-i18n';
     import { Subject, of, switchMap, debounceTime, distinctUntilChanged } from 'rxjs';
-    import UserService, { currentProfile } from '../../service/user/user.service';
+    import UserService from '../../service/user/user.service';
     import { showError, showInfo } from '../../store/notification.store';
+    import { currentProfile } from '../../store/profile.store';
 
     const userService = new UserService();
     const aliasInput$ = new Subject<string>();

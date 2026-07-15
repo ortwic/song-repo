@@ -1,8 +1,9 @@
 import deepmerge from 'deepmerge';
 import { filter, firstValueFrom, Observable, take, map } from 'rxjs';
 import type { UserSettings } from '../../model/settings.model';
+import { currentProfile } from '../../store/profile.store';
 import { DEFAULT_USER_SETTINGS } from './default-settings';
-import UserService, { currentProfile } from './user.service';
+import UserService from './user.service';
 
 const userService = new UserService();
 

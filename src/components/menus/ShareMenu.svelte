@@ -1,7 +1,7 @@
 <script lang='ts'>
     import { t } from 'svelte-i18n';
     import { onDestroy } from 'svelte';
-    import { currentProfile } from '../../service/user/user.service';
+    import { currentProfile } from '../../store/profile.store';
     import { toClipboard } from '../ui/helper/input.helper';
     import { generateQRCode } from '../actions/qrcode.action';
 

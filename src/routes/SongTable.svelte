@@ -28,18 +28,18 @@
     import { settings } from '../store/user-settings.svelte';
 
     interface Props {
-        params?: { id?: string };
+        params?: { uid?: string };
     }
 
     let { params = {} }: Props = $props();
 
-    const readonly = !!params.id;
-    const sharedUid = params.id?.slice(1);
-    const service = new SongService(sharedUid);
-    const sessionService = new SessionService(service);
-    const actions = new SongActions(service, sessionService);
-    const actionMenu = buildActionMenu(actions, settings.advanced);
-    const entities = service.usersongs$.pipe(
+    const readonly = $derived(!!params.uid);
+    const sharedUid = $derived(params.uid);
+    const service = $derived(new SongService(sharedUid));
+    const sessionService = $derived(new SessionService(service));
+    const actions = $derived(new SongActions(service, sessionService));
+    const actionMenu = $derived(buildActionMenu(actions, settings.advanced));
+    const entities = $derived(service.usersongs$.pipe(
         map(items => items.map(song => {
             const entity = createSongEntity(song, settings.advanced);
             // Workaround to make headerFilter for status column work
@@ -47,15 +47,15 @@
             entity.status = entity.resolvedStatus();
             return entity;
         }))
-    );
+    ));
     const column = createColumnBuilder('songs');
-    const format = formatTemplates(service, settings.advanced);
+    const format = $derived(formatTemplates(service, settings.advanced));
 
     const genreList = refData.genres.map((v) => v.name);
-    const editor = createEditor(updateHandler(), readonly);
+    const editor = $derived(createEditor(updateHandler(), readonly));
 
     // https://tabulator.info/docs/5.4/edit#editor-list
-    const columns: ColumnDefinition[] = [
+    const columns: ColumnDefinition[] = $derived([
         {
             title: '',
             field: '__responsive',
@@ -98,7 +98,7 @@
         column(8, 'mastery', '200', 'string', format.label, autoFilter(), { visible: false }),
         column(9, 'createdAt', '136', 'date', format.timestamp, dateFilter(), { visible: false }),
         { title: 'id', field: 'id', visible: false },
-    ];
+    ]);
 
     async function addSong() {
         const newSong = await openDialog<UserSong, UserSong>('EditSongDialog');
