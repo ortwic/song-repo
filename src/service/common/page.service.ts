@@ -14,7 +14,7 @@ export function getPage(id: string): PageView {
             .join('\n');
         return {
             title: page.title,
-            body: marked(body)
+            body: marked(body, { mangle: false, headerIds: false })
         };
     }
     
