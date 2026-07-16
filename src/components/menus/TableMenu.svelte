@@ -16,11 +16,11 @@
         }
     }
 
-    function download(type: DownloadType, params?: DownloadOptions): void {
+    function download(type: DownloadType, options?: DownloadOptions): void {
         const { table, exportAction } = tableContext;
         if (table) {
             try {
-                table.download(type, `${exportAction.fileName}.${type}`, params);
+                table.download(type, `${exportAction.fileName}.${type}`, options);
             } catch (error) {
                 showError(error.message);
             }

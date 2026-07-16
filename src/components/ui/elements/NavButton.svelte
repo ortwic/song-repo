@@ -16,16 +16,10 @@
     }: Props = $props();
 
     const self = $location.startsWith(href);
-    
-    function clicked() {
-        push(href);
-    }
 </script>
 
 {#if !self}
-<div class="row">
-    <button data-close class={className} {title} onclick={clicked}>
-        {@render children?.()}
-    </button>
-</div>
+<button data-close class={className} {title} onclick={() => push(href)}>
+    {@render children?.()}
+</button>
 {/if}

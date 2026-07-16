@@ -15,7 +15,6 @@
     import Sidebar from '../ui/Sidebar.svelte';
     import { tableContext } from '../table/table.svelte';
     import MenuDrawer from '../ui/elements/MenuDrawer.svelte';
-    import NavButton from '../ui/elements/NavButton.svelte';
     import { currentUser } from '../../service/user/auth.service';
     import { currentMenu } from '../../store/app.store';
 
@@ -57,12 +56,6 @@
             {/if}
 
             {#snippet lower()}
-                <NavButton href="/events" title={$t('menu.event-calendar')}>
-                    <span><i class="bx bx-calendar"></i> {$t('menu.events')}</span>
-                </NavButton>
-                <NavButton href="/blog" title={$t('menu.howto-blog')}>
-                    <span><i class="bx bx-book-open"></i> {$t('menu.howto')}</span>
-                </NavButton>
                 <div class="row">
                     <a use:link class="warn" role="button" href="/user/song-repo">
                         <span>

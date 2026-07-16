@@ -23,10 +23,3 @@
     </div>
     {/each}
 </section>
-
-<style lang="scss">
-    .event {
-        width: calc(100% - 1em);
-        white-space: nowrap;
-    }
-</style>

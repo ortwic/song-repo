@@ -5,6 +5,7 @@
     import { slide } from 'svelte/transition';
     import { swipeable } from '@svelte-put/swipeable';
     import { currentUser } from '../../service/user/auth.service';
+    import NavButton from './elements/NavButton.svelte';
     import Titlebar from './elements/Titlebar.svelte';
 
     interface Props {
@@ -30,7 +31,7 @@
     <Titlebar target="hidden">
         {#snippet controls()}
             {#if $location !== '/'}
-            <button class="titlebar-button" title={$t('start.hello')} data-close onclick={() => push('/')}>
+            <button class="titlebar-button" data-close title={$t('start.hello')} onclick={() => push('/')}>
                 {#if $currentUser}
                 <i class="item bx bx-user-circle"></i>
                 {:else}
@@ -38,31 +39,21 @@
                 {/if}
             </button>
             {/if}
-            {#if !$location.startsWith('/songs')}
-            <button class="titlebar-button" title={$t('menu.repo')} data-close onclick={() => push('/songs')}>
+            <NavButton className="titlebar-button" title={$t('menu.repo')} href='/songs'>
                 <i class="item bx bxs-playlist"></i>
-            </button>
-            {/if}
-            {#if !$location.startsWith('/snippets')}
-            <button class="titlebar-button" title="{ $t('menu.snippets') }" data-close onclick={() => push('/snippets')}>
+            </NavButton>
+            <NavButton className="titlebar-button" title={ $t('menu.snippets') } href='/snippets'>
                 <i class="bx bx-bulb"></i>
-            </button> 
-            {/if}
-            {#if !$location.startsWith('/blog')}
-            <button class="titlebar-button" title={$t('menu.howto')} data-close onclick={() => push('/blog')}>
+            </NavButton> 
+            <NavButton className="titlebar-button" title={$t('menu.howto')} href='/blog'>
                 <i class="item bx bx-book-open"></i>
-            </button>
-            {/if}
-            {#if $location !== '/events'}
-            <button class="titlebar-button" title={$t('menu.events')} data-close onclick={() => push('/events')}>
+            </NavButton>
+            <NavButton className="titlebar-button" title={$t('menu.events')} href='/events'>
                 <i class="item bx bx-calendar"></i>
-            </button>
-            {/if}
-            {#if $location !== '/settings'}
-            <button class="titlebar-button" title={$t('settings.title')} data-close onclick={() => push('/settings')}>
+            </NavButton>
+            <NavButton className="titlebar-button" title={$t('settings.title')} href='/settings'>
                 <i class="item bx bx-cog"></i>
-            </button>
-            {/if}
+            </NavButton>
         {/snippet}
     </Titlebar>
     <section>
