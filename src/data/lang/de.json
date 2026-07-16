@@ -45,6 +45,7 @@
   "start": {
     "loading": "Wird geladen...",
     "hello": "Hallo",
+    "repo-name": "{name}’s Repertoire",
     "anonymous": "Musiker!",
     "eyebrow": "Dein persönliches Musikrepertoire",
     "headline": "Blackout beim Jammen?",

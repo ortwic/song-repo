@@ -45,6 +45,7 @@
   "start": {
     "loading": "Loading...",
     "hello": "Hello",
+    "repo-name": "{name}’s repertoire",
     "anonymous": "musician!",
     "eyebrow": "Your personal music repertoire",
     "headline": "Mind gap while jamming?",

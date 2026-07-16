@@ -1,23 +1,23 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
     import { marked } from 'marked';
-    import Avatar from '../components/ui/Avatar.svelte';
-    import Footer from '../components/ui/Footer.svelte';
-    import type { UserProfileView } from '../model/user.model';
-    import UserService from '../service/user/user.service';
-    import { setAppReady } from '../store/app.store';
-    import NotFound from './NotFound.svelte';
+    import Avatar from './components/ui/Avatar.svelte';
+    import Footer from './components/ui/Footer.svelte';
+    import type { UserProfileView } from './model/user.model';
+    import UserService from './service/user/user.service';
+    import { setAppReady } from './store/app.store';
+    import NotFound from './routes/NotFound.svelte';
 
     interface Props {
-        params?: { alias?: string };
+        routeParams?: { alias?: string };
     }
 
-    let { params = {} }: Props = $props();
+    let { routeParams = {} }: Props = $props();
 
     let profile = $state<UserProfileView>();
 
     $effect(() => {
-        const { unsubscribe } = new UserService().getProfileWithLinks(params.alias).subscribe((value) => {
+        const { unsubscribe } = new UserService().getProfileWithLinks(routeParams.alias).subscribe((value) => {
             profile = value;
             setAppReady();
         });
@@ -36,7 +36,7 @@
         <p class="about">{@html marked(profile.about ?? '', { mangle: false, headerIds: false })}</p>
         
         <section class="linktree">
-            <a class="link primary" role="button" href="/#/songs/{profile.id}">
+            <a class="link primary" role="button" href="/songs/{profile.id}">
                 <i class="icon-badge bx bxs-playlist"></i>
                 {$t('user.song-list')}
             </a>
@@ -52,7 +52,7 @@
         <NotFound>
             <p>{$t('user.alias-unknown', { 
                 values: { 
-                    alias: params.alias 
+                    alias: routeParams.alias 
                 }
             })}</p>
         </NotFound>

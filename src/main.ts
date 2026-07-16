@@ -7,15 +7,16 @@ import { initRefData } from './service/base/app-cache.setup';
 import { setupI18n } from './service/base/i18n.setup';
 
 const app = (async () => {
+    const target = document.getElementById('app');    
     await initRefData();
     await setupI18n().catch(console.error);
 
     if (window.location.pathname.startsWith('/@')) {
-        const { default: UserPage } = await import('./routes/UserPage.svelte');
+        const { default: UserPage } = await import('./UserPage.svelte');
         return mount(UserPage, { 
-            target: document.getElementById('app'),
+            target, 
             props: {
-                params: {
+                routeParams: {
                     alias: window.location.pathname.slice(2)
                 }
             }
@@ -23,9 +24,7 @@ const app = (async () => {
     } 
     
     const { default: App } = await import('./App.svelte');
-    return mount(App, { 
-        target: document.getElementById('app')
-    });
+    return mount(App, { target });
 })();
 
 export default app;

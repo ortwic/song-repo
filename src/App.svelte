@@ -1,8 +1,6 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
-    import Router, { location } from 'svelte-spa-router';
-    import { map } from 'rxjs';
-    import type { User } from 'firebase/auth';
+    import { t } from 'svelte-i18n';
+    import Router from 'svelte-spa-router';
     import Menu from './components/menus/Index.svelte';
     import Context from './components/Context.svelte';
     import Snackbar from './components/ui/Snackbar.svelte';
@@ -18,8 +16,7 @@
     import NotFound from './routes/NotFound.svelte';
     import { currentUser } from './service/user/auth.service';
     import { setAppReady } from './store/app.store';
-
-    const usertitle = currentUser.pipe(map(initAuth));
+    import { showInfo } from './store/notification.store';
 
     const routes = {
         '/': Dashboard,
@@ -40,30 +37,33 @@
         '*': NotFound,
     };
 
-    onMount(() => {
+    $effect(() => {
         if (window.innerWidth <= 600) {
             const metaTag = document.createElement('meta');
             metaTag.name = 'viewport';
             metaTag.content = 'width=device-width, initial-scale=0.9, maximum-scale=1';
             document.head.appendChild(metaTag);
         }
+
+        const sub = currentUser.subscribe((user) => 
+            sayHello(user?.displayName || user?.email.split('@')[0]?.replace('.', ' '))
+        );
+
         setAppReady();
+
+        return () => sub?.unsubscribe();
     });
 
-    function initAuth(user: User): string {
-        if ($location === '/') {
-            if (user) {
-                const name = user.displayName || user.email.split('@')[0]?.replace('.', ' ');
-                return `${name}'s known songs`;
-            }
+    function sayHello(name: string) {
+        if (name) {
+            showInfo(`${$t('start.hello')} ${name}!`);
         }
-        return `Start | Login`;
     }
 </script>
 
 <svelte:head>
     <meta name="author" content="OCSoft, ocsoft42@gmail.com" />
-    <title>{$usertitle || 'Loading...'}</title>
+    <title>Loading...</title>
 </svelte:head>
 
 <Context>

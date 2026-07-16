@@ -13,7 +13,6 @@ import {
 import { setUserId } from 'firebase/analytics';
 import { authState } from 'rxfire/auth';
 import { analytics, auth } from '../base/firebase.setup';
-import { showInfo } from '../../store/notification.store';
 import UserService from './user.service';
 import { googleAuthSetupService } from '../storage/google-setup.service';
 
@@ -35,7 +34,6 @@ onAuthStateChanged(auth, async (user) => {
             await googleAuthSetupService.ensureGsiLoaded();
             await googleAuthSetupService.refreshDriveTokenSilently(user);
         }
-        showInfo(`${user.displayName || user.email} has signed in.`);
     }
 });
 
