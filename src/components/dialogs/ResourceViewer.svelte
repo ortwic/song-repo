@@ -1,12 +1,12 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
+    import { zoomable } from '../actions/zoomable.action';
+    import { registerDialog } from '../dialog-context.svelte';
     import { createResourceResolver } from '../../domain/resource-resolver';
     import type { Song } from '../../model/song.model';
-    import { registerDialog } from '../dialog-context.svelte';
     import { currentUser } from '../../service/user/auth.service';
     import IFrame from '../ui/elements/IFrame.svelte';
     import DialogBase from './DialogBase.svelte';
-    import { zoomable } from './zoomable';
 
     const resolver = createResourceResolver();
 

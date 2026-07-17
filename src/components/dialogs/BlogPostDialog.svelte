@@ -9,6 +9,7 @@
     import NotFound from '../../routes/NotFound.svelte';
     import { registerDialog } from '../dialog-context.svelte';
     import IFrame from '../ui/elements/IFrame.svelte';
+    import Image from '../ui/elements/Image.svelte';
     import { toClipboard } from '../ui/helper/input.helper';
     import DialogBase from './DialogBase.svelte';
     
@@ -89,7 +90,7 @@
             </blockquote>
             {:else if entry.type === 'images'}
                 {#each entry.value as src}
-                    <img {src} alt={src?.split('/')?.at(-1)} />
+                    <Image {src} title={src?.split('/')?.at(-1)} size={480} ratio={21/9} />
                     <br />
                 {/each}
             {:else}

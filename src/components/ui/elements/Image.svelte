@@ -1,59 +1,42 @@
 <script lang="ts">
+    import { StorageService } from "../../../service/base/storage.service";
+    import { resizable } from "../../actions/resizable-canvas.action";
+
     let {
         src,
+        title = '',
         size = 50,
         ratio = 1,
     }: {
         src: string;
-        size?: number;
+        title?: string;
+        size?: number | string;
         ratio?: number;
     } = $props();
 
-    async function loadImage(src: string): Promise<HTMLImageElement | null> {
+    const width = $derived(typeof size === 'number' ? `${size}px` : size);
+    const height = $derived(typeof size === 'number' ? `${size / ratio}px` : 'auto');
+
+    const storageService = new StorageService();
+    const resolveImgPath = async (path: string): Promise<string> => 
+        path.startsWith('http') ? path : storageService.getFileUrl(path);
+        
+    async function loadImage(path: string): Promise<HTMLImageElement | null> {
         const img = new Image();
-        img.src = src;
+        img.src = await resolveImgPath(path);
         return await new Promise<boolean>((resolve) => {
             img.onload = () => resolve(true);
             img.onerror = () => resolve(false);
         }) ? img : null;
     }
-
-    function resizeable(canvas: HTMLCanvasElement, img: HTMLImageElement): { destroy: () => void } {
-        const observer = new ResizeObserver(() => renderCroppedImage(canvas, img));
-        observer.observe(canvas.parentElement!);
-        return { destroy: () => observer.disconnect() };
-    }
-
-    function renderCroppedImage(canvas: HTMLCanvasElement, img: HTMLImageElement) {
-        if (img) {
-            const ctx = canvas.getContext('2d');
-            const { sx, sy, sw, sh } = computeCrop(img, ratio);
-
-            ctx.clearRect(0, 0, size, size);
-            ctx.drawImage(img, sx, sy, sw, sh, 0, 0, size, size);   
-        }
-    }
-
-    function computeCrop(img: HTMLImageElement, ratio: number) {
-        const aspectRatio = img.width / img.height;
-        if (aspectRatio > ratio) {
-            const sw = img.height * ratio;
-            const sx = (img.width - sw) / 2;
-            return { sx, sy: 0, sw, sh: img.height };
-        } else {
-            const sh = img.width / ratio;
-            const sy = (img.height - sh) / 2;
-            return { sx: 0, sy, sw: img.width, sh };
-        }
-    }
 </script>
 
-<div style:width="{size}px" style:height="{size}px">
+<div {title} style:width={width} style:height={height}>
     {#await loadImage(src)}
         <span class="spinner"></span>        
     {:then img} 
         {#if img}
-            <canvas width={size} height={size} use:resizeable={img}></canvas>
+            <canvas use:resizable={{ img, ratio }}></canvas>
         {:else}
             <span>n/a</span>
         {/if}
