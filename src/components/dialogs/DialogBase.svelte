@@ -150,6 +150,8 @@ div.dialog {
     }
 
     .dialog-content {
+        display: flex;
+        flex-direction: column;
         overflow-y: auto;
         flex: 1 1 auto;
         min-height: 0;

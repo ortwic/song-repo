@@ -38,14 +38,11 @@
 
 <style lang="scss">
     main {
-        overflow: hidden;
+        overflow-x: hidden;
+        overflow-y: visible;
 
-        div.body {
+        .body {
             padding: 0 1em;
-            width: 100%;
-            height: calc(100% - 2.2em - 3.6em);
-            overflow-x: hidden;
-            overflow-y: visible;
         }
     }
 </style>
