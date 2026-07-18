@@ -34,11 +34,7 @@ const serverTimestamps: SnapshotOptions['serverTimestamps'] = 'none';
 const store = initFirestore();
 
 export class FirestoreService {
-    private constructor(
-        private readonly path: string, 
-        private readonly options = { idField: 'id' }
-    ) {
-    }
+    private constructor(private readonly path: string) {}
 
     static create(...pathSegments: string[]): FirestoreService {
         const path = pathSegments.length % 2 > 0 ? pathSegments.join('/') : '';
@@ -55,8 +51,9 @@ export class FirestoreService {
 
     public getDocuments<T extends DocumentData>(...constraints: QueryConstraint[]): Observable<T[]> {
         if (this.path) {
+            const idField: keyof T = 'id';
             const query = this.createQuery<T>(constraints);
-            return collectionData<T>(query, this.options).pipe(startWith([]));
+            return collectionData<T>(query, { idField }).pipe(startWith([]));
         }
         return of([]);
     }
@@ -64,7 +61,7 @@ export class FirestoreService {
     public async getDocumentsAsync<T extends DocumentData>(...constraints: QueryConstraint[]): Promise<T[]> {
         if (this.path) {
             const query = this.createQuery<T>(constraints);
-            return getDocs<T>(query).then((snapshot) => {
+            return getDocs<T, DocumentData>(query).then((snapshot) => {
                 const result: T[] = [];
                 snapshot.forEach((doc) => result.push({
                     id: doc.id,
@@ -78,18 +75,19 @@ export class FirestoreService {
 
     private createQuery<T extends DocumentData>(constraints: QueryConstraint[]): Query<T> {
         const items = collection(store, this.path) as CollectionReference<T>;
-        return query<T>(items, ...constraints);
+        return query<T, DocumentData>(items, ...constraints);
     }
     
-    public getDocument<T>(id: string): Observable<T | null> {
+    public getDocument<T extends { id: string }>(id: string): Observable<T | null> {
         if (id && this.path) {
+            const idField: keyof T = 'id';
             const docRef = doc(store, this.path, id);
-            return docData(docRef, { idField: 'id' }) as Observable<T | null>;
+            return docData(docRef, { idField }) as Observable<T | null>;
         }
         return of(null);
     }
 
-    public async getDocumentAsync<T>(id: string): Promise<T | null> {
+    public async getDocumentAsync<T extends { id: string }>(id: string): Promise<T | null> {
         if (id && this.path) {
             const docRef = doc(store, this.path, id);
             const snapshot = await getDoc(docRef);

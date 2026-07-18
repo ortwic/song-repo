@@ -98,6 +98,7 @@ export interface TableParams<T> extends Options, Partial<TableViewParams> {
 
 export function createTable<T>(node: HTMLElement, params: TableParams<T>) {
     const rowGroups: Record<string, GroupArg> = {};
+    let lastData: T[] | undefined;
     const options: Options = {
         columns: params.columns,
         placeholder: params.placeholder,
@@ -156,7 +157,9 @@ export function createTable<T>(node: HTMLElement, params: TableParams<T>) {
     }
 
     function handleTableBuilt(table: Tabulator, useResponsiveLayout: boolean) {
-        firstValueFrom(params.data$).then((v) => setData(table, v));
+        if (lastData !== undefined) {
+            table.setData(lastData);
+        }
         initHeaderMenu(table);
         initGroupBy(table);
 
@@ -219,6 +222,7 @@ export function createTable<T>(node: HTMLElement, params: TableParams<T>) {
     }
 
     async function setData(table: Tabulator, data: T[]): Promise<void> {
+        lastData = data;
         const idField = params.idField;
         const areEquivalent = (source: T[]) => {
             return (
