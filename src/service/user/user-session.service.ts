@@ -15,7 +15,7 @@ export default class SessionService {
     constructor(private service: SongService) {
         currentUser.subscribe((user) => (this.uid = user?.uid));
         this.sessions = currentUser.pipe(
-            switchMap((user) => stores.usersessions(user?.uid).getDocuments<UserSession>(orderBy('id', 'desc'))),
+            switchMap((user) => stores.userSessions(user?.uid).getDocuments<UserSession>(orderBy('id', 'desc'))),
         );
     }
 
@@ -73,7 +73,7 @@ export default class SessionService {
         if (this.uid) {
             const createdAt = Timestamp.now();
             const id = DateTime.now().toFormat('yyMMdd-HHmmssSSS');
-            return stores.usersessions(this.uid).setDocument<UserSession>({
+            return stores.userSessions(this.uid).setDocument<UserSession>({
                 ...session,
                 createdAt,
                 type: session.type ?? 'free',

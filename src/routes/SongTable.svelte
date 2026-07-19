@@ -9,7 +9,7 @@
     import { createColumnBuilder, createEditor } from '../components/table/templates/column.helper';
     import { autoFilter, dateFilter, hasValueFilter, rangeFilter, statusFilter } from '../components/table/templates/filter.helper';
     import { createIntervals, formatTemplates, songGroupHeaderFormatter } from '../components/table/templates/formatters.svelte';
-    import { openDialog } from '../components/dialog-context.svelte';
+    import { type DialogAction, openDialog } from '../components/dialog-context.svelte';
     import LoadingBar from '../components/ui/elements/LoadingBar.svelte';
     import type { TableView } from '../components/table/table.action';
     import { tableContext } from '../components/table/table.svelte';
@@ -17,10 +17,12 @@
     import { buildActionMenu } from '../components/table/templates/actionMenu.helper';
     import { songSummaryFormatter } from '../components/table/templates/responsive.helper';
     import TableSearch from '../components/ui/TableSearch.svelte';
+    import DonationReminderState from '../domain/donation-reminder.state';
     import { SongActions } from '../domain/song.actions';
     import { createSongEntity, type SongEntity } from '../domain/song.entity';
     import type { UserSong } from '../model/song.model';
     import { refData } from '../service/base/app-cache.setup';
+    import SongRequestService from '../service/user/song-requests.service';
     import SessionService from '../service/user/user-session.service';
     import SongService, { SONG_SETTINGS_ID } from '../service/user/user-song.service';
     import { orientation } from '../store/media.store';
@@ -35,6 +37,8 @@
 
     const readonly = $derived(!!params.uid);
     const sharedUid = $derived(params.uid);
+    const donationState = $derived(new DonationReminderState(sharedUid));
+    const requestService = new SongRequestService();
     const service = $derived(new SongService(sharedUid));
     const sessionService = $derived(new SessionService(service));
     const actions = $derived(new SongActions(service, sessionService));
@@ -64,10 +68,11 @@
             responsive: 0,
             visible: false,
         },
-        column(0, '__summary', undefined, 'string', songSummaryFormatter(readonly), {
+        column(0, '__summary', undefined, 'string', songSummaryFormatter(readonly, sendSongRequest), {
             visible: false,
             clickMenu: !readonly ? actionMenu : undefined,
         }),
+        column(-1, '__request', '50', undefined, format.action('jukebox', sendSongRequest), { visible: readonly }),
         column(-1, 'fav', '50', undefined, format.favorite, editor()),
         column(-1, 'status', '50', 'string', format.status, statusFilter(), {
             visible: !readonly,
@@ -117,6 +122,24 @@
                 showError(error.message);
             }
         };
+    }
+
+    function sendSongRequest(song: UserSong): void {
+        requestService.addRequest(sharedUid, song.id).then(() => {
+            showInfo($t('songs.request-sent', { 
+                values: { 
+                    name: `${song.artist} - ${song.title}`
+                } 
+            }));
+        });
+
+        if (!donationState.hasConfirmed()) {
+            openDialog<UserSong, DialogAction>('DonationHintDialog', song).then(action => {
+                if (action === 'confirm') {
+                    donationState.markConfirmed();
+                }
+            });
+        }
     }
 
     async function importJSON(data: string): Promise<void> {

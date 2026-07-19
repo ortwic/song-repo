@@ -1,6 +1,6 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
-    import { push } from 'svelte-spa-router';
+    import { link, push } from 'svelte-spa-router';
     import { onMount } from 'svelte';
     import { combineLatest } from 'rxjs';
     import { type DialogAction, openDialog } from '../dialog-context.svelte';
@@ -116,6 +116,24 @@
         <ShareMenu showPreview={false} showQRDownload={true} />
         <p class="center smaller">{$t('start.setup.share.dialog-hint')}</p>
     </DialogBase>
+{:else}
+    <div class="grid-auto-fit">
+        <a role="button" use:link href="/songs">
+            <i class="bx bxs-playlist"></i>
+            {$t('menu.repo')}
+        </a>
+        <a role="button" use:link href="/snippets">
+            <i class="bx bx-bulb"></i>
+            {$t('menu.snippets')}
+        </a>
+        <button title={$t('sessions.requests.title')} onclick={() => openDialog('LiveSessionDialog')}>
+            <i class="bx bx-microphone"></i>
+            <!-- TODO change to this in further iteration
+            {$t('sessions.menu.go-live')} 
+            -->
+            {$t('sessions.requests.title')}
+        </button>
+    </div>
 {/if}
 
 <style lang="scss">

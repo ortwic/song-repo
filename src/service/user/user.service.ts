@@ -7,7 +7,8 @@ import { UserLinkService } from './user-link.service';
 
 export default class UserService {
 
-    constructor() {
+    getProfile(uid: string): Observable<UserProfile> {
+        return stores.user.getDocument<UserProfile>(uid);
     }
 
     getProfileWithLinks(alias: string): Observable<UserProfileView> | never {

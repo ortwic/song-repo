@@ -35,12 +35,12 @@ export default class SongService {
         currentUser.subscribe((user) => (this.uid = user?.uid));
         if (sharedUid) {
             this.isShared = true;
-            this.usersongs$ = stores.usersongs(sharedUid)
+            this.usersongs$ = stores.userSongs(sharedUid)
                 .getDocuments(orderBy('id'), where('status', '==', 'done'));
         } else {
             this.usersongs$ = currentUser.pipe(
                 switchMap(user => user?.uid 
-                    ? stores.usersongs(user.uid).getDocuments<UserSong>(orderBy('id')) 
+                    ? stores.userSongs(user.uid).getDocuments<UserSong>(orderBy('id')) 
                     : localSubject),
                 auditTime(990),
                 shareReplay(1) // one stream only for multiple subscribers
@@ -89,7 +89,7 @@ export default class SongService {
     async setSong(song: Partial<UserSong> & { id: string }, forceLocalUpdate = false): Promise<string> {
         if (this.uid) {
             if (song.id) {
-                await stores.usersongs(this.uid).setDocument(song, { merge: true });
+                await stores.userSongs(this.uid).setDocument(song, { merge: true });
                 return song.id;
             }
         } else if (forceLocalUpdate) {
@@ -99,7 +99,7 @@ export default class SongService {
 
     async deleteSong(song: UserSong): Promise<void> {
         if (this.uid) {
-            return stores.usersongs(this.uid).removeDocument(song.id);
+            return stores.userSongs(this.uid).removeDocument(song.id);
         } else {
             delete localStore[song.id];
             localSubject.next(Object.values(localStore));
@@ -110,7 +110,7 @@ export default class SongService {
         if (data) {
             const songs = data.map((s) => appendGeneratedId(this.uid, s, { importedAt: Timestamp.now() }));
             if (this.uid) {
-                await stores.usersongs(this.uid).setDocuments(songs, { merge: true });
+                await stores.userSongs(this.uid).setDocuments(songs, { merge: true });
             } else { 
                 // if user is not logged in
                 localSubject.next(songs);

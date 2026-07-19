@@ -68,3 +68,10 @@ export interface ProgressModel {
     lastRetention?: number;
     mastery?: TrainingAreas<Percent>;
 }
+
+export interface SongRequest {
+    id: string;
+    songId: string;
+    status: 'open' | 'done';
+    createdAt: Timestamp;
+}

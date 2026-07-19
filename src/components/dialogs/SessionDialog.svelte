@@ -24,8 +24,8 @@
     const SESSION_KIND_ICON: Record<SessionKind, string> = {
         practice: 'bx-dumbbell',
         jam: 'bx-music',
-        demo: 'bx-station',
-        record: 'bx-microphone',
+        live: 'bx-microphone',
+        record: 'bx-station',
         import: 'bx-check-circle',
     };
     const FOCUS_AREA_ICON: TrainingAreas<string> = {

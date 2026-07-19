@@ -148,8 +148,9 @@ export const stores = {
     genres: FirestoreService.create('genres'),
     pages: FirestoreService.create('pages'),
     user: FirestoreService.create('user'),
-    userlinks: (id: string) => FirestoreService.create('user', id, 'links'),
-    usersessions: (id: string) => FirestoreService.create('user', id, 'sessions'),
+    userLinks: (id: string) => FirestoreService.create('user', id, 'links'),
+    userRequests: (id: string) => FirestoreService.create('user', id, 'requests'),
+    userSessions: (id: string) => FirestoreService.create('user', id, 'sessions'),
     userSnippets: (id: string) => FirestoreService.create('user', id, 'snippets'),
-    usersongs: (id: string) => FirestoreService.create('user', id, 'songs'),
+    userSongs: (id: string) => FirestoreService.create('user', id, 'songs'),
 };

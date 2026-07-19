@@ -255,6 +255,20 @@ export function formatTemplates(songService: SongService, settings: AdvancedSett
             }
         },
 
+        action<T>(icon: string, onAction: (data: T) => void) {
+            return {
+                formatter(cell: CellComponent): HTMLElement {
+                    const data = cell.getData() as T;
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.classList.add('clear');
+                    button.innerHTML = `<i class="bx ${icon}"></i>`;
+                    button.addEventListener('click', () => onAction(data));
+                    return button;
+                }
+            }
+        },
+
         translate(key: string): Partial<ColumnDefinition> {
             return {
                 formatter(cell: CellComponent): string {

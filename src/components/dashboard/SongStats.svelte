@@ -1,7 +1,6 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
     import { onMount } from 'svelte';
-    import { link } from 'svelte-spa-router';
     import type { DashboardSettings } from '../../model/settings.model';
     import type { IndexEntry } from '../../utils/index-builder';
     import { type Status, STATUS_KEYS } from '../../model/app.types';
@@ -110,12 +109,6 @@
         </a>
         <a role="button" href="#current-songs" class="label stat" title="{$t('common.more')}" onclick={showAdvancedFilters}>
             <i class="bx bx-filter"></i> ...
-        </a>
-    </div>
-    <div class="right">
-        <a role="button" use:link href="/songs" class="primary">
-            <i class="bx bxs-playlist"></i>
-            {$t('menu.repo')}
         </a>
     </div>
 </section>

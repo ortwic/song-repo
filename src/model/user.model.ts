@@ -24,6 +24,7 @@ export interface UserLink {
     url: string;
     createdAt: Timestamp;
     changedAt: Timestamp;
+    type?: 'default' | 'donation' | 'social';
     icon?: string;
     order?: number;
 }

@@ -1,6 +1,6 @@
 {
   "menu": {
-    "repo": "Gesamtes Repertoire",
+    "repo": "Dein Repertoire",
     "howto": "Wie geht Musik",
     "howto-blog": "Wie geht Musik Blog",
     "events": "Veranstaltungen",
@@ -116,6 +116,7 @@
   },
   "sessions": {
     "menu": {
+      "go-live": "Starte Live-Session",
       "quick": "Quicky",
       "start": "Übung starten",
       "focus": "Schwerpunkt hinzufügen",
@@ -124,12 +125,19 @@
     "kind": {
       "practice": "Übung",
       "jam": "Jamsession",
-      "demo": "Vorführung",
+      "live": "Vorführung",
       "record": "Aufnahme",
       "import": "Können erfassen"
     },
     "dialog": {
       "title": "Session"
+    },
+    "requests": {
+      "title": "Song-Anfragen",
+      "empty": "Aktuell keine offenen Anfragen.",
+      "unknown-song": "Unbekannter Song",
+      "mark-done": "Als erledigt markieren",
+      "count": "{count}× angefragt"
     },
     "focus": {
       "melody": "Melodie",
@@ -246,7 +254,14 @@
     "edit": "Bearbeite",
     "search-filter": "Filter von '{type}' nach '{value}'.",
     "search-filter-settings": "Filtereinstellungen",
-    "played-times": "{count}x gespielt"
+    "played-times": "{count}x gespielt",
+    "request-dialog": {
+      "title": "Gefällt dir, was du hörst?",
+      "text": "Wenn dir die Musik gefällt, freut sich {name} über deine Unterstützung.",
+      "later": "Vielleicht später",
+      "done": "Erledigt"
+    },
+    "request-sent": "Anfrage für {name} wurde gesendet!"
   },
   "snippets": {
     "start-type": "{type} starten",

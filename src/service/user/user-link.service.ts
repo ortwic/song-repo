@@ -9,11 +9,11 @@ export class UserLinkService {
     readonly userlinks$: Observable<UserLink[] | null>;
 
     constructor(private uid?: string) {
-        this.userlinks$ = uid ? stores.userlinks(uid).getDocuments<UserLink>(orderBy('order')) : of(null);
+        this.userlinks$ = uid ? stores.userLinks(uid).getDocuments<UserLink>(orderBy('order')) : of(null);
     }
     
     async countLinks(): Promise<number> {
-        return this.uid ? firstValueFrom(stores.userlinks(this.uid).countDocuments()) : 0;
+        return this.uid ? firstValueFrom(stores.userLinks(this.uid).countDocuments()) : 0;
     }
 
     async addLink(url: string, title?: string, order?: number): Promise<string> {
@@ -34,7 +34,7 @@ export class UserLinkService {
             }
             link.changedAt = Timestamp.now();
             if (link.id) {
-                await stores.userlinks(this.uid).setDocument(link, { merge: true });
+                await stores.userLinks(this.uid).setDocument(link, { merge: true });
                 return link.id;
             }
         }
@@ -42,7 +42,7 @@ export class UserLinkService {
 
     async deleteLink(link: UserLink): Promise<void> {
         if (this.uid) {
-            return stores.userlinks(this.uid).removeDocument(link.id);
+            return stores.userLinks(this.uid).removeDocument(link.id);
         }
     }
 }

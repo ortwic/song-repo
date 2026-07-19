@@ -16,13 +16,18 @@ service cloud.firestore {
       allow write, delete: if request.auth.uid == request.resource.data.uid;
       allow read: if true;
     }
+
+    match /user/{userId}/requests/{requestId} {
+        allow read, update, delete: if request.auth != null && request.auth.uid == userId;
+
+        allow create: if request.resource.data.keys().hasOnly(['id', 'title', 'artist', 'status', 'createdAt'])
+            && exists(/databases/$(database)/documents/user/$(userId)/songs/$(request.resource.data.songId))
+            && request.resource.data.status == 'open'
+            && request.resource.data.createdAt is timestamp;
+    }
     
     match /feedback/{docId} {
       allow write: if true;
-      allow read: if true;
-    }
-
-    match /settings/{docId} {
       allow read: if true;
     }
 

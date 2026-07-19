@@ -1,6 +1,6 @@
 {
   "menu": {
-    "repo": "Complete repertory",
+    "repo": "Your repertory",
     "howto": "How to music",
     "howto-blog": "How to make music blog",
     "events": "Public events",
@@ -116,6 +116,7 @@
   },
   "sessions": {
     "menu": {
+      "go-live": "Start live session",
       "quick": "Quick session",
       "start": "Start practicing",
       "focus": "Add focus area",
@@ -124,12 +125,19 @@
     "kind": {
       "practice": "Practice",
       "jam": "Jamsession",
-      "demo": "Demonstration",
+      "live": "Demonstration",
       "record": "Recording",
       "import": "Assess proficiency"
     },
     "dialog": {
       "title": "Session"
+    },
+    "requests": {
+      "title": "Song requests",
+      "empty": "No open requests right now.",
+      "unknown-song": "Unknown song",
+      "mark-done": "Mark as done",
+      "count": "requested {count}×"
     },
     "focus": {
       "melody": "Melody",
@@ -246,7 +254,14 @@
     "edit": "Edit",
     "search-filter": "Filter for  '{type}' like '{value}'.",
     "search-filter-settings": "Filter settings",
-    "played-times": "Played {count}x"
+    "played-times": "Played {count}x",
+    "request-dialog": {
+      "title": "Enjoying what you hear?",
+      "text": "If you like the music, {name} would appreciate your support.",
+      "later": "Maybe later",
+      "done": "Done"
+    },
+    "request-sent": "Request for {name} was sent!"
   },
   "snippets": {
     "start-type": "Start {type}",

@@ -23,7 +23,7 @@ const FOCUS_RECORD = {
 const SESSIONKIND_RECORD = {
     1: 'practice',
     2: 'jam',
-    3: 'demo',
+    3: 'live',
     4: 'record',
     5: 'import'
 } as const;
@@ -41,7 +41,7 @@ export type StatusMode = typeof AUTO_STATUS | Status;
 export type TrainingAreas<T> = Partial<Record<TrainingFocus, T>>;
 export type TrainingFocus = ObjectValues<typeof FOCUS_RECORD>;
 
-export type SessionType = SessionKind | 'free' | 'quick';
+export type SessionType = SessionKind | 'free' | 'quick' | 'live';
 export type SessionKind = ObjectValues<typeof SESSIONKIND_RECORD>;
 
 export type MenuTarget = 'hidden' | 'dynamic' | 'signup';

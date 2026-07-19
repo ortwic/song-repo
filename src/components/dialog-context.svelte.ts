@@ -5,8 +5,10 @@ export type DialogType = 'view' | 'confirm' | 'wizard';
 export type DialogAction = 'confirm' | undefined;
 type DialogNames = 'BlogPostDialog'
                  | 'ConfirmDialog' 
+                 | 'DonationHintDialog'
                  | 'EditSongDialog' 
                  | 'ExceptionDialog'
+                 | 'LiveSessionDialog'
                  | 'ResourceViewer' 
                  | 'SessionDialog'
                  | 'SnippetDialog';
