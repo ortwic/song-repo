@@ -69,7 +69,7 @@ export function createSoundGenerator(audioContext: AudioContext, config: SoundGe
 
     const noiseBuffer = createNoiseBuffer(audioContext, clickConfig.noiseDurationSeconds);
 
-    const playClick = (time: number, volume: number): void => {
+    const playClick = ({ time, volume }: SoundOptions): void => {
         // Layer 1: filtered noise transient — the percussive "tick" edge
         const noiseSource = audioContext.createBufferSource();
         noiseSource.buffer = noiseBuffer;
@@ -108,7 +108,7 @@ export function createSoundGenerator(audioContext: AudioContext, config: SoundGe
         oscillator.stop(time + clickConfig.toneDurationSeconds);
     };
 
-    const playAccent = (time: number, volume: number): void => {
+    const playAccent = ({ time, volume }: SoundOptions): void => {
         accentConfig.partialRatios.forEach((ratio, index) => {
             const oscillator = audioContext.createOscillator();
             const gainNode = audioContext.createGain();
@@ -130,15 +130,7 @@ export function createSoundGenerator(audioContext: AudioContext, config: SoundGe
         });
     };
 
-    const play = ({ time, isAccent, volume }: SoundOptions): void => {
-        if (isAccent) {
-            playAccent(time, volume);
-        } else {
-            playClick(time, volume);
-        }
-    };
-
-    return { play };
+    return { playAccent, playClick };
 }
 
 export type SoundGenerator = ReturnType<typeof createSoundGenerator>;

@@ -75,15 +75,12 @@ export function createMetronome(config: MetronomeConfig) {
     const scheduleNote = (time: number) => {
         if (!state.audioContext || !soundGenerator) return;
 
-        const isFirstBeatOfBar = beatsPerBar > 0 
-            ? state.currentBeat % beatsPerBar === 0 
-            : false;
-
-        soundGenerator.play({
-            time,
-            isAccent: isFirstBeatOfBar,
-            volume,
-        });
+        const isFirstBeatOfBar = beatsPerBar > 0 && state.currentBeat % beatsPerBar === 0;
+        if (isFirstBeatOfBar) {
+            soundGenerator.playAccent({ time, volume });
+        } else {
+            soundGenerator.playClick({ time, volume });
+        }
 
         // Calculate the actual beat number (1-based) to pass to the callback
         const beatNumber = (state.currentBeat % beatsPerBar) + 1;

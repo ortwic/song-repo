@@ -137,7 +137,8 @@
       "empty": "No open requests right now.",
       "unknown-song": "Unknown song",
       "mark-done": "Mark as done",
-      "count": "requested {count}×"
+      "count": "requested {count}×",
+      "new-request": "New song request"
     },
     "focus": {
       "melody": "Melody",

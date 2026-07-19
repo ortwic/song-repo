@@ -1,4 +1,4 @@
-import { Observable, switchMap, map, auditTime, BehaviorSubject, shareReplay } from 'rxjs';
+import { Observable, switchMap, map, auditTime, BehaviorSubject, shareReplay, of } from 'rxjs';
 import { Timestamp, orderBy, where } from 'firebase/firestore';
 import { currentUser } from './auth.service';
 import { stores } from '../base/firestore.service';
@@ -28,8 +28,14 @@ export default class SongService {
     private uid: string | undefined;
     hasUser = () => !!this.uid;
     readonly isShared: boolean;
-    readonly usersongs$: Observable<UserSong[]>;
+    readonly usersongs$: Observable<UserSong[]> = of([]);
     readonly tagIndex$: Observable<ReturnType<typeof buildIndex>>;
+
+    get usersongsMap$(): Observable<Map<string, UserSong>> {
+        return this.usersongs$.pipe(
+            map(songs => new Map(songs.map(s => [s.id, s])))
+        );
+    }
 
     constructor(sharedUid?: string) {
         currentUser.subscribe((user) => (this.uid = user?.uid));

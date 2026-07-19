@@ -137,7 +137,8 @@
       "empty": "Aktuell keine offenen Anfragen.",
       "unknown-song": "Unbekannter Song",
       "mark-done": "Als erledigt markieren",
-      "count": "{count}× angefragt"
+      "count": "{count}× angefragt",
+      "new-request": "Neue Songanfrage"
     },
     "focus": {
       "melody": "Melodie",

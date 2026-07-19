@@ -1,8 +1,6 @@
 export interface SoundOptions {
     /** AudioContext time at which the sound should play. */
     time: number;
-    /** Whether this is the first beat of a bar (plays the bell sound instead of the click). */
-    isAccent: boolean;
     /** Volume in the 0–1 range. */
     volume: number;
 }

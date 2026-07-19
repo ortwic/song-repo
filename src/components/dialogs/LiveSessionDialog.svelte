@@ -1,45 +1,64 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
-    import { combineLatest, type Subscription } from 'rxjs';
-    import { groupSongRequests, type SongRequestView } from '../../domain/song-request.view';
+    import type { Subscription } from 'rxjs';
+    import type { UserSong } from '../../model/song.model';
+    import type { SongRequestViewGroup } from '../../model/song-request.model';
     import SongRequestService from '../../service/user/song-requests.service';
     import SongService from '../../service/user/user-song.service';
+    import { initBrowserNotification } from '../../utils/browser-notification';
     import { toDate } from '../../utils/date.helper';
     import { createDeferred, type DeferredResult } from '../../utils/promise.helper';
     import { registerDialog } from '../dialog-context.svelte';
     import DialogBase from './DialogBase.svelte';
 
-    const requestService = new SongRequestService();
     const songService = new SongService();
-
+    const requestService = new SongRequestService(songService);
+    
     let visible = $state(false);
-    let items = $state<SongRequestView[]>([]);
-    let subscription: Subscription | undefined;
+    let items = $state<SongRequestViewGroup[]>([]);
+    let notifier: ReturnType<typeof initBrowserNotification>;
+    let subscriptions: Subscription[] = [];
     let result: DeferredResult<void> | undefined;
 
     registerDialog('LiveSessionDialog', showDialog);
 
     export function showDialog(): Promise<void> {
+        const formatNotification = (song: UserSong) => ({
+            title: $t('sessions.requests.title'),
+            message: song ? `${song.artist} – ${song.title}` : $t('sessions.requests.unknown-song')
+        });
+        
         visible = true;
-        subscription = combineLatest([requestService.requests$, songService.usersongs$]).subscribe(
-            ([requests, songs]) => {
-                items = groupSongRequests(
-                    requests.filter((r) => r.status === 'open'),
-                    songs
-                );
-            }
-        );
+        notifier = initBrowserNotification('/logo.svg');
+
+        let knownIds = new Set<string>();
+
+        subscriptions = [
+            requestService.pendingRequestsAsGroup().subscribe((groups) => items = groups),
+            requestService.requests$.subscribe((requests) => {
+                const openRequests = requests.filter((r) => r.status === 'open');
+                
+                const newIds = openRequests.map(r => r.id).filter(id => !knownIds.has(id));
+                if (newIds.length > 0) {
+                    notifier.send(openRequests, ({ song }) => formatNotification(song));
+                }
+
+                knownIds = new Set(openRequests.map(r => r.id));
+                requestService.markSeen(openRequests.map((r) => r.id));
+            })  
+        ];
+
         result = createDeferred<void>();
         return result.promise;
     }
 
-    async function handleMarkDone(view: SongRequestView): Promise<void> {
+    async function handleMarkDone(view: SongRequestViewGroup): Promise<void> {
         await requestService.markDone(view.requestIds);
     }
 
     function close(): void {
-        subscription?.unsubscribe();
-        subscription = undefined;
+        notifier.dispose();
+        subscriptions.forEach(s => s.unsubscribe());
         visible = false;
         result?.resolve();
     }

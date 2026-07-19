@@ -38,8 +38,8 @@
     const readonly = $derived(!!params.uid);
     const sharedUid = $derived(params.uid);
     const donationState = $derived(new DonationReminderState(sharedUid));
-    const requestService = new SongRequestService();
     const service = $derived(new SongService(sharedUid));
+    const requestService = $derived(new SongRequestService(service));
     const sessionService = $derived(new SessionService(service));
     const actions = $derived(new SongActions(service, sessionService));
     const actionMenu = $derived(buildActionMenu(actions, settings.advanced));
