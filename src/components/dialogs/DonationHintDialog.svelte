@@ -32,7 +32,7 @@
     }
 
     function setDonationLinks(links: UserLink[]) {
-        donationLinks = links.filter(({ type }) => type === 'donation');
+        donationLinks = links.filter(({ placement }) => placement.contains('donation'));
     }
 
     function donateLinkClicked() {
@@ -48,7 +48,6 @@
     }
 </script>
 
-{#if props}
 <DialogBase 
     visible={props !== undefined} 
     title={$t('songs.request-dialog.title')}
@@ -84,7 +83,6 @@
         </div>
     {/snippet}
 </DialogBase>
-{/if}
 
 <style lang="scss">
     .body {

@@ -347,7 +347,10 @@
     "update-profile": "Save",
     "linkhub": {
       "empty": "No links available yet.",
-      "title": "Title"
+      "title": "Title",
+      "placement": "Visibility",
+      "placement-userpage": "Your music page",
+      "placement-donation": "Song wish dialog (donation)"
     },
     "cancel": "Cancel",
     "add": "Add",

@@ -16,14 +16,12 @@ export class UserLinkService {
         return this.uid ? firstValueFrom(stores.userLinks(this.uid).countDocuments()) : 0;
     }
 
-    async addLink(url: string, title?: string, order?: number): Promise<string> {
+    async addLink(link: Pick<UserLink, 'url' | 'title' | 'order' | 'placement'>): Promise<string> {
         return this.setLink({
-            id: docId(url),
-            url,
-            title,
-            icon: resolveIcon(url),
-            order,
-            createdAt: Timestamp.now(),
+            ...link,
+            id: docId(link.url),
+            icon: resolveIcon(link.url),
+            createdAt: Timestamp.now()
         });
     }
 

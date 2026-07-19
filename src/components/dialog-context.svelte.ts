@@ -1,5 +1,3 @@
-import type { MenuTarget } from "../model/app.types";
-
 export type DialogSize = 'auto' | 'full';
 export type DialogType = 'view' | 'confirm' | 'wizard';
 export type DialogAction = 'confirm' | undefined;
@@ -22,7 +20,6 @@ export interface DialogArgs {
     title?: string;
     body: string;
     size?: DialogSize;
-    target?: MenuTarget;
 }
 
 export interface NavigationContext<T> {

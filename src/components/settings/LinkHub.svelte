@@ -1,10 +1,10 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
     import { flip } from 'svelte/animate';
-    import type { UserLink } from '../../model/user.model';
+    import type { LinkPlacement, UserLink } from '../../model/user.model';
     import { UserLinkService } from '../../service/user/user-link.service';
     import { showError } from '../../store/notification.store';
-    import { slideFade } from '../ui/helper/transition.helper';
+    import LinkFormDialog from './LinkFormDialog.svelte';
 
     let {
         uid,
@@ -14,54 +14,23 @@
 
     const linkService = $derived(new UserLinkService(uid));
     const links$ = $derived(linkService.userlinks$);
-    
-    let addingLink = $state(false);
-    let newUrl = $state('');
-    let newTitle = $state('');
 
-    let editingId: string | null = $state(null);
-    let editUrl = $state('');
-    let editTitle = $state('');
+    let dialogVisible = $state(false);
+    let editingLink: UserLink | null = $state(null);
 
-    function startEdit(link: UserLink) {
-        editingId = link.id;
-        editUrl = link.url;
-        editTitle = link.title;
+    const LINK_TYPE_ICONS: Record<LinkPlacement, string> = {
+        default: 'bx-link',
+        donation: 'bx-coffee',
+    };
+
+    function openAddDialog() {
+        editingLink = null;
+        dialogVisible = true;
     }
 
-    function cancelEdit() {
-        editingId = null;
-    }
-
-    async function saveEdit(link: UserLink) {
-        if (!editUrl.trim()) return;
-        try {
-            await linkService.setLink({
-                id: link.id,
-                url: editUrl.trim(),
-                title: editTitle.trim() || editUrl.trim(),
-            });
-            editingId = null;
-        } catch (error) {
-            showError(error.message);
-        }
-    }
-
-    async function addLink() {
-        if (!newUrl.trim()) return;
-        try {
-            const nextOrder = $links$?.length ?? 0;
-            await linkService.addLink(
-                newUrl.trim(),
-                newTitle.trim() || undefined,
-                nextOrder,
-            );
-            newUrl = '';
-            newTitle = '';
-            addingLink = false;
-        } catch (error) {
-            showError(error.message);
-        }
+    function openEditDialog(link: UserLink) {
+        editingLink = link;
+        dialogVisible = true;
     }
 
     async function deleteLink(link: UserLink) {
@@ -97,20 +66,6 @@
 <ul class="link-list">
     {#each $links$ as link, i (link.id)}
         <li class="link-item" animate:flip={{ duration: 150 }}>
-            {#if editingId === link.id}
-                <div class="link-form" in:slideFade={{ duration: 150 }}>
-                    <input class="input" type="text" placeholder={$t('settings.linkhub.title')} bind:value={editTitle} />
-                    <input class="input" type="url"  placeholder="URL*" bind:value={editUrl} />
-                    <div class="form-actions">
-                        <button class="sm clear" onclick={() => saveEdit(link)}>
-                            <i class="icon bx bx-check primary"></i> {$t('settings.update-profile')}
-                        </button>
-                        <button class="sm clear" onclick={cancelEdit}>
-                            <i class="icon bx bx-x"></i> {$t('settings.cancel')}
-                        </button>
-                    </div>
-                </div>
-            {:else}
                 <div class="link-row">
                     <div class="order-controls">
                         <button class="sm clear" disabled={i === 0}
@@ -121,32 +76,31 @@
                             title={$t('settings.move-down')} onclick={() => moveLink(i, 1)}>
                             <i class="icon bx bx-chevron-down"></i>
                         </button>
-                    </div>
-                    <span class="link-icon">
-                        {#if link.icon}
-                            {#if link.icon.startsWith('http')}
-                                <img src={link.icon} alt="" width="16" height="16" />
-                            {:else}
-                                <i class="bx {link.icon}"></i>
-                            {/if}
-                        {:else}
-                            <i class="bx bx-link"></i>
-                        {/if}
-                    </span>
-                    <span class="link-info">
-                        <span class="link-title no-wrap" title={link.url}>{link.title}</span>
-                        <span class="link-url no-wrap">{link.url}</span>
-                    </span>
-                    <div class="row-actions">
-                        <button class="small clear" title="{$t('settings.edit')}" onclick={() => startEdit(link)}>
-                            <i class="icon bx bx-pencil"></i>
-                        </button>
-                        <button class="small clear danger-text" title="{$t('settings.delete')}" onclick={() => deleteLink(link)}>
-                            <i class="icon bx bx-trash"></i>
-                        </button>
-                    </div>
                 </div>
-            {/if}
+                <span class="link-icon">
+                    {#if link.icon}
+                        {#if link.icon.startsWith('http')}
+                            <img src={link.icon} alt="" width="16" height="16" />
+                        {:else}
+                            <i class="bx {link.icon}"></i>
+                        {/if}
+                    {:else}
+                        <i class="bx {LINK_TYPE_ICONS[link.placement.at(-1) ?? 'default']}"></i>
+                    {/if}
+                </span>
+                <span class="link-info">
+                    <span class="link-title no-wrap" title={link.url}>{link.title}</span>
+                    <span class="link-url no-wrap">{link.url}</span>
+                </span>
+                <div class="row-actions">
+                    <button class="small clear" title={$t('settings.edit')} onclick={() => openEditDialog(link)}>
+                        <i class="icon bx bx-pencil"></i>
+                    </button>
+                    <button class="small clear danger-text" title={$t('settings.delete')} onclick={() => deleteLink(link)}>
+                        <i class="icon bx bx-trash"></i>
+                    </button>
+                </div>
+            </div>
         </li>
     {/each}
 </ul>
@@ -156,27 +110,19 @@
     </div>
 {/if}
 
-{#if addingLink}
-    <div class="link-form new-form" in:slideFade={{ duration: 150 }}>
-        <input class="input" type="text" placeholder={$t('settings.linkhub.title')} bind:value={newTitle} />
-        <input class="input" type="url"  placeholder="URL *"    bind:value={newUrl} />
-        <div class="form-actions">
-            <button class="primary clear" onclick={addLink} disabled={!newUrl.trim()}>
-                <i class="icon bx bx-plus"></i> {$t('settings.add')}
-            </button>
-            <button class="clear" onclick={() => (addingLink = false)}>
-                <i class="icon bx bx-x"></i> {$t('settings.cancel')}
-            </button>
-        </div>
-    </div>
-{:else}
-    <div class="section" style="text-align: right;">
-        <span></span>
-        <button class="clear" title="{$t('settings.add')}" onclick={() => (addingLink = true)}>
-            <i class="icon bx bx-plus"></i>
-        </button>
-    </div>
-{/if}
+<div class="section" style="text-align: right;">
+    <span></span>
+    <button class="clear" title={$t('settings.add')} onclick={openAddDialog}>
+        <i class="icon bx bx-plus"></i>
+    </button>
+</div>
+
+<LinkFormDialog
+    {uid}
+    bind:visible={dialogVisible}
+    link={editingLink}
+    nextOrder={$links$?.length ?? 0}
+/>
 
 <style lang="scss">
     .link-list {
@@ -237,26 +183,6 @@
             opacity: 0.2;
             cursor: default;
         }
-    }
-
-    .link-form {
-        display: flex;
-        flex-direction: column;
-        gap: 0.4rem;
-        padding: 0.5rem 0.25rem;
-
-        .form-actions {
-            display: flex;
-            gap: 0.5rem;
-            justify-content: flex-end;
-            margin-top: 0.25rem;
-        }
-    }
-
-    .new-form {
-        border-top: 1px dashed var(--surface-light);
-        margin-top: 0.5rem;
-        padding-top: 0.75rem;
     }
 
     .empty-hint {

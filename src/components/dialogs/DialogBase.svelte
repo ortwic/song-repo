@@ -4,13 +4,11 @@
     import { cubicOut } from 'svelte/easing';
     import { t } from "svelte-i18n";
     import { swipeable } from "@svelte-put/swipeable";
-    import type { MenuTarget } from "../../model/app.types";
     import type { DialogAction, DialogSize, DialogType } from "../dialog-context.svelte";
     import Titlebar from "../ui/elements/Titlebar.svelte";
 
     interface Props {
         size: DialogSize;
-        target?: MenuTarget;
         title?: string;
         visible?: boolean;
         type: DialogType;
@@ -25,7 +23,6 @@
 
     let {
         size,
-        target = 'hidden',
         title = '',
         visible = false,
         type = 'view',
@@ -86,7 +83,7 @@
 
 {#if visible}
     <div class='dialog {size}' use:center transition:fly={flyParams}>
-        <Titlebar {target} onClose={handleClose}>
+        <Titlebar onClose={handleClose}>
             {@render header?.()} {title}
             {#snippet controls()}
                 {@render controls?.()}
@@ -104,10 +101,10 @@
         {@render footer?.()}
         {#if type === 'confirm'}
             <div class="row">
-                <button data-target={target} onclick={(e) => handleClose(e, 'confirm')}>
+                <button onclick={(e) => handleClose(e, 'confirm')}>
                     { $t('dialog.confirm') }
                 </button>
-                <button data-target={target} onclick={(e) => handleClose(e)}>
+                <button onclick={(e) => handleClose(e)}>
                     { $t('dialog.decline') }
                 </button>
             </div>

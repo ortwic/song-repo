@@ -18,7 +18,7 @@
     let password = $state('');
     let pwdRepeat = $state('');
 
-    const checks: RequiredPageChecks = $state();
+    const checks: RequiredPageChecks = $state({});
 
     async function signUp() {
         try {
@@ -50,8 +50,7 @@
         checks[target] = await openDialog<DialogArgs, DialogAction>('ConfirmDialog', { 
             title, 
             body,
-            size: 'full',
-            target: 'signup'
+            size: 'full'
         });
         logPageView({ page: 'signup', target });
     }

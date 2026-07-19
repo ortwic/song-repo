@@ -16,9 +16,10 @@
     let { routeParams = {} }: Props = $props();
 
     let profile = $state<UserProfileView>();
+    const userlinks$ = $derived(new UserService().getProfileWithLinks(routeParams.alias, 'default'));
 
     $effect(() => {
-        const { unsubscribe } = new UserService().getProfileWithLinks(routeParams.alias).subscribe((value) => {
+        const { unsubscribe } = userlinks$.subscribe((value) => {
             profile = value;
             setAppReady();
         });

@@ -2,7 +2,7 @@ import type { User } from 'firebase/auth';
 import { where } from 'firebase/firestore';
 import { filter, from, map, Observable, of, startWith, switchMap } from 'rxjs';
 import { stores } from '../base/firestore.service';
-import type { UserProfile, UserProfileView } from '../../model/user.model';
+import type { LinkPlacement, UserProfile, UserProfileView } from '../../model/user.model';
 import { UserLinkService } from './user-link.service';
 
 export default class UserService {
@@ -11,10 +11,13 @@ export default class UserService {
         return stores.user.getDocument<UserProfile>(uid);
     }
 
-    getProfileWithLinks(alias: string): Observable<UserProfileView> | never {
+    getProfileWithLinks(alias: string, placement: LinkPlacement): Observable<UserProfileView> | never {
         return this.getProfileByAlias(alias).pipe(
             switchMap(profile => new UserLinkService(profile.id).userlinks$.pipe(
-                map(links => ({ ...profile, links } as UserProfileView))
+                map(links => ({
+                    ...profile,
+                    links: links?.filter(link => link.placement.includes(placement)) ?? links,
+                } as UserProfileView))
             )),
             filter(p => p.id && p.links !== null),
             startWith({} as UserProfileView)

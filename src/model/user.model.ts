@@ -1,5 +1,5 @@
 import { Timestamp } from 'firebase/firestore';
-import { UserSettings } from './settings.model';
+import type { UserSettings } from './settings.model';
 
 export interface UserProfile {
     id: string;
@@ -18,13 +18,15 @@ export interface UserProfileView extends UserProfile {
     links: UserLink[];
 }
 
+export type LinkPlacement = 'default' | 'donation';
+
 export interface UserLink {
     id: string;
     title: string;
     url: string;
     createdAt: Timestamp;
     changedAt: Timestamp;
-    type?: 'default' | 'donation' | 'social';
+    placement: LinkPlacement[];
     icon?: string;
     order?: number;
 }

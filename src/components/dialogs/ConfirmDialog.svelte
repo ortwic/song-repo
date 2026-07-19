@@ -28,7 +28,6 @@
     title={props.title ? `${props.title} | ${import.meta.env.PACKAGE_NAME}` : import.meta.env.PACKAGE_NAME} 
     size={props.size ?? 'auto'} 
     type='confirm'
-    target={props.target}
     onClose={({ action }) => done(action)}
 >
     <div class="body" use:interceptInternalLinks>

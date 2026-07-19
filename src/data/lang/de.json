@@ -343,8 +343,11 @@
     "profile-updated": "Profil aktualisiert",
     "update-profile": "Speichern",
     "linkhub": {
-      "empty": "Noch keine Links vorhanden.",
-      "title": "Titel"
+        "empty": "Noch keine Links vorhanden.",
+        "title": "Titel",
+        "placement": "Sichtbarkeit",
+        "placement-userpage": "Deine Musikseite",
+        "placement-donation": "Song-Wunsch-Dialog (Spende)"
     },
     "cancel": "Abbrechen",
     "add": "Hinzufügen",
