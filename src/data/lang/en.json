@@ -405,7 +405,8 @@
       "view-grid": "Gridview",
       "show-folders": "Show folders",
       "navigation": "Navigation"
-    }
+    },
+    "generate-avatar": "Generate Avatar"
   },
   "user": {
     "song-list": "Song list",

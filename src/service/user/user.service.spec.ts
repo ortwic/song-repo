@@ -134,7 +134,7 @@ describe('UserService', () => {
             expect(data).not.toHaveProperty('provider');
         });
 
-        it('sets photoURL to undefined when null', async () => {
+        it('sets a generated avatar photoURL when null', async () => {
             mockGetDoc.mockResolvedValue(makeSnapshot(null));
             mockGetDocs.mockResolvedValue(makeQuerySnapshot([]));
             mockSetDoc.mockResolvedValue(undefined);
@@ -142,7 +142,8 @@ describe('UserService', () => {
             await service.initProfile(makeUser({ photoURL: null }) as any);
 
             const [, data] = mockSetDoc.mock.calls[0];
-            expect(data.photoURL).toBeUndefined();
+            expect(data.photoURL).toBeDefined();
+            expect(data.photoURL).toMatch(/^data:image\/svg\+xml/);
         });
     });
 

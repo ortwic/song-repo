@@ -19,12 +19,12 @@
     const userlinks$ = $derived(new UserService().getProfileWithLinks(routeParams.alias, 'default'));
 
     $effect(() => {
-        const { unsubscribe } = userlinks$.subscribe((value) => {
+        const sub = userlinks$.subscribe((value) => {
             profile = value;
             setAppReady();
         });
 
-        return () => unsubscribe();
+        return () => !sub.closed && sub.unsubscribe();
     });
 </script>
 

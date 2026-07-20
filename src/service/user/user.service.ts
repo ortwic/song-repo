@@ -3,6 +3,7 @@ import { where } from 'firebase/firestore';
 import { filter, from, map, Observable, of, startWith, switchMap } from 'rxjs';
 import { stores } from '../base/firestore.service';
 import type { LinkPlacement, UserProfile, UserProfileView } from '../../model/user.model';
+import { generateAvatarUrl } from '../../utils/avatar.helper';
 import { UserLinkService } from './user-link.service';
 
 export default class UserService {
@@ -40,13 +41,14 @@ export default class UserService {
         const existing = await stores.user.getDocumentAsync<UserProfile>(user.uid);
         if (!existing?.email) {
             const alias = await this.resolveUniqueAlias(user);
+            const photoURL = user.photoURL ?? generateAvatarUrl(user.email);
             await stores.user.setDocument({
                 id: user.uid,
                 created: new Date(),
                 deleted: null,
                 name: user.displayName,
-                photoURL: user.photoURL ?? undefined,
                 email: user.email,
+                photoURL,
                 alias,
                 ...(provider && { provider }),
             } as UserProfile, { merge: true });

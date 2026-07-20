@@ -16,7 +16,7 @@ export const genreColor = (name: string): string => {
     return 'transparent';
 };
 
-function generateColorCode(name: string) {
+export function generateColorCode(name: string) {
     let hash = 0;
     for (let i = 0; i < name.length; i++) {
         hash = name.charCodeAt(i) + ((hash << 5) - hash);
