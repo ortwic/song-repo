@@ -117,29 +117,17 @@
 </main>
 
 <style lang="scss">
-    main > section {
+    section {
         padding: 1em 5%;
         max-width: 40em;
 
-        Expand,
         div {
             margin: 1rem;
             text-align: left;
             border-color: var(--surface-light);
 
-            legend,
-            p {
-                padding: 0 0.4rem;
-            }
-
             label {
                 display: inline;
-            }
-
-            & > div {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
             }
         }
 

@@ -1,43 +1,24 @@
 <script lang="ts">
-    import { get } from 'svelte/store';
     import { swipeable } from '@svelte-put/swipeable';
     import { menuContext } from '../../../store/menu-context.svelte';
-    import { currentMenu } from '../../../store/app.store';
 
     interface Props {
+        onOpen: () => void;
         children?: import('svelte').Snippet;
     }
 
-    let { children }: Props = $props();
-
-    function toggle() {
-        if (get(currentMenu) === 'hidden') {
-            currentMenu.set('dynamic');
-        } else {
-            currentMenu.set('hidden');
-        }
-    }
-
-    function handleDataClose(ev: SubmitEvent) {
-        ev.preventDefault();
-
-        if (ev.submitter.getAttribute('data-close') !== null) {
-            currentMenu.set('hidden');
-        }
-    }
+    let { children, onOpen }: Props = $props();
 </script>
 
-<form onsubmit={handleDataClose}>
-    <header 
-        use:swipeable={{ direction: 'x', threshold: '30px' }} 
-        onswipeend={toggle}
-        style:right="{menuContext.offsetWidth}px">
-    </header>
+<header 
+    use:swipeable={{ direction: 'x', threshold: '30px' }} 
+    onswipeend={onOpen}
+    style:right="{menuContext.offsetWidth}px">
+</header>
 
-    <nav>
-        {@render children?.()}
-    </nav>
-</form>
+<nav>
+    {@render children?.()}
+</nav>
 
 <style lang="scss">
     @use '../../../styles/vars.scss';

@@ -81,57 +81,53 @@
 </main>
 
 <style lang="scss">
-    main {
-        color: var(--text);
+    div.post {
+        border-color: var(--border);
+        border-style: solid;
+        border-width: 1px 0 1px 0;
+        padding: 0.4rem;
 
-        div.post {
-            border-color: var(--border);
-            border-style: solid;
-            border-width: 1px 0 1px 0;
-            padding: 0.4rem;
+        .thumbnail {
+            float: left;
+            margin-right: 0.4rem;
+        }
 
-            .thumbnail {
-                float: left;
-                margin-right: 0.4rem;
+        h2 {
+            margin: .3em 0;
+            transition: all .2s ease-in-out;
+        }
+        
+        a.label {
+            display: inline-block;
+            margin: 0.6rem 0.3rem;
+        }
+
+        .more {
+            padding: 0;
+            border: 0;
+            background-color: transparent;
+            text-align: left;
+
+            &::before {
+                content: '[';
+                padding-right: 2px;
             }
+
+            &::after {
+                content: ']';
+                padding-left: 2px;
+            }
+        }
+        
+        @media screen and (orientation: portrait) {
+            padding-right: 1rem;
 
             h2 {
-                margin: .3em 0;
-                transition: all .2s ease-in-out;
-            }
-            
-            a.label {
-                display: inline-block;
-                margin: 0.6rem 0.3rem;
+                font-size: 13pt;
             }
 
-            .more {
-                padding: 0;
-                border: 0;
-                background-color: transparent;
-                text-align: left;
-
-                &::before {
-                    content: '[';
-                    padding-right: 2px;
-                }
-
-                &::after {
-                    content: ']';
-                    padding-left: 2px;
-                }
-            }
-            
-            @media screen and (orientation: portrait) {
-                padding-right: 1rem;
-
-                h2 {
-                    font-size: 13pt;
-                }
-
-                .content, .more {
-                    font-size: 11pt;
-                }
+            .content, .more {
+                font-size: 11pt;
             }
         }
     }

@@ -13,8 +13,7 @@
     import TitlebarMenu from '../components/menus/TitlebarMenu.svelte';
     import { getPage } from '../service/common/page.service';
     import { authService, currentUser } from '../service/user/auth.service';
-    import { currentMenu } from '../store/app.store';
-    import { content } from '../store/menu-context.svelte';
+    import { content, menuContext } from '../store/menu-context.svelte';
     import { currentProfile } from '../store/profile.store';
 
     const INFO_KEY = 'song-repo_hide-dashboard-info';
@@ -27,7 +26,7 @@
 
     async function signOut() {
         await authService.signOut();
-        currentMenu.set('dynamic');
+        menuContext.showMenu();
     }
 
     const dashboard = getPage('dashboard');
@@ -82,16 +81,8 @@
 </main>
 
 <style lang="scss">
-main {
-    & > section {
-        padding: 1em 5%;
-        max-width: 40em;
-
-    }
-
-    .titlebar a {
-        display: flex;
-        align-items: center;
-    }
+section {
+    padding: 1em 5%;
+    max-width: 40em;
 }
 </style>

@@ -29,7 +29,7 @@ import {
 import * as luxon from 'luxon';
 import type { ColumnDefinition } from './tabulator/types';
 import { default as ResponsiveLayoutModule, type CollapsedCellData } from './tabulator/modules/ResponsiveLayout';
-import { Observable, firstValueFrom } from 'rxjs';
+import { Observable } from 'rxjs';
 import { showError } from '../../store/notification.store';
 import { orientation, type Orientation } from '../../store/media.store';
 import responsiveCollapse from './tabulator/modules/formatters/responsiveCollapse';

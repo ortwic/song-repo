@@ -1,5 +1,11 @@
+type MenuTarget = 'hidden' | 'dynamic' | 'signup';
+
 function createMenuContext() {
+    let menuState = $state<MenuTarget>('hidden');
     let offsetWidth = $state(0);
+    
+    const getTarget = () => menuState;
+    const setTarget = (target: MenuTarget) => menuState = target;
 
     function updateOffsetWidth(node: HTMLElement): void {
         offsetWidth = window.innerWidth - node.clientWidth;
@@ -10,6 +16,12 @@ function createMenuContext() {
             return offsetWidth;
         },
         updateOffsetWidth,
+        getTarget,
+        isVisible: () => getTarget() !== 'hidden',
+        toggleMenu: () => getTarget() !== 'hidden' ? setTarget('hidden') : setTarget('dynamic'),
+        hideMenu: () => setTarget('hidden'),
+        showMenu: () => setTarget('dynamic'),
+        showSignup: () => setTarget('signup')
     };
 }
 

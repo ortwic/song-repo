@@ -1,5 +1,7 @@
 import { writable } from 'svelte/store';
 
+export const setAppReady = () => document.body.classList.add('app-ready');
+
 const watch = <T>(mediaquery: string, map: (matches: boolean) => T) => (writable<T>(undefined, set => {
     const queryList = window.matchMedia(mediaquery);
     queryList.addEventListener('change', ({ matches }) => set(map(matches)));

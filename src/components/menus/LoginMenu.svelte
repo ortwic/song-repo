@@ -4,8 +4,13 @@
     import { cubicOut } from 'svelte/easing';
     import { authService } from '../../service/user/auth.service';
     import { showError } from '../../store/notification.store';
-    import { currentMenu } from '../../store/app.store';
     
+    let {
+        onSignIn,
+    }: {
+        onSignIn?: (ev: MouseEvent) => void;
+    } = $props();
+
     const slideParams = { duration: 200, easing: cubicOut };
     let email = $state(import.meta.env.DEV ? 'john.doe@example.com' : '');
     let password = $state(import.meta.env.DEV ? 'password' : '');
@@ -14,7 +19,7 @@
     async function signIn(ev: MouseEvent) {
         try {
             await authService.signIn(email, password);
-            currentMenu.set('hidden');
+            onSignIn?.(ev);
         } catch (error) {
             if (`${error.message}`.includes('auth/wrong-password')) {
                 showError(`${ $t('menu.login.wrong-password') }`);

@@ -1,7 +1,7 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
     import { Router } from '@keenmate/svelte-spa-router';
-    import Menu from './components/menus/Index.svelte';
+    import AppMenu from './components/menus/AppMenu.svelte';
     import Context from './components/Context.svelte';
     import Snackbar from './components/ui/Snackbar.svelte';
     import Blog from './routes/Blog.svelte';
@@ -15,7 +15,7 @@
     import Feedback from './routes/Feedback.svelte';
     import NotFound from './routes/NotFound.svelte';
     import { currentUser } from './service/user/auth.service';
-    import { setAppReady } from './store/app.store';
+    import { setAppReady } from './store/media.store';
     import { showInfo } from './store/notification.store';
 
     const routes = {
@@ -67,7 +67,7 @@
 </svelte:head>
 
 <Context>
-    <Menu />
+    <AppMenu />
 
     <Router {routes} restoreScrollState={true} />
 

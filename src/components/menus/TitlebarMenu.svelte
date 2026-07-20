@@ -1,7 +1,7 @@
 <script lang="ts">
     import { t } from "svelte-i18n";
     import { link, location } from "@keenmate/svelte-spa-router";
-    import { currentMenu } from "../../store/app.store";
+    import { menuContext } from "../../store/menu-context.svelte";
     
     let {
         minimal = false,
@@ -13,11 +13,7 @@
     
     function toggleMenu(e: Event) {
         (e.target as HTMLElement).blur();
-        if ($currentMenu !== 'hidden') {
-            currentMenu.set('hidden');
-        } else {
-            currentMenu.set('dynamic');
-        }
+        menuContext.toggleMenu();
     }
 
 </script>
@@ -25,7 +21,7 @@
 
 {#if minimal}
     <button class="clear float" onclick={toggleMenu}
-        title={$currentMenu !== 'hidden' ? $t('menu.close') : $t('menu.open')}>
+        title={menuContext.isVisible() ? $t('menu.close') : $t('menu.open')}>
         <i class="icon shadow bx bx-sidebar bx-flip-horizontal"></i>
     </button>
 {:else}

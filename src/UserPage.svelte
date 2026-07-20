@@ -6,7 +6,7 @@
     import Footer from './components/ui/Footer.svelte';
     import type { UserProfileView } from './model/user.model';
     import UserService from './service/user/user.service';
-    import { setAppReady } from './store/app.store';
+    import { setAppReady } from './store/media.store';
     import NotFound from './routes/NotFound.svelte';
 
     interface Props {

@@ -44,6 +44,4 @@ export type TrainingFocus = ObjectValues<typeof FOCUS_RECORD>;
 export type SessionType = SessionKind | 'free' | 'quick' | 'live';
 export type SessionKind = ObjectValues<typeof SESSIONKIND_RECORD>;
 
-export type MenuTarget = 'hidden' | 'dynamic' | 'signup';
-
 export type SearchEngines = 'musicbrainz' | 'audius' | 'discogs' | 'songbpm';

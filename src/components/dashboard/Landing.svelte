@@ -1,10 +1,10 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
     import { link } from '@keenmate/svelte-spa-router';
-    import { currentMenu } from '../../store/app.store';
+    import { menuContext } from '../../store/menu-context.svelte';
 
     function signup() {
-        currentMenu.set('signup');
+        menuContext.showSignup();
     }
 </script>
 
