@@ -4,6 +4,7 @@
     import { location, push } from 'svelte-spa-router';
     import { slide } from 'svelte/transition';
     import { swipeable } from '@svelte-put/swipeable';
+    import { menuContext } from '../../store/menu-context.svelte';
     import { currentUser } from '../../service/user/auth.service';
     import NavButton from './elements/NavButton.svelte';
     import Titlebar from './elements/Titlebar.svelte';
@@ -15,6 +16,8 @@
         onclose: () => void;
     }
 
+    const offset = window.innerWidth - document.querySelector('main').clientWidth;
+
     let { children, lower, footer, onclose }: Props = $props();
 
     function hide() {
@@ -25,8 +28,8 @@
 <aside
     use:swipeable={{ direction: 'right', threshold: '1rem' }}
     onswipeend={hide}
-    in:slide={{ duration: 200, axis: 'x' }}
-    out:slide={{ duration: 200, axis: 'x' }}
+    transition:slide={{ duration: 200, axis: 'x' }}
+    style:right="{menuContext.offsetWidth}px"
 >
     <Titlebar target="hidden">
         {#snippet controls()}
@@ -82,10 +85,6 @@
         z-index: 100;
         box-shadow: 0 0 2em #00000080;
         user-select: none;
-
-        a.title {
-            color: inherit;
-        }
 
         button {
             padding: 0;

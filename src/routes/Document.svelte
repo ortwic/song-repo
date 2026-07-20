@@ -1,6 +1,7 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
     import { link, push } from 'svelte-spa-router';
+    import { content } from '../store/menu-context.svelte';
     import { interceptInternalLinks } from '../components/actions/intercept-internal-links.action';
     import Footer from '../components/ui/Footer.svelte';
     import Titlebar from '../components/ui/elements/Titlebar.svelte';
@@ -16,7 +17,7 @@
     const page = $derived(getPage(params.id));
 </script>
 
-<main class="content">
+<main use:content={{ overflow: 'auto' }}>
 {#key params.id}
     <Titlebar onClose={() => push('/')}>
         <i class="bx bx-file"></i>&nbsp; {page?.title ?? $t('notfound.title')}

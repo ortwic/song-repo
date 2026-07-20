@@ -1,5 +1,6 @@
 <script lang="ts">
     import { t, json } from 'svelte-i18n';
+    import { content } from '../store/menu-context.svelte';
     
     interface Props {
         children?: import('svelte').Snippet;
@@ -11,7 +12,7 @@
     const no = Math.floor(Math.random() * Object.keys(messages).length );
 </script>
 
-<div>
+<div use:content>
     <h2>
         <i class="bx bx-error"></i>
         404 &ndash; { $t('notfound.title') }

@@ -4,9 +4,10 @@
     import { t } from "svelte-i18n";
     import { Loader } from '@googlemaps/js-api-loader';
     import TitlebarMenu from "../components/menus/TitlebarMenu.svelte";
-    import { getEvents } from "../service/common/event.service";
-    import { showError } from "../store/notification.store";
     import type { CalendarEvent } from "../model/event.model";
+    import { getEvents } from "../service/common/event.service";
+    import { content } from "../store/menu-context.svelte";
+    import { showError } from "../store/notification.store";
 
     let mapContainer: HTMLDivElement = $state();
     let infoContents: Record<string, HTMLDivElement> = $state({});
@@ -106,7 +107,7 @@
    <title>{ $t('calendar.title') } | {import.meta.env.PACKAGE_NAME}</title>
 </svelte:head>
 
-<main>
+<main use:content>
     <TitlebarMenu>
         <i class="bx bx-calendar"></i>&nbsp; {$t('menu.events')}
     </TitlebarMenu>

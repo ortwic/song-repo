@@ -6,8 +6,9 @@
     import Image from '../components/ui/elements/Image.svelte';
     import type { Post } from '../model/post.model';
     import { blogService } from '../service/common/blog.service';
-    import { logPageView } from '../store/notification.store';
     import { orientation } from '../store/media.store';
+    import { content } from '../store/menu-context.svelte';
+    import { logPageView } from '../store/notification.store';
     
     interface Props {
         params?: { slug?: string };
@@ -52,7 +53,7 @@
     <title>{$t('menu.howto')} blog | {import.meta.env.PACKAGE_NAME}</title>
 </svelte:head>
 
-<main class="content">
+<main use:content={{ overflow: 'auto' }}>
     <TitlebarMenu>
         <i class="bx bx-book-open"></i>&nbsp; {$t('blog.title')}
     </TitlebarMenu>

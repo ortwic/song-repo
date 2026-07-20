@@ -57,12 +57,8 @@ body {
 }
 
 main {
+    hyphens: auto;
     height: 100vh;
-
-    &.content {
-        hyphens: auto;
-        overflow: auto;
-    }
 }
 
 a {

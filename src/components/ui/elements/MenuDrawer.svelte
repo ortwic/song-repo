@@ -1,6 +1,7 @@
 <script lang="ts">
     import { get } from 'svelte/store';
     import { swipeable } from '@svelte-put/swipeable';
+    import { menuContext } from '../../../store/menu-context.svelte';
     import type { MenuTarget } from '../../../model/app.types';
     import { currentMenu } from '../../../store/app.store';
 
@@ -9,7 +10,6 @@
     }
 
     let { children }: Props = $props();
-
 
     function toggle() {
         if (get(currentMenu) === 'hidden') {
@@ -32,7 +32,11 @@
 </script>
 
 <form onsubmit={navigate}>
-    <header use:swipeable={{ direction: 'x', threshold: '30px' }} onswipeend={toggle}></header>
+    <header 
+        use:swipeable={{ direction: 'x', threshold: '30px' }} 
+        onswipeend={toggle}
+        style:right="{menuContext.offsetWidth}px">
+    </header>
 
     <nav>
         {@render children?.()}
@@ -61,12 +65,5 @@
         z-index: 100;
         text-align: right;
         margin-top: 2.2em;
-    }
-
-    nav [aria-hidden] {
-        position: absolute;
-        right: 0;
-        width: 1.5em;
-        height: 1.5em;
     }
 </style>

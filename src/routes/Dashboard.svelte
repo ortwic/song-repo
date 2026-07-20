@@ -14,6 +14,7 @@
     import { getPage } from '../service/common/page.service';
     import { authService, currentUser } from '../service/user/auth.service';
     import { currentMenu } from '../store/app.store';
+    import { content } from '../store/menu-context.svelte';
     import { currentProfile } from '../store/profile.store';
 
     const INFO_KEY = 'song-repo_hide-dashboard-info';
@@ -36,7 +37,7 @@
     <title>Dashboard | {import.meta.env.PACKAGE_NAME}</title>
 </svelte:head>
 
-<main class="content">
+<main use:content={{ overflow: 'auto' }}>
     <TitlebarMenu>
         {#if $currentUser}
             <i class="bx bx-user-circle"></i>&nbsp; { $t('start.hello')} { $currentProfile.name ?? $currentProfile.alias }
