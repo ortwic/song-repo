@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { location, push } from "svelte-spa-router";
+    import { location, push } from "@keenmate/svelte-spa-router";
 
     interface Props {
         href: string;
@@ -15,7 +15,7 @@
         children
     }: Props = $props();
 
-    const self = $location.startsWith(href);
+    const self = $derived(location().startsWith(href));
 </script>
 
 {#if !self}

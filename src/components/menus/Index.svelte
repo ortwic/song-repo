@@ -1,8 +1,7 @@
 <script lang="ts">
     import '../../styles/menu.scss';
     import { t } from 'svelte-i18n';
-    import { derived } from 'svelte/store';
-    import { link, location } from 'svelte-spa-router';
+    import { link, location } from '@keenmate/svelte-spa-router';
     import LoginMenu from './LoginMenu.svelte';
     import SignupMenu from './SignupMenu.svelte';
     import ProfileMenu from './ProfileMenu.svelte';
@@ -19,9 +18,9 @@
     import { currentMenu } from '../../store/app.store';
 
     const version = `${import.meta.env.PACKAGE_NAME} ${import.meta.env.PACKAGE_VERSION}`;
-    const isDashboard = derived(location, (path) => path === '/');
-    const isBlogView = derived(location, (path) => path.startsWith('/blog'));
-    const isEventView = derived(location, (path) => path.startsWith('/events'));
+    const isDashboard = $derived(location() === '/');
+    const isBlogView = $derived(location().startsWith('/blog'));
+    const isEventView = $derived(location().startsWith('/events'));
 
     function hide() {
         currentMenu.set('hidden');
@@ -37,19 +36,19 @@
                     photoURL={$currentUser.photoURL}
                     displayName={$currentUser.displayName}
                 />
-            {:else if !$isEventView && !$isBlogView}
+            {:else if !isEventView && !isBlogView}
                 <LoginMenu />
             {/if}
 
             {#if tableContext.table}
                 <TableMenu />
                 <ColumnMenu />
-            {:else if $isBlogView}
+            {:else if isBlogView}
                 <BlogMenu />
-            {:else if $isEventView}
+            {:else if isEventView}
                 <EventListMenu />
             {:else if $currentUser}
-                {#if $isDashboard}
+                {#if isDashboard}
                     <RecentMenu />
                 {/if}
                 <ShareMenu />
@@ -57,7 +56,7 @@
 
             {#snippet lower()}
                 <div class="row">
-                    <a use:link class="warn" role="button" href="/user/song-repo">
+                    <a use:link class="warn" role="button" href="/@song-repo">
                         <span>
                             <i class="bx bxs-coffee"></i> {$t('menu.donate')}
                         </span>

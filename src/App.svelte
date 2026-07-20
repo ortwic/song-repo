@@ -1,6 +1,6 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
-    import Router from 'svelte-spa-router';
+    import { Router } from '@keenmate/svelte-spa-router';
     import Menu from './components/menus/Index.svelte';
     import Context from './components/Context.svelte';
     import Snackbar from './components/ui/Snackbar.svelte';
@@ -69,7 +69,7 @@
 <Context>
     <Menu />
 
-    <Router {routes} />
+    <Router {routes} restoreScrollState={true} />
 
     <Snackbar />
 </Context>

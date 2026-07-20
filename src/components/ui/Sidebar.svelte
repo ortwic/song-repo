@@ -1,7 +1,7 @@
 <script lang="ts">
     import '../../styles/menu.scss';
     import { t } from 'svelte-i18n';
-    import { location, push } from 'svelte-spa-router';
+    import { location, push } from '@keenmate/svelte-spa-router';
     import { slide } from 'svelte/transition';
     import { swipeable } from '@svelte-put/swipeable';
     import { menuContext } from '../../store/menu-context.svelte';
@@ -33,8 +33,8 @@
 >
     <Titlebar target="hidden">
         {#snippet controls()}
-            {#if $location !== '/'}
-            <button class="titlebar-button" data-close title={$t('start.hello')} onclick={() => push('/')}>
+            {#if location() !== '/'}
+            <button class="titlebar-button" title={$t('start.hello')} data-close onclick={() => push('/')}>
                 {#if $currentUser}
                 <i class="item bx bx-user-circle"></i>
                 {:else}

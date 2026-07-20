@@ -2,7 +2,7 @@
     import { t } from 'svelte-i18n';
     import { fly } from 'svelte/transition';
     import { cubicOut } from 'svelte/easing';
-    import { link } from 'svelte-spa-router';
+    import { link } from '@keenmate/svelte-spa-router';
     import { swipeable } from '@svelte-put/swipeable';
     import RecentSongs from '../components/dashboard/RecentSongs.svelte';
     import Footer from '../components/ui/Footer.svelte';

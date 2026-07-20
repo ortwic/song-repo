@@ -1,6 +1,6 @@
 <script lang='ts'>
     import { t } from 'svelte-i18n';
-    import { link } from 'svelte-spa-router';
+    import { link } from '@keenmate/svelte-spa-router';
     import TitlebarMenu from '../components/menus/TitlebarMenu.svelte';
     import Profile from '../components/settings/Profile.svelte';
     import LinkHub from '../components/settings/LinkHub.svelte';

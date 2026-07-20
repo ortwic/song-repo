@@ -1,8 +1,8 @@
 <script lang="ts">
     import { marked } from 'marked';
     import { t } from 'svelte-i18n';
-    import { onMount } from 'svelte';
-    import { push, location, querystring } from 'svelte-spa-router';
+    import { untrack } from 'svelte';
+    import { push, location, querystring } from '@keenmate/svelte-spa-router';
     import type { PostContent, Post } from '../../model/post.model';
     import { currentUser } from '../../service/user/auth.service';
     import { logPageView } from '../../store/notification.store';
@@ -35,16 +35,12 @@
 
     registerDialog('BlogPostDialog', showDialog);
     
-    onMount(() => {
-        const unsubscribe = location.subscribe((loc) => {
-            if (visible) {
-                visible = loc.indexOf(post.id) > 0;
-            }
-        });
-
-        return () => {
-            unsubscribe();
-        };
+    $effect(() => {
+        const loc = location();
+        if (untrack(() => visible)) {
+            // history.back() was invoked
+            visible = loc.indexOf(post.id) > 0;
+        }
     });
 
     export async function showDialog(args?: Post) {
@@ -56,7 +52,7 @@
 
     function handleClose(): void {
         visible = false;
-        const query = $querystring && `?${$querystring}` || '';
+        const query = querystring() && `?${querystring()}` || '';
         push('/blog' + query);
     }
 </script>

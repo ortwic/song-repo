@@ -2,7 +2,7 @@
     import 'tabulator-tables/dist/css/tabulator_bulma.min.css';
     import '../styles/table.scss';
     import { t } from 'svelte-i18n';
-    import { push } from 'svelte-spa-router';
+    import { push } from '@keenmate/svelte-spa-router';
     import { firstValueFrom } from 'rxjs';
     import type { CellComponent, CellEditEventCallback } from 'tabulator-tables';
     import type { ColumnDefinition } from '../components/table/tabulator/types';
@@ -24,11 +24,11 @@
     import { settings } from '../store/user-settings.svelte';
 
     interface Props {
-        params?: { id?: string };
+        routeParams?: { id?: string };
     }
 
     let { 
-        params = {}
+        routeParams = {}
     }: Props = $props();
 
     const service = new SnippetService();
@@ -69,7 +69,7 @@
     ];
 
     $effect(() => {
-        openSnippet(params?.id);
+        openSnippet(routeParams?.id);
     });
 
     async function openSnippet(id: string | undefined) {

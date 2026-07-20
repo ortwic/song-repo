@@ -1,6 +1,6 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
-    import { link, push } from 'svelte-spa-router';
+    import { link, push } from '@keenmate/svelte-spa-router';
     import { onMount } from 'svelte';
     import { combineLatest } from 'rxjs';
     import { type DialogAction, openDialog } from '../dialog-context.svelte';

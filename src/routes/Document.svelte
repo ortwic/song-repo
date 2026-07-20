@@ -1,6 +1,6 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
-    import { link, push } from 'svelte-spa-router';
+    import { link, push } from '@keenmate/svelte-spa-router';
     import { content } from '../store/menu-context.svelte';
     import { interceptInternalLinks } from '../components/actions/intercept-internal-links.action';
     import Footer from '../components/ui/Footer.svelte';
@@ -9,16 +9,16 @@
     import NotFound from './NotFound.svelte';
     
     interface Props {
-        params?: { id?: string };
+        routeParams?: { id?: string };
     }
 
-    let { params = {} }: Props = $props();
+    let { routeParams = {} }: Props = $props();
 
-    const page = $derived(getPage(params.id));
+    const page = $derived(getPage(routeParams.id));
 </script>
 
 <main use:content={{ overflow: 'auto' }}>
-{#key params.id}
+{#key routeParams.id}
     <Titlebar onClose={() => push('/')}>
         <i class="bx bx-file"></i>&nbsp; {page?.title ?? $t('notfound.title')}
     </Titlebar>

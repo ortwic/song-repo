@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { link, querystring } from 'svelte-spa-router';
+    import { link, querystring } from '@keenmate/svelte-spa-router';
     import { t } from 'svelte-i18n';
     import { openDialog } from '../components/dialog-context.svelte';
     import TitlebarMenu from '../components/menus/TitlebarMenu.svelte';
@@ -11,15 +11,15 @@
     import { logPageView } from '../store/notification.store';
     
     interface Props {
-        params?: { slug?: string };
+        routeParams?: { slug?: string };
     }
 
     let { 
-        params = {}
+        routeParams = {}
     }: Props = $props();
 
     const width = $derived($orientation === 'landscape' ? 120 : 80);
-    const tag = $derived(new URLSearchParams($querystring).get('tag'));
+    const tag = $derived(new URLSearchParams(querystring()).get('tag'));
 
     let posts = $state<Post[]>([]);
 
@@ -32,8 +32,8 @@
     });
 
     $effect(() => {
-        if (params?.slug) {
-            const subscription = blogService.bySlugOrId(params?.slug)
+        if (routeParams?.slug) {
+            const subscription = blogService.bySlugOrId(routeParams?.slug)
                 .subscribe((post) => openDialog('BlogPostDialog', post));
             return () => subscription.unsubscribe();
         }
@@ -44,7 +44,7 @@
     });
 
     function more(post: Post) {
-        const query = $querystring && `?${$querystring}` || '';
+        const query = querystring() && `?${querystring()}` || '';
         return `/blog/${post.slug ?? post.id}${query}`;
     }
 </script>
@@ -67,7 +67,7 @@
             <h2>{post.title}</h2>
             <summary>
                 <span class="content">{post.excerpt}</span>
-                <a role="button" use:link class="clear more" href={more(post)}>
+                <a use:link class="clear more" href={more(post)}>
                     {$t('blog.more')}
                 </a>
             </summary>

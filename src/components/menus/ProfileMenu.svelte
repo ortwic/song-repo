@@ -1,6 +1,6 @@
 <script lang='ts'>
     import { t } from 'svelte-i18n';
-    import { push } from 'svelte-spa-router';
+    import { push } from '@keenmate/svelte-spa-router';
     import { map } from 'rxjs';
     import UserIcon from '../ui/Avatar.svelte';
     import { currentProfile } from '../../store/profile.store';

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
-    import { link, push } from 'svelte-spa-router';
+    import { link, push } from '@keenmate/svelte-spa-router';
     import { blogService } from '../../service/common/blog.service';
     import TagCloud from '../ui/elements/TagCloud.svelte';
     import { onMount } from 'svelte';

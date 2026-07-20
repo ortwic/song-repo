@@ -1,6 +1,6 @@
 <script lang="ts">
     import { t } from "svelte-i18n";
-    import { link, location } from "svelte-spa-router";
+    import { link, location } from "@keenmate/svelte-spa-router";
     import { currentMenu } from "../../store/app.store";
     
     let {
@@ -33,32 +33,32 @@
     <span class="text">
         {@render children?.()}
     </span>
-    {#if $location !== '/'}
+    {#if location() !== '/'}
     <a use:link class="titlebar-button" href="/" title="{ $t('start.hello') }">
         <i class="bx bx-user-circle"></i>
     </a> 
     {/if}
-    {#if !$location.startsWith('/songs')}
+    {#if !location().startsWith('/songs')}
     <a use:link class="titlebar-button" href="/songs" title="{ $t('menu.repo') }">
         <i class="bx bxs-playlist"></i>
     </a> 
     {/if}
-    {#if !$location.startsWith('/snippets')}
+    {#if !location().startsWith('/snippets')}
     <a use:link class="titlebar-button" href="/snippets" title="{ $t('menu.snippets') }">
         <i class="bx bx-bulb"></i>
     </a> 
     {/if}
-    {#if !$location.startsWith('/blog')}
+    {#if !location().startsWith('/blog')}
     <a use:link class="titlebar-button" href="/blog" title="{ $t('menu.howto') }">
         <i class="bx bx-book-open"></i>
     </a> 
     {/if}
-    {#if $location !== '/events'}
+    {#if location() !== '/events'}
     <a use:link class="titlebar-button" href="/events" title="{ $t('menu.events') }">
         <i class="bx bx-calendar"></i>
     </a>
     {/if}
-    {#if $location !== '/settings'}
+    {#if location() !== '/settings'}
     <a use:link class="titlebar-button" href="/settings" title={$t('settings.title')}>
         <i class="bx bx-cog"></i>
     </a>

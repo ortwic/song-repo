@@ -29,15 +29,15 @@
     import { content } from '../store/menu-context.svelte';
     import { showError, showInfo } from '../store/notification.store';
     import { settings } from '../store/user-settings.svelte';
-
+    
     interface Props {
-        params?: { uid?: string };
+        routeParams?: { uid?: string };
     }
 
-    let { params = {} }: Props = $props();
+    let { routeParams = {} }: Props = $props();
 
-    const readonly = $derived(!!params.uid);
-    const sharedUid = $derived(params.uid);
+    const readonly = $derived(!!routeParams.uid);
+    const sharedUid = $derived(routeParams.uid?.slice(1));
     const donationState = $derived(new DonationReminderState(sharedUid));
     const service = $derived(new SongService(sharedUid));
     const requestService = $derived(new SongRequestService(service));

@@ -17,7 +17,7 @@
         if (profile) {
             shareLink = profile.alias 
                 ? `${window.location.origin}/@${profile.alias}` 
-                : `${window.location.origin}/#/songs/@${profile.id}`;
+                : `${window.location.origin}/songs/${profile.id}`;
         }
     });
 

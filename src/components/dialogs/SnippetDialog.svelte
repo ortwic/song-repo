@@ -1,7 +1,7 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
-    import { onMount } from 'svelte';
-    import { push, location } from 'svelte-spa-router';
+    import { untrack } from 'svelte';
+    import { push, location } from '@keenmate/svelte-spa-router';
     import NavigableDialog from './NavigableDialog.svelte';
     import { createMidiPlayer } from '../actions/midi-player.svelte';
     import { type NavigationContext, registerDialog } from '../dialog-context.svelte';
@@ -67,17 +67,12 @@
 
     registerDialog('SnippetDialog', showDialog);
 
-    onMount(() => {
-        const unsubscribe = location.subscribe((loc) => {
-            if (visible && !loc.endsWith(snippet.id)) {
-                // history.back() was invoked
-                hideDialog();
-            }
-        });
-
-        return () => {
-            unsubscribe();
-        };
+    const active = $derived(location().endsWith(snippet?.id));
+    $effect(() => {
+        if (!active && untrack(() => visible)) {
+            // history.back() was invoked
+            hideDialog();
+        }
     });
 
     export function showDialog(ctx: NavigationContext<UserSnippet>): Promise<void> {

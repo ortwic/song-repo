@@ -1,6 +1,19 @@
+v0.7.2 (2026-07-20)
+-------------------
+- added song-request feature for anyone
+- added live-session feature for song-requests
+- config links for donation placement 
+- updated svelte-spa-router to svelte 5
+- generate random avatar
+
 v0.7.1 (2026-07-02)
 -------------------
+- added snippet view for ideas, riffs, etudes etc.
 - added Metronome component
+- added opensheetmusicdisplay
+- added simple midi playback with tone.js
+- optimized initial load time for UserPage.svelte
+- refactorded Dialog-Context
 
 v0.7.0 (2026-06-18)
 -------------------

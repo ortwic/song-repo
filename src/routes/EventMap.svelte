@@ -1,6 +1,5 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import { params as params$ } from "svelte-spa-router";
     import { t } from "svelte-i18n";
     import { Loader } from '@googlemaps/js-api-loader';
     import TitlebarMenu from "../components/menus/TitlebarMenu.svelte";
@@ -8,6 +7,14 @@
     import { getEvents } from "../service/common/event.service";
     import { content } from "../store/menu-context.svelte";
     import { showError } from "../store/notification.store";
+
+    interface Props {
+        routeParams?: { id?: string };
+    }
+
+    let { 
+        routeParams = {}
+    }: Props = $props();
 
     let mapContainer: HTMLDivElement = $state();
     let infoContents: Record<string, HTMLDivElement> = $state({});
@@ -86,17 +93,15 @@
         events$.subscribe(async (events) => {
             if (mapContainer) {
                 const map = await initMap(mapContainer, events);
-                params$.subscribe((p) => {
-                    const event = events.find(e => e.id === p?.id);
-                    if (event) {
-                        if (event.place?.geometry) {
-                            centerViewport(map, event);
-                            showInfoWindow(map, event);
-                        } else {
-                            showError(event.place.name);
-                        }
-                    } 
-                });                
+                const event = events.find(e => e.id === routeParams?.id);
+                if (event) {
+                    if (event.place?.geometry) {
+                        centerViewport(map, event);
+                        showInfoWindow(map, event);
+                    } else {
+                        showError(event.place.name);
+                    }
+                }           
             }
         });
     });
