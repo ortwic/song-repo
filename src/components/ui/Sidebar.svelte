@@ -16,22 +16,16 @@
         onclose: () => void;
     }
 
-    const offset = window.innerWidth - document.querySelector('main').clientWidth;
-
     let { children, lower, footer, onclose }: Props = $props();
-
-    function hide() {
-        onclose();
-    }
 </script>
 
 <aside
     use:swipeable={{ direction: 'right', threshold: '1rem' }}
-    onswipeend={hide}
+    onswipeend={onclose}
     transition:slide={{ duration: 200, axis: 'x' }}
     style:right="{menuContext.offsetWidth}px"
 >
-    <Titlebar target="hidden">
+    <Titlebar onClose={onclose}>
         {#snippet controls()}
             {#if location() !== '/'}
             <button class="titlebar-button" title={$t('start.hello')} data-close onclick={() => push('/')}>

@@ -2,7 +2,6 @@
     import { get } from 'svelte/store';
     import { swipeable } from '@svelte-put/swipeable';
     import { menuContext } from '../../../store/menu-context.svelte';
-    import type { MenuTarget } from '../../../model/app.types';
     import { currentMenu } from '../../../store/app.store';
 
     interface Props {
@@ -19,19 +18,16 @@
         }
     }
 
-    function navigate(ev: SubmitEvent) {
+    function handleDataClose(ev: SubmitEvent) {
         ev.preventDefault();
 
-        const target = ev.submitter.getAttribute('data-target') as MenuTarget;
-        if (target) {
-            currentMenu.set(target);
-        } else if (ev.submitter.getAttribute('data-close') !== null) {
+        if (ev.submitter.getAttribute('data-close') !== null) {
             currentMenu.set('hidden');
         }
     }
 </script>
 
-<form onsubmit={navigate}>
+<form onsubmit={handleDataClose}>
     <header 
         use:swipeable={{ direction: 'x', threshold: '30px' }} 
         onswipeend={toggle}

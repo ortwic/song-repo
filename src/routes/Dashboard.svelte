@@ -66,7 +66,7 @@
             <RecentSongs />
         </p>
         <div style="text-align: right;">
-            <button class="clear" title={$t('profile.sign-out')} data-close onclick={signOut}>
+            <button class="clear" title={$t('profile.sign-out')} onclick={signOut}>
                 <i class="bx bx-log-out-circle"></i> {$t('profile.sign-out')}
             </button>
         </div>

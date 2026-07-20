@@ -12,24 +12,20 @@
     import BlogMenu from './BlogMenu.svelte';
     import EventListMenu from './EventListMenu.svelte';
     import Sidebar from '../ui/Sidebar.svelte';
-    import { tableContext } from '../table/table.svelte';
     import MenuDrawer from '../ui/elements/MenuDrawer.svelte';
     import { currentUser } from '../../service/user/auth.service';
     import { currentMenu } from '../../store/app.store';
+    import { tableContext } from '../table/table.svelte';
 
     const version = `${import.meta.env.PACKAGE_NAME} ${import.meta.env.PACKAGE_VERSION}`;
     const isDashboard = $derived(location() === '/');
     const isBlogView = $derived(location().startsWith('/blog'));
     const isEventView = $derived(location().startsWith('/events'));
-
-    function hide() {
-        currentMenu.set('hidden');
-    }
 </script>
 
 <MenuDrawer>
     {#if $currentMenu === 'dynamic'}
-        <Sidebar onclose={hide}>
+        <Sidebar onclose={() => currentMenu.set('hidden')}>
             {#if $currentUser}
                 <ProfileMenu
                     email={$currentUser.email}
@@ -68,7 +64,7 @@
             {/snippet}
         </Sidebar>
     {:else if $currentMenu === 'signup'}
-        <Sidebar onclose={hide}>
+        <Sidebar onclose={() => currentMenu.set('dynamic')}>
             <SignupMenu />
             {#snippet footer()}
                 {version}

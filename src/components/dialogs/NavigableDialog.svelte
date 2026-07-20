@@ -3,13 +3,11 @@
     import type { Snippet } from 'svelte';
     import DialogBase from './DialogBase.svelte';
     import type { DialogAction, DialogSize } from '../dialog-context.svelte';
-    import type { MenuTarget } from '../../model/app.types';
 
     interface Props {
         items: T[];
         currentIndex: number;
         size: DialogSize;
-        target?: MenuTarget;
         title?: string;
         visible?: boolean;
         header?: Snippet;
@@ -23,7 +21,6 @@
         items,
         currentIndex = $bindable(),
         size,
-        target,
         title,
         visible,
         header,
@@ -54,7 +51,7 @@
     }
 </script>
 
-<DialogBase {size} {target} {title} {visible} type="view" {header} {controls} onClose={() => onClose({})}>
+<DialogBase {size} {title} {visible} type="view" {header} {controls} onClose={() => onClose({})}>
     {#snippet footer()}
         <div class="row">
             <button onclick={prev} disabled={!hasPrev}>
