@@ -4,6 +4,7 @@
     import type { LinkPlacement, UserLink } from '../../model/user.model';
     import { UserLinkService } from '../../service/user/user-link.service';
     import { showError } from '../../store/notification.store';
+    import { nextOrder, swapOrder } from '../../utils/orderable';
     import LinkFormDialog from './LinkFormDialog.svelte';
 
     let {
@@ -42,22 +43,13 @@
     }
 
     async function moveLink(index: number, direction: -1 | 1) {
-        const links = $links$;
-        const swapIndex = index + direction;
-        if (swapIndex < 0 || swapIndex >= links.length) return;
-
-        const a = links[index];
-        const b = links[swapIndex];
-        const orderA = a.order ?? index;
-        const orderB = b.order ?? swapIndex;
-
-        try {
-            await Promise.all([
-                linkService.setLink({ id: a.id, order: orderB }),
-                linkService.setLink({ id: b.id, order: orderA }),
-            ]);
-        } catch (error) {
-            showError(error.message);
+        const updates = swapOrder($links$, index, direction);
+        if (updates) {
+            try {
+                await Promise.all(updates.map((update) => linkService.setLink(update)));
+            } catch (error) {
+                showError(error.message);
+            }
         }
     }
 </script>
@@ -66,16 +58,16 @@
 <ul class="link-list">
     {#each $links$ as link, i (link.id)}
         <li class="link-item" animate:flip={{ duration: 150 }}>
-                <div class="link-row">
-                    <div class="order-controls">
-                        <button class="sm clear" disabled={i === 0}
-                            title={$t('settings.move-up')} onclick={() => moveLink(i, -1)}>
-                            <i class="icon bx bx-chevron-up"></i>
-                        </button>
-                        <button class="sm clear" disabled={i === $links$.length - 1}
-                            title={$t('settings.move-down')} onclick={() => moveLink(i, 1)}>
-                            <i class="icon bx bx-chevron-down"></i>
-                        </button>
+            <div class="link-row">
+                <div class="order-controls">
+                    <button class="sm clear" disabled={i === 0}
+                        title={$t('settings.move-up')} onclick={() => moveLink(i, -1)}>
+                        <i class="icon bx bx-chevron-up"></i>
+                    </button>
+                    <button class="sm clear" disabled={i === $links$.length - 1}
+                        title={$t('settings.move-down')} onclick={() => moveLink(i, 1)}>
+                        <i class="icon bx bx-chevron-down"></i>
+                    </button>
                 </div>
                 <span class="link-icon">
                     {#if link.icon}
@@ -121,7 +113,7 @@
     {uid}
     bind:visible={dialogVisible}
     link={editingLink}
-    nextOrder={$links$?.length ?? 0}
+    nextOrder={nextOrder($links$ ?? [])}
 />
 
 <style lang="scss">
