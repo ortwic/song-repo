@@ -19,7 +19,7 @@
     import type { UserSnippet } from '../model/snippet.model';
     import SnippetService, { SNIPPETS_SETTINGS_ID } from '../service/user/snippet.service';
     import { orientation } from '../store/media.store';
-    import { content } from '../store/menu-context.svelte';
+    import { menu } from '../store/menu-context.svelte';
     import { showError } from '../store/notification.store';
     import { settings } from '../store/user-settings.svelte';
 
@@ -114,7 +114,7 @@
     <title>{$t('menu.snippets')} | {import.meta.env.PACKAGE_NAME}</title>
 </svelte:head>
 
-<main use:content>
+<main use:menu.offset>
     <TitlebarMenu minimal={true} />
     <LoadingBar isLoading={!$data$}>
         {#if $orientation === 'portrait'}

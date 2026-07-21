@@ -2,7 +2,7 @@
     import { t } from 'svelte-i18n';
     import { format } from 'fecha';
     import { stores } from '../service/base/firestore.service';
-    import { content } from '../store/menu-context.svelte';
+    import { menu } from '../store/menu-context.svelte';
     import { showError } from '../store/notification.store';
     import TitlebarMenu from '../components/menus/TitlebarMenu.svelte';
 
@@ -60,11 +60,11 @@
     }
 </style>
 
-<main use:content={{ overflow: 'auto' }} class="dialog">
+<main use:menu.offset class="scrollable">
     <TitlebarMenu>
         <i class="bx bx-mail-send"></i>&nbsp; { $t('feedback.submit')}
     </TitlebarMenu>
-    <form onsubmit={handleForm}>
+    <form class="dialog" onsubmit={handleForm}>
         <div class="section">
             {#if !sent}
             <p>{ $t('feedback.note')}</p>

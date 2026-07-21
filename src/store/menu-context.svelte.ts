@@ -1,55 +1,65 @@
-type MenuTarget = 'hidden' | 'dynamic' | 'signup';
+import type { Component } from 'svelte';
+import { routeContext } from '@keenmate/svelte-spa-router/helpers/route-metadata';
 
 function createMenuContext() {
-    let menuState = $state<MenuTarget>('hidden');
+    let visible = $state(false);
+    let submenus = $state<Component[]>(undefined);
     let offsetWidth = $state(0);
-    
-    const getTarget = () => menuState;
-    const setTarget = (target: MenuTarget) => menuState = target;
 
-    function updateOffsetWidth(node: HTMLElement): void {
-        offsetWidth = window.innerWidth - node.clientWidth;
+    function computeMenuOffset(node: HTMLElement) {
+        const updateOffset = (): void => {
+            offsetWidth = window.innerWidth - node.clientWidth;
+        };
+
+        updateOffset();
+
+        const resizeObserver = new ResizeObserver(() => updateOffset());
+        resizeObserver.observe(node);
+
+        window.addEventListener('resize', updateOffset);
+
+        return {
+            destroy(): void {
+                resizeObserver.disconnect();
+                window.removeEventListener('resize', updateOffset);
+            },
+        };
     }
 
     return {
+        get visible(): boolean {
+            return visible;
+        },
+        get shouldHideLogin(): boolean {
+            return routeContext()?.hideLogin ?? false;
+        },
+        get context(): Component[] {
+            return routeContext()?.menus ?? [];
+        },
+        get userContext(): Component[] {
+            return routeContext()?.userMenus ?? [];
+        },
+        get submenus(): Component[] {
+            return submenus;
+        },
         get offsetWidth(): number {
             return offsetWidth;
         },
-        updateOffsetWidth,
-        getTarget,
-        isVisible: () => getTarget() !== 'hidden',
-        toggleMenu: () => getTarget() !== 'hidden' ? setTarget('hidden') : setTarget('dynamic'),
-        hideMenu: () => setTarget('hidden'),
-        showMenu: () => setTarget('dynamic'),
-        showSignup: () => setTarget('signup')
-    };
-}
-
-export const menuContext = createMenuContext();
-
-type ContentParams = {
-    overflow: 'hidden' | 'auto' | 'scroll' | 'visible';
-};
-
-export function content(node: HTMLElement, params: ContentParams = { overflow: 'hidden' }) {
-    node.style.overflow = params.overflow;
-    menuContext.updateOffsetWidth(node);
-
-    const resizeObserver = new ResizeObserver(() => {
-        menuContext.updateOffsetWidth(node);
-    });
-    resizeObserver.observe(node);
-
-    function handleWindowResize(): void {
-        menuContext.updateOffsetWidth(node);
-    }
-
-    window.addEventListener('resize', handleWindowResize);
-
-    return {
-        destroy(): void {
-            resizeObserver.disconnect();
-            window.removeEventListener('resize', handleWindowResize);
+        offset: computeMenuOffset,
+        toggle: () => visible = !visible,
+        back: () => {
+            if (submenus) {
+                submenus = undefined;
+            } else {
+                visible = false;
+            }
         },
+        show: (target?: Component) => {
+            submenus = target ? [target] : undefined;
+            visible = true;
+        }
     };
 }
+
+export const menu = createMenuContext();
+

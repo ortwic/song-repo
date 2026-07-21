@@ -1,7 +1,7 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
     import { link, push } from '@keenmate/svelte-spa-router';
-    import { content } from '../store/menu-context.svelte';
+    import { menu } from '../store/menu-context.svelte';
     import { interceptInternalLinks } from '../components/actions/intercept-internal-links.action';
     import Footer from '../components/ui/Footer.svelte';
     import Titlebar from '../components/ui/elements/Titlebar.svelte';
@@ -17,7 +17,7 @@
     const page = $derived(getPage(routeParams.id));
 </script>
 
-<main use:content={{ overflow: 'auto' }}>
+<main use:menu.offset class="scrollable">
 {#key routeParams.id}
     <Titlebar onClose={() => push('/')}>
         <i class="bx bx-file"></i>&nbsp; {page?.title ?? $t('notfound.title')}

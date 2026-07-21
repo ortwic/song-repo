@@ -4,28 +4,28 @@
     import { location, push } from '@keenmate/svelte-spa-router';
     import { slide } from 'svelte/transition';
     import { swipeable } from '@svelte-put/swipeable';
-    import { menuContext } from '../../store/menu-context.svelte';
     import { currentUser } from '../../service/user/auth.service';
     import NavButton from './elements/NavButton.svelte';
     import Titlebar from './elements/Titlebar.svelte';
 
     interface Props {
+        offset: number;
         children?: import('svelte').Snippet;
         lower?: import('svelte').Snippet;
         footer?: import('svelte').Snippet;
-        onclose: () => void;
+        onClose: () => void;
     }
 
-    let { children, lower, footer, onclose }: Props = $props();
+    let { offset, children, lower, footer, onClose }: Props = $props();
 </script>
 
 <aside
     use:swipeable={{ direction: 'right', threshold: '1rem' }}
-    onswipeend={onclose}
+    onswipeend={onClose}
     transition:slide={{ duration: 200, axis: 'x' }}
-    style:right="{menuContext.offsetWidth}px"
+    style:right="{offset}px"
 >
-    <Titlebar onClose={onclose}>
+    <Titlebar onClose={onClose}>
         {#snippet controls()}
             {#if location() !== '/'}
             <button class="titlebar-button" title={$t('start.hello')} data-close onclick={() => push('/')}>

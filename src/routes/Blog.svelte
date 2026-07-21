@@ -7,7 +7,7 @@
     import type { Post } from '../model/post.model';
     import { blogService } from '../service/common/blog.service';
     import { orientation } from '../store/media.store';
-    import { content } from '../store/menu-context.svelte';
+    import { menu } from '../store/menu-context.svelte';
     import { logPageView } from '../store/notification.store';
     
     interface Props {
@@ -53,7 +53,7 @@
     <title>{$t('menu.howto')} blog | {import.meta.env.PACKAGE_NAME}</title>
 </svelte:head>
 
-<main use:content={{ overflow: 'auto' }}>
+<main use:menu.offset class="scrollable">
     <TitlebarMenu>
         <i class="bx bx-book-open"></i>&nbsp; {$t('blog.title')}
     </TitlebarMenu>

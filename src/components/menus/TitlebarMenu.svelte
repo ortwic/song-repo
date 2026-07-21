@@ -1,7 +1,7 @@
 <script lang="ts">
     import { t } from "svelte-i18n";
     import { link, location } from "@keenmate/svelte-spa-router";
-    import { menuContext } from "../../store/menu-context.svelte";
+    import { menu } from "../../store/menu-context.svelte";
     
     let {
         minimal = false,
@@ -13,7 +13,7 @@
     
     function toggleMenu(e: Event) {
         (e.target as HTMLElement).blur();
-        menuContext.toggleMenu();
+        menu.toggle();
     }
 
 </script>
@@ -21,7 +21,7 @@
 
 {#if minimal}
     <button class="clear float" onclick={toggleMenu}
-        title={menuContext.isVisible() ? $t('menu.close') : $t('menu.open')}>
+        title={menu.visible ? $t('menu.close') : $t('menu.open')}>
         <i class="icon shadow bx bx-sidebar bx-flip-horizontal"></i>
     </button>
 {:else}

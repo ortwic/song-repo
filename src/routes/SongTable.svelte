@@ -26,7 +26,7 @@
     import SessionService from '../service/user/user-session.service';
     import SongService, { SONG_SETTINGS_ID } from '../service/user/user-song.service';
     import { orientation } from '../store/media.store';
-    import { content } from '../store/menu-context.svelte';
+    import { menu } from '../store/menu-context.svelte';
     import { showError, showInfo } from '../store/notification.store';
     import { settings } from '../store/user-settings.svelte';
     
@@ -181,7 +181,7 @@
     <title>{$t('menu.repo')} | {import.meta.env.PACKAGE_NAME}</title>
 </svelte:head>
 
-<main use:content>
+<main use:menu.offset>
     <TitlebarMenu minimal={true} />
     <LoadingBar isLoading={!$entities}>
         <FileDrop onEnter={() => showInfo($t('songs.import'))} onAddJson={(detail) => importJSON(detail)}>

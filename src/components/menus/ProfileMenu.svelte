@@ -1,36 +1,31 @@
 <script lang='ts'>
+    import { combineLatest } from 'rxjs';
     import { t } from 'svelte-i18n';
     import { push } from '@keenmate/svelte-spa-router';
-    import { map } from 'rxjs';
     import UserIcon from '../ui/Avatar.svelte';
     import { currentProfile } from '../../store/profile.store';
+    import { currentUser } from '../../service/user/auth.service';
 
-    interface Props {
-        displayName: string;
-        photoURL: string;
-        email: string;
-    }
+    let name = $state('');
+    let photoURL = $state('');
 
-    let { displayName, photoURL, email }: Props = $props();
-
-    const name = currentProfile.pipe(
-        map((profile) => {
-            if (profile.name) {
-                return profile.name;
+    $effect(() => {
+        const sub = combineLatest([currentUser, currentProfile]).subscribe(
+            ([user, profile]) => {
+                name = profile.name ?? user.displayName ?? user.email.split('@').at(0);
+                photoURL = profile?.photoURL ?? user.photoURL ?? '';
             }
-            if (displayName) {
-                return displayName;
-            }
-            return email.split('@').at(0);
-        })
-    );
+        );
+
+        return () => !sub.closed && sub?.unsubscribe();
+    });
 </script>
 
 <section class="menu">
     <div class="row">
-        <button class="profil" data-close title="{ $t('start.hello') } {$name ?? $t('start.anonymous')}" onclick={() => push('/')}>
-            <UserIcon photoURL={$currentProfile.photoURL ?? photoURL} size="50px" />
-            <span class="name">{$name}</span>
+        <button class="profil" data-close title="{ $t('start.hello') } {name ?? $t('start.anonymous')}" onclick={() => push('/')}>
+            <UserIcon photoURL={photoURL} size="50px" />
+            <span class="name">{name}</span>
         </button>
     </div>
 </section>

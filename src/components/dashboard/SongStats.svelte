@@ -7,7 +7,7 @@
     import { settings, saveSettings } from '../../store/user-settings.svelte';
     import SongService from '../../service/user/user-song.service';
     import { createSongEntity } from '../../domain/song.entity';
-    import { menuContext } from '../../store/menu-context.svelte';
+    import { menu } from '../../store/menu-context.svelte';
 
     const EMPTY_STATS = {
         todo: 0,
@@ -75,7 +75,7 @@
         ev.preventDefault();
         settings.dashboard.expands.showRecentFilter = true;
         saveSettings('dashboard', settings.dashboard);
-        menuContext.showMenu();
+        menu.show();
     }
 
     const scrollToSection = (id: string) => {

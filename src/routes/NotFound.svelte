@@ -1,6 +1,6 @@
 <script lang="ts">
     import { t, json } from 'svelte-i18n';
-    import { content } from '../store/menu-context.svelte';
+    import { menu } from '../store/menu-context.svelte';
     
     interface Props {
         children?: import('svelte').Snippet;
@@ -12,7 +12,7 @@
     const no = Math.floor(Math.random() * Object.keys(messages).length );
 </script>
 
-<div use:content>
+<main use:menu.offset class="scrollable">
     <h2>
         <i class="bx bx-error"></i>
         404 &ndash; { $t('notfound.title') }
@@ -25,18 +25,18 @@
         {/if}
     </h4>
     <img src="error.jpg" title="{$t('notfound.title')}" alt="{$t('notfound.title')}">
-</div>
+</main>
 
 <style>
+    main {
+        margin: 1em;
+    }
+
     h2 {
         display: flex;
         align-items: center;
         gap: 0.5em;
         color: var(--accent);
-    }
-
-    div {
-        margin: 1em;
     }
 
     img {

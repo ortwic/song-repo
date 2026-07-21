@@ -57,8 +57,12 @@ body {
 }
 
 main {
-    hyphens: auto;
     height: 100vh;
+
+    &.scrollable {
+        hyphens: auto;
+        overflow: auto;
+    }
 }
 
 a {

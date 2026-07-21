@@ -13,7 +13,7 @@
     import TitlebarMenu from '../components/menus/TitlebarMenu.svelte';
     import { getPage } from '../service/common/page.service';
     import { authService, currentUser } from '../service/user/auth.service';
-    import { content, menuContext } from '../store/menu-context.svelte';
+    import { menu } from '../store/menu-context.svelte';
     import { currentProfile } from '../store/profile.store';
 
     const INFO_KEY = 'song-repo_hide-dashboard-info';
@@ -26,7 +26,7 @@
 
     async function signOut() {
         await authService.signOut();
-        menuContext.showMenu();
+        menu.show();
     }
 
     const dashboard = getPage('dashboard');
@@ -36,7 +36,7 @@
     <title>Dashboard | {import.meta.env.PACKAGE_NAME}</title>
 </svelte:head>
 
-<main use:content={{ overflow: 'auto' }}>
+<main use:menu.offset class="scrollable">
     <TitlebarMenu>
         {#if $currentUser}
             <i class="bx bx-user-circle"></i>&nbsp; { $t('start.hello')} { $currentProfile.name ?? $currentProfile.alias }

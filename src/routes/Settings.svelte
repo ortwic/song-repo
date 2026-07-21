@@ -12,7 +12,7 @@
     import Footer from '../components/ui/Footer.svelte';
     import { authService, currentUser } from '../service/user/auth.service';
     import UserService from '../service/user/user.service';
-    import { content } from '../store/menu-context.svelte';
+    import { menu } from '../store/menu-context.svelte';
     import { showError, showInfo } from '../store/notification.store';
     import { isEmailPwdUser, isGoogleUser } from '../store/profile.store';
     import '../styles/menu.scss';
@@ -37,7 +37,7 @@
     }
 </script>
 
-<main use:content={{ overflow: 'auto' }}>
+<main use:menu.offset class="scrollable">
     <TitlebarMenu>
         <i class="bx bx-cog"></i>&nbsp; {$t('settings.title')}
     </TitlebarMenu>

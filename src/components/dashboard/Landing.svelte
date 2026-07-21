@@ -1,11 +1,7 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
-    import { link } from '@keenmate/svelte-spa-router';
-    import { menuContext } from '../../store/menu-context.svelte';
-
-    function signup() {
-        menuContext.showSignup();
-    }
+    import { menu } from '../../store/menu-context.svelte';
+    import SignupMenu from '../menus/SignupMenu.svelte';
 </script>
 
 <section class="landing">
@@ -16,12 +12,12 @@
             <em>{$t('start.headline_em')}</em>
         </h1>
         <p class="sub">{$t('start.sub')}</p>
-        <a use:link role="button" class="primary cta" href="/" onclick={signup}>
+        <button class="primary cta" title="{$t('menu.login.signup')}" onclick={() => menu.show(SignupMenu)}>
             <i class="bx bxs-edit" aria-hidden="true"></i>
             {$t('menu.login.signup')}
-        </a>
+        </button>
     </div>
-
+    
     <hr class="divider" />
 
     <div class="grid-auto-fit">

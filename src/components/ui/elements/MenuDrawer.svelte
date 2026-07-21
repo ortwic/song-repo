@@ -1,19 +1,19 @@
 <script lang="ts">
     import { swipeable } from '@svelte-put/swipeable';
-    import { menuContext } from '../../../store/menu-context.svelte';
 
     interface Props {
+        offset: number;
         onOpen: () => void;
         children?: import('svelte').Snippet;
     }
 
-    let { children, onOpen }: Props = $props();
+    let { offset, children, onOpen }: Props = $props();
 </script>
 
 <header 
     use:swipeable={{ direction: 'x', threshold: '30px' }} 
     onswipeend={onOpen}
-    style:right="{menuContext.offsetWidth}px">
+    style:right="{offset}px">
 </header>
 
 <nav>

@@ -4,38 +4,10 @@
     import AppMenu from './components/menus/AppMenu.svelte';
     import Context from './components/Context.svelte';
     import Snackbar from './components/ui/Snackbar.svelte';
-    import Blog from './routes/Blog.svelte';
-    import Dashboard from './routes/Dashboard.svelte';
-    import Document from './routes/Document.svelte';
-    import EventCalendar from './routes/EventCalendar.svelte';
-    import EventMap from './routes/EventMap.svelte';
-    import Settings from './routes/Settings.svelte';
-    import SnippetTable from './routes/SnippetTable.svelte';
-    import SongTable from './routes/SongTable.svelte';
-    import Feedback from './routes/Feedback.svelte';
-    import NotFound from './routes/NotFound.svelte';
+    import { routes } from './routes.setup';
     import { currentUser } from './service/user/auth.service';
     import { setAppReady } from './store/media.store';
     import { showInfo } from './store/notification.store';
-
-    const routes = {
-        '/': Dashboard,
-        '/blog': Blog,
-        '/blog/:slug': Blog,
-        '/docs/:id': Document,
-        '/events': EventMap,
-        '/events/:id': EventMap,
-        '/settings': Settings,
-        '/snippets': SnippetTable,
-        '/snippets/:id': SnippetTable,
-        '/songs': SongTable,
-        '/songs/:uid': SongTable,
-
-        // hidden / unused routes
-        '/calendar': EventCalendar,
-        '/feedback': Feedback,
-        '*': NotFound,
-    };
 
     $effect(() => {
         if (window.innerWidth <= 600) {

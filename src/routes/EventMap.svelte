@@ -5,7 +5,7 @@
     import TitlebarMenu from "../components/menus/TitlebarMenu.svelte";
     import type { CalendarEvent } from "../model/event.model";
     import { getEvents } from "../service/common/event.service";
-    import { content } from "../store/menu-context.svelte";
+    import { menu } from "../store/menu-context.svelte";
     import { showError } from "../store/notification.store";
 
     interface Props {
@@ -112,7 +112,7 @@
    <title>{ $t('calendar.title') } | {import.meta.env.PACKAGE_NAME}</title>
 </svelte:head>
 
-<main use:content>
+<main use:menu.offset>
     <TitlebarMenu>
         <i class="bx bx-calendar"></i>&nbsp; {$t('menu.events')}
     </TitlebarMenu>
