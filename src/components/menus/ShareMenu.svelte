@@ -2,8 +2,9 @@
     import { t } from 'svelte-i18n';
     import { onDestroy } from 'svelte';
     import { currentProfile } from '../../store/profile.store';
-    import { toClipboard } from '../ui/helper/input.helper';
     import { generateQRCode } from '../actions/qrcode.action';
+    import { toClipboard } from '../ui/helper/input.helper';
+    import MenuButton from '../ui/elements/MenuButton.svelte';
 
     let {
         showPreview = true,
@@ -27,9 +28,9 @@
 <section class="menu">
     {#if showPreview}
     <div class="row">
-        <button data-close title="{ $t('profile.preview-linkhub') }" onclick={() => window.open(shareLink) }>
+        <MenuButton title={ $t('profile.preview-linkhub') } onclick={() => window.open(shareLink) }>
             <i class='bx bx-sitemap'></i> { $t('profile.preview-linkhub') }
-        </button>
+        </MenuButton>
     </div>
     {/if}
     <div class="row">

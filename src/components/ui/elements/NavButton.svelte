@@ -1,5 +1,6 @@
 <script lang="ts">
     import { location, push } from "@keenmate/svelte-spa-router";
+    import MenuButton from "./MenuButton.svelte";
 
     interface Props {
         href: string;
@@ -19,7 +20,7 @@
 </script>
 
 {#if !self}
-<button data-close class={className} {title} onclick={() => push(href)}>
+<MenuButton {title} className={className} onclick={() => push(href)}>
     {@render children?.()}
-</button>
+</MenuButton>
 {/if}

@@ -10,61 +10,51 @@
     import { menu } from '../../store/menu-context.svelte';
 
     const version = `${import.meta.env.PACKAGE_NAME} ${import.meta.env.PACKAGE_VERSION}`;
-
-    function handleDataClose(ev: SubmitEvent) {
-        ev.preventDefault();
-
-        if (ev.submitter.getAttribute('data-close') !== null) {
-            menu.back();
-        }
-    }
 </script>
 
-<form onsubmit={handleDataClose}>
-    <MenuDrawer offset={menu.offsetWidth} onOpen={() => menu.show()}>
-        {#if menu.visible && menu.submenus}
-        <Sidebar offset={menu.offsetWidth} onClose={() => menu.back()}>
-            {#each menu.submenus as Submenu}
-                <Submenu />
-            {/each}
+<MenuDrawer offset={menu.offsetWidth} onOpen={() => menu.show()}>
+    {#if menu.visible && menu.submenus}
+    <Sidebar offset={menu.offsetWidth} onClose={() => menu.back()}>
+        {#each menu.submenus as Submenu}
+            <Submenu />
+        {/each}
 
-            {#snippet footer()}
-                {version}
-            {/snippet}
-        </Sidebar>
-        {:else if menu.visible}
-        <Sidebar offset={menu.offsetWidth} onClose={() => menu.back()}>
-            {#if $currentUser}
-                <ProfileMenu />
+        {#snippet footer()}
+            {version}
+        {/snippet}
+    </Sidebar>
+    {:else if menu.visible}
+    <Sidebar offset={menu.offsetWidth} onClose={() => menu.back()}>
+        {#if $currentUser}
+            <ProfileMenu />
 
-                {#each menu.userContext as Section}
-                    <Section />
-                {/each}
-            {:else if !$currentUser && !menu.shouldHideLogin}
-                <LoginMenu onSignIn={() => menu.back()} />
-            {/if}
-
-            {#each menu.context as Section}
+            {#each menu.userContext as Section}
                 <Section />
             {/each}
-
-            {#snippet lower()}
-                <div class="row">
-                    <a use:link class="warn" role="button" href="/@song-repo">
-                        <span>
-                            <i class="bx bxs-coffee"></i> {$t('menu.donate')}
-                        </span>
-                    </a>
-                </div>
-            {/snippet}
-
-            {#snippet footer()}
-                {version}
-            {/snippet}
-        </Sidebar>
+        {:else if !$currentUser && !menu.shouldHideLogin}
+            <LoginMenu />
         {/if}
-    </MenuDrawer>
-</form>
+
+        {#each menu.context as Section}
+            <Section />
+        {/each}
+
+        {#snippet lower()}
+            <div class="row">
+                <a use:link class="warn" role="button" href="/@song-repo">
+                    <span>
+                        <i class="bx bxs-coffee"></i> {$t('menu.donate')}
+                    </span>
+                </a>
+            </div>
+        {/snippet}
+
+        {#snippet footer()}
+            {version}
+        {/snippet}
+    </Sidebar>
+    {/if}
+</MenuDrawer>
 
 <style>
     a[role="button"] > span > i.bx.bxs-coffee {

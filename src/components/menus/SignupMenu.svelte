@@ -4,6 +4,7 @@
     import { logPageView, showError } from '../../store/notification.store';
     import { getPage } from '../../service/common/page.service';
     import { type DialogAction, type DialogArgs, openDialog } from '../dialog-context.svelte';
+    import MenuButton from '../ui/elements/MenuButton.svelte';
     
     interface RequiredPageChecks {
         termsofuse?: DialogAction;
@@ -87,25 +88,24 @@
         </button>
     </div>
     <div class="row">
-        <button data-close={valid ? '' : undefined} title="{ $t('menu.login.signup') }" onclick={signUp} 
-            disabled={!valid}>
+        <MenuButton disabled={!valid} title={ $t('menu.login.signup') } onclick={signUp} >
             <i class='bx bxs-edit'></i> { $t('menu.login.signup') }
-        </button>
+        </MenuButton>
     </div>
     <div class="row">
         <p>&ndash; { $t('menu.or') } &ndash;</p>
     </div>
     <div class="row">
-        <button id='google' title="{ $t('menu.login.with-google') }" onclick={useGoogle}
+        <MenuButton title={ $t('menu.login.with-google') } onclick={useGoogle}
             disabled={!valid}>
             <i class='bx bxl-google'></i> { $t('menu.login.with-google') }
-        </button>
+        </MenuButton>
     </div>
     <div class="row">
-        <button id='microsoft' title="{ $t('menu.login.with-microsoft') }" onclick={useMicrosoft}
+        <MenuButton title={ $t('menu.login.with-microsoft') } onclick={useMicrosoft}
             disabled={!valid}>
             <i class='bx bxl-microsoft'></i> { $t('menu.login.with-microsoft') }
-        </button>
+        </MenuButton>
     </div>
 </section>
 
@@ -123,7 +123,7 @@
     }
 
     div > p {
-        color: gray;
+        color: var(--text-muted);
         text-align: center;
     }
 

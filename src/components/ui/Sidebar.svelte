@@ -5,6 +5,7 @@
     import { slide } from 'svelte/transition';
     import { swipeable } from '@svelte-put/swipeable';
     import { currentUser } from '../../service/user/auth.service';
+    import MenuButton from './elements/MenuButton.svelte';
     import NavButton from './elements/NavButton.svelte';
     import Titlebar from './elements/Titlebar.svelte';
 
@@ -28,13 +29,13 @@
     <Titlebar onClose={onClose}>
         {#snippet controls()}
             {#if location() !== '/'}
-            <button class="titlebar-button" title={$t('start.hello')} data-close onclick={() => push('/')}>
+            <MenuButton className="titlebar-button" title={$t('start.hello')} onclick={() => push('/')}>
                 {#if $currentUser}
                 <i class="item bx bx-user-circle"></i>
                 {:else}
                 <i class="item bx bx-world"></i>
                 {/if}
-            </button>
+            </MenuButton>
             {/if}
             <NavButton className="titlebar-button" title={$t('menu.repo')} href='/songs'>
                 <i class="item bx bxs-playlist"></i>

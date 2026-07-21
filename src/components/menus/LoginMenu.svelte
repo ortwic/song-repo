@@ -2,14 +2,9 @@
     import { t } from 'svelte-i18n';
     import { slide } from 'svelte/transition';
     import { cubicOut } from 'svelte/easing';
+    import MenuButton from '../ui/elements/MenuButton.svelte';
     import { authService } from '../../service/user/auth.service';
     import { showError } from '../../store/notification.store';
-    
-    let {
-        onSignIn,
-    }: {
-        onSignIn?: (ev: MouseEvent) => void;
-    } = $props();
 
     const slideParams = { duration: 200, easing: cubicOut };
     let email = $state(import.meta.env.DEV ? 'john.doe@example.com' : '');
@@ -19,7 +14,6 @@
     async function signIn(ev: MouseEvent) {
         try {
             await authService.signIn(email, password);
-            onSignIn?.(ev);
         } catch (error) {
             if (`${error.message}`.includes('auth/wrong-password')) {
                 showError(`${ $t('menu.login.wrong-password') }`);
@@ -64,25 +58,25 @@
         <br/>
     </div>
     <div class="row">
-        <button disabled={!password} title="{ $t('menu.login.login') }" onclick={signIn}>
+        <MenuButton disabled={!password} title={ $t('menu.login.login') } onclick={signIn}>
             <i class='bx bx-log-in-circle'></i> { $t('menu.login.login') }
-        </button>
+        </MenuButton>
     </div>
     {#if loginMenu}
     <div class="row" in:slide={slideParams} out:slide={slideParams}>
-        <button class="warn" data-close title="{ $t('menu.login.reset-password') } '{email}'" onclick={resetPassword}>
+        <MenuButton className="warn" title="{ $t('menu.login.reset-password') } '{email}'" onclick={resetPassword}>
             <i class='bx bx-envelope'></i> { $t('menu.login.reset-password') }
-        </button>
+        </MenuButton>
     </div>
     {/if}
     <div class="row">
-        <button data-close title="{ $t('menu.login.with-google') }" onclick={useGoogle}>
+        <MenuButton title={ $t('menu.login.with-google') } onclick={useGoogle}>
             <i class='bx bxl-google'></i> { $t('menu.login.with-google') }
-        </button>
+        </MenuButton>
     </div>
     <div class="row">
-        <button data-close title="{ $t('menu.login.with-microsoft') }" onclick={useMicrosoft}>
+        <MenuButton title={ $t('menu.login.with-microsoft') } onclick={useMicrosoft}>
             <i class='bx bxl-microsoft'></i> { $t('menu.login.with-microsoft') }
-        </button>
+        </MenuButton>
     </div>
 </section>

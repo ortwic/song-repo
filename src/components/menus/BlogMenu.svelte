@@ -1,9 +1,10 @@
 <script lang="ts">
     import { t } from 'svelte-i18n';
+    import { onMount } from 'svelte';
     import { link, push } from '@keenmate/svelte-spa-router';
     import { blogService } from '../../service/common/blog.service';
+    import MenuButton from '../ui/elements/MenuButton.svelte';
     import TagCloud from '../ui/elements/TagCloud.svelte';
-    import { onMount } from 'svelte';
 
     let tags = $state<Map<string, { count: number }>>(new Map());
 
@@ -17,10 +18,10 @@
 
 <section class="menu">
     <div class="row">
-        <button data-close onclick={() => push('/blog')}>
+        <MenuButton onclick={() => push('/blog')}>
             <i class="bx bx-book-open"></i>
             {$t('blog.all-entries')}
-        </button>
+        </MenuButton>
     </div>
     <TagCloud index={tags}>
         {#snippet item(tag)}

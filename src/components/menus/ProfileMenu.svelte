@@ -3,6 +3,7 @@
     import { t } from 'svelte-i18n';
     import { push } from '@keenmate/svelte-spa-router';
     import UserIcon from '../ui/Avatar.svelte';
+    import MenuButton from '../ui/elements/MenuButton.svelte';
     import { currentProfile } from '../../store/profile.store';
     import { currentUser } from '../../service/user/auth.service';
 
@@ -23,10 +24,12 @@
 
 <section class="menu">
     <div class="row">
-        <button class="profil" data-close title="{ $t('start.hello') } {name ?? $t('start.anonymous')}" onclick={() => push('/')}>
-            <UserIcon photoURL={photoURL} size="50px" />
-            <span class="name">{name}</span>
-        </button>
+        <MenuButton title="{ $t('start.hello') } {name ?? $t('start.anonymous')}" onclick={() => push('/')}>
+            <div class="profil">
+                <UserIcon {photoURL} size="50px" />
+                <span class="name">{name}</span>
+            </div>
+        </MenuButton>
     </div>
 </section>
 
@@ -36,7 +39,8 @@
         justify-content: center;
         align-content: center;
         align-items: center;
-        padding: .4em 0;
+        padding: .2em;
+        gap: .4em;
 
         span.name {
             padding: 0 .4em;
