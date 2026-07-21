@@ -3,15 +3,14 @@ import './styles/app.scss';
 import './styles/icons.scss';
 import './styles/utils.scss';
 import { mount } from "svelte";
-// import { setHashRoutingEnabled } from '@keenmate/svelte-spa-router';
+import { setHashRoutingEnabled } from '@keenmate/svelte-spa-router';
 import { initRefData } from './service/base/app-cache.setup';
 import { setupI18n } from './service/base/i18n.setup';
 
 const app = (async () => {
     const target = document.getElementById('app');
 
-    // TODO: data-close from menuContext doesn't work for some reason
-    // setHashRoutingEnabled(false);
+    setHashRoutingEnabled(false);
     
     await initRefData();
     await setupI18n().catch(console.error);

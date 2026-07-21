@@ -73,7 +73,7 @@
             </summary>
             <div>
                 {#each post.tags as tag}
-                    <a href="#/blog?tag={tag}" class="label">{tag}</a>
+                    <a use:link href="/blog?tag={tag}" class="label">{tag}</a>
                 {/each}
             </div>
         </div>

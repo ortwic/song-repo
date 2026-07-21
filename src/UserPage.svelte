@@ -40,7 +40,7 @@
         <p class="about">{@html marked(profile.about ?? '', { mangle: false, headerIds: false })}</p>
         
         <section class="linktree">
-            <a class="link primary" role="button" href="/#/songs/{profile.id}">
+            <a class="link primary" role="button" href="/songs/{profile.id}">
                 <i class="icon-badge bx bxs-playlist"></i>
                 {$t('user.song-list')}
             </a>
